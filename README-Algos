@@ -1,0 +1,43 @@
+Plugin di base per ogni applicazione.
+Grails: 2.2.2
+Utilizza algospref
+Utilizza algosvers
+Utilizza algoslogo
+
+Per istallarlo:
+#Nel file '''BuildConfig''', aggiungere (''closure'' esistente '''repositories''') la riga:
+ mavenRepo ":8080/artifactory/plugins-release-local/"
+#Nel file '''BuildConfig''', aggiungere (''closure'' esistente '''plugins''') la riga:
+ runtime ":algos:latest.integration"
+
+DataBase: utilizza il DB dell'applicazione finale (esclusi dal JAR)
+Views: utilizza i propri templates per creare i file .gsp
+Layout: utilizza il layout dell'applicazione finale (esclusi dal JAR)
+Index: utilizza il file index dell'applicazione finale (esclusi dal JAR)
+Scripts: ricopia il file i18n/algospref.properties
+Enumeration: BoolValue, disponibile nell'applicazione finale
+Librerie: LibPref, disponibile nell'applicazione finale
+Templates: usati solo internamente (esclusi dal JAR)
+Test: usati solo internamente (esclusi dal JAR)
+CSS: utilizza il css dell'applicazione finale (esclusi dal JAR)
+
+Utilizza il plugin export:
+    1) aggiunge una barra nel template list
+    2) modifica il metodo list nel template controller
+    3) inietta la property exportService nel template controller
+    4) aggiunge il plugin export:1.5 in BuildConfig
+    5) aggiunge il file ExportBootStrap che viene ricopiato nell'applicazione
+    6) di default la property exportService è regolata a false
+
+Utilizza il plugin quartz
+    1) crea una directory Jobs
+    2) crea un file RefreshJob (nell'applicazione), per ''attivare'' l'applicazione ogni 30 minuti
+    3) cancella il file RefreshJob (nel plugin) per evitare duplicazioni
+    4) si possono aggiungere altri files xxxJob nella directory
+
+Utilizza il plugin mail
+    1) regolare: host, port, username, password e props in Config
+
+
+@TODO da aggiungere l'utilizzo del plugin mail
+@TODO da aggiungere l'utilizzo del plugin security

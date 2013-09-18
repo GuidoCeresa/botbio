@@ -1,0 +1,36 @@
+Plugin per gestire una tavola di log
+Grails: 2.2.3
+
+Viene installato di default dal plugin -algos-, oppure anche singolarmente
+
+Inserisce sempre il file VersioneBootStrap nella directory grails-app/conf dell'applicazione
+Se non lo si vuole usare o se si vogliono refgistrare eventi diversi, occorre modificarlo
+
+Serve per tenere traccia di ogni modifica/aggiunta/cancellazione apportata ai records delle varie tavole
+Si creano prima alcuni record di Evento; uno per ogni evento di cui si vuole tenere traccia
+Ogni volta che si verifica un evento del tipo da controllare, si invoca un metodo nella classe LogoService:
+*setInfo()
+
+Per l'applicazione sono inoltre disponibili (situati nel plugin):
+la domain class, il controller e le views
+I controller Evento e Logo
+Le domain class Evento e Logo sono utilizzabile nell'applicazione finale
+I valori sono creabili, modificabili e visibili dall'utilizzatore nelle normali views
+Se non si vuole usare/vedere i controller, occorre escluderli dalla visualizzazione nel file index
+Tipicamente il controller Evento viene oscurato all'utente normale dal controllo di security
+Tipicamente il controller Logo viene reso visibile/disponibile all'admin dal controllo di security
+Le class EventoService e LogoService
+
+Può spedire mail di controllo per determinati eventi
+
+DataBase: utilizza il DB dell'applicazione finale (esclusi dal JAR)
+Views: utilizza i propri templates per creare i file .gsp
+Layout: utilizza il layout dell'applicazione finale (esclusi dal JAR)
+Index: utilizza il file index dell'applicazione finale (esclusi dal JAR)
+Scripts: ricopia il file i18n/algosvers.properties
+Templates: usati solo internamente (esclusi dal JAR)
+Test: usati solo internamente (esclusi dal JAR)
+CSS: utilizza il css dell'applicazione finale (esclusi dal JAR)
+
+@TODO mancano i test
+@TODO presentare la data in forma umanamente leggibile

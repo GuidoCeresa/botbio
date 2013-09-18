@@ -1,0 +1,39 @@
+Plugin per gestire una tavola di preferenze standard.
+Grails: 2.2.3
+
+Tipologia dei tipi di valori utilizzabili: ['string', 'integer', 'decimal', 'date', 'boolean']
+La visualizzazione delle liste avviene in due formati: ridotto e completo
+
+Il controller Preferenze appare nella normale lista dei controlli dell'applicazione
+La domain class Preferenze è utilizzabile nell'applicazione finale
+I valori sono creabili, modificabili e visibili dall'utilizzatore nelle normali views
+
+I valori sono accessibili da programma usando la libreria LibPref e le chiamate:
+    generiche:
+        Preferenze getPref(String code)
+        Preferenze getPreferenza(String code)
+    specifiche per un valore di ritorno (con valore di default suggerito, oppure senza):
+        String getString(String code)
+        String getString(String code, String suggerito)
+        int getInt(String code)
+        int getInt(String code, int suggerito)
+        Date getData(String code)
+        Date getData(String code, Date suggerito)
+        boolean getBool(String code)
+        boolean getBool(String code, boolean suggerito)
+
+DataBase: utilizza il DB dell'applicazione finale (esclusi dal JAR)
+Views: utilizza i propri templates per creare i file .gsp
+Layout: utilizza il layout dell'applicazione finale (esclusi dal JAR)
+Index: utilizza il file index dell'applicazione finale (esclusi dal JAR)
+Scripts: ricopia il file i18n/algospref.properties
+Enumeration: BoolValue, disponibile nell'applicazione finale
+Librerie: LibPref, disponibile nell'applicazione finale
+Templates: usati solo internamente (esclusi dal JAR)
+Test: usati solo internamente (esclusi dal JAR)
+CSS: utilizza il css dell'applicazione finale (esclusi dal JAR)
+
+@TODO mancano i test
+@TODO modificare i valori booleani da testo a checkbox, utilizzando Ajax
+@TODO modificare i valori data, utilizzano un picker
+@TODO manca l'implementazione del tipo decimale

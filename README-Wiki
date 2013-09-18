@@ -1,0 +1,11 @@
+Plugin per gestire le API di wikipedia
+Grails: 2.2.3
+
+Viene installato singolarmente (non fa parte del pacchetto algos)
+
+Inserisce sempre il file WikiBootStrap nella directory grails-app/conf dell'applicazione
+Inietta una property globale per il login
+
+La property login si recupera da grailsApplication.config.login
+Nelle classi in cui non viene iniettata automaticamente, la grailsApplication si recupera da:
+    def grailsApplication = Holders.grailsApplication

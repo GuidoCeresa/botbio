@@ -1,0 +1,26 @@
+Plugin per gestire una tavola di versioni installate.
+Grails: 2.2.3
+
+Viene installato di default dal plugin -algos-, oppure anche singolarmente
+
+Inserisce sempre il file VersioneBootStrap nella directory grails-app/conf dell'applicazione
+Se non lo si vuole usare, basta ignorarlo
+
+Serve per tenere traccia di ogni modifica/revisione apportata all'applicazione
+Queste vengono implementate nel file VersioneBootStrap ed eseguite una volta sola
+Registra numero progressivo di modifica/revisione, data, titolo e descrizione
+Attenzione: l'ordine di inserimento (numero) è FONDAMENTALE
+
+Per l'applicazione sono inoltre disponibili (situati nel plugin):
+la domain class, il controller e le views
+Se non si vuole usare/vedere il controller, occorre escluderlo dalla visualizzazione nel file index
+Tipicamente il controller viene oscurato all'utente normale dal controllo di security
+La classe VersioneService
+
+I valori sono visibili dall'admin nelle normali views
+Normalmente i valori NON vengono creati/modificati nelle views, ma solo nel file VersioneBootStrap
+
+La domain class Versione si può estendere ad una sottoclasse,
+per avere ulteriori campi/field di controllo specifici
+(In questo caso, occorre escludere il controller Versione dalla visualizzazione nel file index)
+L'estensione è del tipo: table-per-hierarchy inheritance mapping

@@ -1,0 +1,35 @@
+Plugin con le librerie di base da utilizzare sempre
+Grails: 2.2.3
+
+Viene installato di default dal plugin -algos-, oppure anche singolarmente
+
+Per l'applicazione sono disponibili le classi statiche di liberia (situate nel plugin):
+Lib (classe di redirect)
+LibArray
+LibGrails
+LibHtml
+LibMat
+LibTesto
+LibWiki
+L'applicazione od il plugin che utilizza quersto plugin, NON possono avere classi statiche
+di libreria con lo stesso nome. Se occorre, vanno chiamate ... LibWiki2 (o simile)
+
+Per invocare un metodo ... -> Lib.-> suggerisce i nomi delle classi reali,
+    ma poi non suggerisce il nome del metodo
+Per invocare un metodo ... -> LibTesto.-> suggerisce i nomi dei metodi
+    di questa classe
+
+Per l'applicazione sono disponibili inoltre le Enumeration (situate nel plugin):
+Mese
+
+DataBase: utilizza il DB dell'applicazione finale (esclusi dal JAR)
+Views: utilizza i propri templates per creare i file .gsp
+Layout: utilizza il layout dell'applicazione finale (esclusi dal JAR)
+Index: utilizza il file index dell'applicazione finale (esclusi dal JAR)
+Scripts: ricopia il file i18n/algosvers.properties
+Templates: usati solo internamente (esclusi dal JAR)
+Test: usati solo internamente (esclusi dal JAR)
+CSS: utilizza il css dell'applicazione finale (esclusi dal JAR)
+
+@TODO mancano i test
+@TODO presentare la data in forma umanamente leggibile
