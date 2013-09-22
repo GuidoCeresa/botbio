@@ -147,9 +147,14 @@ public class WrapBio {
         StatoPagina statoPagina
         StatoBio statoBio
 
-        statoPagina = WikiLib.getStato(mappaWiki)
-        statoBio = StatoBio.get(statoPagina)
-        this.setStatoBio(statoBio)
+        if (mappaWiki[Const.TAG_STATO_PAGINA]) {
+            statoPagina = (StatoPagina) mappaWiki[Const.TAG_STATO_PAGINA]
+        }// fine del blocco if
+
+        if (statoPagina) {
+            statoBio = StatoBio.get(statoPagina)
+            this.setStatoBio(statoBio)
+        }// fine del blocco if
 
         // Metodo iniziale con la mappa dei parametri recuperata da wiki
         this.inizializza(mappaWiki)
@@ -305,12 +310,16 @@ public class WrapBio {
 
         // controlla l'esistenza del testo della voce
         if (continua) {
-            testoCompletoVoce = this.getTestoVoce()
-            if (!testoCompletoVoce) {
-                this.setStatoBio(StatoBio.vuota)
+            if (getStatoBio() == StatoBio.vuota) {
                 continua = false
-                valida = false
             }// fine del blocco if
+
+//            testoCompletoVoce = this.getTestoVoce()
+//            if (!testoCompletoVoce) {
+//                this.setStatoBio(StatoBio.vuota)
+//                continua = false
+//                valida = false
+//            }// fine del blocco if
         }// fine del blocco if
 
         //--controlla che la pagina sia normale

@@ -16,6 +16,7 @@ package it.algos.botbio
 import groovy.util.logging.Log4j
 import it.algos.algoslib.Lib
 import it.algos.algoslib.LibArray
+import it.algos.algoslib.LibTesto
 import it.algos.algospref.LibPref
 import it.algos.algospref.Preferenze
 import it.algos.algoswiki.Login
@@ -85,8 +86,11 @@ class BioWikiService {
         ArrayList<Integer> listaNuoviRecordsDaCreare = null
         ArrayList<Integer> listaRecordsForseDaCancellare = null
         ArrayList<Integer> listaRecordsDaCancellare = null
-        def nuoveVoci
+        int vociCat
+        def numVoci
+        String percentuale
         boolean debug = Preferenze.getBool((String) grailsApplication.config.debug)
+        String avviso = ''
 
         // messaggio di log
         inizio = System.currentTimeMillis()
@@ -95,7 +99,7 @@ class BioWikiService {
         //--Recupera dal server la lista completa delle voci esistenti dalla categoria BioBot
         if (continua) {
             if (debug) {
-                listaVociServerWiki = [0, 4689129, 4689130, 4689133, 160011, 4689135, 4689136, 4689137]
+                listaVociServerWiki = [0, 4689129, 4689130, 4689133, 160011, 4689135, 4689136, 4689137,142459]
             } else {
                 listaVociServerWiki = this.getListaVociServerWiki()
             }// fine del blocco if-else
@@ -148,6 +152,14 @@ class BioWikiService {
 
         // valore di ritorno
         log.info 'Fine del metodo di aggiunta nuovi records'
+        vociCat = listaVociServerWiki.size()
+        numVoci = BioWiki.count()
+        percentuale = LibTesto.formatPercentuale(numVoci, vociCat)
+        numVoci = LibTesto.formatNum(numVoci)
+        avviso += "[[Utente:Biobot|<span style=\"color:green\">'''Biobot'''</span>]]"
+        avviso += " gestisce ${numVoci} voci pari al '''${percentuale}'''"
+        avviso += " della categoria [[:Categoria:BioBot|'''BioBot''']]"
+        logService.info(avviso)
         return listaVociServerWiki
     } // fine del metodo
 
@@ -622,37 +634,37 @@ class BioWikiService {
                             }// fine del blocco if
                             break
                         case StatoBio.bioIncompleto:
-                            logService.warn "Alla voce [[${title}]] mancano alcuni campi indispensabili per il funzionamento del tmpl Bio"
+                            logService.warn "Alla voce '''[[${title}]]''' mancano alcuni campi indispensabili per il funzionamento del '''[[Template:Bio|tmpl Bio]]'''"
                             registrata = false
                             break
                         case StatoBio.bioErrato:
-                            logService.warn "Il tmpl Bio della voce [[${title}]] è errato"
+                            logService.warn "Il '''[[Template:Bio|tmpl Bio]]''' della voce '''[[${title}]]''' è errato"
                             registrata = false
                             break
                         case StatoBio.senzaBio:
-                            logService.warn "Nella voce [[${title}]] manca completamente il tmpl Bio"
+                            logService.warn "Nella voce '''[[${title}]]''' manca completamente il '''[[Template:Bio|tmpl Bio]]'''"
                             registrata = false
                             break
                         case StatoBio.vuota:
-                            logService.error "La voce [[${title}]] non ha nessun contenuto di testo"
+                            logService.warn "La voce '''[[${title}]]''' non ha nessun contenuto di testo"
                             registrata = false
                             break
                         case StatoBio.redirect:
-                            logService.warn "La voce [[${title}]] non è una voce biografica, ma un redirect"
+                            logService.warn "La voce '''[[${title}]]''' non è una voce biografica, ma un '''[[Aiuto:Redirect|redirect]]'''"
                             registrata = false
                             break
                         case StatoBio.disambigua:
-                            logService.warn "La voce [[${title}]] non è una voce biografica, ma una disambigua"
+                            logService.warn "La voce '''[[${title}]]''' non è una voce biografica, ma una '''[[Aiuto:Disambigua|disambigua]]'''"
                             registrata = false
                             break
                         case StatoBio.maiEsistita:
                             if (title) {
-                                logService.error "La voce [[${title}]] non esiste"
+                                logService.warn "La voce '''[[${title}]]''' non esiste"
                             } else {
                                 if (pageid) {
-                                    logService.error "Non esiste la voce col pageid = ${pageid}"
+                                    logService.warn "Non esiste la voce col pageid = '''${pageid}'''"
                                 } else {
-                                    logService.error "Non esiste una pagina"
+                                    logService.warn "Non esiste una pagina"
                                 }// fine del blocco if-else
                             }// fine del blocco if-else
                             registrata = false

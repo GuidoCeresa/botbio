@@ -40,17 +40,21 @@ class QueryMultiBio extends QueryMultiId {
         HashMap unaMappa
         String testoVoce
         String testoTemplateBio
+        StatoPagina statoPagina
 
         super.regolaRisultato()
         listaMappe = this.getListaMappe()
 
         listaMappe.each {
             unaMappa = (HashMap) it
+
+            statoPagina = WikiLib.getStato(unaMappa)
+            unaMappa[Const.TAG_STATO_PAGINA] = statoPagina
+
             testoVoce = unaMappa.testo
             testoTemplateBio = WikiLib.estraeTmpTesto(testoVoce)
-            unaMappa.testo = testoTemplateBio
+            unaMappa[Const.TAG_TESTO] = testoTemplateBio
         } // fine del ciclo each
-        def stop
     } // fine del metodo
 
 } // fine della classe

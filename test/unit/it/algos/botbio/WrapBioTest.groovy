@@ -1,38 +1,34 @@
 package it.algos.botbio
-
-import it.algos.algoswiki.Const
-import it.algos.algoswiki.Query
-import it.algos.algoswiki.QueryPag
-import it.algos.algoswiki.StatoPagina
-import it.algos.algoswiki.WikiLib
-
+import grails.test.mixin.TestFor
+import it.algos.algoswiki.*
+import org.junit.Before
+import org.junit.Test
 /**
  * Created with IntelliJ IDEA.
  * User: Gac
  * Date: 29-8-13
  * Time: 07:55
  */
-
+@TestFor(LogService)
 class WrapBioTest extends GroovyTestCase {
+
+    LogService logService = new LogService()
+    private Login loginDelTest
+    private static boolean SCRIVE_SU_UTENTE_BIOBOT_LOG = false //attenzione a rimetterlo che scrive sulla pagina di log
 
     private static final int PAGE_ID = 4163337
     private static String MULTI_PAGE = '4163337|3427955|581968'
 
     // Setup logic here
+    @Before
     void setUp() {
+        loginDelTest = new Login('biobot', 'fulvia')
     } // fine del metodo iniziale
 
     // Tear down logic here
     void tearDown() {
     } // fine del metodo iniziale
 
-    void testBioErratoIncompleto() {
-        String titolo
-        WrapBio wrap
-        String testoVoce
-        String testoTemplate
-
-    } // fine del test
 
     void testTmplErrato() {
         String titolo
@@ -214,6 +210,7 @@ class WrapBioTest extends GroovyTestCase {
     } // fine del test
 
     //--costruzione da array di pageid
+    @Test
     void testArrayDebug() {
         ArrayList listaPageids
         Query query
@@ -226,7 +223,7 @@ class WrapBioTest extends GroovyTestCase {
         boolean registrata
         int pageid
 
-        listaPageids = [0, 4689129, 4689130, 4689133, 160011, 4689135, 4689136, 4689137,142459]
+        listaPageids = [0, 4689129, 4689130, 4689133, 160011, 4689135, 4689136, 4689137, 142459]
         query = new QueryMultiBio(listaPageids)
         listaMappe = query.getListaMappe()
 
@@ -245,37 +242,37 @@ class WrapBioTest extends GroovyTestCase {
                         }// fine del blocco if
                         break
                     case StatoBio.bioIncompleto:
-                        println("Alla voce [[${title}]] mancano alcuni campi indispensabili per il funzionamento del tmpl Bio")
+                        scriveLog(LogTipo.warn, "Alla voce [[${title}]] mancano alcuni campi indispensabili per il funzionamento del tmpl Bio")
                         registrata = false
                         break
                     case StatoBio.bioErrato:
-                        println("Il tmpl Bio della voce [[${title}]] è errato")
+                        scriveLog(LogTipo.warn, "Il tmpl Bio della voce [[${title}]] è errato")
                         registrata = false
                         break
                     case StatoBio.senzaBio:
-                        println("Nella voce [[${title}]] manca completamente il tmpl Bio")
+                        scriveLog(LogTipo.warn, "Nella voce [[${title}]] manca completamente il tmpl Bio")
                         registrata = false
                         break
                     case StatoBio.vuota:
-                        println("La voce [[${title}]] non ha nessun contenuto di testo")
+                        scriveLog(LogTipo.warn, "La voce [[${title}]] non ha nessun contenuto di testo")
                         registrata = false
                         break
                     case StatoBio.redirect:
-                        println("La voce [[${title}]] non è una voce biografica, ma un redirect")
+                        scriveLog(LogTipo.warn, "La voce [[${title}]] non è una voce biografica, ma un redirect")
                         registrata = false
                         break
                     case StatoBio.disambigua:
-                        println("La voce [[${title}]] non è una voce biografica, ma una disambigua")
+                        scriveLog(LogTipo.warn, "La voce [[${title}]] non è una voce biografica, ma una disambigua")
                         registrata = false
                         break
                     case StatoBio.maiEsistita:
                         if (title) {
-                            println("La voce [[${title}]] non esiste")
+                            scriveLog(LogTipo.warn, "La voce [[${title}]] non esiste")
                         } else {
                             if (pageid) {
-                                println("Non esiste la voce col pageid = ${pageid}")
+                                scriveLog(LogTipo.warn, "Non esiste la voce col pageid = ${pageid}")
                             } else {
-                                println("Non esiste una pagina")
+                                scriveLog(LogTipo.warn, "Non esiste una pagina")
                             }// fine del blocco if-else
                         }// fine del blocco if-else
                         registrata = false
@@ -290,6 +287,16 @@ class WrapBioTest extends GroovyTestCase {
             }// fine del ciclo each
         }// fine del blocco if
     } // fine del test
+
+    void scriveLog(LogTipo logTipo, String testo) {
+        Login login = loginDelTest
+
+        if (SCRIVE_SU_UTENTE_BIOBOT_LOG && login) {
+            logService.scriveLogin(login, testo, logTipo)
+        } else {
+            println(testo)
+        }// fine del blocco if-else
+    } // fine del metodo di supporto
 
     //--costruzione da pageid
     void testSingolaVoce() {
