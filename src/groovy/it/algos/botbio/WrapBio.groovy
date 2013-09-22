@@ -153,6 +153,7 @@ public class WrapBio {
 
         // Metodo iniziale con la mappa dei parametri recuperata da wiki
         this.inizializza(mappaWiki)
+
     }// fine del metodo costruttore completo
 
     /**
