@@ -86,6 +86,7 @@ class BioWikiService {
         ArrayList<Integer> listaRecordsForseDaCancellare = null
         ArrayList<Integer> listaRecordsDaCancellare = null
         def nuoveVoci
+        boolean debug = Preferenze.getBool((String) grailsApplication.config.debug)
 
         // messaggio di log
         inizio = System.currentTimeMillis()
@@ -93,20 +94,31 @@ class BioWikiService {
 
         //--Recupera dal server la lista completa delle voci esistenti dalla categoria BioBot
         if (continua) {
-            listaVociServerWiki = this.getListaVociServerWiki()
+            if (debug) {
+                listaVociServerWiki = [0, 4689129, 4689130, 4689133, 160011, 4689135, 4689136, 4689137]
+            } else {
+                listaVociServerWiki = this.getListaVociServerWiki()
+            }// fine del blocco if-else
+
             continua = (listaVociServerWiki && listaVociServerWiki.size() > 0)
             tempo()
         }// fine del blocco if
 
         //--Recupera la lista dei records esistenti nel database
         if (continua) {
-            listaRecordsDatabase = getListaRecordsDatabase()
+            if (!debug) {
+                listaRecordsDatabase = getListaRecordsDatabase()
+            }// fine del blocco if
             tempo()
         }// fine del blocco if
 
         //--Recupera la lista delle voci nuove che non hanno ancora records (da creare)
         if (continua) {
-            listaNuoviRecordsDaCreare = deltaListe(listaVociServerWiki, listaRecordsDatabase)
+            if (debug) {
+                listaNuoviRecordsDaCreare = listaVociServerWiki
+            } else {
+                listaNuoviRecordsDaCreare = deltaListe(listaVociServerWiki, listaRecordsDatabase)
+            }// fine del blocco if-else
             tempo()
         }// fine del blocco if-else
 
@@ -191,12 +203,13 @@ class BioWikiService {
     private ArrayList<Integer> getListaVociServerWiki() {
         // variabili e costanti locali di lavoro
         ArrayList<Integer> lista = null
+        boolean continua = true
         String titoloCategoria = 'BioBot'
         def num = 0
         Login login = grailsApplication.config.login
         boolean debug = Preferenze.getBool((String) grailsApplication.config.debug)
         String catDebug = Preferenze.getStr((String) grailsApplication.config.catDebug)
-        QueryCatPageid query
+        QueryCatPageid query = null
 
         if (debug) {
             log.info 'Siamo in modalità debug'
@@ -212,24 +225,67 @@ class BioWikiService {
         }// fine del blocco if-else
 
         // recupera una lista di pageId
-        log.info "Caricamento della categoria ${titoloCategoria} - Circa 4 minuti"
+        if (debug) {
+            log.info "Caricamento della categoria ${titoloCategoria} - Circa 4 minuti (siamo in debug)"
+        } else {
+            log.info "Caricamento della categoria ${titoloCategoria} - Circa 2 minuti"
+        }// fine del blocco if-else
+
         try { // prova ad eseguire il codice
             query = new QueryCatPageid(login, titoloCategoria)
-            lista = query.getListaIds()
-
-            if (lista) {
-                num = lista.size()
-                num = Lib.Text.formatNum(num)
-                logService.info("La categoria ${titoloCategoria} contiene ${num} voci" )
-                log.info "La categoria contiene ${num} voci"
-            } else {
-                logService.warn("La categoria ${titoloCategoria} non contiene nessuna voce" )
-                log.warn "La categoria non contiene voci"
-            }// fine del blocco if-else
         } catch (Exception unErrore) { // intercetta l'errore
             logService.error "Non sono riuscito a caricare la categoria ${titoloCategoria}"
             log.error "Non sono riuscito a caricare la categoria ${titoloCategoria}"
+            log.error(unErrore)
+            continua = false
         }// fine del blocco try-catch
+
+        if (continua) {
+            try { // prova ad eseguire il codice
+                lista = query.getListaIds()
+            } catch (Exception unErrore) { // intercetta l'errore
+                logService.error "Non sono riuscito ad estrarre le pageids dalla categoria ${titoloCategoria}"
+                log.error "Non sono riuscito ad estrarre le pageids dalla categoria ${titoloCategoria}"
+                log.error(unErrore)
+                continua = false
+            }// fine del blocco try-catch
+        }// fine del blocco if
+
+        //--patch per la voce Pagina principale @todo non ho capito perche entra nella categoria
+        if (continua) {
+            long inizio
+            long fine
+            long differenza
+            boolean rimossa
+            int pageidPaginaPrincipale = 521472
+            if (lista.contains(pageidPaginaPrincipale)) {
+                inizio = System.currentTimeMillis()
+                try { // prova ad eseguire il codice
+                    rimossa = lista.remove(lista.indexOf(pageidPaginaPrincipale))
+                    fine = System.currentTimeMillis()
+                    differenza = fine - inizio
+                    log.info "tempo di cancellazione di un elemento della lista: " + differenza
+                } catch (Exception unErrore) { // intercetta l'errore
+                    log.info "errore nella rimozione di un elemento dalla lista"
+                    log.error unErrore
+                }// fine del blocco try-catch
+            } else {
+                log.info "la lista non conteneva la pagina principale"
+            }// fine del blocco if-else
+            if (rimossa) {
+//                    logService.warn 'cancellato il pageid della Pagina principale'
+                log.info 'cancellato il pageid della Pagina principale'
+            }// fine del blocco if
+        }// fine del blocco if
+
+        if (lista) {
+            num = lista.size()
+            num = Lib.Text.formatNum(num)
+            log.info "La categoria contiene ${num} voci"
+        } else {
+            logService.warn("La categoria ${titoloCategoria} non contiene nessuna voce")
+            log.warn "La categoria non contiene voci"
+        }// fine del blocco if-else
 
         // valore di ritorno
         return lista
@@ -271,18 +327,18 @@ class BioWikiService {
         int maxDownload
 
         if (listaNuoviRecords) {
-            num = listaNuoviRecords.size()
-            num = Lib.Text.formatNum(num)
-            log.info "Ci sono ${num} nuovi records da creare"
-            logService.info "Ci sono ${num} nuove voci da importare"
-
             if (LibPref.getBool('usaLimiteDownload')) {
                 maxDownload = LibPref.getInt('maxDownload')
                 listaNuoviRecords = LibArray.estraArray(listaNuoviRecords, maxDownload)
             }// fine del blocco if
 
+            num = listaNuoviRecords.size()
+            num = Lib.Text.formatNum(num)
+            log.info "Ci sono ${num} nuovi records da creare"
+
             //--creo le voci nuove che non hanno ancora records
             this.regolaVociNuoveModificate(listaNuoviRecords)
+            logService.info "Sono state aggiunte ${num} nuove voci dopo l'ultimo check"
             log.warn "Fine dei nuovi records"
         } else {
             log.warn "Non ci sono nuovi records da creare"
@@ -513,7 +569,7 @@ class BioWikiService {
                     listaPageids.each {
                         this.regolaBloccoNuovoModificato((ArrayList) it)
                         cont++
-                        log.info "Regolato il blocco $cont/$totBlocchi"
+                        log.info "Caricato il blocco $cont/$totBlocchi"
                         tempo()
                     }// fine del ciclo each
                 }// fine del blocco if
@@ -537,6 +593,11 @@ class BioWikiService {
         String numero
         WrapBio wrapBio
         String title
+        int pageid
+        boolean debug = Preferenze.getBool((String) grailsApplication.config.debug)
+        boolean registrata
+        HashMap mappa
+        StatoBio statoBio
 
         if (listaPageids) {
             try { // prova ad eseguire il codice
@@ -546,28 +607,67 @@ class BioWikiService {
                 log.error 'Non sono riuscito ad eseguire la query'
             }// fine del blocco try-catch
 
-            // caso singolo
-            if (listaMappe && listaMappe.size() == 1) {
-//                mappaWiki = pagina.getPar()
-//                //@todo inizio nuova gestione
-//                // wrapBio = new WrapBio(mappaWiki, true)
-//                //this.regolaMappaPar(mappaWiki, true)
-//                this.creaWrapBio(mappaWiki)
-            }// fine del blocco if
-
-            //caso normale del blocco multipagine
             if (listaMappe && listaMappe.size() > 1) {
                 listaMappe.each {
-                    wrapBio = new WrapBio(it)
+                    mappa = it
+                    wrapBio = new WrapBio(mappa)
                     title = wrapBio.getTitoloVoce()
-                    if (wrapBio.isValida()) {
-                        wrapBio.registraBioWiki()
-                    } else {
-                        logService.warn "La voce [[${title}]], non è stata registrata"
+                    pageid = wrapBio.getPageid()
+                    statoBio = wrapBio.getStatoBio()
+                    switch (statoBio) {
+                        case StatoBio.bioNormale:
+                            if (!debug) {
+                                wrapBio.registraBioWiki()
+                                registrata = true
+                            }// fine del blocco if
+                            break
+                        case StatoBio.bioIncompleto:
+                            logService.warn "Alla voce [[${title}]] mancano alcuni campi indispensabili per il funzionamento del tmpl Bio"
+                            registrata = false
+                            break
+                        case StatoBio.bioErrato:
+                            logService.warn "Il tmpl Bio della voce [[${title}]] è errato"
+                            registrata = false
+                            break
+                        case StatoBio.senzaBio:
+                            logService.warn "Nella voce [[${title}]] manca completamente il tmpl Bio"
+                            registrata = false
+                            break
+                        case StatoBio.vuota:
+                            logService.error "La voce [[${title}]] non ha nessun contenuto di testo"
+                            registrata = false
+                            break
+                        case StatoBio.redirect:
+                            logService.warn "La voce [[${title}]] non è una voce biografica, ma un redirect"
+                            registrata = false
+                            break
+                        case StatoBio.disambigua:
+                            logService.warn "La voce [[${title}]] non è una voce biografica, ma una disambigua"
+                            registrata = false
+                            break
+                        case StatoBio.maiEsistita:
+                            if (title) {
+                                logService.error "La voce [[${title}]] non esiste"
+                            } else {
+                                if (pageid) {
+                                    logService.error "Non esiste la voce col pageid = ${pageid}"
+                                } else {
+                                    logService.error "Non esiste una pagina"
+                                }// fine del blocco if-else
+                            }// fine del blocco if-else
+                            registrata = false
+                            break
+                        default: // caso non definito
+                            break
+                    } // fine del blocco switch
+
+                    if (!registrata) {
                         log.error "regolaBloccoNuovoModificato - La voce ${title}, non è stata registrata"
+                    } else {
                     }// fine del blocco if-else
                 }// fine del ciclo each
             }// fine del blocco if
+
             numRec = BioWiki.count()
             numero = Lib.Txt.formatNum(numRec)
             log.info "Nel database dopo il flushing ci sono ${numero} records"

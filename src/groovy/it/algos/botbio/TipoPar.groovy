@@ -8,4 +8,4 @@ package it.algos.botbio
  */
 public enum TipoPar {
     frequente, medio, scarso, speciale, valorizzabile, valoriCorretti, sesso, giorno, anno
-}
+} // fine della Enumeration

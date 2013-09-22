@@ -146,4 +146,4 @@ public enum ParBio {
     public TipoPar getTipoPar() {
         return tipoPar;
     }
-}
+} // fine della Enumeration

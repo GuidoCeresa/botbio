@@ -12,8 +12,8 @@
           <root url="file://$USER_HOME$/.grails/2.2.3/projects/botbio/plugins/algospref-0.46/grails-app/views" relative="/" />
           <root url="file://$USER_HOME$/.grails/2.2.3/projects/botbio/plugins/algos-0.69/web-app" relative="/" />
           <root url="file://$USER_HOME$/.grails/2.2.3/projects/botbio/plugins/algos-0.69/grails-app/views" relative="/" />
-          <root url="file://$USER_HOME$/.grails/2.2.3/projects/botbio/plugins/algoswiki-0.46/web-app" relative="/" />
-          <root url="file://$USER_HOME$/.grails/2.2.3/projects/botbio/plugins/algoswiki-0.46/grails-app/views" relative="/" />
+          <root url="file://$USER_HOME$/.grails/2.2.3/projects/botbio/plugins/algoswiki-0.52/web-app" relative="/" />
+          <root url="file://$USER_HOME$/.grails/2.2.3/projects/botbio/plugins/algoswiki-0.52/grails-app/views" relative="/" />
         </webroots>
         <sourceRoots />
       </configuration>
@@ -58,11 +58,11 @@
       <sourceFolder url="file://$USER_HOME$/.grails/2.2.3/projects/botbio/plugins/algosvers-0.29/grails-app/domain" isTestSource="false" />
       <sourceFolder url="file://$USER_HOME$/.grails/2.2.3/projects/botbio/plugins/algosvers-0.29/grails-app/services" isTestSource="false" />
     </content>
-    <content url="file://$USER_HOME$/.grails/2.2.3/projects/botbio/plugins/algoswiki-0.46">
-      <sourceFolder url="file://$USER_HOME$/.grails/2.2.3/projects/botbio/plugins/algoswiki-0.46/src/groovy" isTestSource="false" />
-      <sourceFolder url="file://$USER_HOME$/.grails/2.2.3/projects/botbio/plugins/algoswiki-0.46/grails-app/i18n" isTestSource="false" />
-      <sourceFolder url="file://$USER_HOME$/.grails/2.2.3/projects/botbio/plugins/algoswiki-0.46/grails-app/controllers" isTestSource="false" />
-      <sourceFolder url="file://$USER_HOME$/.grails/2.2.3/projects/botbio/plugins/algoswiki-0.46/grails-app/services" isTestSource="false" />
+    <content url="file://$USER_HOME$/.grails/2.2.3/projects/botbio/plugins/algoswiki-0.52">
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.3/projects/botbio/plugins/algoswiki-0.52/src/groovy" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.3/projects/botbio/plugins/algoswiki-0.52/grails-app/i18n" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.3/projects/botbio/plugins/algoswiki-0.52/grails-app/controllers" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.3/projects/botbio/plugins/algoswiki-0.52/grails-app/services" isTestSource="false" />
     </content>
     <content url="file://$USER_HOME$/.grails/2.2.3/projects/botbio/plugins/cache-1.0.1">
       <sourceFolder url="file://$USER_HOME$/.grails/2.2.3/projects/botbio/plugins/cache-1.0.1/src/java" isTestSource="false" />

@@ -1,6 +1,9 @@
 package it.algos.botbio
 
+import it.algos.algoswiki.Const
+import it.algos.algoswiki.Query
 import it.algos.algoswiki.QueryPag
+import it.algos.algoswiki.StatoPagina
 import it.algos.algoswiki.WikiLib
 
 /**
@@ -23,6 +26,271 @@ class WrapBioTest extends GroovyTestCase {
     void tearDown() {
     } // fine del metodo iniziale
 
+    void testBioErratoIncompleto() {
+        String titolo
+        WrapBio wrap
+        String testoVoce
+        String testoTemplate
+
+    } // fine del test
+
+    void testTmplErrato() {
+        String titolo
+        WrapBio wrap
+        String testoVoce
+        String testoTemplate
+        StatoBio voceBioOttenuta
+        StatoBio voceBioRichiesta
+
+        titolo = 'Utente:Biobot/7'  //testo più template
+        voceBioRichiesta = StatoBio.bioNormale
+        wrap = new WrapBio(titolo)
+        assert wrap
+        testoVoce = wrap.getTestoVoce()
+        assert testoVoce
+        testoTemplate = wrap.getTestoTemplateOriginale()
+        assert testoTemplate
+        assert testoTemplate != testoVoce
+        voceBioOttenuta = wrap.getStatoBio()
+        assert voceBioOttenuta == voceBioRichiesta
+
+        titolo = 'Utente:Biobot/6'  //solo template
+        voceBioRichiesta = StatoBio.bioNormale
+        wrap = new WrapBio(titolo)
+        assert wrap
+        testoVoce = wrap.getTestoVoce()
+        assert testoVoce
+        testoTemplate = wrap.getTestoTemplateOriginale()
+        assert testoTemplate
+        assert testoTemplate == testoVoce
+        voceBioOttenuta = wrap.getStatoBio()
+        assert voceBioOttenuta == voceBioRichiesta
+
+        titolo = 'Utente:Biobot/5'  //template incompleto
+        voceBioRichiesta = StatoBio.bioIncompleto
+        wrap = new WrapBio(titolo)
+        assert wrap
+        testoVoce = wrap.getTestoVoce()
+        assert testoVoce
+        testoTemplate = wrap.getTestoTemplateOriginale()
+        assert testoTemplate
+        assert testoTemplate == testoVoce
+        voceBioOttenuta = wrap.getStatoBio()
+        assert voceBioOttenuta == voceBioRichiesta
+
+        titolo = 'Utente:Biobot/4'  //template errato
+        voceBioRichiesta = StatoBio.bioErrato
+        wrap = new WrapBio(titolo)
+        assert wrap
+        testoVoce = wrap.getTestoVoce()
+        assert testoVoce
+        testoTemplate = wrap.getTestoTemplateOriginale()
+        assert testoTemplate
+        assert testoTemplate == testoVoce
+        voceBioOttenuta = wrap.getStatoBio()
+        assert voceBioOttenuta == voceBioRichiesta
+
+        titolo = 'Utente:Biobot/3'  //redirect
+        voceBioRichiesta = StatoBio.redirect
+        wrap = new WrapBio(titolo)
+        assert wrap
+        testoVoce = wrap.getTestoVoce()
+        assert testoVoce
+        testoTemplate = wrap.getTestoTemplateOriginale()
+        assert testoTemplate == ''
+        assert testoTemplate != testoVoce
+        voceBioOttenuta = wrap.getStatoBio()
+        assert voceBioOttenuta == voceBioRichiesta
+
+        titolo = 'Artesa'  //disambigua
+        voceBioRichiesta = StatoBio.disambigua
+        wrap = new WrapBio(titolo)
+        assert wrap
+        testoVoce = wrap.getTestoVoce()
+        assert testoVoce
+        testoTemplate = wrap.getTestoTemplateOriginale()
+        assert testoTemplate == ''
+        assert testoTemplate != testoVoce
+        voceBioOttenuta = wrap.getStatoBio()
+        assert voceBioOttenuta == voceBioRichiesta
+
+        titolo = 'Utente:Biobot/2'  //vuota
+        voceBioRichiesta = StatoBio.vuota
+        wrap = new WrapBio(titolo)
+        assert wrap
+        testoVoce = wrap.getTestoVoce()
+        assert testoVoce == ''
+        testoTemplate = wrap.getTestoTemplateOriginale()
+        assert testoTemplate == ''
+        assert testoTemplate == testoVoce
+        voceBioOttenuta = wrap.getStatoBio()
+        assert voceBioOttenuta == voceBioRichiesta
+
+        titolo = 'Coripe'  //testo normale senza template
+        voceBioRichiesta = StatoBio.senzaBio
+        wrap = new WrapBio(titolo)
+        assert wrap
+        testoVoce = wrap.getTestoVoce()
+        assert testoVoce
+        testoTemplate = wrap.getTestoTemplateOriginale()
+        assert testoTemplate == ''
+        assert testoTemplate != testoVoce
+        voceBioOttenuta = wrap.getStatoBio()
+        assert voceBioOttenuta == voceBioRichiesta
+    } // fine del test
+
+    void testCompletaVoci() {
+        String titoloBase = 'Utente:Biobot/'
+        String titolo
+        int num = 6
+        int pageid
+        WrapBio wrap
+        StatoBio voceBioOttenuta
+        StatoBio voceBioRichiesta
+
+        titolo = 'Utente:Biobot/paginamaiscritta' //pagina inesistente
+        voceBioRichiesta = StatoBio.maiEsistita
+        wrap = new WrapBio(titolo)
+        assert wrap
+        voceBioOttenuta = wrap.getStatoBio()
+        assert voceBioOttenuta
+        assert voceBioOttenuta == voceBioRichiesta
+
+        pageid = 4689129 //pagina cancellata
+        voceBioRichiesta = StatoBio.maiEsistita  //@todo dovrebbe diventare StatoBio.cancellata
+        wrap = new WrapBio(pageid)
+        assert wrap
+        voceBioOttenuta = wrap.getStatoBio()
+        assert voceBioOttenuta
+        assert voceBioOttenuta == voceBioRichiesta
+
+        titolo = titoloBase + 2 //pagina vuota
+        voceBioRichiesta = StatoBio.vuota
+        wrap = new WrapBio(titolo)
+        assert wrap
+        voceBioOttenuta = wrap.getStatoBio()
+        assert voceBioOttenuta
+        assert voceBioOttenuta == voceBioRichiesta
+
+        titolo = titoloBase + 3 //pagina redirect
+        voceBioRichiesta = StatoBio.redirect
+        wrap = new WrapBio(titolo)
+        assert wrap
+        voceBioOttenuta = wrap.getStatoBio()
+        assert voceBioOttenuta
+        assert voceBioOttenuta == voceBioRichiesta
+
+        titolo = 'Artesa' //pagina redirect
+        voceBioRichiesta = StatoBio.disambigua
+        wrap = new WrapBio(titolo)
+        assert wrap
+        voceBioOttenuta = wrap.getStatoBio()
+        assert voceBioOttenuta
+        assert voceBioOttenuta == voceBioRichiesta
+
+        titolo = titoloBase + 4 //template errato
+        voceBioRichiesta = StatoBio.bioErrato
+        wrap = new WrapBio(titolo)
+        assert wrap
+        voceBioOttenuta = wrap.getStatoBio()
+        assert voceBioOttenuta
+        assert voceBioOttenuta == voceBioRichiesta
+
+        titolo = titoloBase + 5 //template errato
+        voceBioRichiesta = StatoBio.bioIncompleto
+        wrap = new WrapBio(titolo)
+        assert wrap
+        voceBioOttenuta = wrap.getStatoBio()
+        assert voceBioOttenuta
+        assert voceBioOttenuta == voceBioRichiesta
+
+        titolo = titoloBase + 6 //template normale e completo
+        voceBioRichiesta = StatoBio.bioNormale
+        wrap = new WrapBio(titolo)
+        assert wrap
+        voceBioOttenuta = wrap.getStatoBio()
+        assert voceBioOttenuta
+        assert voceBioOttenuta == voceBioRichiesta
+    } // fine del test
+
+    //--costruzione da array di pageid
+    void testArrayDebug() {
+        ArrayList listaPageids
+        Query query
+        ArrayList listaMappe
+        WrapBio wrapBio
+        String title
+        boolean debug = false
+        HashMap mappa
+        StatoBio statoBio
+        boolean registrata
+        int pageid
+
+        listaPageids = [0, 4689129, 4689130, 4689133, 160011, 4689135, 4689136, 4689137,142459]
+        query = new QueryMultiBio(listaPageids)
+        listaMappe = query.getListaMappe()
+
+        if (listaMappe && listaMappe.size() > 1) {
+            listaMappe.each {
+                mappa = it
+                wrapBio = new WrapBio(mappa)
+                title = wrapBio.getTitoloVoce()
+                pageid = wrapBio.getPageid()
+                statoBio = wrapBio.getStatoBio()
+                switch (statoBio) {
+                    case StatoBio.bioNormale:
+                        if (!debug) {
+//                            wrapBio.registraBioWiki()
+                            registrata = true
+                        }// fine del blocco if
+                        break
+                    case StatoBio.bioIncompleto:
+                        println("Alla voce [[${title}]] mancano alcuni campi indispensabili per il funzionamento del tmpl Bio")
+                        registrata = false
+                        break
+                    case StatoBio.bioErrato:
+                        println("Il tmpl Bio della voce [[${title}]] è errato")
+                        registrata = false
+                        break
+                    case StatoBio.senzaBio:
+                        println("Nella voce [[${title}]] manca completamente il tmpl Bio")
+                        registrata = false
+                        break
+                    case StatoBio.vuota:
+                        println("La voce [[${title}]] non ha nessun contenuto di testo")
+                        registrata = false
+                        break
+                    case StatoBio.redirect:
+                        println("La voce [[${title}]] non è una voce biografica, ma un redirect")
+                        registrata = false
+                        break
+                    case StatoBio.disambigua:
+                        println("La voce [[${title}]] non è una voce biografica, ma una disambigua")
+                        registrata = false
+                        break
+                    case StatoBio.maiEsistita:
+                        if (title) {
+                            println("La voce [[${title}]] non esiste")
+                        } else {
+                            if (pageid) {
+                                println("Non esiste la voce col pageid = ${pageid}")
+                            } else {
+                                println("Non esiste una pagina")
+                            }// fine del blocco if-else
+                        }// fine del blocco if-else
+                        registrata = false
+                        break
+                    default: // caso non definito
+                        break
+                } // fine del blocco switch
+
+                if (!registrata) {
+                    println("regolaBloccoNuovoModificato - La voce ${title}, non è stata registrata")
+                }// fine del blocco if
+            }// fine del ciclo each
+        }// fine del blocco if
+    } // fine del test
+
     //--costruzione da pageid
     void testSingolaVoce() {
         WrapBio wrap
@@ -35,8 +303,9 @@ class WrapBioTest extends GroovyTestCase {
         mappa = wrap.getMappaPar()
 
         assert mappa != null
-        assert mappa.size() == 14
+        assert mappa.size() == 15
 
+        assert mappa[Const.TAG_STATO_PAGINA] == StatoPagina.normale
         assert mappa['pageid'] != null
         assert mappa['pageid'] instanceof Integer
         assert mappa['pageid'] == PAGE_ID
@@ -176,7 +445,6 @@ class WrapBioTest extends GroovyTestCase {
             assert testoTemplateOriginale != null
             assert testoTemplateOriginale instanceof String
         } // fine del ciclo each
-
     } // fine del test
 
     void testValidita() {
@@ -191,7 +459,7 @@ class WrapBioTest extends GroovyTestCase {
         wrap = new WrapBio(pageid)
         assert wrap != null
         assert wrap.getTitoloVoce() == titolo
-        assertFalse(wrap.isValida())
+        assert wrap.isValida()
     } // fine del test
 
     void testErrore() {
@@ -227,7 +495,6 @@ class WrapBioTest extends GroovyTestCase {
         wrap = new WrapBio(titolo)
         assert wrap != null
         assert wrap.isValida()
-
     } // fine del test
 
     void testErrore2() {
@@ -246,12 +513,11 @@ class WrapBioTest extends GroovyTestCase {
 //        assert wrap.isValida()
 //        assert wrap.getTitoloVoce() == titolo
 
-        titolo='Luigi Belli'
+        titolo = 'Luigi Belli'
         wrap = new WrapBio(titolo)
         assert wrap != null
         assert wrap.isValida()
         assert wrap.getTitoloVoce() == titolo
-
     } // fine del test
 
 } // fine della classe di test

@@ -55,8 +55,6 @@ public class WrapBio {
 
     public static String tagAvviso = ' <!--Parametro bio inesistente-->'
 
-    boolean valida
-
     private HashMap mappaPar
     private String testoVoce
     private String testoTemplateOriginale  // testo del template originale presente sul server
@@ -78,12 +76,17 @@ public class WrapBio {
     private LinkedHashMap mappaFinale   // mappa definitiva (e registrabile sul server)
     private String testoTemplateFinale  // testo definitivo del template (e registrabile sul server)
     private String testoVoceFinale      // testo definitivo della voce (e registrabile sul server)
+
+    StatoBio statoBio = StatoBio.indeterminata
+    boolean valida
     private boolean isBio = false
+
     private boolean hasNote = false
     private boolean hasGraffe = false
     private boolean hasNascosto = false
     private boolean isRegistrabileDB = false
     private boolean isRegistrabileWiki = false
+
     private boolean meseNascitaValido = false
     private boolean meseMorteValido = false
     private boolean annoNascitaValido = false
@@ -141,6 +144,13 @@ public class WrapBio {
      * @param mappaWiki una mappa dei (21?) parametri
      */
     public WrapBio(HashMap mappaWiki) {
+        StatoPagina statoPagina
+        StatoBio statoBio
+
+        statoPagina = WikiLib.getStato(mappaWiki)
+        statoBio = StatoBio.get(statoPagina)
+        this.setStatoBio(statoBio)
+
         // Metodo iniziale con la mappa dei parametri recuperata da wiki
         this.inizializza(mappaWiki)
     }// fine del metodo costruttore completo
@@ -174,9 +184,9 @@ public class WrapBio {
         }// fine del blocco if
 
         // controllo di validità
-        if (pageid) {
-            this.inizializza(pageid)
-        }// fine del blocco if
+//        if (pageid) {
+        this.inizializza(pageid)
+//        }// fine del blocco if
     }// fine del metodo
 
     /**
@@ -189,11 +199,16 @@ public class WrapBio {
     public inizializza(int pageid) {
         QueryBio query
         HashMap mappaWiki
+        StatoPagina statoPagina
+        StatoBio statoBio
 
         // Recupera la pagina wiki dal server
         query = new QueryBio(pageid)
         if (query) {
             mappaWiki = query.getMappa()
+            statoPagina = query.getStatoPagina()
+            statoBio = StatoBio.get(statoPagina)
+            this.setStatoBio(statoBio)
         }// fine del blocco if
 
         // controllo di validità
@@ -213,6 +228,8 @@ public class WrapBio {
      * @param mappaWiki una mappa dei (21?) parametri
      */
     public inizializza(HashMap mappaWiki) {
+        boolean valida
+
         // regola le variabili di istanza coi parametri
         this.setMappaPar(mappaWiki)
 
@@ -220,13 +237,15 @@ public class WrapBio {
         this.estraeTestoTitolo()
 
         // Controlla la congruità della voce (testo) prima di proseguire
-        if (checkVoce()) {
-            // Estrae il template originale
+        valida = checkVoce()
+
+        // Estrae il template originale
 //            this.estraeTemplate()
 
-            // Estrae le mappe dal testo
-            this.estraeMappe()
+        // Estrae le mappe dal testo
+        this.estraeMappe()
 
+        if (valida) {
             // Crea un record di biografia con esattamente i dati del server wiki
             this.creaBioOriginale()
 
@@ -255,120 +274,6 @@ public class WrapBio {
 //            this.creaTestoVoceFinale()
         }// fine del blocco if
     }// fine del metodo
-
-//    /**
-//     * Metodo iniziale con la biografia
-//     * Legge la pagina sul server wiki
-//     * Recupera testo e mappaExtra
-//     *
-//     * @param biografia esistente sul db locale
-//     */
-//    public inizializza(Bio biografia) {
-//        // regola le variabili di istanza coi parametri
-//        String titolo
-//        String testoVoce
-//
-//        // mette da parte la biografia
-//        this.setBioFinale(biografia)
-//
-//        // recupera il titolo della voce
-//        titolo = biografia.title
-//        this.setTitoloVoce(titolo)
-//
-//        // recupera pagina e testo dal server wiki
-//        testoVoce = Pagina.leggeTesto(titolo)
-//        this.setTestoVoce(testoVoce)
-//
-//        // Estrae il template originale
-//        this.estraeTemplate()
-//
-//        // Estrae le mappe dal testo
-//        this.estraeMappe()
-//
-//        // Crea la mappa definitiva
-//        this.creaMappaFinale()
-//
-//        // Crea il testo definitivo del template
-//        this.creaTestoFinaleTemplate()
-//
-//        // Crea il testo definitivo della voce
-//        this.creaTestoVoceFinale()
-//    }// fine del metodo
-
-//    /**
-//     * Metodo iniziale con la mappa dei parametri recuperata da wiki
-//     * La mappa contiene anche il testo
-//     *
-//     * Estrae il testo ed il titolo della voce dai parametri wiki
-//     *
-//     * @param mappaWiki una mappa dei (21?) parametri
-//     */
-//    public inizializza(HashMap mappaWiki) {
-//        // regola le variabili di istanza coi parametri
-//        this.setMappaPar(mappaWiki)
-//
-//        // Estrae il testo ed il titolo della voce dai parametri wiki
-//        this.estraeTestoTitolo()
-//
-//        // Controlla la congruità della voce (testo) prima di proseguire
-//        if (checkVoce()) {
-//            // Estrae il template originale
-//            this.estraeTemplate()
-//
-//            // Estrae le mappe dal testo
-//            this.estraeMappe()
-//
-//            // Crea un record di biografia con esattamente i dati del server wiki
-//            this.creaBioOriginale()
-//
-//            // Modifica (ove possibile) i valori dei campi da linkare
-//            this.regolaBioModificata()
-//
-//            // Regola i campi linkati ad altre tavole
-//            this.regolaBioLinkata()
-//
-//            // Regola i flag dei campi linkati ad altre tavole
-//            this.regolaFlagLinkati()
-//
-//            // Elabora (ove possibile) i valori dei campi
-//            this.regolaBioFinale()
-//
-//            // Prepara la versione finale per la registrazione
-//            this.regolaBioRegistrabile()
-//
-//            // Crea la mappa definitiva
-//            this.creaMappaFinale()
-//
-//            // Crea il testo definitivo del template
-//            this.creaTestoFinaleTemplate()
-//
-//            // Crea il testo definitivo della voce
-//            this.creaTestoVoceFinale()
-//        }// fine del blocco if
-//    }// fine del metodo
-
-//    /**
-//     * Metodo iniziale con il titolo della voce ed il testo
-//     *
-//     * @param titoloVoce
-//     * @param testoVoce
-//     */
-//    public inizializza(String titoloVoce, String testoVoce) {
-//        // recupera il titolo della voce
-//        this.setTitoloVoce(titoloVoce)
-//
-//        // recupera pagina e testo dal server wiki
-//        this.setTestoVoce(testoVoce)
-//
-//        // Controlla la congruità della voce (testo) prima di proseguire
-//        if (checkVoce()) {
-//            // Estrae il template originale
-//            this.estraeTemplate()
-//
-//            // Estrae le mappe dal testo
-//            this.estraeMappe()
-//        }// fine del blocco if
-//    }// fine del metodo
 
     /**
      * Controlla la congruità della voce (testo) prima di proseguire
@@ -402,19 +307,39 @@ public class WrapBio {
         if (continua) {
             testoCompletoVoce = this.getTestoVoce()
             if (!testoCompletoVoce) {
+                this.setStatoBio(StatoBio.vuota)
                 continua = false
                 valida = false
             }// fine del blocco if
+        }// fine del blocco if
+
+        //--controlla che la pagina sia normale
+        //--per cercare il template bio
+        //--esclude redirect e disambigue
+        if (continua) {
+            if (getStatoBio() == StatoBio.normale) {
+                this.setStatoBio(StatoBio.bioNormale)
+                continua = true
+            } else {
+                continua = false
+            }// fine del blocco if-else
         }// fine del blocco if
 
         //--controlla l'esistenza del template bio
         //--se mancano parametri, meglio non registrare e segnalare l'errore
         if (continua) {
             testoTemplate = this.getTestoTemplateOriginale()
-            if (testoTemplate && LibWiki.isGraffePari(testoTemplate)) {
-                this.setBio(true)
+            if (testoTemplate) {
+                if (LibWiki.isGraffePari(testoTemplate)) {
+                } else {
+                    this.setBio(false)
+                    this.setStatoBio(StatoBio.bioErrato)
+                    continua = false
+                    valida = false
+                }// fine del blocco if-else
             } else {
                 this.setBio(false)
+                this.setStatoBio(StatoBio.senzaBio)
                 continua = false
                 valida = false
             }// fine del blocco if-else
@@ -454,11 +379,14 @@ public class WrapBio {
         boolean trovati = true
         String testo
         String titolo
+        int pageid
         String template
         HashMap mappaPar = this.getMappaPar()
 
         if (mappaPar) {
-            titolo = mappaPar[Const.TAG_TITlE]
+            if (mappaPar[Const.TAG_TITlE]) {
+                titolo = (String) mappaPar[Const.TAG_TITlE]
+            }// fine del blocco if
             if (titolo) {
                 this.setTitoloVoce(titolo)
             } else {
@@ -466,12 +394,24 @@ public class WrapBio {
                 log.error 'estraeTestoTitolo - La pagina con ID ' + mappaPar.pageid + ' non ha titolo'
             }// fine del blocco if-else
 
-            testo = mappaPar[Const.TAG_TESTO]
+            if (mappaPar[Const.TAG_TESTO]) {
+                testo = (String) mappaPar[Const.TAG_TESTO]
+            }// fine del blocco if
             if (testo) {
                 this.setTestoVoce(testo)
             } else {
+                this.setTestoVoce('')
                 trovati = false
                 log.error 'estraeTestoTitolo - La pagina dal titolo ' + mappaPar.title + ' non ha testo'
+            }// fine del blocco if-else
+
+            if (mappaPar[Const.TAG_PAGE_ID]) {
+                pageid = (int) mappaPar[Const.TAG_PAGE_ID]
+            }// fine del blocco if
+            if (pageid) {
+                this.setPageid(pageid)
+            } else {
+                log.error 'estraeTestoTitolo - La pagina dal titolo ' + mappaPar.title + ' non ha pageid'
             }// fine del blocco if-else
 
             if (testo) {
@@ -479,10 +419,13 @@ public class WrapBio {
                 if (template) {
                     this.setTestoTemplateOriginale(template)
                 } else {
+                    this.setTestoTemplateOriginale('')
                     trovati = false
                     log.error 'estraeTestoTitolo - La pagina dal titolo ' + mappaPar.title + ' non ha template Bio'
                 }// fine del blocco if-else
-            }// fine del blocco if
+            } else {
+                this.setTestoTemplateOriginale('')
+            }// fine del blocco if-else
         }// fine del blocco if
 
         return trovati
@@ -532,6 +475,10 @@ public class WrapBio {
         }// fine del blocco if
 
         if (continua) {
+            this.checkValiditàTemplate(mappaBio)
+        }// fine del blocco if
+
+        if (continua) {
 //            mappaExtra = LibBio.getMappaExtraBio(wikiService, testoTemplate)
             if (mappaExtra && mappaExtra.size() > 0) {
                 continua = true
@@ -557,6 +504,33 @@ public class WrapBio {
             }// fine del blocco if
         }// fine del blocco if
 
+    } // fine del metodo
+
+    /**
+     * Controlla che il template contenga tutti i campi obbligatori:
+     *  Nome
+     *  Sesso
+     * Controlla che i siano alcuni campi alternativi, quando mancano quelli normali:
+     *  Attività e Nazionalità, sostituiti da Categorie e FineIncipit
+     */
+    public checkValiditàTemplate(LinkedHashMap mappaBio) {
+        boolean incompleto = false
+        ArrayList chiavi
+        String titoloVoce = this.getTitoloVoce()
+
+        chiavi = mappaBio.keySet().toArray()
+        if (!chiavi.contains('Nome')) {
+            incompleto = true
+//            logService.error "Nella voce [[${titoloVoce}]] manca il parametro Nome che è indispensabile per il corretto funzionamento del template"
+        }// fine del blocco if
+        if (!chiavi.contains('Sesso')) {
+            incompleto = true
+//            logService.error "Nella voce [[${titoloVoce}]] manca il parametro Sesso che è indispensabile per il corretto funzionamento del template"
+        }// fine del blocco if
+
+        if (incompleto) {
+            this.setStatoBio(StatoBio.bioIncompleto)
+        }// fine del blocco if-else
     } // fine del metodo
 
     /**
@@ -1603,5 +1577,13 @@ public class WrapBio {
 
     private void setValida(boolean valida) {
         this.valida = valida
+    }
+
+    StatoBio getStatoBio() {
+        return statoBio
+    }
+
+    void setStatoBio(StatoBio statoBio) {
+        this.statoBio = statoBio
     }
 } // fine della classe
