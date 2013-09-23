@@ -27,15 +27,23 @@ class BotbioTagLib {
     def listaControllers = {
         String testoOut = ''
 
+        //--controllers dei plugins
         testoOut += tagController('Preferenze')
-        testoOut += tagController('Logo')
-        testoOut += tagController('Evento')
         testoOut += tagController('Versione')
-        testoOut += tagController('LoginWiki')
+        testoOut += tagController('Evento')
+        testoOut += tagController('Logo')
+
+        //--controllers di supporto
+        if (mostraSetup()) {
+            testoOut += tagController('Setup')
+        }// fine del blocco if
+        testoOut += tagController('LoginWiki') //--controller del plugin
         testoOut += tagController('Anno')
         testoOut += tagController('Giorno')
         testoOut += tagController('Attivita')
         testoOut += tagController('Nazionalita')
+
+        //--controllers dei (3) database principali
         testoOut += tagController('Bio')
         testoOut += tagController('BioWiki')
         testoOut += tagController('BioGrails')
@@ -67,6 +75,27 @@ class BotbioTagLib {
     } // fine del metodo statico
 
     //--Costruisce il tag controller per il testo indicato
+    private static boolean mostraSetup() {
+        boolean mostra = false
+
+        if (Giorno.count < 1) {
+            mostra = true
+        }// fine del blocco if
+        if (Anno.count < 1) {
+            mostra = true
+        }// fine del blocco if
+        if (Attivita.count < 1) {
+            mostra = true
+        }// fine del blocco if
+        if (Nazionalita.count < 1) {
+            mostra = true
+        }// fine del blocco if
+
+        return mostra
+    } // fine del metodo statico
+
+    //--Costruisce il tag controller per il testo indicato
+
     public static String tagController(String controller, String titolo) {
         return tagController(controller, titolo, '')
     } // fine del metodo statico

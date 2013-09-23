@@ -107,15 +107,26 @@
     <g:if test="${flash.error}">
         <div class="errors" role="status">${flash.error}</div>
     </g:if>
+    <g:if test="${flash.messages}">
+        <g:each in="${flash.messages}" status="i" var="singoloMessaggio">
+            <div class="message" role="status">${singoloMessaggio}</div>
+        </g:each>
+    </g:if>
+    <g:if test="${flash.errors}">
+        <g:each in="${flash.errors}" status="i" var="singoloErrore">
+            <div class="errors" role="status">${singoloErrore}</div>
+        </g:each>
+    </g:if>
 
     <div id="controller-list" role="navigation">
         <h2>Moduli disponibili:</h2>
         <ul>
             <g:if test="${grailsApplication.config.mostraControllerSpecifici}">
-                <bio:listaControllers> </bio:listaControllers>
+                <bio:listaControllers></bio:listaControllers>
             </g:if>
             <g:else>
-                <g:each var="c" in="${grailsApplication.controllerClasses.findAll { it.fullName != 'grails.plugin.databasemigration.DbdocController' }}">
+                <g:each var="c"
+                        in="${grailsApplication.controllerClasses.findAll { it.fullName != 'grails.plugin.databasemigration.DbdocController' }}">
                     <li class="controller"><g:link controller="${c.logicalPropertyName}">${c.getName()}</g:link></li>
                 </g:each>
             </g:else>
