@@ -20,12 +20,13 @@ import java.text.SimpleDateFormat
  * Classe con esattamente i dati esistenti sul server (nel momento in cui li legge)
  * Fotocopia esatta
  */
-class BioWiki extends Bio {
+class BioWiki  {
 
     /** nomi interni dei campi (ordine non garantito) */
     //--parametri wiki
-    int ns
+    int pageid
     String title
+    int ns
     Date touched
     int revid
     int size
@@ -35,6 +36,51 @@ class BioWiki extends Bio {
     String logNote
     String logErr
     int langlinks
+
+    //--parametri del template Bio presenti nel template della voce
+    String titolo = ''  //titolo tipo ''dottore'', non TITLE della pagina
+    String nome = ''
+    String cognome = ''
+    String forzaOrdinamento = ''
+    String sesso = ''
+    String postCognome = ''
+    String postCognomeVirgola = ''
+    String preData = ''
+
+    String luogoNascita = ''
+    String luogoNascitaLink = ''
+    String luogoNascitaAlt = ''
+    String giornoMeseNascita = ''
+    String annoNascita = ''
+    String noteNascita = ''
+
+    String luogoMorte = ''
+    String luogoMorteLink = ''
+    String luogoMorteAlt = ''
+    String giornoMeseMorte = ''
+    String annoMorte = ''
+    String noteMorte = ''
+
+    String preAttivita = ''
+    String epoca = ''
+    String epoca2 = ''
+    String cittadinanza = ''
+    String attivitaAltre = ''
+    String nazionalitaNaturalizzato = ''
+    String postNazionalita = ''
+
+    String attivita = ''
+    String attivita2 = ''
+    String attivita3 = ''
+    String nazionalita = ''
+
+    String categorie = ''
+    String fineIncipit = ''
+    String punto = ''
+    String immagine = ''
+    String didascalia = ''
+    String didascalia2 = ''
+    String dimImmagine = ''
 
     //--estratto dal testo della voce
     String testoTemplate
@@ -77,6 +123,9 @@ class BioWiki extends Bio {
     //serve per le voci che sono state ricaricate su wiki dopo controllo e formattazione del template
     boolean controllato = false
 
+    //serve per le voci che sono state elaborate e trasferite (creando od aggiornando il record) su BioGrails
+    boolean elaborata = false
+
     /**
      * regolazione delle proprietà di ogni campo
      * l'ordine con cui vengono elencati qui,
@@ -84,11 +133,11 @@ class BioWiki extends Bio {
      * la possibilità di avere valori nulli, di default è false
      */
     static constraints = {
-        pageid()
-        wikiUrl()
-        title(nullable: true)
+        wikiUrl(nullable: true)
         testoTemplate(nullable: true)
 
+        pageid(unique: true, nullable: false, blank: false)
+        title(unique: true, nullable: false, blank: false)
         ns()
         touched(nullable: true, formatoData: new SimpleDateFormat('d MMM yy'))
         revid()
@@ -98,7 +147,51 @@ class BioWiki extends Bio {
         comment(nullable: true)
         logNote(nullable: true)
         logErr(nullable: true)
-        langlinks()
+        langlinks(nullable: true)
+
+        nome(nullable: true, blank: true)
+        cognome(nullable: true, blank: true)
+        forzaOrdinamento(nullable: true, blank: true)
+        sesso(nullable: true, blank: true)
+
+        attivita(nullable: true, blank: true)
+        attivita2(nullable: true, blank: true)
+        attivita3(nullable: true, blank: true)
+        nazionalita(nullable: true, blank: true)
+
+        titolo(nullable: true, blank: true)
+        postCognome(nullable: true, blank: true)
+        postCognomeVirgola(nullable: true, blank: true)
+        preData(nullable: true, blank: true)
+        luogoNascita(nullable: true, blank: true)
+        luogoNascitaLink(nullable: true, blank: true)
+        luogoNascitaAlt(nullable: true, blank: true)
+        giornoMeseNascita(nullable: true, blank: true)
+        annoNascita(nullable: true, blank: true)
+        noteNascita(nullable: true, blank: true)
+
+        luogoMorte(nullable: true, blank: true)
+        luogoMorteLink(nullable: true, blank: true)
+        luogoMorteAlt(nullable: true, blank: true)
+        giornoMeseMorte(nullable: true, blank: true)
+        annoMorte(nullable: true, blank: true)
+        noteMorte(nullable: true, blank: true)
+
+        preAttivita(nullable: true, blank: true)
+        epoca(nullable: true, blank: true)
+        epoca2(nullable: true, blank: true)
+        cittadinanza(nullable: true, blank: true)
+        attivitaAltre(nullable: true, blank: true)
+        nazionalitaNaturalizzato(nullable: true, blank: true)
+        postNazionalita(nullable: true, blank: true)
+
+        categorie(nullable: true, blank: true)
+        fineIncipit(nullable: true, blank: true)
+        punto(nullable: true, blank: true)
+        immagine(nullable: true, blank: true)
+        didascalia(nullable: true, blank: true)
+        didascalia2(nullable: true, blank: true)
+        dimImmagine(nullable: true, blank: true)
 
         ultimaLettura(nullable: true)
         ultimaScrittura(nullable: true)
@@ -147,6 +240,48 @@ class BioWiki extends Bio {
         comment type: 'text'
         logNote type: 'text'
         logErr type: 'text'
+
+        // stringa di lunghezza variabile
+        nome type: 'text'
+        cognome type: 'text'
+        postCognome type: 'text'
+        postCognomeVirgola type: 'text'
+        forzaOrdinamento type: 'text'
+        preData type: 'text'
+        sesso type: 'text'
+
+        luogoNascita type: 'text'
+        luogoNascitaLink type: 'text'
+        luogoNascitaAlt type: 'text'
+        giornoMeseNascita type: 'text'
+        annoNascita type: 'text'
+        noteNascita type: 'text'
+
+        luogoMorte type: 'text'
+        luogoMorteLink type: 'text'
+        luogoMorteAlt type: 'text'
+        giornoMeseMorte type: 'text'
+        annoMorte type: 'text'
+        noteMorte type: 'text'
+
+        preAttivita type: 'text'
+        attivita type: 'text'
+        epoca type: 'text'
+        epoca2 type: 'text'
+        attivita2 type: 'text'
+        attivita3 type: 'text'
+        attivitaAltre type: 'text'
+        nazionalita type: 'text'
+        nazionalitaNaturalizzato type: 'text'
+        postNazionalita type: 'text'
+
+        categorie type: 'text'
+        fineIncipit type: 'text'
+        punto type: 'text'
+        immagine type: 'text'
+        didascalia type: 'text'
+        didascalia2 type: 'text'
+        dimImmagine type: 'text'
 
         // stringa di lunghezza variabile
         testoTemplate type: 'text'

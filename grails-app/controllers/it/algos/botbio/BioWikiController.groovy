@@ -19,6 +19,7 @@ import it.algos.algoslib.Lib
 import org.codehaus.groovy.grails.commons.DefaultGrailsDomainClass
 import org.springframework.dao.DataIntegrityViolationException
 
+//--gestisce il download delle informazioni
 class BioWikiController {
 
     static allowedMethods = [save: 'POST', update: 'POST', delete: 'POST']
@@ -30,7 +31,7 @@ class BioWikiController {
     def eventoService
     def bioWikiService
     def grailsApplication
-
+    def bioService
 
     def index() {
         redirect(action: 'list', params: params)
@@ -82,7 +83,6 @@ class BioWikiController {
         }// fine del blocco if-else
     } // fine del metodo
 
-
     //--ritorno dal dialogo di conferma
     //--a seconda del valore ritornato come parametro, esegue o meno l'operazione
     //--importa (usa il nome-metodo create, perchè è il primo ed unico della lista standard)
@@ -108,6 +108,28 @@ class BioWikiController {
         redirect(action: 'list')
     } // fine del metodo
 
+    //--mostra un dialogo di conferma per l'operazione da compiere
+    //--passa al metodo effettivo
+    def elabora() {
+        if (BioWiki.count() > 0) {
+            params.tipo = TipoDialogo.conferma
+            params.avviso = 'Elaborazione di tutte le biografie. Da BioWiki a BioGrails. Ci vogliono parecchie ore. Sei sicuro di volerlo fare?'
+            params.returnController = 'bioWiki'
+            params.returnAction = 'elaboraDopoConferma'
+            redirect(controller: 'dialogo', action: 'box', params: params)
+        } else {
+            params.tipo = TipoDialogo.avviso
+            params.avviso = 'Sorry, non ci sono voci biografiche da elaborare !'
+            params.returnController = 'bio'
+            redirect(controller: 'dialogo', action: 'box', params: params)
+        }// fine del blocco if-else
+    } // fine del metodo
+
+    //--elaborazione dei dati da BioWiki a BioGrails
+    def elaboraDopoConferma() {
+        bioService.elabora()
+        redirect(uri: '/')
+    } // fine del metodo
 
     def list(Integer max) {
         params.max = Math.min(max ?: 1000, 1000)
@@ -134,7 +156,8 @@ class BioWikiController {
         //--mappa con [cont:'controller', action:'metodo', icon:'iconaImmagine', title:'titoloVisibile']
         menuExtra = [
                 [cont: 'bioWiki', action: 'aggiungeWiki', icon: 'frecciagiu', title: 'AggiungeWiki'],
-                [cont: 'bioWiki', action: 'aggiornaWiki', icon: 'frecciagiu', title: 'AggiornaWiki']
+                [cont: 'bioWiki', action: 'aggiornaWiki', icon: 'frecciagiu', title: 'AggiornaWiki'],
+                [cont: 'bioWiki', action: 'elabora', icon: 'pippo', title: 'Elabora']
         ]
         // fine della definizione
 

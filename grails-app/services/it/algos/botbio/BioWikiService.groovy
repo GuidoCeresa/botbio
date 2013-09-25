@@ -86,7 +86,7 @@ class BioWikiService {
         ArrayList<Integer> listaNuoviRecordsDaCreare = null
         ArrayList<Integer> listaRecordsForseDaCancellare = null
         ArrayList<Integer> listaRecordsDaCancellare = null
-        int vociCat
+        int vociCat = 0
         def numVoci
         String percentuale
         boolean debug = Preferenze.getBool((String) grailsApplication.config.debug)
@@ -99,7 +99,7 @@ class BioWikiService {
         //--Recupera dal server la lista completa delle voci esistenti dalla categoria BioBot
         if (continua) {
             if (debug) {
-                listaVociServerWiki = [0, 4689129, 4689130, 4689133, 160011, 4689135, 4689136, 4689137,142459]
+                listaVociServerWiki = [0, 4689129, 4689130, 4689133, 160011, 4689135, 4689136, 4689137, 142459]
             } else {
                 listaVociServerWiki = this.getListaVociServerWiki()
             }// fine del blocco if-else
@@ -152,7 +152,9 @@ class BioWikiService {
 
         // valore di ritorno
         log.info 'Fine del metodo di aggiunta nuovi records'
-        vociCat = listaVociServerWiki.size()
+        if (listaVociServerWiki) {
+            vociCat = listaVociServerWiki.size()
+        }// fine del blocco if
         numVoci = BioWiki.count()
         percentuale = LibTesto.formatPercentuale(numVoci, vociCat)
         numVoci = LibTesto.formatNum(numVoci)
@@ -638,15 +640,15 @@ class BioWikiService {
                             registrata = false
                             break
                         case StatoBio.bioErrato:
-                            logService.warn "Il '''[[Template:Bio|tmpl Bio]]''' della voce '''[[${title}]]''' è errato"
+                            logService.error "Il '''[[Template:Bio|tmpl Bio]]''' della voce '''[[${title}]]''' è errato"
                             registrata = false
                             break
                         case StatoBio.senzaBio:
-                            logService.warn "Nella voce '''[[${title}]]''' manca completamente il '''[[Template:Bio|tmpl Bio]]'''"
+                            logService.error "Nella voce '''[[${title}]]''' manca completamente il '''[[Template:Bio|tmpl Bio]]'''"
                             registrata = false
                             break
                         case StatoBio.vuota:
-                            logService.warn "La voce '''[[${title}]]''' non ha nessun contenuto di testo"
+                            logService.error "La voce '''[[${title}]]''' non ha nessun contenuto di testo"
                             registrata = false
                             break
                         case StatoBio.redirect:
@@ -659,12 +661,12 @@ class BioWikiService {
                             break
                         case StatoBio.maiEsistita:
                             if (title) {
-                                logService.warn "La voce '''[[${title}]]''' non esiste"
+                                logService.error "La voce '''[[${title}]]''' non esiste"
                             } else {
                                 if (pageid) {
-                                    logService.warn "Non esiste la voce col pageid = '''${pageid}'''"
+                                    logService.error "Non esiste la voce col pageid = '''${pageid}'''"
                                 } else {
-                                    logService.warn "Non esiste una pagina"
+                                    logService.error "Non esiste una pagina"
                                 }// fine del blocco if-else
                             }// fine del blocco if-else
                             registrata = false

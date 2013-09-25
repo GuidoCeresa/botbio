@@ -13,9 +13,36 @@
 
 package it.algos.botbio
 
-class BioGrails extends Bio{
+class BioGrails  {
 
     /** nomi interni dei campi (ordine non garantito) */
+    //--parametri wiki
+    int pageid
+    String title
+
+    //--parametri del template Bio presenti nel template della voce
+    //--alcuni sono presenti nella superclasse
+    String nome = ''
+    String cognome = ''
+    String forzaOrdinamento = ''
+    String sesso = ''
+    String localitaNato //luogoNascita oppure luogoNascitaLink se esiste in BioWiki
+    String localitaMorto //luogoMorte oppure luogoMorteLink se esiste in BioWiki
+
+    String attivita = ''
+    String attivita2 = ''
+    String attivita3 = ''
+    String nazionalita = ''
+
+    String didascaliaBase
+    String didascaliaAnnoNatoPrima
+    String didascaliaAnnoNatoDopo
+    String didascaliaAnnoMortoPrima
+    String didascaliaAnnoMortoDopo
+    String didascaliaGiornoNatoPrima
+    String didascaliaGiornoNatoDopo
+    String didascaliaGiornoMortoPrima
+    String didascaliaGiornoMortoDopo
 
     // altri campi di collegamenti alle altre tavole specializzate
     Giorno giornoMeseNascitaLink = null
@@ -27,24 +54,23 @@ class BioGrails extends Bio{
     Attivita attivita3Link = null
     Nazionalita nazionalitaLink = null
 
-
     //--altri campi di controllo
-    boolean meseNascitaValido = false
-    boolean meseMorteValido = false
-    boolean annoNascitaValido = false
-    boolean annoMorteValido = false
-    boolean attivitaValida = false
-    boolean attivita2Valida = false
-    boolean attivita3Valida = false
-    boolean nazionalitaValida = false
-    boolean meseNascitaErrato = false
-    boolean meseMorteErrato = false
-    boolean annoNascitaErrato = false
-    boolean annoMorteErrato = false
-    boolean attivitaErrato = false
-    boolean attivita2Errato = false
-    boolean attivita3Errato = false
-    boolean nazionalitaErrato = false
+//    boolean meseNascitaValido = false
+//    boolean meseMorteValido = false
+//    boolean annoNascitaValido = false
+//    boolean annoMorteValido = false
+//    boolean attivitaValida = false
+//    boolean attivita2Valida = false
+//    boolean attivita3Valida = false
+//    boolean nazionalitaValida = false
+//    boolean meseNascitaErrato = false
+//    boolean meseMorteErrato = false
+//    boolean annoNascitaErrato = false
+//    boolean annoMorteErrato = false
+//    boolean attivitaErrato = false
+//    boolean attivita2Errato = false
+//    boolean attivita3Errato = false
+//    boolean nazionalitaErrato = false
 
     /**
      * regolazione delle proprietà di ogni campo
@@ -53,6 +79,32 @@ class BioGrails extends Bio{
      * la possibilità di avere valori nulli, di default è false
      */
     static constraints = {
+
+        pageid(unique: true, nullable: false, blank: false)
+        title(unique: true, nullable: false, blank: false)
+
+        nome(nullable: true, blank: true)
+        cognome(nullable: true, blank: true)
+        forzaOrdinamento(nullable: true, blank: true)
+        sesso(nullable: true, blank: true)
+
+        attivita(nullable: true, blank: true)
+        attivita2(nullable: true, blank: true)
+        attivita3(nullable: true, blank: true)
+        nazionalita(nullable: true, blank: true)
+        localitaNato(nullable: true, blank: true)
+        localitaMorto(nullable: true, blank: true)
+
+        didascaliaBase(nullable: true, blank: true)
+        didascaliaAnnoNatoPrima(nullable: true, blank: true)
+        didascaliaAnnoNatoDopo(nullable: true, blank: true)
+        didascaliaAnnoMortoPrima(nullable: true, blank: true)
+        didascaliaAnnoMortoDopo(nullable: true, blank: true)
+        didascaliaGiornoNatoPrima(nullable: true, blank: true)
+        didascaliaGiornoNatoDopo(nullable: true, blank: true)
+        didascaliaGiornoMortoPrima(nullable: true, blank: true)
+        didascaliaGiornoMortoDopo(nullable: true, blank: true)
+
         giornoMeseNascitaLink(nullable: true)
         giornoMeseMorteLink(nullable: true)
         annoNascitaLink(nullable: true)
@@ -82,7 +134,6 @@ class BioGrails extends Bio{
     static mapping = {
         tablePerHierarchy true  //standard
     } // end of static mapping
-
 
     /**
      * GORM supports the registration of events as methods that get fired

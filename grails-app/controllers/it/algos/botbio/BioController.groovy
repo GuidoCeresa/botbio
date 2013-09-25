@@ -13,10 +13,12 @@
 
 package it.algos.botbio
 
+import it.algos.algos.TipoDialogo
 import it.algos.algoslib.Lib
 import org.codehaus.groovy.grails.commons.DefaultGrailsDomainClass
 import org.springframework.dao.DataIntegrityViolationException
 
+//--gestisce l'elaborazione dei dati
 class BioController {
 
     static allowedMethods = [save: 'POST', update: 'POST', delete: 'POST']
@@ -28,6 +30,7 @@ class BioController {
     def eventoService
     def bioService
     def grailsApplication
+
 
     def index() {
         redirect(action: 'list', params: params)
@@ -133,10 +136,6 @@ class BioController {
         }// fine del blocco if
     } // fine del metodo
 
-
-    def create() {
-        [bioInstance: new Bio(params)]
-    } // fine del metodo
 
     def save() {
         def bioInstance = new Bio(params)

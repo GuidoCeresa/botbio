@@ -19,6 +19,7 @@ class LibBio {
     public static final String USA_PAGINE_SINGOLE = 'usaPagineSingole'
     public static final String USA_LIMITE_DOWNLOAD = 'usaLimiteDownload'
     public static final String MAX_DOWNLOAD = 'maxDownload'
+    public static final String USA_CRONO_DOWNLOAD = 'usaCronoDownload'
 
     private static String TAG_BIO = '\\{\\{ ?([Tt]emplate:)? ?[Bb]io[ \\|\n\r\t]'
 

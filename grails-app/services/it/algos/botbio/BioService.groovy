@@ -49,51 +49,154 @@ class BioService {
 
     private static boolean pagineMultiple = true // controllo e caricamente singolo piuttosto che a pacchetto
 
-
-
-
-
-    /**
-     * Regola i link interni in funzione dei parametri già caricati
-     *
-     * Recupera la lista dei records esistenti nel database
-     */
-    public regola = {
+    //--Elaborazione dei dati da BioWiki a BioGrails
+    //--Recupera la lista dei records esistenti nel database Bio
+    //--Spazola la lista e crea un record di BioGrails per ogni record di Bio
+    //--Copiando SOLO i campi validi di Bio
+    public elabora() {
         // variabili e costanti locali di lavoro
-        def listaid
-        Bio biografia
+        ArrayList<Integer> listaid
+        BioWiki bioWiki
+        BioGrails bioGrails
+        BioGrails bioGrailsRegistrata
         int num = 0
         def numStringa
         int delta = 1000
+        int pageid
 
         //Recupera la lista dei records esistenti nel database
-        log.info 'Recupera tutti i records di Bio (1 minuto circa)'
+        log.info 'Recupera tutti i records di BioWiki (1 minuto circa)'
 
-        listaid = Bio.executeQuery('select id from Bio')
+        listaid = (ArrayList<Integer>) BioWiki.executeQuery('select pageid from BioWiki where elaborata=false')
 
-        if (listaid) {
-            listaid.each {
-                num++
-
-                if (num % delta == 0) {
-                    numStringa = WikiLib.formatNumero(num)
-                    log.info "Regolati ${numStringa} records"
+        listaid?.each {
+            pageid = (int) it
+            bioWiki = BioWiki.findByPageid(pageid)
+            if (bioWiki) {
+                bioGrails = BioGrails.findByPageid(pageid)
+                if (bioGrails == null) {
+                    bioGrails = new BioGrails(pageid: pageid)
                 }// fine del blocco if
 
-                //biografia = Bio.findByPageid(1675141)
-                biografia = Bio.findById(it)
+                bioGrails.title = fixTitolo(bioWiki.title)
+                bioGrails.nome = fixNome(bioWiki.nome)
+                bioGrails.cognome = fixCognome(bioWiki.cognome)
+                bioGrails.forzaOrdinamento = fixOrdinamento(bioWiki.forzaOrdinamento)
+                bioGrails.sesso = fixSesso(bioWiki.sesso)
+                bioGrails.localitaNato = fixLuogoNato(bioWiki.luogoNascita, bioWiki.luogoNascitaLink)
+                bioGrails.localitaMorto = fixLuogoMorto(bioWiki.luogoMorte, bioWiki.luogoMorteLink)
+                bioGrails.attivita = fixAttivita(bioWiki.attivita)
+                bioGrails.attivita2 = fixAttivita2(bioWiki.attivita2)
+                bioGrails.attivita3 = fixAttivita3(bioWiki.attivita3)
+                bioGrails.nazionalita = fixNazionalita(bioWiki.nazionalita)
 
-                if (biografia) {
-                    this.regolaLink(biografia)
-                    biografia.save()
+
+                bioGrailsRegistrata = bioGrails.save(flush: true)
+                if (bioGrailsRegistrata) {
+                    bioWiki.elaborata = true
+//                    bioWiki.save(flush: true)
                 }// fine del blocco if
-            }// fine di each
+
+                def stop
+            }// fine del blocco if
+        }// fine di each
+
+    } // fine del metodo
+
+    private static String fixTitolo(String testoIn) {
+        String testoOut = testoIn
+
+        if (testoIn) {
         }// fine del blocco if
-    } // fine della closure
 
+        return testoOut
+    } // fine del metodo
+    private static String fixNome(String testoIn) {
+        String testoOut = testoIn
 
+        if (testoIn) {
+        }// fine del blocco if
 
+        return testoOut
+    } // fine del metodo
+    private static String fixCognome(String testoIn) {
+        String testoOut = testoIn
 
+        if (testoIn) {
+        }// fine del blocco if
+
+        return testoOut
+    } // fine del metodo
+    private static String fixOrdinamento(String testoIn) {
+        String testoOut = testoIn
+
+        if (testoIn) {
+        }// fine del blocco if
+
+        return testoOut
+    } // fine del metodo
+    private static String fixSesso(String testoIn) {
+        String testoOut = testoIn
+
+        if (testoIn) {
+        }// fine del blocco if
+
+        return testoOut
+    } // fine del metodo
+    private static String fixLuogoNato(String luogoNascita, String luogoNascitaLink) {
+        String testoOut = ''
+
+        if (luogoNascitaLink) {
+            testoOut = luogoNascitaLink
+        } else {
+            testoOut = luogoNascita
+        }// fine del blocco if-else
+
+        return testoOut
+    } // fine del metodo
+    private static String fixLuogoMorto(String luogoMorte, String luogoMorteLink) {
+        String testoOut = ''
+
+        if (luogoMorteLink) {
+            testoOut = luogoMorteLink
+        } else {
+            testoOut = luogoMorte
+        }// fine del blocco if-else
+
+        return testoOut
+    } // fine del metodo
+    private static String fixAttivita(String testoIn) {
+        String testoOut = testoIn
+
+        if (testoIn) {
+        }// fine del blocco if
+
+        return testoOut
+    } // fine del metodo
+    private static String fixAttivita2(String testoIn) {
+        String testoOut = testoIn
+
+        if (testoIn) {
+        }// fine del blocco if
+
+        return testoOut
+    } // fine del metodo
+    private static String fixAttivita3(String testoIn) {
+        String testoOut = testoIn
+
+        if (testoIn) {
+        }// fine del blocco if
+
+        return testoOut
+    } // fine del metodo
+    private static String fixNazionalita(String testoIn) {
+        String testoOut = testoIn
+
+        if (testoIn) {
+        }// fine del blocco if
+
+        return testoOut
+    } // fine del metodo
 
     /**
      * Modifica i records esistenti nel database biografia
@@ -139,7 +242,6 @@ class BioService {
         this.regolaVociNuoveModificate(listaRecordsModificati)
     } // fine della closure
 
-
     /**
      * Regola la lista delle voci sicuramente modificate
      *
@@ -178,10 +280,6 @@ class BioService {
         // valore di ritorno
         return listaPageid
     } // fine della closure
-
-
-
-
 
     /**
      * Spazzola la lista a blocchi stabiliti
@@ -805,8 +903,6 @@ class BioService {
         }// fine del blocco if
     } // fine della closure
 
-
-
     /**
      * Regola le voci sul server wiki, riscrivendole
      *
@@ -814,9 +910,21 @@ class BioService {
      */
     public formatta = {
         // variabili e costanti locali di lavoro
-        def listaPageId                                                           \
+        def listaPageId
 
-        //Recupera la lista dei records esistenti nel database
+
+
+
+
+
+
+
+
+
+
+                                                                                                \
+
+                                                                                                //Recupera la lista dei records esistenti nel database
         log.info 'Recupera tutti i records di Bio da controllare'
 
         listaPageId = Bio.executeQuery('select pageid from Bio where controllato=false')
@@ -1384,7 +1492,6 @@ class BioService {
         // valore di ritorno
         return biografia
     } // fine della closure
-
 
     /**
      * Carica su wikipedia una voce esistente nel database
@@ -2930,7 +3037,6 @@ class BioService {
         // valore di ritorno
         return modificata
     }// fine della closure
-
 
     /**
      * Restituisce il valore booleano di un parametro Setting

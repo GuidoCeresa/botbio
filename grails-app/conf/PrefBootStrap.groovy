@@ -21,6 +21,7 @@ class PrefBootStrap {
         grailsApplication.config.usaPagineSingole = LibBio.USA_PAGINE_SINGOLE
         grailsApplication.config.usaLimiteDownload = LibBio.USA_LIMITE_DOWNLOAD
         grailsApplication.config.maxDownload = LibBio.MAX_DOWNLOAD
+        grailsApplication.config.usaCronoDownload = LibBio.USA_CRONO_DOWNLOAD
 
         //--alcune preferenze sempre presenti
         Preferenze.findOrCreateByCodeAndTypeAndValue((String) grailsApplication.config.debug, Preferenze.TYPE_BOOL, 'false').save(flush: true)
@@ -29,6 +30,7 @@ class PrefBootStrap {
         Preferenze.findOrCreateByCodeAndTypeAndValue((String) grailsApplication.config.usaPagineSingole, Preferenze.TYPE_BOOL, 'false').save(flush: true)
         Preferenze.findOrCreateByCodeAndTypeAndValue((String) grailsApplication.config.usaLimiteDownload, Preferenze.TYPE_BOOL, 'true').save(flush: true)
         Preferenze.findOrCreateByCodeAndTypeAndValue((String) grailsApplication.config.maxDownload, Preferenze.TYPE_INT, '10000').save(flush: true)
+        Preferenze.findOrCreateByCodeAndTypeAndValue((String) grailsApplication.config.usaCronoDownload, Preferenze.TYPE_BOOL, 'false').save(flush: true)
     }// fine della closure
 
     //--metodo invocato direttamente da Grails

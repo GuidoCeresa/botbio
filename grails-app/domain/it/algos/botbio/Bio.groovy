@@ -17,52 +17,21 @@ class Bio {
 
     /** nomi interni dei campi (ordine non garantito) */
     //--parametri wiki
+    //--sono comuni alle due sottoclassi
     int pageid
+    String title
 
     //--parametri del template Bio presenti nel template della voce
-    String titolo = ''
+    //--sono comuni alle due sottoclassi
     String nome = ''
     String cognome = ''
-    String postCognome = ''
-    String postCognomeVirgola = ''
     String forzaOrdinamento = ''
-    String preData = ''
     String sesso = ''
 
-    String luogoNascita = ''
-    String luogoNascitaLink = ''
-    String luogoNascitaAlt = ''
-    String giornoMeseNascita = ''
-    String annoNascita = ''
-    String noteNascita = ''
-
-    String luogoMorte = ''
-    String luogoMorteLink = ''
-    String luogoMorteAlt = ''
-    String giornoMeseMorte = ''
-    String annoMorte = ''
-    String noteMorte = ''
-
-    String preAttivita = ''
     String attivita = ''
-    String epoca = ''
-    String epoca2 = ''
-    String cittadinanza = ''
     String attivita2 = ''
     String attivita3 = ''
-    String attivitaAltre = ''
     String nazionalita = ''
-    String nazionalitaNaturalizzato = ''
-    String postNazionalita = ''
-
-    String categorie = ''
-    String fineIncipit = ''
-    String punto = ''
-    String immagine = ''
-    String didascalia = ''
-    String didascalia2 = ''
-    String dimImmagine = ''
-
 
     //serve per le voci che sono state modificate sul server wiki rispetto alla versione sul database
     //si basa sul parametro lastrevid
@@ -72,6 +41,9 @@ class Bio {
     //serve per le voci che sono state ricaricate su wiki dopo controllo e formattazione del template
     boolean controllato = false
 
+    //serve per le voci che sono state elaborate e trasferite (creando od aggiornando il record) su BioGrails
+    boolean elaborata = false
+
     /**
      * regolazione delle proprietà di ogni campo
      * l'ordine con cui vengono elencati qui,
@@ -79,50 +51,6 @@ class Bio {
      * la possibilità di avere valori nulli, di default è false
      */
     static constraints = {
-        pageid(unique: true)
-
-        titolo()
-        nome()
-        cognome()
-        postCognome()
-        postCognomeVirgola()
-        forzaOrdinamento()
-        preData()
-        sesso()
-
-        luogoNascita()
-        luogoNascitaLink()
-        luogoNascitaAlt()
-        giornoMeseNascita()
-        annoNascita()
-        noteNascita()
-
-        luogoMorte()
-        luogoMorteLink()
-        luogoMorteAlt()
-        giornoMeseMorte()
-        annoMorte()
-        noteMorte()
-
-        preAttivita()
-        attivita()
-        epoca()
-        epoca2()
-        cittadinanza()
-        attivita2()
-        attivita3()
-        attivitaAltre()
-        nazionalita()
-        nazionalitaNaturalizzato()
-        postNazionalita()
-
-        categorie()
-        fineIncipit()
-        punto()
-        immagine()
-        didascalia()
-        didascalia2()
-        dimImmagine()
 
     } // end of static constraints
 
@@ -147,48 +75,6 @@ class Bio {
         // default del versioning è true
         version true
 
-        // stringa di lunghezza variabile
-        titolo type: 'text'
-        nome type: 'text'
-        cognome type: 'text'
-        postCognome type: 'text'
-        postCognomeVirgola type: 'text'
-        forzaOrdinamento type: 'text'
-        preData type: 'text'
-        sesso type: 'text'
-
-        luogoNascita type: 'text'
-        luogoNascitaLink type: 'text'
-        luogoNascitaAlt type: 'text'
-        giornoMeseNascita type: 'text'
-        annoNascita type: 'text'
-        noteNascita type: 'text'
-
-        luogoMorte type: 'text'
-        luogoMorteLink type: 'text'
-        luogoMorteAlt type: 'text'
-        giornoMeseMorte type: 'text'
-        annoMorte type: 'text'
-        noteMorte type: 'text'
-
-        preAttivita type: 'text'
-        attivita type: 'text'
-        epoca type: 'text'
-        epoca2 type: 'text'
-        attivita2 type: 'text'
-        attivita3 type: 'text'
-        attivitaAltre type: 'text'
-        nazionalita type: 'text'
-        nazionalitaNaturalizzato type: 'text'
-        postNazionalita type: 'text'
-
-        categorie type: 'text'
-        fineIncipit type: 'text'
-        punto type: 'text'
-        immagine type: 'text'
-        didascalia type: 'text'
-        didascalia2 type: 'text'
-        dimImmagine type: 'text'
     } // end of static mapping
 
     /**

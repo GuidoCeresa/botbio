@@ -16,6 +16,7 @@ package it.algos.botbio
 import org.codehaus.groovy.grails.commons.DefaultGrailsDomainClass
 import org.springframework.dao.DataIntegrityViolationException
 
+//--gestisce l'upload delle informazioni
 class BioGrailsController {
 
     static allowedMethods = [save: 'POST', update: 'POST', delete: 'POST']
@@ -46,7 +47,15 @@ class BioGrailsController {
         //--selezione delle colonne (campi) visibili nella lista
         //--solo nome e di default il titolo viene uguale
         //--mappa con [campo:'nomeDelCampo', titolo:'titoloVisibile', sort:'ordinamento']
-        campiLista = []
+        campiLista = [
+                'pageid',
+                'title',
+                'nome',
+                'cognome',
+                'attivita',
+                'attivita2',
+                'attivita3',
+                'nazionalita']
         // fine della definizione
 
         //--regolazione dei campo di ordinamento
