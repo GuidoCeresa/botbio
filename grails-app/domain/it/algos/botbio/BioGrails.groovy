@@ -80,7 +80,7 @@ class BioGrails  {
      */
     static constraints = {
 
-        pageid(unique: true, nullable: false, blank: false)
+        pageid(unique: true)
         title(unique: true, nullable: false, blank: false)
 
         nome(nullable: true, blank: true)

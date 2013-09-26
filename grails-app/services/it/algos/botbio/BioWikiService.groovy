@@ -316,8 +316,8 @@ class BioWikiService {
         int pageid
         def num = 0
 
-        log.info 'Recupera dal database tutti i records di Bio'
-        lista = (ArrayList<Integer>) Bio.executeQuery("select pageid from Bio")
+        log.info 'Recupera dal database tutti i records di BioWiki'
+        lista = (ArrayList<Integer>) BioWiki.executeQuery("select pageid from BioWiki")
 
         if (lista) {
             num = lista.size()
@@ -623,7 +623,7 @@ class BioWikiService {
 
             if (listaMappe && listaMappe.size() > 1) {
                 listaMappe.each {
-                    mappa = it
+                    mappa = (HashMap) it
                     wrapBio = new WrapBio(mappa)
                     title = wrapBio.getTitoloVoce()
                     pageid = wrapBio.getPageid()

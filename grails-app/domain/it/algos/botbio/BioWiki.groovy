@@ -136,7 +136,7 @@ class BioWiki  {
         wikiUrl(nullable: true)
         testoTemplate(nullable: true)
 
-        pageid(unique: true, nullable: false, blank: false)
+        pageid(unique: true)
         title(unique: true, nullable: false, blank: false)
         ns()
         touched(nullable: true, formatoData: new SimpleDateFormat('d MMM yy'))
@@ -147,7 +147,7 @@ class BioWiki  {
         comment(nullable: true)
         logNote(nullable: true)
         logErr(nullable: true)
-        langlinks(nullable: true)
+        langlinks()
 
         nome(nullable: true, blank: true)
         cognome(nullable: true, blank: true)

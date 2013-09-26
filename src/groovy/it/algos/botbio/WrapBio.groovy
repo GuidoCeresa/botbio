@@ -662,14 +662,15 @@ public class WrapBio {
     } // fine della closure
 
     /**
-     * Crea un record di biografia
+     * Crea un nuovo record di biografia
      * Esattamente uguale ai dati presenti sul servere wiki
+     * Di norma dovrebbe essere nuovo. Per errore potrebbe esistere già; in questo caso lo modifica.
      */
     public creaBioOriginale() {
         // variabili e costanti locali di lavoro
         boolean continua = false
         int pageid
-        BioWiki newBio = null
+        BioWiki bioWiki = null
         String chiaveNoAccento
         String chiaveSiAccento
         String valore
@@ -688,36 +689,36 @@ public class WrapBio {
             pageid = mappaPar.pageid
 
             try { // prova ad eseguire il codice
-                newBio = BioWiki.findByPageid(pageid)
+                bioWiki = BioWiki.findOrCreateByPageid(pageid)
             } catch (Exception unErrore) { // intercetta l'errore
                 try { // prova ad eseguire il codice
                     log.error 'creaBioOriginale - Non funziona il findByPageid di ' + pageid
-                    def a = newBio.class
+                    def a = bioWiki.class
                     log.error 'Pageid di classe ' + a
                 } catch (Exception unSecondoErrore) { // intercetta l'errore
                 }// fine del blocco try-catch
             }// fine del blocco try-catch
 
-            if (newBio) {
-                id = newBio.id
-                version = newBio.version
-                newBio = new BioWiki()
-                newBio.id = id
-                newBio.version = version
-            } else {
-                newBio = new BioWiki()
-            }// fine del blocco if-else
+//            if (newBio) {
+//                id = newBio.id
+//                version = newBio.version
+//                newBio = new BioWiki()
+//                newBio.id = id
+//                newBio.version = version
+//            } else {
+//                newBio = new BioWiki()
+//            }// fine del blocco if-else
         }// fine del blocco if
 
         if (continua) {
-            newBio.properties.each {
+            bioWiki.properties.each {
                 chiaveNoAccento = it.key
                 if (chiaveNoAccento) {
                     chiaveSiAccento = ParBio.getStaticTag(chiaveNoAccento)
                     try { // prova ad eseguire il codice
                         valore = mappaBio."${chiaveSiAccento}"
                         if (valore) {
-                            newBio."${chiaveNoAccento}" = valore
+                            bioWiki."${chiaveNoAccento}" = valore
                         }// fine del blocco if
                     } catch (Exception unErrore) { // intercetta l'errore
                     }// fine del blocco try-catch
@@ -728,60 +729,60 @@ public class WrapBio {
         // parametri di wikipedia fuori dalla mappa del template
         if (continua) {
             if (mappaPar.pageid) {
-                newBio.pageid = mappaPar.pageid
+                bioWiki.pageid = mappaPar.pageid
             }// fine del blocco if
             if (mappaPar.ns) {
-                newBio.ns = mappaPar.ns
+                bioWiki.ns = mappaPar.ns
             }// fine del blocco if
             if (mappaPar.title) {
-                newBio.title = mappaPar.title
+                bioWiki.title = mappaPar.title
             }// fine del blocco if
             if (mappaPar.touched) {
-                newBio.touched = mappaPar.touched
+                bioWiki.touched = mappaPar.touched
             }// fine del blocco if
             if (mappaPar.revid) {
-                newBio.revid = mappaPar.revid
+                bioWiki.revid = mappaPar.revid
             }// fine del blocco if
             if (mappaPar.size) {
-                newBio.size = mappaPar.size
+                bioWiki.size = mappaPar.size
             }// fine del blocco if
             if (mappaPar.user) {
-                newBio.user = mappaPar.user
+                bioWiki.user = mappaPar.user
             }// fine del blocco if
             if (mappaPar.timestamp) {
                 def a = mappaPar.timestamp
-                newBio.timestamp = mappaPar.timestamp
+                bioWiki.timestamp = mappaPar.timestamp
             }// fine del blocco if
             if (mappaPar.comment) {
-                newBio.comment = mappaPar.comment
+                bioWiki.comment = mappaPar.comment
             }// fine del blocco if
             if (mappaPar.logNote) {
-                newBio.logNote = mappaPar.logNote
+                bioWiki.logNote = mappaPar.logNote
             }// fine del blocco if
             if (mappaPar.logErr) {
-                newBio.logErr = mappaPar.logErr
+                bioWiki.logErr = mappaPar.logErr
             }// fine del blocco if
 
 //            newBio.langlinks = wikiService.getLInksTesto(testo)  //@todo futuro
-            newBio.extra = this.isExtra()
+            bioWiki.extra = this.isExtra()
 //            newBio.extraLista = WikiLib.getStringa(this.getListaExtra()) //@todo presto
-            newBio.graffe = this.isGraffe()
-            newBio.note = this.isNote()
-            newBio.nascosto = this.isNascosto()
-            newBio.testoTemplate = this.getTestoTemplateOriginale()
-            newBio.ultimaLettura = new Timestamp(System.currentTimeMillis())
-            newBio.sizeBio = this.getTestoTemplateOriginale().length()
-            newBio.wikiUrl = 'https://it.wikipedia.org/wiki/' + newBio.title
+            bioWiki.graffe = this.isGraffe()
+            bioWiki.note = this.isNote()
+            bioWiki.nascosto = this.isNascosto()
+            bioWiki.testoTemplate = this.getTestoTemplateOriginale()
+            bioWiki.ultimaLettura = new Timestamp(System.currentTimeMillis())
+            bioWiki.sizeBio = this.getTestoTemplateOriginale().length()
+            bioWiki.wikiUrl = 'https://it.wikipedia.org/wiki/' + bioWiki.title
 
             Date data = new Date(System.currentTimeMillis())
             Timestamp tempo = data.toTimestamp()
             data = LibTime.creaData(tempo)
-            newBio.modificaWiki = LibTime.creaData(newBio.timestamp)
-            newBio.letturaWiki = data
+            bioWiki.modificaWiki = LibTime.creaData(bioWiki.timestamp)
+            bioWiki.letturaWiki = data
         }// fine del blocco if
 
         if (continua) {
-            this.setBioOriginale(newBio)
+            this.setBioOriginale(bioWiki)
         }// fine del blocco if
     } // fine del metodo
 
