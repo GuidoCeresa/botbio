@@ -35,14 +35,10 @@ class BioGrails  {
     String nazionalita = ''
 
     String didascaliaBase
-    String didascaliaAnnoNatoPrima
-    String didascaliaAnnoNatoDopo
-    String didascaliaAnnoMortoPrima
-    String didascaliaAnnoMortoDopo
-    String didascaliaGiornoNatoPrima
-    String didascaliaGiornoNatoDopo
-    String didascaliaGiornoMortoPrima
-    String didascaliaGiornoMortoDopo
+    String didascaliaGiornoNato
+    String didascaliaGiornoMorto
+    String didascaliaAnnoNato
+    String didascaliaAnnoMorto
 
     // altri campi di collegamenti alle altre tavole specializzate
     Giorno giornoMeseNascitaLink = null
@@ -96,14 +92,10 @@ class BioGrails  {
         localitaMorto(nullable: true, blank: true)
 
         didascaliaBase(nullable: true, blank: true)
-        didascaliaAnnoNatoPrima(nullable: true, blank: true)
-        didascaliaAnnoNatoDopo(nullable: true, blank: true)
-        didascaliaAnnoMortoPrima(nullable: true, blank: true)
-        didascaliaAnnoMortoDopo(nullable: true, blank: true)
-        didascaliaGiornoNatoPrima(nullable: true, blank: true)
-        didascaliaGiornoNatoDopo(nullable: true, blank: true)
-        didascaliaGiornoMortoPrima(nullable: true, blank: true)
-        didascaliaGiornoMortoDopo(nullable: true, blank: true)
+        didascaliaGiornoNato(nullable: true, blank: true)
+        didascaliaGiornoMorto(nullable: true, blank: true)
+        didascaliaAnnoNato(nullable: true, blank: true)
+        didascaliaAnnoMorto(nullable: true, blank: true)
 
         giornoMeseNascitaLink(nullable: true)
         giornoMeseMorteLink(nullable: true)

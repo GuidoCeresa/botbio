@@ -37,18 +37,31 @@
 </div>
 
 <div id="list-${domainClass.propertyName}" class="content scaffold-list" role="main">
-    <g:if test="\${titoloLista}">
-        <h1>\${titoloLista}</h1>
-    </g:if>
-    <g:else>
-        <h1><g:message code="${domainClass.propertyName}.list.label" args="[entityName]" default="Elenco"/></h1>
-    </g:else>
+
     <g:if test="\${flash.message}">
         <div class="message" role="status">\${flash.message}</div>
     </g:if>
     <g:if test="\${flash.error}">
         <div class="errors" role="status">\${flash.error}</div>
     </g:if>
+    <g:if test="\${flash.messages}">
+        <g:each in="\${flash.messages}" status="i" var="singoloMessaggio">
+            <div class="message" role="status">\${singoloMessaggio}</div>
+        </g:each>
+    </g:if>
+    <g:if test="\${flash.errors}">
+        <g:each in="\${flash.errors}" status="i" var="singoloErrore">
+            <div class="errors" role="status">\${singoloErrore}</div>
+        </g:each>
+    </g:if>
+
+    <g:if test="\${titoloLista}">
+        <h1>\${titoloLista}</h1>
+    </g:if>
+    <g:else>
+        <h1><g:message code="${domainClass.propertyName}.list.label" args="[entityName]" default="Elenco"/></h1>
+    </g:else>
+
     <table>
         <thead>
         <g:if test="\${campiLista}">

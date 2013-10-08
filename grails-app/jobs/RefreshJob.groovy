@@ -6,6 +6,7 @@ import it.algos.algoslogo.Evento
 import it.algos.algoslogo.EventoService
 import it.algos.algoslogo.Logo
 
+//
 class RefreshJob {
 
     // utilizzo di un service con la businessLogic per l'elaborazione dei dati

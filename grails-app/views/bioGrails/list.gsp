@@ -37,13 +37,31 @@
 </div>
 
 <div id="list-bioGrails" class="content scaffold-list" role="main">
-    <h1><g:message code="bioGrails.list.label" args="[entityName]" default="Elenco"/></h1>
+
     <g:if test="${flash.message}">
         <div class="message" role="status">${flash.message}</div>
     </g:if>
     <g:if test="${flash.error}">
         <div class="errors" role="status">${flash.error}</div>
     </g:if>
+    <g:if test="${flash.messages}">
+        <g:each in="${flash.messages}" status="i" var="singoloMessaggio">
+            <div class="message" role="status">${singoloMessaggio}</div>
+        </g:each>
+    </g:if>
+    <g:if test="${flash.errors}">
+        <g:each in="${flash.errors}" status="i" var="singoloErrore">
+            <div class="errors" role="status">${singoloErrore}</div>
+        </g:each>
+    </g:if>
+
+    <g:if test="${titoloLista}">
+        <h1>${titoloLista}</h1>
+    </g:if>
+    <g:else>
+        <h1><g:message code="bioGrails.list.label" args="[entityName]" default="Elenco"/></h1>
+    </g:else>
+
     <table>
         <thead>
         <g:if test="${campiLista}">
@@ -55,8 +73,8 @@
                 <g:sortableColumn property="pageid"
                                   title="${message(code: 'bioGrails.pageid.label', default: 'Pageid')}"/>
                 
-                <g:sortableColumn property="titolo"
-                                  title="${message(code: 'bioGrails.titolo.label', default: 'Titolo')}"/>
+                <g:sortableColumn property="title"
+                                  title="${message(code: 'bioGrails.title.label', default: 'Title')}"/>
                 
                 <g:sortableColumn property="nome"
                                   title="${message(code: 'bioGrails.nome.label', default: 'Nome')}"/>
@@ -64,17 +82,17 @@
                 <g:sortableColumn property="cognome"
                                   title="${message(code: 'bioGrails.cognome.label', default: 'Cognome')}"/>
                 
-                <g:sortableColumn property="postCognome"
-                                  title="${message(code: 'bioGrails.postCognome.label', default: 'Post Cognome')}"/>
-                
-                <g:sortableColumn property="postCognomeVirgola"
-                                  title="${message(code: 'bioGrails.postCognomeVirgola.label', default: 'Post Cognome Virgola')}"/>
-                
                 <g:sortableColumn property="forzaOrdinamento"
                                   title="${message(code: 'bioGrails.forzaOrdinamento.label', default: 'Forza Ordinamento')}"/>
                 
-                <g:sortableColumn property="preData"
-                                  title="${message(code: 'bioGrails.preData.label', default: 'Pre Data')}"/>
+                <g:sortableColumn property="sesso"
+                                  title="${message(code: 'bioGrails.sesso.label', default: 'Sesso')}"/>
+                
+                <g:sortableColumn property="attivita"
+                                  title="${message(code: 'bioGrails.attivita.label', default: 'Attivita')}"/>
+                
+                <g:sortableColumn property="attivita2"
+                                  title="${message(code: 'bioGrails.attivita2.label', default: 'Attivita2')}"/>
                 
             </tr>
         </g:else>
@@ -95,7 +113,7 @@
                                 id="${bioGrailsInstance.id}">${fieldValue(bean: bioGrailsInstance, field: "pageid")}</g:link></td>
                     
                     <td><g:link action="show"
-                                id="${bioGrailsInstance.id}">${fieldValue(bean: bioGrailsInstance, field: "titolo")}</g:link></td>
+                                id="${bioGrailsInstance.id}">${fieldValue(bean: bioGrailsInstance, field: "title")}</g:link></td>
                     
                     <td><g:link action="show"
                                 id="${bioGrailsInstance.id}">${fieldValue(bean: bioGrailsInstance, field: "nome")}</g:link></td>
@@ -104,16 +122,16 @@
                                 id="${bioGrailsInstance.id}">${fieldValue(bean: bioGrailsInstance, field: "cognome")}</g:link></td>
                     
                     <td><g:link action="show"
-                                id="${bioGrailsInstance.id}">${fieldValue(bean: bioGrailsInstance, field: "postCognome")}</g:link></td>
-                    
-                    <td><g:link action="show"
-                                id="${bioGrailsInstance.id}">${fieldValue(bean: bioGrailsInstance, field: "postCognomeVirgola")}</g:link></td>
-                    
-                    <td><g:link action="show"
                                 id="${bioGrailsInstance.id}">${fieldValue(bean: bioGrailsInstance, field: "forzaOrdinamento")}</g:link></td>
                     
                     <td><g:link action="show"
-                                id="${bioGrailsInstance.id}">${fieldValue(bean: bioGrailsInstance, field: "preData")}</g:link></td>
+                                id="${bioGrailsInstance.id}">${fieldValue(bean: bioGrailsInstance, field: "sesso")}</g:link></td>
+                    
+                    <td><g:link action="show"
+                                id="${bioGrailsInstance.id}">${fieldValue(bean: bioGrailsInstance, field: "attivita")}</g:link></td>
+                    
+                    <td><g:link action="show"
+                                id="${bioGrailsInstance.id}">${fieldValue(bean: bioGrailsInstance, field: "attivita2")}</g:link></td>
                     
                 </tr>
             </g:each>

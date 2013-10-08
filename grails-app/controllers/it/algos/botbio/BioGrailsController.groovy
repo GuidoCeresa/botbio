@@ -13,6 +13,8 @@
 
 package it.algos.botbio
 
+import it.algos.algos.TipoDialogo
+import it.algos.algoslib.Lib
 import org.codehaus.groovy.grails.commons.DefaultGrailsDomainClass
 import org.springframework.dao.DataIntegrityViolationException
 
@@ -26,9 +28,39 @@ class BioGrailsController {
     def exportService
     def logoService
     def eventoService
+    def bioService
 
     def index() {
         redirect(action: 'list', params: params)
+    } // fine del metodo
+
+    //--elabora (usa il nome-metodo create, perchè è il primo ed unico della lista standard)
+    //--mostra un dialogo di conferma per l'operazione da compiere
+    //--passa al metodo effettivo
+    def create() {
+        params.titolo = 'Elaborazione'
+        if (BioGrails.count() > 0) {
+            params.tipo = TipoDialogo.conferma
+            params.avviso = []
+            params.avviso.add('Elaborazione di tutte le biografie (BioGrails) esistenti.')
+            params.avviso.add("Azzera il flag 'elaborata' di tutte le voci (BioWiki)")
+            params.avviso.add('Ci vogliono parecchie ore')
+            params.returnController = 'bioGrails'
+            params.returnAction = 'elaboraDopoConferma'
+            redirect(controller: 'dialogo', action: 'box', params: params)
+        } else {
+            params.tipo = TipoDialogo.avviso
+            params.avviso = 'Sorry, non ci sono voci biografiche da elaborare !'
+            params.returnController = 'bioGrails'
+            redirect(controller: 'dialogo', action: 'box', params: params)
+        }// fine del blocco if-else
+    } // fine del metodo
+
+    //--elabora (usa il nome-metodo create, perchè è il primo ed unico della lista standard)
+    //--elaborazione dei dati da BioWiki a BioGrails
+    def elaboraDopoConferma() {
+        bioService.elaboraAll()
+        redirect(action: 'list')
     } // fine del metodo
 
     def list(Integer max) {
@@ -37,25 +69,28 @@ class BioGrailsController {
         ArrayList campiLista
         def lista
         def campoSort
+        String titoloLista
+        int recordsTotali
 
         //--selezione dei menu extra
         //--solo azione e di default controller=questo; classe e titolo vengono uguali
         //--mappa con [cont:'controller', action:'metodo', icon:'iconaImmagine', title:'titoloVisibile']
-        menuExtra = []
+        menuExtra = [
+                [cont: 'bioWiki', action: 'list', icon: 'scambia', title: 'BioWiki']
+        ]
         // fine della definizione
 
         //--selezione delle colonne (campi) visibili nella lista
         //--solo nome e di default il titolo viene uguale
-        //--mappa con [campo:'nomeDelCampo', titolo:'titoloVisibile', sort:'ordinamento']
+        //--mappa con [campo:'nomeDelCampo', title:'titoloVisibile', sort:'ordinamento']
         campiLista = [
                 'pageid',
                 'title',
-                'nome',
-                'cognome',
-                'attivita',
-                'attivita2',
-                'attivita3',
-                'nazionalita']
+                'didascaliaBase',
+                [campo: 'giornoMeseNascitaLink', title: 'giorno'],
+                [campo: 'annoNascitaLink', title: 'anno'],
+                [campo: 'attivitaLink', title: 'att'],
+                [campo: 'nazionalitaLink', title: 'naz']]
         // fine della definizione
 
         //--regolazione dei campo di ordinamento
@@ -83,6 +118,12 @@ class BioGrailsController {
         //--oppure modificare il findAllByInteroGreaterThan()...
         lista = BioGrails.findAll(params)
 
+        //--calcola il numero di record
+        recordsTotali = BioGrails.count()
+
+        //--titolo visibile sopra la table dei dati
+        titoloLista = 'Elenco di ' + Lib.Txt.formatNum(recordsTotali) + ' biografie (records del database)'
+
         //--presentazione della view (list), secondo il modello
         //--menuExtra e campiLista possono essere nulli o vuoti
         //--se campiLista è vuoto, mostra tutti i campi (primi 8)
@@ -90,6 +131,7 @@ class BioGrailsController {
                 bioGrailsInstanceList: lista,
                 bioGrailsInstanceTotal: lista.size(),
                 menuExtra: menuExtra,
+                titoloLista: titoloLista,
                 campiLista: campiLista],
                 params: params)
     } // fine del metodo
@@ -119,10 +161,6 @@ class BioGrailsController {
                 exportService.export((String) params.format, response.outputStream, records, fields, [:], [:], parameters)
             }// fine del blocco if
         }// fine del blocco if
-    } // fine del metodo
-
-    def create() {
-        [bioGrailsInstance: new BioGrails(params)]
     } // fine del metodo
 
     def save() {

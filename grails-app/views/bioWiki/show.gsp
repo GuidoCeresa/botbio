@@ -36,6 +36,24 @@
     </g:if>
     <ol class="property-list bioWiki">
         
+        <g:if test="${bioWikiInstance?.wikiUrl}">
+            <li class="fieldcontain">
+                <span id="wikiUrl-label" class="property-label"><g:message code="bioWiki.wikiUrl.label" default="Wiki Url" /></span>
+                
+                <span class="property-value" aria-labelledby="wikiUrl-label"><g:fieldValue bean="${bioWikiInstance}" field="wikiUrl"/></span>
+                
+            </li>
+        </g:if>
+        
+        <g:if test="${bioWikiInstance?.testoTemplate}">
+            <li class="fieldcontain">
+                <span id="testoTemplate-label" class="property-label"><g:message code="bioWiki.testoTemplate.label" default="Testo Template" /></span>
+                
+                <span class="property-value" aria-labelledby="testoTemplate-label"><g:fieldValue bean="${bioWikiInstance}" field="testoTemplate"/></span>
+                
+            </li>
+        </g:if>
+        
         <g:if test="${bioWikiInstance?.pageid}">
             <li class="fieldcontain">
                 <span id="pageid-label" class="property-label"><g:message code="bioWiki.pageid.label" default="Pageid" /></span>
@@ -45,11 +63,101 @@
             </li>
         </g:if>
         
-        <g:if test="${bioWikiInstance?.titolo}">
+        <g:if test="${bioWikiInstance?.title}">
             <li class="fieldcontain">
-                <span id="titolo-label" class="property-label"><g:message code="bioWiki.titolo.label" default="Titolo" /></span>
+                <span id="title-label" class="property-label"><g:message code="bioWiki.title.label" default="Title" /></span>
                 
-                <span class="property-value" aria-labelledby="titolo-label"><g:fieldValue bean="${bioWikiInstance}" field="titolo"/></span>
+                <span class="property-value" aria-labelledby="title-label"><g:fieldValue bean="${bioWikiInstance}" field="title"/></span>
+                
+            </li>
+        </g:if>
+        
+        <g:if test="${bioWikiInstance?.ns}">
+            <li class="fieldcontain">
+                <span id="ns-label" class="property-label"><g:message code="bioWiki.ns.label" default="Ns" /></span>
+                
+                <span class="property-value" aria-labelledby="ns-label"><g:fieldValue bean="${bioWikiInstance}" field="ns"/></span>
+                
+            </li>
+        </g:if>
+        
+        <g:if test="${bioWikiInstance?.touched}">
+            <li class="fieldcontain">
+                <span id="touched-label" class="property-label"><g:message code="bioWiki.touched.label" default="Touched" /></span>
+                
+                <span class="property-value" aria-labelledby="touched-label"><g:formatDate date="${bioWikiInstance?.touched}" /></span>
+                
+            </li>
+        </g:if>
+        
+        <g:if test="${bioWikiInstance?.revid}">
+            <li class="fieldcontain">
+                <span id="revid-label" class="property-label"><g:message code="bioWiki.revid.label" default="Revid" /></span>
+                
+                <span class="property-value" aria-labelledby="revid-label"><g:fieldValue bean="${bioWikiInstance}" field="revid"/></span>
+                
+            </li>
+        </g:if>
+        
+        <g:if test="${bioWikiInstance?.size}">
+            <li class="fieldcontain">
+                <span id="size-label" class="property-label"><g:message code="bioWiki.size.label" default="Size" /></span>
+                
+                <span class="property-value" aria-labelledby="size-label"><g:fieldValue bean="${bioWikiInstance}" field="size"/></span>
+                
+            </li>
+        </g:if>
+        
+        <g:if test="${bioWikiInstance?.user}">
+            <li class="fieldcontain">
+                <span id="user-label" class="property-label"><g:message code="bioWiki.user.label" default="User" /></span>
+                
+                <span class="property-value" aria-labelledby="user-label"><g:fieldValue bean="${bioWikiInstance}" field="user"/></span>
+                
+            </li>
+        </g:if>
+        
+        <g:if test="${bioWikiInstance?.timestamp}">
+            <li class="fieldcontain">
+                <span id="timestamp-label" class="property-label"><g:message code="bioWiki.timestamp.label" default="Timestamp" /></span>
+                
+                <span class="property-value" aria-labelledby="timestamp-label"><g:fieldValue bean="${bioWikiInstance}" field="timestamp"/></span>
+                
+            </li>
+        </g:if>
+        
+        <g:if test="${bioWikiInstance?.comment}">
+            <li class="fieldcontain">
+                <span id="comment-label" class="property-label"><g:message code="bioWiki.comment.label" default="Comment" /></span>
+                
+                <span class="property-value" aria-labelledby="comment-label"><g:fieldValue bean="${bioWikiInstance}" field="comment"/></span>
+                
+            </li>
+        </g:if>
+        
+        <g:if test="${bioWikiInstance?.logNote}">
+            <li class="fieldcontain">
+                <span id="logNote-label" class="property-label"><g:message code="bioWiki.logNote.label" default="Log Note" /></span>
+                
+                <span class="property-value" aria-labelledby="logNote-label"><g:fieldValue bean="${bioWikiInstance}" field="logNote"/></span>
+                
+            </li>
+        </g:if>
+        
+        <g:if test="${bioWikiInstance?.logErr}">
+            <li class="fieldcontain">
+                <span id="logErr-label" class="property-label"><g:message code="bioWiki.logErr.label" default="Log Err" /></span>
+                
+                <span class="property-value" aria-labelledby="logErr-label"><g:fieldValue bean="${bioWikiInstance}" field="logErr"/></span>
+                
+            </li>
+        </g:if>
+        
+        <g:if test="${bioWikiInstance?.langlinks}">
+            <li class="fieldcontain">
+                <span id="langlinks-label" class="property-label"><g:message code="bioWiki.langlinks.label" default="Langlinks" /></span>
+                
+                <span class="property-value" aria-labelledby="langlinks-label"><g:fieldValue bean="${bioWikiInstance}" field="langlinks"/></span>
                 
             </li>
         </g:if>
@@ -72,6 +180,69 @@
             </li>
         </g:if>
         
+        <g:if test="${bioWikiInstance?.forzaOrdinamento}">
+            <li class="fieldcontain">
+                <span id="forzaOrdinamento-label" class="property-label"><g:message code="bioWiki.forzaOrdinamento.label" default="Forza Ordinamento" /></span>
+                
+                <span class="property-value" aria-labelledby="forzaOrdinamento-label"><g:fieldValue bean="${bioWikiInstance}" field="forzaOrdinamento"/></span>
+                
+            </li>
+        </g:if>
+        
+        <g:if test="${bioWikiInstance?.sesso}">
+            <li class="fieldcontain">
+                <span id="sesso-label" class="property-label"><g:message code="bioWiki.sesso.label" default="Sesso" /></span>
+                
+                <span class="property-value" aria-labelledby="sesso-label"><g:fieldValue bean="${bioWikiInstance}" field="sesso"/></span>
+                
+            </li>
+        </g:if>
+        
+        <g:if test="${bioWikiInstance?.attivita}">
+            <li class="fieldcontain">
+                <span id="attivita-label" class="property-label"><g:message code="bioWiki.attivita.label" default="Attivita" /></span>
+                
+                <span class="property-value" aria-labelledby="attivita-label"><g:fieldValue bean="${bioWikiInstance}" field="attivita"/></span>
+                
+            </li>
+        </g:if>
+        
+        <g:if test="${bioWikiInstance?.attivita2}">
+            <li class="fieldcontain">
+                <span id="attivita2-label" class="property-label"><g:message code="bioWiki.attivita2.label" default="Attivita2" /></span>
+                
+                <span class="property-value" aria-labelledby="attivita2-label"><g:fieldValue bean="${bioWikiInstance}" field="attivita2"/></span>
+                
+            </li>
+        </g:if>
+        
+        <g:if test="${bioWikiInstance?.attivita3}">
+            <li class="fieldcontain">
+                <span id="attivita3-label" class="property-label"><g:message code="bioWiki.attivita3.label" default="Attivita3" /></span>
+                
+                <span class="property-value" aria-labelledby="attivita3-label"><g:fieldValue bean="${bioWikiInstance}" field="attivita3"/></span>
+                
+            </li>
+        </g:if>
+        
+        <g:if test="${bioWikiInstance?.nazionalita}">
+            <li class="fieldcontain">
+                <span id="nazionalita-label" class="property-label"><g:message code="bioWiki.nazionalita.label" default="Nazionalita" /></span>
+                
+                <span class="property-value" aria-labelledby="nazionalita-label"><g:fieldValue bean="${bioWikiInstance}" field="nazionalita"/></span>
+                
+            </li>
+        </g:if>
+        
+        <g:if test="${bioWikiInstance?.titolo}">
+            <li class="fieldcontain">
+                <span id="titolo-label" class="property-label"><g:message code="bioWiki.titolo.label" default="Titolo" /></span>
+                
+                <span class="property-value" aria-labelledby="titolo-label"><g:fieldValue bean="${bioWikiInstance}" field="titolo"/></span>
+                
+            </li>
+        </g:if>
+        
         <g:if test="${bioWikiInstance?.postCognome}">
             <li class="fieldcontain">
                 <span id="postCognome-label" class="property-label"><g:message code="bioWiki.postCognome.label" default="Post Cognome" /></span>
@@ -90,29 +261,11 @@
             </li>
         </g:if>
         
-        <g:if test="${bioWikiInstance?.forzaOrdinamento}">
-            <li class="fieldcontain">
-                <span id="forzaOrdinamento-label" class="property-label"><g:message code="bioWiki.forzaOrdinamento.label" default="Forza Ordinamento" /></span>
-                
-                <span class="property-value" aria-labelledby="forzaOrdinamento-label"><g:fieldValue bean="${bioWikiInstance}" field="forzaOrdinamento"/></span>
-                
-            </li>
-        </g:if>
-        
         <g:if test="${bioWikiInstance?.preData}">
             <li class="fieldcontain">
                 <span id="preData-label" class="property-label"><g:message code="bioWiki.preData.label" default="Pre Data" /></span>
                 
                 <span class="property-value" aria-labelledby="preData-label"><g:fieldValue bean="${bioWikiInstance}" field="preData"/></span>
-                
-            </li>
-        </g:if>
-        
-        <g:if test="${bioWikiInstance?.sesso}">
-            <li class="fieldcontain">
-                <span id="sesso-label" class="property-label"><g:message code="bioWiki.sesso.label" default="Sesso" /></span>
-                
-                <span class="property-value" aria-labelledby="sesso-label"><g:fieldValue bean="${bioWikiInstance}" field="sesso"/></span>
                 
             </li>
         </g:if>
@@ -234,15 +387,6 @@
             </li>
         </g:if>
         
-        <g:if test="${bioWikiInstance?.attivita}">
-            <li class="fieldcontain">
-                <span id="attivita-label" class="property-label"><g:message code="bioWiki.attivita.label" default="Attivita" /></span>
-                
-                <span class="property-value" aria-labelledby="attivita-label"><g:fieldValue bean="${bioWikiInstance}" field="attivita"/></span>
-                
-            </li>
-        </g:if>
-        
         <g:if test="${bioWikiInstance?.epoca}">
             <li class="fieldcontain">
                 <span id="epoca-label" class="property-label"><g:message code="bioWiki.epoca.label" default="Epoca" /></span>
@@ -270,38 +414,11 @@
             </li>
         </g:if>
         
-        <g:if test="${bioWikiInstance?.attivita2}">
-            <li class="fieldcontain">
-                <span id="attivita2-label" class="property-label"><g:message code="bioWiki.attivita2.label" default="Attivita2" /></span>
-                
-                <span class="property-value" aria-labelledby="attivita2-label"><g:fieldValue bean="${bioWikiInstance}" field="attivita2"/></span>
-                
-            </li>
-        </g:if>
-        
-        <g:if test="${bioWikiInstance?.attivita3}">
-            <li class="fieldcontain">
-                <span id="attivita3-label" class="property-label"><g:message code="bioWiki.attivita3.label" default="Attivita3" /></span>
-                
-                <span class="property-value" aria-labelledby="attivita3-label"><g:fieldValue bean="${bioWikiInstance}" field="attivita3"/></span>
-                
-            </li>
-        </g:if>
-        
         <g:if test="${bioWikiInstance?.attivitaAltre}">
             <li class="fieldcontain">
                 <span id="attivitaAltre-label" class="property-label"><g:message code="bioWiki.attivitaAltre.label" default="Attivita Altre" /></span>
                 
                 <span class="property-value" aria-labelledby="attivitaAltre-label"><g:fieldValue bean="${bioWikiInstance}" field="attivitaAltre"/></span>
-                
-            </li>
-        </g:if>
-        
-        <g:if test="${bioWikiInstance?.nazionalita}">
-            <li class="fieldcontain">
-                <span id="nazionalita-label" class="property-label"><g:message code="bioWiki.nazionalita.label" default="Nazionalita" /></span>
-                
-                <span class="property-value" aria-labelledby="nazionalita-label"><g:fieldValue bean="${bioWikiInstance}" field="nazionalita"/></span>
                 
             </li>
         </g:if>
@@ -387,123 +504,6 @@
             </li>
         </g:if>
         
-        <g:if test="${bioWikiInstance?.wikiUrl}">
-            <li class="fieldcontain">
-                <span id="wikiUrl-label" class="property-label"><g:message code="bioWiki.wikiUrl.label" default="Wiki Url" /></span>
-                
-                <span class="property-value" aria-labelledby="wikiUrl-label"><g:fieldValue bean="${bioWikiInstance}" field="wikiUrl"/></span>
-                
-            </li>
-        </g:if>
-        
-        <g:if test="${bioWikiInstance?.title}">
-            <li class="fieldcontain">
-                <span id="title-label" class="property-label"><g:message code="bioWiki.title.label" default="Title" /></span>
-                
-                <span class="property-value" aria-labelledby="title-label"><g:fieldValue bean="${bioWikiInstance}" field="title"/></span>
-                
-            </li>
-        </g:if>
-        
-        <g:if test="${bioWikiInstance?.testoTemplate}">
-            <li class="fieldcontain">
-                <span id="testoTemplate-label" class="property-label"><g:message code="bioWiki.testoTemplate.label" default="Testo Template" /></span>
-                
-                <span class="property-value" aria-labelledby="testoTemplate-label"><g:fieldValue bean="${bioWikiInstance}" field="testoTemplate"/></span>
-                
-            </li>
-        </g:if>
-        
-        <g:if test="${bioWikiInstance?.ns}">
-            <li class="fieldcontain">
-                <span id="ns-label" class="property-label"><g:message code="bioWiki.ns.label" default="Ns" /></span>
-                
-                <span class="property-value" aria-labelledby="ns-label"><g:fieldValue bean="${bioWikiInstance}" field="ns"/></span>
-                
-            </li>
-        </g:if>
-        
-        <g:if test="${bioWikiInstance?.touched}">
-            <li class="fieldcontain">
-                <span id="touched-label" class="property-label"><g:message code="bioWiki.touched.label" default="Touched" /></span>
-                
-                <span class="property-value" aria-labelledby="touched-label"><g:formatDate date="${bioWikiInstance?.touched}" /></span>
-                
-            </li>
-        </g:if>
-        
-        <g:if test="${bioWikiInstance?.revid}">
-            <li class="fieldcontain">
-                <span id="revid-label" class="property-label"><g:message code="bioWiki.revid.label" default="Revid" /></span>
-                
-                <span class="property-value" aria-labelledby="revid-label"><g:fieldValue bean="${bioWikiInstance}" field="revid"/></span>
-                
-            </li>
-        </g:if>
-        
-        <g:if test="${bioWikiInstance?.size}">
-            <li class="fieldcontain">
-                <span id="size-label" class="property-label"><g:message code="bioWiki.size.label" default="Size" /></span>
-                
-                <span class="property-value" aria-labelledby="size-label"><g:fieldValue bean="${bioWikiInstance}" field="size"/></span>
-                
-            </li>
-        </g:if>
-        
-        <g:if test="${bioWikiInstance?.user}">
-            <li class="fieldcontain">
-                <span id="user-label" class="property-label"><g:message code="bioWiki.user.label" default="User" /></span>
-                
-                <span class="property-value" aria-labelledby="user-label"><g:fieldValue bean="${bioWikiInstance}" field="user"/></span>
-                
-            </li>
-        </g:if>
-        
-        <g:if test="${bioWikiInstance?.timestamp}">
-            <li class="fieldcontain">
-                <span id="timestamp-label" class="property-label"><g:message code="bioWiki.timestamp.label" default="Timestamp" /></span>
-                
-                <span class="property-value" aria-labelledby="timestamp-label"><g:fieldValue bean="${bioWikiInstance}" field="timestamp"/></span>
-                
-            </li>
-        </g:if>
-        
-        <g:if test="${bioWikiInstance?.comment}">
-            <li class="fieldcontain">
-                <span id="comment-label" class="property-label"><g:message code="bioWiki.comment.label" default="Comment" /></span>
-                
-                <span class="property-value" aria-labelledby="comment-label"><g:fieldValue bean="${bioWikiInstance}" field="comment"/></span>
-                
-            </li>
-        </g:if>
-        
-        <g:if test="${bioWikiInstance?.logNote}">
-            <li class="fieldcontain">
-                <span id="logNote-label" class="property-label"><g:message code="bioWiki.logNote.label" default="Log Note" /></span>
-                
-                <span class="property-value" aria-labelledby="logNote-label"><g:fieldValue bean="${bioWikiInstance}" field="logNote"/></span>
-                
-            </li>
-        </g:if>
-        
-        <g:if test="${bioWikiInstance?.logErr}">
-            <li class="fieldcontain">
-                <span id="logErr-label" class="property-label"><g:message code="bioWiki.logErr.label" default="Log Err" /></span>
-                
-                <span class="property-value" aria-labelledby="logErr-label"><g:fieldValue bean="${bioWikiInstance}" field="logErr"/></span>
-                
-            </li>
-        </g:if>
-        
-        <g:if test="${bioWikiInstance?.langlinks}">
-            <li class="fieldcontain">
-                <span id="langlinks-label" class="property-label"><g:message code="bioWiki.langlinks.label" default="Langlinks" /></span>
-                
-                <span class="property-value" aria-labelledby="langlinks-label"><g:fieldValue bean="${bioWikiInstance}" field="langlinks"/></span>
-                
-            </li>
-        </g:if>
-        
         <g:if test="${bioWikiInstance?.ultimaLettura}">
             <li class="fieldcontain">
                 <span id="ultimaLettura-label" class="property-label"><g:message code="bioWiki.ultimaLettura.label" default="Ultima Lettura" /></span>
@@ -585,6 +585,24 @@
             </li>
         </g:if>
         
+        <g:if test="${bioWikiInstance?.modificaWiki}">
+            <li class="fieldcontain">
+                <span id="modificaWiki-label" class="property-label"><g:message code="bioWiki.modificaWiki.label" default="Modifica Wiki" /></span>
+                
+                <span class="property-value" aria-labelledby="modificaWiki-label"><g:formatDate date="${bioWikiInstance?.modificaWiki}" /></span>
+                
+            </li>
+        </g:if>
+        
+        <g:if test="${bioWikiInstance?.letturaWiki}">
+            <li class="fieldcontain">
+                <span id="letturaWiki-label" class="property-label"><g:message code="bioWiki.letturaWiki.label" default="Lettura Wiki" /></span>
+                
+                <span class="property-value" aria-labelledby="letturaWiki-label"><g:formatDate date="${bioWikiInstance?.letturaWiki}" /></span>
+                
+            </li>
+        </g:if>
+        
         <g:if test="${bioWikiInstance?.allineata}">
             <li class="fieldcontain">
                 <span id="allineata-label" class="property-label"><g:message code="bioWiki.allineata.label" default="Allineata" /></span>
@@ -599,6 +617,15 @@
                 <span id="controllato-label" class="property-label"><g:message code="bioWiki.controllato.label" default="Controllato" /></span>
                 
                 <span class="property-value" aria-labelledby="controllato-label"><g:formatBoolean boolean="${bioWikiInstance?.controllato}" /></span>
+                
+            </li>
+        </g:if>
+        
+        <g:if test="${bioWikiInstance?.elaborata}">
+            <li class="fieldcontain">
+                <span id="elaborata-label" class="property-label"><g:message code="bioWiki.elaborata.label" default="Elaborata" /></span>
+                
+                <span class="property-value" aria-labelledby="elaborata-label"><g:formatBoolean boolean="${bioWikiInstance?.elaborata}" /></span>
                 
             </li>
         </g:if>

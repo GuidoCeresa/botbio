@@ -306,7 +306,7 @@ class LibBio {
     } // fine del metodo
 
     /**
-     * Corregge il parametro TipoDidascalia
+     * Corregge il parametro DidascaliaTipo
      * Se il parametro Immagine è vuoto, vuota anche la didascalia
      */
     public static String correggeParametroDidascalia(Bio bio, String oldValue) {

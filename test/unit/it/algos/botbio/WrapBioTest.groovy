@@ -525,6 +525,12 @@ class WrapBioTest extends GroovyTestCase {
         assert wrap != null
         assert wrap.isValida()
         assert wrap.getTitoloVoce() == titolo
+
+        titolo='Hassan Rouhani'
+        wrap = new WrapBio(titolo)
+        assert wrap != null
+        assert wrap.isValida()
+        assert wrap.getTitoloVoce() == titolo
     } // fine del test
 
 } // fine della classe di test

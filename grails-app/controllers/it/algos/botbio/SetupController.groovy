@@ -13,6 +13,7 @@
 
 package it.algos.botbio
 
+import it.algos.algos.DialogoController
 import it.algos.algos.TipoDialogo
 import it.algos.algoslib.LibTesto
 
@@ -29,14 +30,41 @@ class SetupController {
         redirect(action: 'preSetup', params: params)
     } // fine del metodo
 
-    //--mostra un avviso di spiegazione per l'operazione da compiere
+    //--mostra un dialogo di conferma per l'operazione da compiere
     //--passa al metodo effettivo
     def preSetup() {
-        params.tipo = TipoDialogo.avviso
-        params.avviso = 'Setup iniziale del programma. Vengono create le tavole di anni e giorni. Vengono importate le liste di attività e nazionalità.'
+        params.tipo = TipoDialogo.conferma
+        params.titolo = 'Setup iniziale'
+        params.avviso = []
+        params.avviso.add('Setup iniziale del programma.')
+        params.avviso.add( 'Vengono create le tavole di anni e giorni.')
+        params.avviso.add('Vengono importate le liste di attività e nazionalità.')
         params.returnController = 'Setup'
-        params.returnAction = 'postSetup'
+        params.returnAction = 'setupDopoConferma'
         redirect(controller: 'dialogo', action: 'box', params: params)
+    } // fine del metodo
+
+    //--ritorno dal dialogo di conferma
+    //--a seconda del valore ritornato come parametro, esegue o meno l'operazione
+    //--setup (usa il nome-metodo create, perchè è il primo ed unico della lista standard)
+    def setupDopoConferma() {
+        String valore
+        flash.message = 'Operazione annullata. Il setup non è stato eseguito.'
+
+        if (params.valore) {
+            if (params.valore instanceof String) {
+                valore = (String) params.valore
+                if (valore.equals(DialogoController.DIALOGO_CONFERMA)) {
+                    redirect(action: 'postSetup')
+                } else {
+                    redirect(uri: '/')
+                }// fine del blocco if-else
+            } else {
+                redirect(uri: '/')
+            }// fine del blocco if-else
+        } else {
+            redirect(uri: '/')
+        }// fine del blocco if-else
     } // fine del metodo
 
     //--Vengono create le tavole di anni e giorni

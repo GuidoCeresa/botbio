@@ -699,9 +699,19 @@ a:link, a:visited, a:hover {
     color: #333;
     padding-left: 25px;
 }
-
 .menuButton a.deleteAll {
     background: url(../images/skin/database_delete.png) center left no-repeat;
     color: #333;
     padding-left: 25px;
+}
+.menuButton a.scambia {
+    background: url(../images/skin/arrow_refresh.png) center left no-repeat;
+    color: #333;
+    padding-left: 25px;
+}
+.algosTitolo {
+    color: #48802c;
+    font-weight: bold;
+    font-size: 1.25em;
+    margin: 1em 0em 0 1.2em;
 }

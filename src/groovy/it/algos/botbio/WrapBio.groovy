@@ -669,7 +669,7 @@ public class WrapBio {
     public creaBioOriginale() {
         // variabili e costanti locali di lavoro
         boolean continua = false
-        int pageid
+        int pageid = 0
         BioWiki bioWiki = null
         String chiaveNoAccento
         String chiaveSiAccento
@@ -686,16 +686,30 @@ public class WrapBio {
         }// fine del blocco if
 
         if (continua) {
-            pageid = mappaPar.pageid
+            if (mappaPar.pageid) {
+                pageid = mappaPar.pageid
+            } else {
+                log.error 'creaBioOriginale - Manca il pageid dalla mappa' + mappaPar
+            }// fine del blocco if-else
 
             try { // prova ad eseguire il codice
                 bioWiki = BioWiki.findOrCreateByPageid(pageid)
             } catch (Exception unErrore) { // intercetta l'errore
                 try { // prova ad eseguire il codice
                     log.error 'creaBioOriginale - Non funziona il findByPageid di ' + pageid
-                    def a = bioWiki.class
-                    log.error 'Pageid di classe ' + a
+                    if (bioWiki) {
+                        def a = bioWiki.class
+                        log.error 'Pageid di classe ' + a
+                    }// fine del blocco if
+                    try { // prova ad eseguire il codice
+                        bioWiki = new BioWiki()
+                        bioWiki.pageid = pageid
+                    } catch (Exception unErrore2) { // intercetta l'errore
+                        log.error unErrore
+                        continua = false
+                    }// fine del blocco try-catch
                 } catch (Exception unSecondoErrore) { // intercetta l'errore
+                    continua = false
                 }// fine del blocco try-catch
             }// fine del blocco try-catch
 
@@ -779,6 +793,7 @@ public class WrapBio {
             data = LibTime.creaData(tempo)
             bioWiki.modificaWiki = LibTime.creaData(bioWiki.timestamp)
             bioWiki.letturaWiki = data
+            bioWiki.elaborata = false
         }// fine del blocco if
 
         if (continua) {

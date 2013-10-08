@@ -1,4 +1,5 @@
 package it.algos.botbio
+
 import it.algos.algoswiki.Query
 import it.algos.algoswiki.QueryVoce
 
@@ -11,6 +12,7 @@ import it.algos.algoswiki.QueryVoce
 class QueryBioTest extends GroovyTestCase {
 
     private static final int PAGE_ID = 4163337
+
     private static final int PAGE_ID_NOT_BIO = 735901
 
     // Setup logic here
@@ -23,11 +25,12 @@ class QueryBioTest extends GroovyTestCase {
 
     //--costruzione da pageid
     void testLegge() {
+        int pageid = PAGE_ID
         Query query
         String testoBio
         String testoBioStatic
 
-        query = new QueryBio(PAGE_ID)
+        query = new QueryBio(pageid)
         assert query != null
         testoBio = query.getTestoBio()
         assert testoBio != null

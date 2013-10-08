@@ -16,6 +16,9 @@ package it.algos.botbio
 import it.algos.algos.DialogoController
 import it.algos.algos.TipoDialogo
 import it.algos.algoslib.Lib
+import it.algos.algoslib.LibTesto
+import it.algos.algospref.Preferenze
+import it.algos.algoswiki.QueryInfoCat
 import org.codehaus.groovy.grails.commons.DefaultGrailsDomainClass
 import org.springframework.dao.DataIntegrityViolationException
 
@@ -32,28 +35,36 @@ class BioWikiController {
     def bioWikiService
     def grailsApplication
     def bioService
+    def logService
 
     def index() {
         redirect(action: 'list', params: params)
     } // fine del metodo
 
+    //--importa (usa il nome-metodo create, perchè è il primo ed unico della lista standard)
     //--mostra un avviso di spiegazione per l'operazione da compiere
     //--passa al metodo effettivo
     def create() {
         params.tipo = TipoDialogo.avviso
-        params.avviso = 'Vengono cancellati tutti i records di biografie. Vengono importate tutte le voci dalla categoria: BioBot (oltre 250.000). Occorrono circa 4 minuti (per caricare la Categoria).'
+        params.titolo = 'Importazione iniziale'
+        params.avviso = []
+        params.avviso.add('Vengono cancellati tutti i records di biografie')
+        params.avviso.add('Vengono caricate (aggiunte) tutte le voci dalla categoria BioBot BioBot (oltre 250.000).')
+        params.avviso.add('Occorrono diverse ore.')
+        params.avviso.add('Nelle Preferenze può essere impostato un limite di voci da caricare (aggiungere).')
+        params.avviso.add('Non aggiorna le voci esistenti')
         params.returnController = 'bioWiki'
-        params.returnAction = 'createDopoPrimoAvviso'
+        params.returnAction = 'importaDopoPrimoAvviso'
         redirect(controller: 'dialogo', action: 'box', params: params)
     } // fine del metodo
 
     //--controlla che esista un collegamento di Login
     //--se esiste prosegue
     //--se non esiste, mostra un messaggio flash e torna alla lista generale
-    def createDopoPrimoAvviso() {
+    def importaDopoPrimoAvviso() {
         if (grailsApplication && grailsApplication.config.login) {
             flash.message = ''
-            redirect(action: 'createDopoAvviso')
+            redirect(action: 'importaPrimoControllo')
         } else {
             flash.error = 'Devi essere loggato per poter importare le voci dalla categoria Biobot (5.000 voci per Request)'
             redirect(action: 'list')
@@ -63,18 +74,17 @@ class BioWikiController {
     //--creazione iniziale
     //--controlla se esistono già
     //--mostra un dialogo di conferma per l'operazione da compiere
-    //--importa (usa il nome-metodo create, perchè è il primo ed unico della lista standard)
-    //--cancella tutti i records
-    //--forza la rilettura di tutto
-    //--aggiunge nuove voci
-    //--aggiorna le voci esistenti
-    //--carica i parametri del template Bio, leggendoli dalle voci della categoria
-    def createDopoAvviso() {
+    def importaPrimoControllo() {
         if (BioWiki.count() > 0) {
             params.tipo = TipoDialogo.conferma
-            params.avviso = 'Esistono già delle biografie. Se prosegui verranno cancellate e riscritte. Si perdono i valori-chiave dei records. Ci vogliono parecchie ore. Sei sicuro di volerlo fare?'
+            params.titolo = 'Importazione iniziale'
+            params.avviso = []
+            params.avviso.add('Esistono già delle biografie')
+            params.avviso.add('Se prosegui verranno cancellate e riscritte')
+            params.avviso.add('Si perdono i valori-chiave dei records')
+            params.avviso.add('Occorrono diverse ore.')
             params.returnController = 'bioWiki'
-            params.returnAction = 'createDopoConferma'
+            params.returnAction = 'importaSecondoControllo'
             redirect(controller: 'dialogo', action: 'box', params: params)
         } else {
             bioWikiService.importaWiki()
@@ -83,15 +93,29 @@ class BioWikiController {
         }// fine del blocco if-else
     } // fine del metodo
 
+    //--creazione iniziale
+    //--mostra un secondo dialogo di conferma perché l'operazione è distruttiva
+    //--mostra un dialogo di conferma per l'operazione da compiere
+    def importaSecondoControllo() {
+        params.tipo = TipoDialogo.conferma
+        params.titolo = 'Importazione iniziale'
+        params.alert = []
+        params.alert.add('Se prosegui verranno cancellate e riscritte tutte le voci')
+        params.alert.add('Si perdono i valori-chiave dei records')
+        params.alert.add('Sei sicuro di volerl continuare?')
+        params.returnController = 'bioWiki'
+        params.returnAction = 'importaDopoConferma'
+        redirect(controller: 'dialogo', action: 'box', params: params)
+    } // fine del metodo
+
     //--ritorno dal dialogo di conferma
     //--a seconda del valore ritornato come parametro, esegue o meno l'operazione
-    //--importa (usa il nome-metodo create, perchè è il primo ed unico della lista standard)
     //--cancella tutti i records
     //--forza la rilettura di tutto
     //--aggiunge nuove voci
     //--aggiorna le voci esistenti
     //--carica i parametri del template Bio, leggendoli dalle voci della categoria
-    def createDopoConferma() {
+    def importaDopoConferma() {
         String valore
         flash.message = 'Operazione annullata. Le voci biografiche non sono state importate.'
 
@@ -110,25 +134,200 @@ class BioWikiController {
 
     //--mostra un dialogo di conferma per l'operazione da compiere
     //--passa al metodo effettivo
-    def elabora() {
-        if (BioWiki.count() > 0) {
-            params.tipo = TipoDialogo.conferma
-            params.avviso = 'Elaborazione di tutte le biografie. Da BioWiki a BioGrails. Ci vogliono parecchie ore. Sei sicuro di volerlo fare?'
-            params.returnController = 'bioWiki'
-            params.returnAction = 'elaboraDopoConferma'
-            redirect(controller: 'dialogo', action: 'box', params: params)
-        } else {
-            params.tipo = TipoDialogo.avviso
-            params.avviso = 'Sorry, non ci sono voci biografiche da elaborare !'
-            params.returnController = 'bio'
-            redirect(controller: 'dialogo', action: 'box', params: params)
-        }// fine del blocco if-else
+    def aggiungeWiki() {
+        params.tipo = TipoDialogo.conferma
+        params.titolo = 'Aggiunta'
+        params.avviso = []
+        params.avviso.add('Vengono caricate (aggiunte) tutte le voci dalla categoria BioBot non ancora presenti nel database.')
+        params.avviso.add('Occorrono diverse ore.')
+        params.avviso.add('Nelle Preferenze può essere impostato un limite di voci da caricare (aggiungere).')
+        params.avviso.add('Non modifica le voci esistenti')
+        params.returnController = 'bioWiki'
+        params.returnAction = 'aggiungeWikiDopoConferma'
+        redirect(controller: 'dialogo', action: 'box', params: params)
     } // fine del metodo
 
-    //--elaborazione dei dati da BioWiki a BioGrails
-    def elaboraDopoConferma() {
-        bioService.elabora()
-        redirect(uri: '/')
+    //--aggiunge nuove voci
+    //--non aggiorna le voci esistenti
+    //--carica i parametri del template Bio, leggendoli dalle voci della categoria
+    def aggiungeWikiDopoConferma() {
+        String valore
+        boolean continua = false
+        def numVoci
+        boolean debug = Preferenze.getBool((String) grailsApplication.config.debug)
+        flash.message = 'Operazione annullata. Le voci biografiche non sono state aggiunte.'
+
+        if (params.valore) {
+            if (params.valore instanceof String) {
+                valore = (String) params.valore
+                if (valore.equals(DialogoController.DIALOGO_CONFERMA)) {
+                    if (grailsApplication && grailsApplication.config.login) {
+                        continua = true
+                    } else {
+                        if (debug) {
+                            continua = true
+                        } else {
+                            flash.message = 'Devi essere loggato per poter scaricare la categoria Biobot'
+                        }// fine del blocco if-else
+                    }// fine del blocco if-else
+                }// fine del blocco if
+            }// fine del blocco if
+        }// fine del blocco if
+
+        if (continua) {
+            numVoci = bioWikiService.aggiungeWiki()
+            if (numVoci == 0) {
+                flash.message = 'Non ci sono nuove voci nella categoria. Non sono state aggiunte nuove voci'
+            } else {
+                numVoci = LibTesto.formatNum(numVoci)
+                flash.message = "Sono state aggiunte ${numVoci} nuove voci"
+            }// fine del blocco if-else
+        }// fine del blocco if
+
+        redirect(action: 'list')
+    } // fine del metodo
+
+    //--mostra un dialogo di conferma per l'operazione da compiere
+    //--passa al metodo effettivo
+    def aggiornaWiki() {
+        params.tipo = TipoDialogo.conferma
+        params.titolo = 'Aggiornamento'
+        params.avviso = []
+        params.avviso.add("Vengono modificate (aggiornate) tutte le voci presenti nel database e modificate dopo l'ultimo check")
+        params.avviso.add('Occorrono diverse ore.')
+        params.avviso.add('Nelle Preferenze può essere impostato un limite di voci da modificare (aggiornare).')
+        params.avviso.add('Non carica nuove voci, ma si basa solo su quelle già presenti nel database')
+        params.avviso.add('Tipicamente (nel ciclo) viene eseguito subito dopo il metodo Aggiunge')
+        params.returnController = 'bioWiki'
+        params.returnAction = 'aggiornaWikiDopoConferma'
+        redirect(controller: 'dialogo', action: 'box', params: params)
+    } // fine del metodo
+
+    //--aggiorna le voci esistenti
+    //--carica i parametri del template Bio, leggendoli dalle voci della categoria
+    def aggiornaWikiDopoConferma() {
+        String valore
+        boolean continua = false
+        def numVoci
+        boolean debug = Preferenze.getBool((String) grailsApplication.config.debug)
+        flash.message = 'Operazione annullata. Le voci biografiche non sono state aggiornate.'
+
+        if (params.valore) {
+            if (params.valore instanceof String) {
+                valore = (String) params.valore
+                if (valore.equals(DialogoController.DIALOGO_CONFERMA)) {
+                    if (grailsApplication && grailsApplication.config.login) {
+                        continua = true
+                    } else {
+                        if (debug) {
+                            continua = true
+                        } else {
+                            flash.message = 'Devi essere loggato per poter scaricare la categoria Biobot'
+                        }// fine del blocco if-else
+                    }// fine del blocco if-else
+                }// fine del blocco if
+            }// fine del blocco if
+        }// fine del blocco if
+
+        if (continua) {
+            numVoci = bioWikiService.aggiornaWiki()
+            if (numVoci == 0) {
+                flash.message = 'Le voci presenti nel database erano già aggiornate. Non è stato modificato nulla'
+            } else {
+                numVoci = LibTesto.formatNum(numVoci)
+                flash.message = "Sono state aggiornate ${numVoci} voci già presenti nel database"
+            }// fine del blocco if-else
+        }// fine del blocco if
+
+        redirect(action: 'list')
+    } // fine del metodo
+
+    //--mostra un dialogo di conferma per l'operazione da compiere
+    //--passa al metodo effettivo
+    def cicloWiki() {
+        params.tipo = TipoDialogo.conferma
+        params.titolo = 'Ciclo'
+        params.avviso = []
+        params.avviso.add('Vengono caricate (aggiunte) tutte le voci dalla categoria BioBot non ancora presenti nel database.')
+        params.avviso.add("Vengono modificate (aggiornate) tutte le voci presenti nel database BioWiki e modificate dopo l'ultimo check")
+        params.avviso.add("Vengono elaborate (elabora) tutte le voci presenti nel database BioGrails e modificate dopo l'ultimo check")
+        params.avviso.add('Nelle Preferenze può essere impostato un limite di voci da caricare (aggiungere).')
+        params.returnController = 'bioWiki'
+        params.returnAction = 'cicloWikiDopoConferma'
+        redirect(controller: 'dialogo', action: 'box', params: params)
+    } // fine del metodo
+
+    //--ciclo di aggiunta ed aggiornamento
+    def cicloWikiDopoConferma() {
+        String valore
+        boolean continua = false
+        def numVoci
+        boolean debug = Preferenze.getBool((String) grailsApplication.config.debug)
+        flash.message = 'Operazione annullata. Il ciclo non è partito.'
+        int vociCat = 0
+        String percentuale
+        String avviso = ''
+        QueryInfoCat query
+
+        if (params.valore) {
+            if (params.valore instanceof String) {
+                valore = (String) params.valore
+                if (valore.equals(DialogoController.DIALOGO_CONFERMA)) {
+                    if (grailsApplication && grailsApplication.config.login) {
+                        continua = true
+                    } else {
+                        if (debug) {
+                            continua = true
+                        } else {
+                            flash.message = 'Devi essere loggato per poter scaricare la categoria Biobot'
+                        }// fine del blocco if-else
+                    }// fine del blocco if-else
+                }// fine del blocco if
+            }// fine del blocco if
+        }// fine del blocco if
+
+        if (continua) {
+            numVoci = bioWikiService.aggiungeWiki()
+            if (numVoci == 0) {
+                flash.message = 'Non ci sono nuove voci nella categoria. Non sono state aggiunte nuove voci'
+            } else {
+                numVoci = LibTesto.formatNum(numVoci)
+                flash.message = "Sono state aggiunte ${numVoci} nuove voci"
+            }// fine del blocco if-else
+            numVoci = bioWikiService.aggiornaWiki()
+            if (numVoci == 0) {
+                flash.message = 'Le voci presenti nel database erano già aggiornate. Non è stato modificato nulla'
+            } else {
+                numVoci = LibTesto.formatNum(numVoci)
+                flash.message = "Sono state aggiornate ${numVoci} voci già presenti nel database"
+            }// fine del blocco if-else
+            numVoci = bioService.elabora()
+            if (numVoci == 0) {
+                flash.message = 'Le voci presenti nel database erano già elaborate. Non è stato modificato nulla'
+            } else {
+                numVoci = LibTesto.formatNum(numVoci)
+                flash.message = "Sono state elaborate ${numVoci} voci già presenti nel database"
+            }// fine del blocco if-else
+        }// fine del blocco if
+
+        if (continua) {
+            query = new QueryInfoCat('BioBot')
+            vociCat = query.getSize()
+            numVoci = BioWiki.count()
+            percentuale = LibTesto.formatPercentuale(numVoci, vociCat)
+            numVoci = LibTesto.formatNum(numVoci)
+            avviso += "[[Utente:Biobot|<span style=\"color:green\">'''Biobot'''</span>]]"
+            avviso += " gestisce ${numVoci} voci pari al '''${percentuale}'''"
+            avviso += " della categoria [[:Categoria:BioBot|'''BioBot''']]"
+            logService.info(avviso)
+        }// fine del blocco if
+
+        redirect(action: 'list')
+    } // fine del metodo
+
+    //--redirect
+    def elabora() {
+        redirect(controller: 'bioGrails', action: 'create')
     } // fine del metodo
 
     def list(Integer max) {
@@ -140,16 +339,9 @@ class BioWikiController {
         String titoloLista
         int recordsTotali
 
-//        <span class="menuButton"><g:link class="create" action="importa"><g:message code="Import"/></g:link></span>
-//        <span class="menuButton"><g:link class="frecciagiu" action="aggiunge"><g:message code="Aggiunge"/></g:link></span>
-//        <span class="menuButton"><g:link class="frecciagiu" action="aggiorna"><g:message code="Aggiorna"/></g:link></span>
-//        <span class="menuButton"><g:link class="frecciagiu" action="cicloRidotto"><g:message code="Ciclo ridotto"/></g:link></span>
-//        <span class="menuButton"><g:link class="frecciagiu" action="cicloCompleto"><g:message code="Ciclo completo"/></g:link></span>
 //        <span class="menuButton"><g:link class="regola" action="regola"><g:message code="Regola"/></g:link></span>
 //        <span class="menuButton"><g:link class="regola" action="formatta"><g:message code="Formatta"/></g:link></span>
 //        <span class="menuButton"><g:link class="regola" action="soloListe"><g:message code="Liste attnaz"/></g:link></span>
-//        <span class="menuButton"><g:link class="regola" action="cicloNuovoIniziale"><g:message code="Ciclo nuovo iniziale"/></g:link></span>
-//        <span class="menuButton"><g:link class="regola" action="cicloNuovoContinua"><g:message code="Ciclo nuovo continua"/></g:link></span>
 
         //--selezione dei menu extra
         //--solo azione e di default controller=questo; classe e titolo vengono uguali
@@ -157,13 +349,15 @@ class BioWikiController {
         menuExtra = [
                 [cont: 'bioWiki', action: 'aggiungeWiki', icon: 'frecciagiu', title: 'AggiungeWiki'],
                 [cont: 'bioWiki', action: 'aggiornaWiki', icon: 'frecciagiu', title: 'AggiornaWiki'],
-                [cont: 'bioWiki', action: 'elabora', icon: 'pippo', title: 'Elabora']
+                [cont: 'bioWiki', action: 'cicloWiki', icon: 'frecciagiu', title: 'CicloWiki'],
+//                [cont: 'bioWiki', action: 'elabora', icon: 'pippo', title: 'Elabora'],
+                [cont: 'bioGrails', action: 'list', icon: 'scambia', title: 'BioGrails']
         ]
         // fine della definizione
 
         //--selezione delle colonne (campi) visibili nella lista
         //--solo nome e di default il titolo viene uguale
-        //--mappa con [campo:'nomeDelCampo', titolo:'titoloVisibile', sort:'ordinamento']
+        //--mappa con [campo:'nomeDelCampo', title:'titoloVisibile', sort:'ordinamento']
         campiLista = [
                 'pageid',
                 [campo: 'wikiUrl', title: 'Wiki'],
@@ -175,7 +369,9 @@ class BioWikiController {
                 'extra',
                 'graffe',
                 'note',
-                [campo: 'nascosto', title: 'Ref']]
+                [campo: 'nascosto', title: 'Ref'],
+                [campo: 'elaborata', title: 'Grails']
+        ]
         // fine della definizione
 
         //--regolazione dei campo di ordinamento
@@ -202,10 +398,12 @@ class BioWikiController {
         //--per una lista filtrata (parziale), modificare i parametri
         //--oppure modificare il findAllByInteroGreaterThan()...
         lista = BioWiki.findAll(params)
-        recordsTotali = BioWiki.count()
 
         //--calcola il numero di record
-        titoloLista = 'Elenco di ' + Lib.Txt.formatNum(recordsTotali) + ' biografie'
+        recordsTotali = BioWiki.count()
+
+        //--titolo visibile sopra la table dei dati
+        titoloLista = 'Elenco di ' + Lib.Txt.formatNum(recordsTotali) + ' biografie (fotocopia originali wiki)'
 
         //--presentazione della view (list), secondo il modello
         //--menuExtra e campiLista possono essere nulli o vuoti
@@ -244,61 +442,6 @@ class BioWikiController {
                 exportService.export((String) params.format, response.outputStream, records, fields, [:], [:], parameters)
             }// fine del blocco if
         }// fine del blocco if
-    } // fine del metodo
-
-    //--mostra un dialogo di conferma per l'operazione da compiere
-    //--passa al metodo effettivo
-    def aggiungeWiki() {
-        params.tipo = TipoDialogo.conferma
-        params.avviso = 'Vengono aggiunte tutte le voci dalla categoria BioBot non ancora presenti nel database. Occorrono diverse ore. Nelle Preferenze può essere impostato un limite di voci da caricare.'
-        params.returnController = 'bioWiki'
-        params.returnAction = 'aggiungeWikiDopoConferma'
-        redirect(controller: 'dialogo', action: 'box', params: params)
-    } // fine del metodo
-
-    //--aggiunge nuove voci
-    //--aggiorna le voci esistenti
-    //--carica i parametri del template Bio, leggendoli dalle voci della categoria
-    def aggiungeWikiDopoConferma() {
-        String valore
-        flash.message = 'Operazione annullata. Le voci biografiche non sono state aggiunte.'
-
-        if (params.valore) {
-            if (params.valore instanceof String) {
-                valore = (String) params.valore
-                if (valore.equals(DialogoController.DIALOGO_CONFERMA)) {
-                    if (grailsApplication && grailsApplication.config.login) {
-                        bioWikiService.aggiungeWiki()
-                    } else {
-                        if (grailsApplication && grailsApplication.config.debug) {
-                            bioWikiService.aggiungeWiki()
-                            flash.message = 'Operazione effettuata. Sono stati importate tutte le voci della categoria: BioBot.'
-                        } else {
-                            flash.message = 'Devi essere loggato per poter scaricare la categoria Biobot'
-                        }// fine del blocco if-else
-                    }// fine del blocco if-else
-                }// fine del blocco if
-            }// fine del blocco if
-        }// fine del blocco if
-
-        redirect(action: 'list')
-    } // fine del metodo
-
-    //--aggiorna le voci esistenti
-    //--carica i parametri del template Bio, leggendoli dalle voci della categoria
-    def aggiornaWiki() {
-        flash.message = "Inizio dell'aggiornamento delle voci; occorrono alcuni minuti"
-        if (grailsApplication && grailsApplication.config.login) {
-            bioWikiService.aggiornaWiki()
-        } else {
-            if (grailsApplication && grailsApplication.config.debug) {
-                bioWikiService.aggiornaWiki()
-            } else {
-                flash.message = 'Devi essere loggato per poter scaricare la categoria Biobot'
-            }// fine del blocco if-else
-        }// fine del blocco if-else
-
-        redirect(action: 'list')
     } // fine del metodo
 
 

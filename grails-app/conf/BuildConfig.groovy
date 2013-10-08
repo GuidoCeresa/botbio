@@ -66,7 +66,7 @@ grails.project.dependency.resolution = {
 
         // opzionali
         compile ":export:1.5"
-        compile ":quartz:1.0-RC9"
+        compile ":quartz:1.0-RC12"
         compile ":mail:1.0.1"
 
         //--plugin della algos

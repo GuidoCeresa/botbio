@@ -15,6 +15,44 @@
 
 
 
+<div class="fieldcontain ${hasErrors(bean: bioWikiInstance, field: 'wikiUrl', 'error')} ">
+	<label for="wikiUrl">
+		<g:message code="bioWiki.wikiUrl.label" default="Wiki Url" />
+		
+	</label>
+	
+
+
+
+
+
+
+
+
+
+
+<g:textField name="wikiUrl" value="${bioWikiInstance?.wikiUrl}"/>
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: bioWikiInstance, field: 'testoTemplate', 'error')} ">
+	<label for="testoTemplate">
+		<g:message code="bioWiki.testoTemplate.label" default="Testo Template" />
+		
+	</label>
+	
+
+
+
+
+
+
+
+
+
+
+<g:textField name="testoTemplate" value="${bioWikiInstance?.testoTemplate}"/>
+</div>
+
 <div class="fieldcontain ${hasErrors(bean: bioWikiInstance, field: 'pageid', 'error')} required">
 	<label for="pageid">
 		<g:message code="bioWiki.pageid.label" default="Pageid" />
@@ -34,9 +72,47 @@
 <g:field name="pageid" type="number" value="${bioWikiInstance.pageid}" required=""/>
 </div>
 
-<div class="fieldcontain ${hasErrors(bean: bioWikiInstance, field: 'titolo', 'error')} ">
-	<label for="titolo">
-		<g:message code="bioWiki.titolo.label" default="Titolo" />
+<div class="fieldcontain ${hasErrors(bean: bioWikiInstance, field: 'title', 'error')} required">
+	<label for="title">
+		<g:message code="bioWiki.title.label" default="Title" />
+		<span class="required-indicator">*</span>
+	</label>
+	
+
+
+
+
+
+
+
+
+
+
+<g:textField name="title" required="" value="${bioWikiInstance?.title}"/>
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: bioWikiInstance, field: 'ns', 'error')} required">
+	<label for="ns">
+		<g:message code="bioWiki.ns.label" default="Ns" />
+		<span class="required-indicator">*</span>
+	</label>
+	
+
+
+
+
+
+
+
+
+
+
+<g:field name="ns" type="number" value="${bioWikiInstance.ns}" required=""/>
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: bioWikiInstance, field: 'touched', 'error')} ">
+	<label for="touched">
+		<g:message code="bioWiki.touched.label" default="Touched" />
 		
 	</label>
 	
@@ -50,7 +126,159 @@
 
 
 
-<g:textField name="titolo" value="${bioWikiInstance?.titolo}"/>
+<g:datePicker name="touched" precision="day"  value="${bioWikiInstance?.touched}" default="none" noSelection="['': '']" />
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: bioWikiInstance, field: 'revid', 'error')} required">
+	<label for="revid">
+		<g:message code="bioWiki.revid.label" default="Revid" />
+		<span class="required-indicator">*</span>
+	</label>
+	
+
+
+
+
+
+
+
+
+
+
+<g:field name="revid" type="number" value="${bioWikiInstance.revid}" required=""/>
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: bioWikiInstance, field: 'size', 'error')} required">
+	<label for="size">
+		<g:message code="bioWiki.size.label" default="Size" />
+		<span class="required-indicator">*</span>
+	</label>
+	
+
+
+
+
+
+
+
+
+
+
+<g:field name="size" type="number" value="${bioWikiInstance.size}" required=""/>
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: bioWikiInstance, field: 'user', 'error')} ">
+	<label for="user">
+		<g:message code="bioWiki.user.label" default="User" />
+		
+	</label>
+	
+
+
+
+
+
+
+
+
+
+
+<g:textField name="user" value="${bioWikiInstance?.user}"/>
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: bioWikiInstance, field: 'timestamp', 'error')} ">
+	<label for="timestamp">
+		<g:message code="bioWiki.timestamp.label" default="Timestamp" />
+		
+	</label>
+	
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: bioWikiInstance, field: 'comment', 'error')} ">
+	<label for="comment">
+		<g:message code="bioWiki.comment.label" default="Comment" />
+		
+	</label>
+	
+
+
+
+
+
+
+
+
+
+
+<g:textField name="comment" value="${bioWikiInstance?.comment}"/>
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: bioWikiInstance, field: 'logNote', 'error')} ">
+	<label for="logNote">
+		<g:message code="bioWiki.logNote.label" default="Log Note" />
+		
+	</label>
+	
+
+
+
+
+
+
+
+
+
+
+<g:textField name="logNote" value="${bioWikiInstance?.logNote}"/>
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: bioWikiInstance, field: 'logErr', 'error')} ">
+	<label for="logErr">
+		<g:message code="bioWiki.logErr.label" default="Log Err" />
+		
+	</label>
+	
+
+
+
+
+
+
+
+
+
+
+<g:textField name="logErr" value="${bioWikiInstance?.logErr}"/>
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: bioWikiInstance, field: 'langlinks', 'error')} required">
+	<label for="langlinks">
+		<g:message code="bioWiki.langlinks.label" default="Langlinks" />
+		<span class="required-indicator">*</span>
+	</label>
+	
+
+
+
+
+
+
+
+
+
+
+<g:field name="langlinks" type="number" value="${bioWikiInstance.langlinks}" required=""/>
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: bioWikiInstance, field: 'nome', 'error')} ">
@@ -91,6 +319,139 @@
 <g:textField name="cognome" value="${bioWikiInstance?.cognome}"/>
 </div>
 
+<div class="fieldcontain ${hasErrors(bean: bioWikiInstance, field: 'forzaOrdinamento', 'error')} ">
+	<label for="forzaOrdinamento">
+		<g:message code="bioWiki.forzaOrdinamento.label" default="Forza Ordinamento" />
+		
+	</label>
+	
+
+
+
+
+
+
+
+
+
+
+<g:textField name="forzaOrdinamento" value="${bioWikiInstance?.forzaOrdinamento}"/>
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: bioWikiInstance, field: 'sesso', 'error')} ">
+	<label for="sesso">
+		<g:message code="bioWiki.sesso.label" default="Sesso" />
+		
+	</label>
+	
+
+
+
+
+
+
+
+
+
+
+<g:textField name="sesso" value="${bioWikiInstance?.sesso}"/>
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: bioWikiInstance, field: 'attivita', 'error')} ">
+	<label for="attivita">
+		<g:message code="bioWiki.attivita.label" default="Attivita" />
+		
+	</label>
+	
+
+
+
+
+
+
+
+
+
+
+<g:textField name="attivita" value="${bioWikiInstance?.attivita}"/>
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: bioWikiInstance, field: 'attivita2', 'error')} ">
+	<label for="attivita2">
+		<g:message code="bioWiki.attivita2.label" default="Attivita2" />
+		
+	</label>
+	
+
+
+
+
+
+
+
+
+
+
+<g:textField name="attivita2" value="${bioWikiInstance?.attivita2}"/>
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: bioWikiInstance, field: 'attivita3', 'error')} ">
+	<label for="attivita3">
+		<g:message code="bioWiki.attivita3.label" default="Attivita3" />
+		
+	</label>
+	
+
+
+
+
+
+
+
+
+
+
+<g:textField name="attivita3" value="${bioWikiInstance?.attivita3}"/>
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: bioWikiInstance, field: 'nazionalita', 'error')} ">
+	<label for="nazionalita">
+		<g:message code="bioWiki.nazionalita.label" default="Nazionalita" />
+		
+	</label>
+	
+
+
+
+
+
+
+
+
+
+
+<g:textField name="nazionalita" value="${bioWikiInstance?.nazionalita}"/>
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: bioWikiInstance, field: 'titolo', 'error')} ">
+	<label for="titolo">
+		<g:message code="bioWiki.titolo.label" default="Titolo" />
+		
+	</label>
+	
+
+
+
+
+
+
+
+
+
+
+<g:textField name="titolo" value="${bioWikiInstance?.titolo}"/>
+</div>
+
 <div class="fieldcontain ${hasErrors(bean: bioWikiInstance, field: 'postCognome', 'error')} ">
 	<label for="postCognome">
 		<g:message code="bioWiki.postCognome.label" default="Post Cognome" />
@@ -129,25 +490,6 @@
 <g:textField name="postCognomeVirgola" value="${bioWikiInstance?.postCognomeVirgola}"/>
 </div>
 
-<div class="fieldcontain ${hasErrors(bean: bioWikiInstance, field: 'forzaOrdinamento', 'error')} ">
-	<label for="forzaOrdinamento">
-		<g:message code="bioWiki.forzaOrdinamento.label" default="Forza Ordinamento" />
-		
-	</label>
-	
-
-
-
-
-
-
-
-
-
-
-<g:textField name="forzaOrdinamento" value="${bioWikiInstance?.forzaOrdinamento}"/>
-</div>
-
 <div class="fieldcontain ${hasErrors(bean: bioWikiInstance, field: 'preData', 'error')} ">
 	<label for="preData">
 		<g:message code="bioWiki.preData.label" default="Pre Data" />
@@ -165,25 +507,6 @@
 
 
 <g:textField name="preData" value="${bioWikiInstance?.preData}"/>
-</div>
-
-<div class="fieldcontain ${hasErrors(bean: bioWikiInstance, field: 'sesso', 'error')} ">
-	<label for="sesso">
-		<g:message code="bioWiki.sesso.label" default="Sesso" />
-		
-	</label>
-	
-
-
-
-
-
-
-
-
-
-
-<g:textField name="sesso" value="${bioWikiInstance?.sesso}"/>
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: bioWikiInstance, field: 'luogoNascita', 'error')} ">
@@ -433,25 +756,6 @@
 <g:textField name="preAttivita" value="${bioWikiInstance?.preAttivita}"/>
 </div>
 
-<div class="fieldcontain ${hasErrors(bean: bioWikiInstance, field: 'attivita', 'error')} ">
-	<label for="attivita">
-		<g:message code="bioWiki.attivita.label" default="Attivita" />
-		
-	</label>
-	
-
-
-
-
-
-
-
-
-
-
-<g:textField name="attivita" value="${bioWikiInstance?.attivita}"/>
-</div>
-
 <div class="fieldcontain ${hasErrors(bean: bioWikiInstance, field: 'epoca', 'error')} ">
 	<label for="epoca">
 		<g:message code="bioWiki.epoca.label" default="Epoca" />
@@ -509,44 +813,6 @@
 <g:textField name="cittadinanza" value="${bioWikiInstance?.cittadinanza}"/>
 </div>
 
-<div class="fieldcontain ${hasErrors(bean: bioWikiInstance, field: 'attivita2', 'error')} ">
-	<label for="attivita2">
-		<g:message code="bioWiki.attivita2.label" default="Attivita2" />
-		
-	</label>
-	
-
-
-
-
-
-
-
-
-
-
-<g:textField name="attivita2" value="${bioWikiInstance?.attivita2}"/>
-</div>
-
-<div class="fieldcontain ${hasErrors(bean: bioWikiInstance, field: 'attivita3', 'error')} ">
-	<label for="attivita3">
-		<g:message code="bioWiki.attivita3.label" default="Attivita3" />
-		
-	</label>
-	
-
-
-
-
-
-
-
-
-
-
-<g:textField name="attivita3" value="${bioWikiInstance?.attivita3}"/>
-</div>
-
 <div class="fieldcontain ${hasErrors(bean: bioWikiInstance, field: 'attivitaAltre', 'error')} ">
 	<label for="attivitaAltre">
 		<g:message code="bioWiki.attivitaAltre.label" default="Attivita Altre" />
@@ -564,25 +830,6 @@
 
 
 <g:textField name="attivitaAltre" value="${bioWikiInstance?.attivitaAltre}"/>
-</div>
-
-<div class="fieldcontain ${hasErrors(bean: bioWikiInstance, field: 'nazionalita', 'error')} ">
-	<label for="nazionalita">
-		<g:message code="bioWiki.nazionalita.label" default="Nazionalita" />
-		
-	</label>
-	
-
-
-
-
-
-
-
-
-
-
-<g:textField name="nazionalita" value="${bioWikiInstance?.nazionalita}"/>
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: bioWikiInstance, field: 'nazionalitaNaturalizzato', 'error')} ">
@@ -756,253 +1003,6 @@
 <g:textField name="dimImmagine" value="${bioWikiInstance?.dimImmagine}"/>
 </div>
 
-<div class="fieldcontain ${hasErrors(bean: bioWikiInstance, field: 'wikiUrl', 'error')} ">
-	<label for="wikiUrl">
-		<g:message code="bioWiki.wikiUrl.label" default="Wiki Url" />
-		
-	</label>
-	
-
-
-
-
-
-
-
-
-
-
-<g:textField name="wikiUrl" value="${bioWikiInstance?.wikiUrl}"/>
-</div>
-
-<div class="fieldcontain ${hasErrors(bean: bioWikiInstance, field: 'title', 'error')} ">
-	<label for="title">
-		<g:message code="bioWiki.title.label" default="Title" />
-		
-	</label>
-	
-
-
-
-
-
-
-
-
-
-
-<g:textField name="title" value="${bioWikiInstance?.title}"/>
-</div>
-
-<div class="fieldcontain ${hasErrors(bean: bioWikiInstance, field: 'testoTemplate', 'error')} ">
-	<label for="testoTemplate">
-		<g:message code="bioWiki.testoTemplate.label" default="Testo Template" />
-		
-	</label>
-	
-
-
-
-
-
-
-
-
-
-
-<g:textField name="testoTemplate" value="${bioWikiInstance?.testoTemplate}"/>
-</div>
-
-<div class="fieldcontain ${hasErrors(bean: bioWikiInstance, field: 'ns', 'error')} required">
-	<label for="ns">
-		<g:message code="bioWiki.ns.label" default="Ns" />
-		<span class="required-indicator">*</span>
-	</label>
-	
-
-
-
-
-
-
-
-
-
-
-<g:field name="ns" type="number" value="${bioWikiInstance.ns}" required=""/>
-</div>
-
-<div class="fieldcontain ${hasErrors(bean: bioWikiInstance, field: 'touched', 'error')} ">
-	<label for="touched">
-		<g:message code="bioWiki.touched.label" default="Touched" />
-		
-	</label>
-	
-
-
-
-
-
-
-
-
-
-
-<g:datePicker name="touched" precision="day"  value="${bioWikiInstance?.touched}" default="none" noSelection="['': '']" />
-</div>
-
-<div class="fieldcontain ${hasErrors(bean: bioWikiInstance, field: 'revid', 'error')} required">
-	<label for="revid">
-		<g:message code="bioWiki.revid.label" default="Revid" />
-		<span class="required-indicator">*</span>
-	</label>
-	
-
-
-
-
-
-
-
-
-
-
-<g:field name="revid" type="number" value="${bioWikiInstance.revid}" required=""/>
-</div>
-
-<div class="fieldcontain ${hasErrors(bean: bioWikiInstance, field: 'size', 'error')} required">
-	<label for="size">
-		<g:message code="bioWiki.size.label" default="Size" />
-		<span class="required-indicator">*</span>
-	</label>
-	
-
-
-
-
-
-
-
-
-
-
-<g:field name="size" type="number" value="${bioWikiInstance.size}" required=""/>
-</div>
-
-<div class="fieldcontain ${hasErrors(bean: bioWikiInstance, field: 'user', 'error')} ">
-	<label for="user">
-		<g:message code="bioWiki.user.label" default="User" />
-		
-	</label>
-	
-
-
-
-
-
-
-
-
-
-
-<g:textField name="user" value="${bioWikiInstance?.user}"/>
-</div>
-
-<div class="fieldcontain ${hasErrors(bean: bioWikiInstance, field: 'timestamp', 'error')} ">
-	<label for="timestamp">
-		<g:message code="bioWiki.timestamp.label" default="Timestamp" />
-		
-	</label>
-	
-
-
-
-
-
-
-
-
-
-
-
-</div>
-
-<div class="fieldcontain ${hasErrors(bean: bioWikiInstance, field: 'comment', 'error')} ">
-	<label for="comment">
-		<g:message code="bioWiki.comment.label" default="Comment" />
-		
-	</label>
-	
-
-
-
-
-
-
-
-
-
-
-<g:textField name="comment" value="${bioWikiInstance?.comment}"/>
-</div>
-
-<div class="fieldcontain ${hasErrors(bean: bioWikiInstance, field: 'logNote', 'error')} ">
-	<label for="logNote">
-		<g:message code="bioWiki.logNote.label" default="Log Note" />
-		
-	</label>
-	
-
-
-
-
-
-
-
-
-
-
-<g:textField name="logNote" value="${bioWikiInstance?.logNote}"/>
-</div>
-
-<div class="fieldcontain ${hasErrors(bean: bioWikiInstance, field: 'logErr', 'error')} ">
-	<label for="logErr">
-		<g:message code="bioWiki.logErr.label" default="Log Err" />
-		
-	</label>
-	
-
-
-
-
-
-
-
-
-
-
-<g:textField name="logErr" value="${bioWikiInstance?.logErr}"/>
-</div>
-
-<div class="fieldcontain ${hasErrors(bean: bioWikiInstance, field: 'langlinks', 'error')} required">
-	<label for="langlinks">
-		<g:message code="bioWiki.langlinks.label" default="Langlinks" />
-		<span class="required-indicator">*</span>
-	</label>
-	
-
-
-
-
-
-
-
-
-
-
-<g:field name="langlinks" type="number" value="${bioWikiInstance.langlinks}" required=""/>
-</div>
-
 <div class="fieldcontain ${hasErrors(bean: bioWikiInstance, field: 'ultimaLettura', 'error')} ">
 	<label for="ultimaLettura">
 		<g:message code="bioWiki.ultimaLettura.label" default="Ultima Lettura" />
@@ -1174,6 +1174,44 @@
 <g:field name="sizeBio" type="number" value="${bioWikiInstance.sizeBio}" required=""/>
 </div>
 
+<div class="fieldcontain ${hasErrors(bean: bioWikiInstance, field: 'modificaWiki', 'error')} ">
+	<label for="modificaWiki">
+		<g:message code="bioWiki.modificaWiki.label" default="Modifica Wiki" />
+		
+	</label>
+	
+
+
+
+
+
+
+
+
+
+
+<g:datePicker name="modificaWiki" precision="day"  value="${bioWikiInstance?.modificaWiki}" default="none" noSelection="['': '']" />
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: bioWikiInstance, field: 'letturaWiki', 'error')} ">
+	<label for="letturaWiki">
+		<g:message code="bioWiki.letturaWiki.label" default="Lettura Wiki" />
+		
+	</label>
+	
+
+
+
+
+
+
+
+
+
+
+<g:datePicker name="letturaWiki" precision="day"  value="${bioWikiInstance?.letturaWiki}" default="none" noSelection="['': '']" />
+</div>
+
 <div class="fieldcontain ${hasErrors(bean: bioWikiInstance, field: 'allineata', 'error')} ">
 	<label for="allineata">
 		<g:message code="bioWiki.allineata.label" default="Allineata" />
@@ -1210,5 +1248,24 @@
 
 
 <g:checkBox name="controllato" value="${bioWikiInstance?.controllato}" />
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: bioWikiInstance, field: 'elaborata', 'error')} ">
+	<label for="elaborata">
+		<g:message code="bioWiki.elaborata.label" default="Elaborata" />
+		
+	</label>
+	
+
+
+
+
+
+
+
+
+
+
+<g:checkBox name="elaborata" value="${bioWikiInstance?.elaborata}" />
 </div>
 

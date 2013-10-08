@@ -37,12 +37,6 @@
 </div>
 
 <div id="list-bioWiki" class="content scaffold-list" role="main">
-    <g:if test="${titoloLista}">
-        <h1>${titoloLista}</h1>
-    </g:if>
-    <g:else>
-        <h1><g:message code="bioWiki.list.label" args="[entityName]" default="Elenco"/></h1>
-    </g:else>
 
     <g:if test="${flash.message}">
         <div class="message" role="status">${flash.message}</div>
@@ -50,6 +44,24 @@
     <g:if test="${flash.error}">
         <div class="errors" role="status">${flash.error}</div>
     </g:if>
+    <g:if test="${flash.messages}">
+        <g:each in="${flash.messages}" status="i" var="singoloMessaggio">
+            <div class="message" role="status">${singoloMessaggio}</div>
+        </g:each>
+    </g:if>
+    <g:if test="${flash.errors}">
+        <g:each in="${flash.errors}" status="i" var="singoloErrore">
+            <div class="errors" role="status">${singoloErrore}</div>
+        </g:each>
+    </g:if>
+
+    <g:if test="${titoloLista}">
+        <h1>${titoloLista}</h1>
+    </g:if>
+    <g:else>
+        <h1><g:message code="bioWiki.list.label" args="[entityName]" default="Elenco"/></h1>
+    </g:else>
+
     <table>
         <thead>
         <g:if test="${campiLista}">
@@ -58,29 +70,29 @@
         <g:else>
             <tr>
                 
+                <g:sortableColumn property="wikiUrl"
+                                  title="${message(code: 'bioWiki.wikiUrl.label', default: 'Wiki Url')}"/>
+                
+                <g:sortableColumn property="testoTemplate"
+                                  title="${message(code: 'bioWiki.testoTemplate.label', default: 'Testo Template')}"/>
+                
                 <g:sortableColumn property="pageid"
                                   title="${message(code: 'bioWiki.pageid.label', default: 'Pageid')}"/>
                 
-                <g:sortableColumn property="titolo"
-                                  title="${message(code: 'bioWiki.titolo.label', default: 'Titolo')}"/>
+                <g:sortableColumn property="title"
+                                  title="${message(code: 'bioWiki.title.label', default: 'Title')}"/>
                 
-                <g:sortableColumn property="nome"
-                                  title="${message(code: 'bioWiki.nome.label', default: 'Nome')}"/>
+                <g:sortableColumn property="ns"
+                                  title="${message(code: 'bioWiki.ns.label', default: 'Ns')}"/>
                 
-                <g:sortableColumn property="cognome"
-                                  title="${message(code: 'bioWiki.cognome.label', default: 'Cognome')}"/>
+                <g:sortableColumn property="touched"
+                                  title="${message(code: 'bioWiki.touched.label', default: 'Touched')}"/>
                 
-                <g:sortableColumn property="postCognome"
-                                  title="${message(code: 'bioWiki.postCognome.label', default: 'Post Cognome')}"/>
+                <g:sortableColumn property="revid"
+                                  title="${message(code: 'bioWiki.revid.label', default: 'Revid')}"/>
                 
-                <g:sortableColumn property="postCognomeVirgola"
-                                  title="${message(code: 'bioWiki.postCognomeVirgola.label', default: 'Post Cognome Virgola')}"/>
-                
-                <g:sortableColumn property="forzaOrdinamento"
-                                  title="${message(code: 'bioWiki.forzaOrdinamento.label', default: 'Forza Ordinamento')}"/>
-                
-                <g:sortableColumn property="preData"
-                                  title="${message(code: 'bioWiki.preData.label', default: 'Pre Data')}"/>
+                <g:sortableColumn property="size"
+                                  title="${message(code: 'bioWiki.size.label', default: 'Size')}"/>
                 
             </tr>
         </g:else>
@@ -98,28 +110,27 @@
                 <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
                     
                     <td><g:link action="show"
+                                id="${bioWikiInstance.id}">${fieldValue(bean: bioWikiInstance, field: "wikiUrl")}</g:link></td>
+                    
+                    <td><g:link action="show"
+                                id="${bioWikiInstance.id}">${fieldValue(bean: bioWikiInstance, field: "testoTemplate")}</g:link></td>
+                    
+                    <td><g:link action="show"
                                 id="${bioWikiInstance.id}">${fieldValue(bean: bioWikiInstance, field: "pageid")}</g:link></td>
                     
                     <td><g:link action="show"
-                                id="${bioWikiInstance.id}">${fieldValue(bean: bioWikiInstance, field: "titolo")}</g:link></td>
+                                id="${bioWikiInstance.id}">${fieldValue(bean: bioWikiInstance, field: "title")}</g:link></td>
                     
                     <td><g:link action="show"
-                                id="${bioWikiInstance.id}">${fieldValue(bean: bioWikiInstance, field: "nome")}</g:link></td>
+                                id="${bioWikiInstance.id}">${fieldValue(bean: bioWikiInstance, field: "ns")}</g:link></td>
+                    
+                    <td><g:formatDate date="${bioWikiInstance.touched}"/></td>
                     
                     <td><g:link action="show"
-                                id="${bioWikiInstance.id}">${fieldValue(bean: bioWikiInstance, field: "cognome")}</g:link></td>
+                                id="${bioWikiInstance.id}">${fieldValue(bean: bioWikiInstance, field: "revid")}</g:link></td>
                     
                     <td><g:link action="show"
-                                id="${bioWikiInstance.id}">${fieldValue(bean: bioWikiInstance, field: "postCognome")}</g:link></td>
-                    
-                    <td><g:link action="show"
-                                id="${bioWikiInstance.id}">${fieldValue(bean: bioWikiInstance, field: "postCognomeVirgola")}</g:link></td>
-                    
-                    <td><g:link action="show"
-                                id="${bioWikiInstance.id}">${fieldValue(bean: bioWikiInstance, field: "forzaOrdinamento")}</g:link></td>
-                    
-                    <td><g:link action="show"
-                                id="${bioWikiInstance.id}">${fieldValue(bean: bioWikiInstance, field: "preData")}</g:link></td>
+                                id="${bioWikiInstance.id}">${fieldValue(bean: bioWikiInstance, field: "size")}</g:link></td>
                     
                 </tr>
             </g:each>

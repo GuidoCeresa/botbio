@@ -19,9 +19,9 @@ import it.algos.algoslib.LibArray
 import it.algos.algoslib.LibTesto
 import it.algos.algospref.LibPref
 import it.algos.algospref.Preferenze
-import it.algos.algoswiki.Login
-import it.algos.algoswiki.Pagina
-import it.algos.algoswiki.QueryCatPageid
+import it.algos.algoswiki.*
+
+import java.sql.Timestamp
 
 @Log4j
 class BioWikiService {
@@ -40,13 +40,6 @@ class BioWikiService {
     private static String tagAvviso = WrapBio.tagAvviso
 
     long ultimaRegistrazione = 0
-
-    /**
-     * Esegue la funzionalità principale
-     */
-    def esegueJob() {
-        this.aggiorna()
-    } // fine della closure
 
     /**
      * Importa il database biografia
@@ -78,19 +71,17 @@ class BioWikiService {
      *
      * @return lista completa delle voci esistenti dalla categoria BioBot
      */
-    public aggiungeWiki() {
+    public int aggiungeWiki() {
         // variabili e costanti locali di lavoro
+        int vociCreate = 0
+        int maxDownload
         ArrayList<Integer> listaVociServerWiki = null
         boolean continua = true
         ArrayList<Integer> listaRecordsDatabase = null
         ArrayList<Integer> listaNuoviRecordsDaCreare = null
         ArrayList<Integer> listaRecordsForseDaCancellare = null
         ArrayList<Integer> listaRecordsDaCancellare = null
-        int vociCat = 0
-        def numVoci
-        String percentuale
         boolean debug = Preferenze.getBool((String) grailsApplication.config.debug)
-        String avviso = ''
 
         // messaggio di log
         inizio = System.currentTimeMillis()
@@ -123,7 +114,18 @@ class BioWikiService {
             } else {
                 listaNuoviRecordsDaCreare = deltaListe(listaVociServerWiki, listaRecordsDatabase)
             }// fine del blocco if-else
+            if (listaNuoviRecordsDaCreare) {
+                vociCreate = listaNuoviRecordsDaCreare.size()
+            }// fine del blocco if
             tempo()
+        }// fine del blocco if-else
+
+        //--Limitazione del numero di voci da considerare
+        if (continua) {
+            if (LibPref.getBool('usaLimiteDownload')) {
+                maxDownload = LibPref.getInt('maxDownload')
+                listaNuoviRecordsDaCreare = LibArray.estraArray(listaNuoviRecordsDaCreare, maxDownload)
+            }// fine del blocco if
         }// fine del blocco if-else
 
         //--Crea i nuovi records per il database biografia
@@ -152,22 +154,11 @@ class BioWikiService {
 
         // valore di ritorno
         log.info 'Fine del metodo di aggiunta nuovi records'
-        if (listaVociServerWiki) {
-            vociCat = listaVociServerWiki.size()
-        }// fine del blocco if
-        numVoci = BioWiki.count()
-        percentuale = LibTesto.formatPercentuale(numVoci, vociCat)
-        numVoci = LibTesto.formatNum(numVoci)
-        avviso += "[[Utente:Biobot|<span style=\"color:green\">'''Biobot'''</span>]]"
-        avviso += " gestisce ${numVoci} voci pari al '''${percentuale}'''"
-        avviso += " della categoria [[:Categoria:BioBot|'''BioBot''']]"
-        logService.info(avviso)
-        return listaVociServerWiki
+        return vociCreate
     } // fine del metodo
 
     /**
      * Aggiorna il database biografia
-     * Aggiunge prima i nuovi records al database biografia
      *
      * Crea la lista delle voci mantenute, potenzialmente uguali o modificate
      * Legge il parametro revid, lo confronta con il revid del database
@@ -178,28 +169,48 @@ class BioWikiService {
      * Sporca le tavole Giorno e Anno
      * Registra il records modificato, col nuovo revid
      */
-    public aggiornaWiki() {
+    public int aggiornaWiki() {
         // variabili e costanti locali di lavoro
-        def listaCatServerWiki
+        int vociAggiornate = 0
+        int maxDownload
+        boolean debug = Preferenze.getBool((String) grailsApplication.config.debug)
         def listaRecordsDatabase
         def listaRecordsModificati
+        def numVoci
 
-        if (boolSetting('debug')) {
+        if (debug) {
             log.info 'Modalita debug'
             this.download(idDebug)
-            return
+            return 1
         }// fine del blocco if
 
         // messaggio di log
         log.info 'Metodo di aggiunta ed aggiornamento records esistenti'
 
-        // Recupera la lista completa delle voci esistenti dalla categoria BioBot
-        listaCatServerWiki = this.aggiungeWiki()
+        // Recupera la lista completa dei records presenti nel database
+        listaRecordsDatabase = getListaRecordsDatabase()
+
+        //--Limitazione del numero di voci da considerare
+        if (LibPref.getBool('usaLimiteDownload')) {
+            maxDownload = LibPref.getInt('maxDownload')
+            listaRecordsDatabase = LibArray.estraArray(listaRecordsDatabase, maxDownload)
+        }// fine del blocco if
 
         // regolo le voci modificate
-        listaRecordsModificati = this.getListaModificate(listaCatServerWiki)
+        listaRecordsModificati = this.getListaModificate(listaRecordsDatabase)
         this.regolaVociNuoveModificate(listaRecordsModificati)
         tempo()
+
+        if (listaRecordsModificati) {
+            vociAggiornate = listaRecordsModificati.size()
+        }// fine del blocco if
+
+        // valore di ritorno
+        numVoci = LibTesto.formatNum(vociAggiornate)
+        logService.info "Sono state aggiornate ${numVoci} voci dopo l'ultimo check"
+        log.info 'Fine del metodo di aggiornamento dei records'
+
+        return vociAggiornate
     } // fine del metodo
 
     /**
@@ -338,14 +349,8 @@ class BioWikiService {
     def creaNuoviRecords(ArrayList<Integer> listaNuoviRecords) {
         // variabili e costanti locali di lavoro
         def num = 0
-        int maxDownload
 
         if (listaNuoviRecords) {
-            if (LibPref.getBool('usaLimiteDownload')) {
-                maxDownload = LibPref.getInt('maxDownload')
-                listaNuoviRecords = LibArray.estraArray(listaNuoviRecords, maxDownload)
-            }// fine del blocco if
-
             num = listaNuoviRecords.size()
             num = Lib.Text.formatNum(num)
             log.info "Ci sono ${num} nuovi records da creare"
@@ -451,18 +456,21 @@ class BioWikiService {
     /**
      * Crea la lista delle voci sicuramente modificate
      *
+     * Riceve la lista dal database
      * Spazzola la lista a blocchi stabiliti
      * Un blocco legge n pagine contemporaneamente
      * Per ogni blocco legge da wiki solo il pageid ed il lastrevid
-     * Confronta il lastrevid con quello esistente nella voce
+     * Confronta il lastrevid con quello esistente nel record già presente
      * Crea la lista sicuramente modificate
      *
      * @param listaForseModificate lista di pageids
      */
-    def getListaModificate = { listaForseModificate ->
+    private getListaModificate(ArrayList listaForseModificate) {
         // variabili e costanti locali di lavoro
         ArrayList listaModificate = null
         boolean continua = false
+        ArrayList lista = null
+        ArrayList listaWrap = null
         ArrayList listaMappeTmp = null
         ArrayList listaModificateTmp = null
         int dimBlocco = 100
@@ -475,6 +483,7 @@ class BioWikiService {
         int delta
         def corr
         String totTxt
+        QueryTimestamp query
 
         //test di velocità
         // primi diecimila
@@ -490,7 +499,7 @@ class BioWikiService {
         }// fine del blocco if
 
         if (continua) {
-            listaPageids = Libreria.splitArray(listaForseModificate, dimBlocco)
+            listaPageids = Lib.Array.splitArray(listaForseModificate, dimBlocco)
 
             if (listaPageids) {
                 continua = true
@@ -508,26 +517,38 @@ class BioWikiService {
             delta = fix / dimBlocco
             listaPageids.each {
                 k++
+                if (it instanceof ArrayList) {
+                    lista = (ArrayList) it
+                }// fine del blocco if
+
+                if (lista) {
+                    query = new QueryTimestamp((ArrayList) it)
+                    if (query) {
+                        listaWrap = query.getListaWrapTime()
+                        if (listaWrap) {
+                            listaModificateTmp = chekTimeLista(listaWrap)
+                        }// fine del blocco if
+                    }// fine del blocco if
+                }// fine del blocco if
 
                 try { // prova ad eseguire il codice
-                    listaMappeTmp = Pagina.leggeLastrevids(it)
-                    listaModificateTmp = regolaListaModificata(listaMappeTmp)
 
                     listaModificateTmp.each {
                         listaModificate.add(it)
-                    }
+                    } // fine del ciclo each
+
                     mod = listaModificate.size()
                 } catch (Exception unErrore) { // intercetta l'errore
                     log.error 'getListaModificate' + " al blocco ${k}/$blocchi"
                 }// fine del blocco try-catch
 
-                if (isStep(k, delta)) {
-                    totTxt = it.algos.algoswiki.WikiLib.formatNumero(tot)
-                    corr = it.algos.algoswiki.WikiLib.formatNumero(k * dimBlocco)
-                    mod = it.algos.algoswiki.WikiLib.formatNumero(mod)
-                    log.info "Ho controllato (blocchi da $dimBlocco) la pagina ${corr}/${totTxt} e ci sono $mod voci modificate"
-                    tempo()
-                }// fine del blocco if
+//                if (isStep(k, delta)) {
+//                    totTxt = it.algos.algoswiki.WikiLib.formatNumero(tot)
+//                    corr = it.algos.algoswiki.WikiLib.formatNumero(k * dimBlocco)
+//                    mod = it.algos.algoswiki.WikiLib.formatNumero(mod)
+//                    log.info "Ho controllato (blocchi da $dimBlocco) la pagina ${corr}/${totTxt} e ci sono $mod voci modificate"
+//                    tempo()
+//                }// fine del blocco if
             }// fine del ciclo each
         }// fine del blocco if
 
@@ -621,7 +642,7 @@ class BioWikiService {
                 log.error 'Non sono riuscito ad eseguire la query'
             }// fine del blocco try-catch
 
-            if (listaMappe && listaMappe.size() > 1) {
+            if (listaMappe && listaMappe.size() > 0) {
                 listaMappe.each {
                     mappa = (HashMap) it
                     wrapBio = new WrapBio(mappa)
@@ -855,6 +876,59 @@ class BioWikiService {
 
         // valore di ritorno
         return listaDiff
+    } // fine della closure
+
+    /**
+     * Controlla se le voci (su wiki) sono state modificate rispetto alla versione esistente (sul database)
+     *
+     * Confronta il lastrevid con quello esistente nella voce
+     * Crea la lista sicuramente modificate
+     *
+     * @param listaForseModificate lista parziale (a blocchi) di mappe con pageids=lastrevids
+     * @return lista di pageid
+     */
+    private ArrayList chekTimeLista(ArrayList listaWrapTime) {
+        // variabili e costanti locali di lavoro
+        ArrayList listaPageid = null
+        WrapTime wrap
+        BioWiki bio
+        int pageid
+        Timestamp valoreWiki
+        Timestamp valoreDatabase
+        int lastrevid
+
+        if (listaWrapTime) {
+            listaPageid = new ArrayList()
+
+            listaWrapTime.each {
+                wrap = null
+                pageid = 0
+                bio = null
+                if (it instanceof WrapTime) {
+                    wrap = (WrapTime) it
+                }// fine del blocco if
+
+                if (wrap) {
+                    pageid = wrap.getPageid()
+                    valoreWiki = wrap.getTimestamp()
+                }// fine del blocco if
+
+                if (pageid) {
+                    bio = BioWiki.findByPageid(pageid)
+                }// fine del blocco if
+
+                if (bio) {
+                    valoreDatabase = bio.timestamp
+                }// fine del blocco if
+
+                if (valoreWiki > valoreDatabase) {
+                    listaPageid.add(pageid)
+                }// fine del blocco if
+            }// fine del ciclo each
+        }// fine del blocco if
+
+        // valore di ritorno
+        return listaPageid
     } // fine della closure
 
     /**
