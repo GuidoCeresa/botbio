@@ -13,59 +13,45 @@
 
 package it.algos.botbio
 
+import it.algos.algos.DialogoController
 import it.algos.algos.TipoDialogo
 import it.algos.algoslib.Lib
-import org.codehaus.groovy.grails.commons.DefaultGrailsDomainClass
-import org.springframework.dao.DataIntegrityViolationException
+import it.algos.algoslib.LibTesto
+import it.algos.algospref.Preferenze
 
-//--gestisce l'elaborazione dei dati
+//--gestisce operazioni aggiuntive e di controllo
 class BioController {
 
     static allowedMethods = [save: 'POST', update: 'POST', delete: 'POST']
 
     // utilizzo di un service con la businessLogic per l'elaborazione dei dati
     // il service viene iniettato automaticamente
-    def exportService
-    def logoService
-    def eventoService
-    def bioService
+    def logService
     def grailsApplication
-
+    def bioService
 
     def index() {
-        redirect(action: 'list', params: params)
+        render(view: 'index')
     } // fine del metodo
 
-    def list(Integer max) {
-        params.max = Math.min(max ?: 1000, 1000)
-        ArrayList menuExtra
+
+    def parsesso() {
+        params.max = 1000
         ArrayList campiLista
         def lista
         def campoSort
         String titoloLista
-        int recordsTotali
-
-        //--selezione dei menu extra
-        //--solo azione e di default controller=questo; classe e titolo vengono uguali
-        //--mappa con [cont:'controller', action:'metodo', icon:'iconaImmagine', title:'titoloVisibile']
-        menuExtra = []
-        // fine della definizione
 
         //--selezione delle colonne (campi) visibili nella lista
         //--solo nome e di default il titolo viene uguale
-        //--mappa con [campo:'nomeDelCampo', titolo:'titoloVisibile', sort:'ordinamento']
-        //--se vuoto, mostra i primi n (stabilito nel templates:scaffoldinf:list)
-        //--    nell'ordine stabilito nella constraints della DomainClass
+        //--mappa con [campo:'nomeDelCampo', title:'titoloVisibile', sort:'ordinamento']
         campiLista = [
                 'pageid',
                 [campo: 'wikiUrl', title: 'Wiki'],
                 'nome',
                 'cognome',
-                [campo: 'annoNascita', title: 'Nato'],
-                'attivita',
-                'attivita2',
-                'attivita3',
-                'nazionalita']
+                'sesso'
+        ]
         // fine della definizione
 
         //--regolazione dei campo di ordinamento
@@ -85,146 +71,107 @@ class BioController {
             params.order = 'asc'
         }// fine del blocco if-else
 
-        //--metodo di esportazione dei dati (eventuale)
-        export(params)
-
         //--selezione dei records da mostrare
         //--per una lista filtrata (parziale), modificare i parametri
         //--oppure modificare il findAllByInteroGreaterThan()...
-        lista = Bio.findAll(params)
-        recordsTotali = Bio.count()
+        lista = BioWiki.findAllWhere([sesso: ''])
 
-        //--calcola il numero di record
-        titoloLista = 'Elenco di ' + Lib.Txt.formatNum(recordsTotali) + ' biografie'
+        //--titolo visibile sopra la table dei dati
+        titoloLista = 'Elenco di ' + Lib.Txt.formatNum(lista.size()) + ' biografie con parametro sesso errato'
 
         //--presentazione della view (list), secondo il modello
         //--menuExtra e campiLista possono essere nulli o vuoti
         //--se campiLista è vuoto, mostra tutti i campi (primi 8)
-        render(view: 'list', model: [
-                bioInstanceList: lista,
-                bioInstanceTotal: recordsTotali,
-                menuExtra: menuExtra,
+        render(view: 'parsesso', model: [
+                bioWikiInstanceList: lista,
                 titoloLista: titoloLista,
                 campiLista: campiLista],
                 params: params)
     } // fine del metodo
 
-    //--metodo di esportazione dei dati
-    //--funziona SOLO se il flag -usaExport- è true (iniettato e regolato in ExportBootStrap)
-    //--se non si regola la variabile -titleReport- non mette nessun titolo al report
-    //--se non si regola la variabile -records- esporta tutti i records
-    //--se non si regola la variabile -fields- esporta tutti i campi
-    def export = {
-        String titleReport = new Date()
-        def records = null
-        List fields = null
-        Map parameters
+    //--mostra un dialogo di conferma per l'operazione da compiere
+    //--passa al metodo effettivo
+    def uploadSesso() {
+        params.tipo = TipoDialogo.conferma
+        params.titolo = 'FixSesso'
+        params.avviso = []
+        params.avviso.add("Vengono modificate su wikipedia tutte le voci col parametro sesso errato")
+        params.avviso.add("Viene aggiunto di default il parametro 'M'")
+        params.returnController = 'bio'
+        params.returnAction = 'uploadSessoDopoConferma'
+        redirect(controller: 'dialogo', action: 'box', params: params)
+    } // fine del metodo
 
-        if (exportService && servletContext.usaExport) {
-            if (params?.format && params.format != 'html') {
-                if (!records) {
-                    records = Bio.list(params)
+    //--ciclo di correzione ed upload
+    def uploadSessoDopoConferma() {
+        String valore
+        boolean continua = false
+        def numVoci
+        String avviso
+        boolean debug = Preferenze.getBool((String) grailsApplication.config.debug)
+        flash.message = 'Operazione annullata. Le voci non sono state modificate.'
+
+        if (params.valore) {
+            if (params.valore instanceof String) {
+                valore = (String) params.valore
+                if (valore.equals(DialogoController.DIALOGO_CONFERMA)) {
+                    if (grailsApplication && grailsApplication.config.login) {
+                        continua = true
+                    } else {
+                        if (debug) {
+                            continua = true
+                        } else {
+                            flash.message = 'Devi essere loggato per poter modificare le voci.'
+                        }// fine del blocco if-else
+                    }// fine del blocco if-else
                 }// fine del blocco if
-                if (!fields) {
-                    fields = new DefaultGrailsDomainClass(Bio.class).persistentProperties*.name
-                }// fine del blocco if
-                parameters = [title: titleReport]
-                response.contentType = grailsApplication.config.grails.mime.types[params.format]
-                response.setHeader("Content-disposition", "attachment; filename=Bio.${params.extension}")
-                exportService.export((String) params.format, response.outputStream, records, fields, [:], [:], parameters)
             }// fine del blocco if
         }// fine del blocco if
-    } // fine del metodo
 
-
-    def save() {
-        def bioInstance = new Bio(params)
-
-        if (!bioInstance.save(flush: true)) {
-            render(view: 'create', model: [bioInstance: bioInstance])
-            return
-        }// fine del blocco if e fine anticipata del metodo
-
-        //--log della registrazione
-        if (logoService && eventoService) {
-            logoService.setInfo(request, eventoService.getNuovo(), 'Gac')
+        if (continua) {
+            numVoci = bioService.uploadSesso()
+            if (numVoci == 0) {
+                flash.message = 'Non è stata modificata (corretta) nessuna voce'
+            } else {
+                numVoci = LibTesto.formatNum(numVoci)
+                avviso = "Sono state modificate (corrette) ${numVoci} voci che avevano il parametro sesso errato o mancante"
+                flash.message = avviso
+                log.info(avviso)
+//                logService.info(avviso)
+            }// fine del blocco if-else
         }// fine del blocco if
 
-        flash.message = message(code: 'default.created.message', args: [message(code: 'biografia.label', default: 'Bio'), bioInstance.id])
-        redirect(action: 'show', id: bioInstance.id)
+        redirect(action: 'index')
     } // fine del metodo
 
-    def show(Long id) {
-        def bioInstance = Bio.get(id)
+    def test() {
+        String titoloA
+        String titoloB
+        WrapBio wrapA
+        WrapBio wrapB
+        BioWiki bioWikiA
+        BioWiki bioWikiB
+        def registrata
 
-        if (!bioInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'biografia.label', default: 'Bio'), id])
-            redirect(action: 'list')
-            return
-        }// fine del blocco if e fine anticipata del metodo
+        titoloA = 'Pietro Barillà'
+        titoloB = 'Pietro Barilla'
 
-        [bioInstance: bioInstance]
-    } // fine del metodo
+        wrapA = new WrapBio(titoloA)
+        wrapB = new WrapBio(titoloB)
 
-    def edit(Long id) {
-        def bioInstance = Bio.get(id)
+        wrapA.registraBioWiki()
+        wrapB.registraBioWiki()
 
-        if (!bioInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'biografia.label', default: 'Bio'), id])
-            redirect(action: 'list')
-            return
-        }// fine del blocco if e fine anticipata del metodo
+        bioWikiA = wrapA.getBioOriginale()
+        bioWikiB = wrapB.getBioOriginale()
 
-        [bioInstance: bioInstance]
-    } // fine del metodo
+        bioWikiA.attivita3 = 'pippoz'
+        bioWikiB.attivita3 = 'plutox'
 
-    def update(Long id, Long version) {
-        def bioInstance = Bio.get(id)
+        registrata = bioWikiA.save(failOnError: true)
+        registrata = bioWikiB.save(failOnError: true)
 
-        if (!bioInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'biografia.label', default: 'Bio'), id])
-            redirect(action: 'list')
-            return
-        }// fine del blocco if e fine anticipata del metodo
-
-        if (version != null) {
-            if (bioInstance.version > version) {
-                bioInstance.errors.rejectValue("version", "default.optimistic.locking.failure",
-                        [message(code: 'biografia.label', default: 'Bio')] as Object[],
-                        "Another user has updated this Bio while you were editing")
-                render(view: 'edit', model: [bioInstance: bioInstance])
-                return
-            }// fine del blocco if e fine anticipata del metodo
-        }// fine del blocco if
-
-        bioInstance.properties = params
-
-        if (!bioInstance.save(flush: true)) {
-            render(view: 'edit', model: [bioInstance: bioInstance])
-            return
-        }// fine del blocco if e fine anticipata del metodo
-
-        flash.message = message(code: 'default.updated.message', args: [message(code: 'biografia.label', default: 'Bio'), bioInstance.id])
-        redirect(action: 'show', id: bioInstance.id)
-    } // fine del metodo
-
-    def delete(Long id) {
-        def bioInstance = Bio.get(id)
-        if (!bioInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'biografia.label', default: 'Bio'), id])
-            redirect(action: 'list')
-            return
-        }// fine del blocco if e fine anticipata del metodo
-
-        try {
-            bioInstance.delete(flush: true)
-            flash.message = message(code: 'default.deleted.message', args: [message(code: 'biografia.label', default: 'Bio'), id])
-            redirect(action: 'list')
-        }// fine del blocco try
-        catch (DataIntegrityViolationException e) {
-            flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'biografia.label', default: 'Bio'), id])
-            redirect(action: 'show', id: id)
-        }// fine del blocco catch
+        render(view: 'index')
     } // fine del metodo
 
 } // fine della controller classe

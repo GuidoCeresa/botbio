@@ -65,7 +65,7 @@
     <table>
         <thead>
         <g:if test="${campiLista}">
-            <algos:titoliLista campiLista="${campiLista}"></algos:titoliLista>
+            <algos:titoliLista campiLista="${campiLista}"> </algos:titoliLista>
         </g:if>
         <g:else>
             <tr>
@@ -101,7 +101,7 @@
         <g:if test="${campiLista}">
             <g:each in="${bioWikiInstanceList}" status="i" var="bioWikiInstance">
                 <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-                    <algos:rigaLista campiLista="${campiLista}" rec="${bioWikiInstance}"></algos:rigaLista>
+                    <algos:rigaLista campiLista="${campiLista}" rec="${bioWikiInstance}"> </algos:rigaLista>
                 </tr>
             </g:each>
         </g:if>

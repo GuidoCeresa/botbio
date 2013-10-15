@@ -1,6 +1,6 @@
 package it.algos.botbio
 
-import grails.test.*
+import grails.test.GrailsUnitTestCase
 
 /**
  * Created with IntelliJ IDEA.
@@ -28,9 +28,8 @@ class DidascaliaBioTest extends GrailsUnitTestCase {
     void testDidascalieAaron() {
         String titolo = 'Vasile Aaron'
         WrapBio wrap = new WrapBio(titolo)
-        int pageid = wrap.getPageid()
         BioWiki bioWiki = wrap.getBioOriginale()
-        BioGrails bioGrails = bioService.elaboraGrails(bioWiki, pageid)
+        BioGrails bioGrails = bioService.elaboraGrails(bioWiki)
         DidascaliaBio didascalia
 
         //--creazione della didascalia
@@ -84,9 +83,8 @@ class DidascaliaBioTest extends GrailsUnitTestCase {
     void testDidascalieBotta() {
         String titolo = 'Emil Botta'
         WrapBio wrap = new WrapBio(titolo)
-        int pageid = wrap.getPageid()
         BioWiki bioWiki = wrap.getBioOriginale()
-        BioGrails bioGrails = bioService.elaboraGrails(bioWiki, pageid)
+        BioGrails bioGrails = bioService.elaboraGrails(bioWiki)
         DidascaliaBio didascalia
 
         didascalia = new DidascaliaBio(bioGrails)
@@ -357,9 +355,8 @@ class DidascaliaBioTest extends GrailsUnitTestCase {
     void testDidascalie2() {
         String titolo = 'Antonio Abati'
         WrapBio wrap = new WrapBio(titolo)
-        int pageid = wrap.getPageid()
         BioWiki bioWiki = wrap.getBioOriginale()
-        BioGrails bioGrails = bioService.elaboraGrails(bioWiki, pageid)
+        BioGrails bioGrails = bioService.elaboraGrails(bioWiki)
         String previsto = '[[Antonio Abati]], letterato italiano (†[[1667]])'
         String risultato
         DidascaliaBio didascalia
@@ -380,9 +377,8 @@ class DidascaliaBioTest extends GrailsUnitTestCase {
     void testDidascalie3() {
         String titolo = 'Pipin Ferreras'
         WrapBio wrap = new WrapBio(titolo)
-        int pageid = wrap.getPageid()
         BioWiki bioWiki = wrap.getBioOriginale()
-        BioGrails bioGrails = bioService.elaboraGrails(bioWiki, pageid)
+        BioGrails bioGrails = bioService.elaboraGrails(bioWiki)
         String previsto = '[[Pipin Ferreras]], apneista cubano (n.[[1962]])'
         String risultato
         DidascaliaBio didascalia
@@ -403,9 +399,8 @@ class DidascaliaBioTest extends GrailsUnitTestCase {
     void testDidascalie4() {
         String titolo = 'Antonio Abbondanti'
         WrapBio wrap = new WrapBio(titolo)
-        int pageid = wrap.getPageid()
         BioWiki bioWiki = wrap.getBioOriginale()
-        BioGrails bioGrails = bioService.elaboraGrails(bioWiki, pageid)
+        BioGrails bioGrails = bioService.elaboraGrails(bioWiki)
         String previsto = '[[Antonio Abbondanti]], poeta e scrittore italiano'
         String risultato
         DidascaliaBio didascalia
@@ -424,9 +419,8 @@ class DidascaliaBioTest extends GrailsUnitTestCase {
     void testDidascalie5() {
         String titolo = 'Carlo Martello'
         WrapBio wrap = new WrapBio(titolo)
-        int pageid = wrap.getPageid()
         BioWiki bioWiki = wrap.getBioOriginale()
-        BioGrails bioGrails = bioService.elaboraGrails(bioWiki, pageid)
+        BioGrails bioGrails = bioService.elaboraGrails(bioWiki)
         String previsto = '[[Carlo Martello]] (†[[741]])'
         String risultato
         DidascaliaBio didascalia
@@ -444,9 +438,8 @@ class DidascaliaBioTest extends GrailsUnitTestCase {
     void testDidascalie6() {
         String titolo = 'Antonio Blanco'
         WrapBio wrap = new WrapBio(titolo)
-        int pageid = wrap.getPageid()
         BioWiki bioWiki = wrap.getBioOriginale()
-        BioGrails bioGrails = bioService.elaboraGrails(bioWiki, pageid)
+        BioGrails bioGrails = bioService.elaboraGrails(bioWiki)
         String previsto = '[[Antonio Blanco]], calciatore argentino'
         String risultato
         DidascaliaBio didascalia
@@ -465,9 +458,8 @@ class DidascaliaBioTest extends GrailsUnitTestCase {
     void testDidascalie7() {
         String titolo = 'Antonio Blanco'
         WrapBio wrap = new WrapBio(titolo)
-        int pageid = wrap.getPageid()
         BioWiki bioWiki = wrap.getBioOriginale()
-        BioGrails bioGrails = bioService.elaboraGrails(bioWiki, pageid)
+        BioGrails bioGrails = bioService.elaboraGrails(bioWiki)
         String previsto = '[[Antonio Blanco]], calciatore argentino'
         String risultato
         DidascaliaBio didascalia
@@ -486,9 +478,8 @@ class DidascaliaBioTest extends GrailsUnitTestCase {
     void testDidascalie8() {
         String titolo = 'Andrea Ballarin'
         WrapBio wrap = new WrapBio(titolo)
-        int pageid = wrap.getPageid()
         BioWiki bioWiki = wrap.getBioOriginale()
-        BioGrails bioGrails = bioService.elaboraGrails(bioWiki, pageid)
+        BioGrails bioGrails = bioService.elaboraGrails(bioWiki)
         String previsto = '[[Andrea Ballarin]], liutaio italiano ([[Thiene]], n.[[1962]])'
         String risultato
         DidascaliaBio didascalia
@@ -509,9 +500,8 @@ class DidascaliaBioTest extends GrailsUnitTestCase {
     void testDidascalie9() {
         String titolo = 'Arnaud Amaury'
         WrapBio wrap = new WrapBio(titolo)
-        int pageid = wrap.getPageid()
         BioWiki bioWiki = wrap.getBioOriginale()
-        BioGrails bioGrails = bioService.elaboraGrails(bioWiki, pageid)
+        BioGrails bioGrails = bioService.elaboraGrails(bioWiki)
         String previsto = '[[Arnaud Amaury]], abate francese (n... - [[Narbona]], †[[1225]])'
         String risultato
         DidascaliaBio didascalia
@@ -532,9 +522,8 @@ class DidascaliaBioTest extends GrailsUnitTestCase {
     void testDidascalie10() {
         String titolo = 'Androin de la Roche'
         WrapBio wrap = new WrapBio(titolo)
-        int pageid = wrap.getPageid()
         BioWiki bioWiki = wrap.getBioOriginale()
-        BioGrails bioGrails = bioService.elaboraGrails(bioWiki, pageid)
+        BioGrails bioGrails = bioService.elaboraGrails(bioWiki)
         String previsto = '[[Androin de la Roche]], abate e cardinale francese (n... - [[Viterbo]], †[[1363]])'
         String risultato
         DidascaliaBio didascalia
@@ -555,9 +544,8 @@ class DidascaliaBioTest extends GrailsUnitTestCase {
     void testDidascalie11() {
         String titolo = 'Airey Neave'
         WrapBio wrap = new WrapBio(titolo)
-        int pageid = wrap.getPageid()
         BioWiki bioWiki = wrap.getBioOriginale()
-        BioGrails bioGrails = bioService.elaboraGrails(bioWiki, pageid)
+        BioGrails bioGrails = bioService.elaboraGrails(bioWiki)
         String previsto = '[[Airey Neave]], militare, politico e agente segreto britannico (n.[[1916]] - [[Londra]], †[[1979]])'
         String risultato
         DidascaliaBio didascalia
@@ -579,9 +567,8 @@ class DidascaliaBioTest extends GrailsUnitTestCase {
     void testDidascalie12() {
         String titolo = 'Lucy Percy'
         WrapBio wrap = new WrapBio(titolo)
-        int pageid = wrap.getPageid()
         BioWiki bioWiki = wrap.getBioOriginale()
-        BioGrails bioGrails = bioService.elaboraGrails(bioWiki, pageid)
+        BioGrails bioGrails = bioService.elaboraGrails(bioWiki)
         String previsto = '[[Lucy Percy]], agente segreto britannica (n.[[1599]] - †[[1660]])'
         String risultato
         DidascaliaBio didascalia
@@ -603,9 +590,8 @@ class DidascaliaBioTest extends GrailsUnitTestCase {
     void testDidascalie13() {
         String titolo = 'Alfano di Salerno'
         WrapBio wrap = new WrapBio(titolo)
-        int pageid = wrap.getPageid()
         BioWiki bioWiki = wrap.getBioOriginale()
-        BioGrails bioGrails = bioService.elaboraGrails(bioWiki, pageid)
+        BioGrails bioGrails = bioService.elaboraGrails(bioWiki)
         String previsto = '[[Alfano di Salerno]], abate, medico e letterato italiano ([[Salerno]], n... - [[Salerno]], †[[1085]])'
         String risultato
         DidascaliaBio didascalia
@@ -626,9 +612,8 @@ class DidascaliaBioTest extends GrailsUnitTestCase {
     void testDidascalie14() {
         String titolo = 'Antipapa Anastasio III'
         WrapBio wrap = new WrapBio(titolo)
-        int pageid = wrap.getPageid()
         BioWiki bioWiki = wrap.getBioOriginale()
-        BioGrails bioGrails = bioService.elaboraGrails(bioWiki, pageid)
+        BioGrails bioGrails = bioService.elaboraGrails(bioWiki)
         String previsto = '[[Antipapa Anastasio III]], abate e filologo italiano ([[Roma]], n... - †[[879]])'
         String risultato
         DidascaliaBio didascalia
@@ -649,9 +634,8 @@ class DidascaliaBioTest extends GrailsUnitTestCase {
     void testDidascalie15() {
         String titolo = 'Bertario di Montecassino'
         WrapBio wrap = new WrapBio(titolo)
-        int pageid = wrap.getPageid()
         BioWiki bioWiki = wrap.getBioOriginale()
-        BioGrails bioGrails = bioService.elaboraGrails(bioWiki, pageid)
+        BioGrails bioGrails = bioService.elaboraGrails(bioWiki)
         String previsto = '[[Bertario di Montecassino]], abate e santo italiano (n... - [[Cassino]], †[[883]])'
         String risultato
         DidascaliaBio didascalia

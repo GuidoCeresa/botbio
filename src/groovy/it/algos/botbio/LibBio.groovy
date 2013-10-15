@@ -151,7 +151,6 @@ class LibBio {
                 if (pos > -1) {
                     mappaTmp.put(pos, valore)
                 }// fine del blocco if
-
             }// fine di each
 
             lista = mappaTmp.keySet().sort { a, b -> (a < b) ? -1 : 1 }
@@ -159,8 +158,8 @@ class LibBio {
                 lista.add(testoTemplate.length())
 
                 for (int k = 1; k < lista.size(); k++) {
-
-                    valore = testoTemplate.substring(lista.get(k - 1), lista.get(k))
+                    chiave = mappaTmp.get(lista.get(k - 1))
+                    valore = testoTemplate.substring((int) lista.get(k - 1), (int) lista.get(k))
                     if (valore) {
                         valore = valore.trim()
                         posUgu = valore.indexOf(uguale)
@@ -171,8 +170,7 @@ class LibBio {
                         valore = regValore(valore)
                         valore = regACapo(valore)
                         valore = regBreakSpace(valore)
-
-                        chiave = mappaTmp.get(lista.get(k - 1))
+                        valore = valore.trim()
                         mappa.put(chiave, valore)
                     }// fine del blocco if
 
@@ -267,9 +265,9 @@ class LibBio {
      * @param bioOriginale
      * @return bioCopia
      */
-    public static Bio clonaBio(Bio bioOriginale) {
+    public static BioWiki clonaBio(BioWiki bioOriginale) {
         // variabili e costanti locali di lavoro
-        Bio bioCopia = null
+        BioWiki bioCopia = null
         String nomeCampo
         def valCampo
         int id
@@ -280,11 +278,11 @@ class LibBio {
             }// fine del blocco if
 
             if (id) {
-                bioCopia = Bio.findById(id)
+                bioCopia = BioWiki.findById(id)
             }// fine del blocco if
 
             if (!bioCopia) {
-                bioCopia = new Bio()
+                bioCopia = new BioWiki()
             }// fine del blocco if
 
             bioCopia.properties.each {
@@ -309,7 +307,7 @@ class LibBio {
      * Corregge il parametro DidascaliaTipo
      * Se il parametro Immagine è vuoto, vuota anche la didascalia
      */
-    public static String correggeParametroDidascalia(Bio bio, String oldValue) {
+    public static String correggeParametroDidascalia(BioWiki bio, String oldValue) {
         String newValue = oldValue
         String immagine = ','
 

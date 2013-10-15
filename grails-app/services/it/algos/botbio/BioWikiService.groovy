@@ -82,6 +82,7 @@ class BioWikiService {
         ArrayList<Integer> listaRecordsForseDaCancellare = null
         ArrayList<Integer> listaRecordsDaCancellare = null
         boolean debug = Preferenze.getBool((String) grailsApplication.config.debug)
+        def num
 
         // messaggio di log
         inizio = System.currentTimeMillis()
@@ -89,31 +90,20 @@ class BioWikiService {
 
         //--Recupera dal server la lista completa delle voci esistenti dalla categoria BioBot
         if (continua) {
-            if (debug) {
-                listaVociServerWiki = [0, 4689129, 4689130, 4689133, 160011, 4689135, 4689136, 4689137, 142459]
-            } else {
-                listaVociServerWiki = this.getListaVociServerWiki()
-            }// fine del blocco if-else
-
+            listaVociServerWiki = this.getListaVociServerWiki()
             continua = (listaVociServerWiki && listaVociServerWiki.size() > 0)
             tempo()
         }// fine del blocco if
 
         //--Recupera la lista dei records esistenti nel database
         if (continua) {
-            if (!debug) {
-                listaRecordsDatabase = getListaRecordsDatabase()
-            }// fine del blocco if
+            listaRecordsDatabase = getListaRecordsDatabase()
             tempo()
         }// fine del blocco if
 
         //--Recupera la lista delle voci nuove che non hanno ancora records (da creare)
         if (continua) {
-            if (debug) {
-                listaNuoviRecordsDaCreare = listaVociServerWiki
-            } else {
-                listaNuoviRecordsDaCreare = deltaListe(listaVociServerWiki, listaRecordsDatabase)
-            }// fine del blocco if-else
+            listaNuoviRecordsDaCreare = deltaListe(listaVociServerWiki, listaRecordsDatabase)
             if (listaNuoviRecordsDaCreare) {
                 vociCreate = listaNuoviRecordsDaCreare.size()
             }// fine del blocco if
@@ -142,18 +132,29 @@ class BioWikiService {
 
         //--Controlla che i records effettivamente non esistano (la lista della categoria potrebbe essere sbagliata)
         if (continua) {
-//            listaRecordsDaCancellare = controlloRecordsDaEliminare(listaRecordsForseDaCancellare)
+            if (debug) {
+                listaRecordsDaCancellare = listaRecordsForseDaCancellare
+            } else {
+                listaRecordsDaCancellare = controlloRecordsDaEliminare(listaRecordsForseDaCancellare)
+            }// fine del blocco if-else
             tempo()
         }// fine del blocco if-else
 
         //--Cancella i records che non hanno più una voce sul server wiki (sicuramente da cancellare)
         if (continua) {
-//            this.cancellazioneEffettivaRecords(listaRecordsDaCancellare)
+            this.cancellazioneEffettivaRecords(listaRecordsDaCancellare)
             tempo()
         }// fine del blocco if-else
 
+        if (debug) {
+            log.info 'Fine del metodo di aggiunta nuovi records'
+        } else {
+            num = listaNuoviRecordsDaCreare.size()
+            num = Lib.Text.formatNum(num)
+            logService.info "Sono state aggiunte ${num} nuove voci dopo l'ultimo check"
+        }// fine del blocco if-else
+
         // valore di ritorno
-        log.info 'Fine del metodo di aggiunta nuovi records'
         return vociCreate
     } // fine del metodo
 
@@ -207,8 +208,12 @@ class BioWikiService {
 
         // valore di ritorno
         numVoci = LibTesto.formatNum(vociAggiornate)
-        logService.info "Sono state aggiornate ${numVoci} voci dopo l'ultimo check"
-        log.info 'Fine del metodo di aggiornamento dei records'
+        if (debug) {
+            log.info "Sono state aggiornate ${numVoci} voci dopo l'ultimo check"
+            log.info 'Fine del metodo di aggiornamento dei records'
+        } else {
+            logService.info "Sono state aggiornate ${numVoci} voci dopo l'ultimo check"
+        }// fine del blocco if-else
 
         return vociAggiornate
     } // fine del metodo
@@ -357,7 +362,7 @@ class BioWikiService {
 
             //--creo le voci nuove che non hanno ancora records
             this.regolaVociNuoveModificate(listaNuoviRecords)
-            logService.info "Sono state aggiunte ${num} nuove voci dopo l'ultimo check"
+//            logService.info "Sono state aggiunte ${num} nuove voci dopo l'ultimo check"
             log.warn "Fine dei nuovi records"
         } else {
             log.warn "Non ci sono nuovi records da creare"
@@ -376,9 +381,6 @@ class BioWikiService {
         // variabili e costanti locali di lavoro
         ArrayList<Integer> listaRecordsDaCancellare = null
         def dim
-        Pagina pagina
-        Bio bio
-        def title
 
         //Crea la lista dei records che non hanno più una corrispondente voce su wiki (da cancellare)
         if (!listaRecordsForseEliminandi) {
@@ -435,16 +437,26 @@ class BioWikiService {
     def cancellaSingoloRecord(int pageid) {
         // variabili e costanti locali di lavoro
         boolean cancellato = false
-        Bio biografia
+        BioWiki bioWiki
+        BioGrails bioGrails
 
         if (pageid) {
-            biografia = Bio.findByPageid(pageid)
-            if (biografia) {
-                this.regolaLink(biografia)
+            bioWiki = BioWiki.findByPageid(pageid)
+            if (bioWiki) {
+//                this.regolaLink(bioWiki)   //@todo manca
                 try { // prova ad eseguire il codice
-                    cancellato = biografia.delete()
+                    bioWiki.delete(flush: true)
                 } catch (Exception unErrore) { // intercetta l'errore
-                    log.error 'cancellaRecord ' + biografia.title + ' ' + unErrore.toString()
+                    log.error 'cancellaRecord ' + bioWiki.title + ' ' + unErrore.toString()
+                }// fine del blocco try-catch
+            }// fine del blocco if
+            bioGrails = BioGrails.findByPageid(pageid)
+            if (bioGrails) {
+//                this.regolaLink(bioGrails) //@todo manca
+                try { // prova ad eseguire il codice
+                    bioGrails.delete(flush: true)
+                } catch (Exception unErrore) { // intercetta l'errore
+                    log.error 'cancellaRecord ' + bioGrails.title + ' ' + unErrore.toString()
                 }// fine del blocco try-catch
             }// fine del blocco if
         }// fine del blocco if
@@ -629,7 +641,6 @@ class BioWikiService {
         WrapBio wrapBio
         String title
         int pageid
-        boolean debug = Preferenze.getBool((String) grailsApplication.config.debug)
         boolean registrata
         HashMap mappa
         StatoBio statoBio
@@ -651,12 +662,12 @@ class BioWikiService {
                     statoBio = wrapBio.getStatoBio()
                     switch (statoBio) {
                         case StatoBio.bioNormale:
-                            if (!debug) {
-                                wrapBio.registraBioWiki()
-                                registrata = true
-                            }// fine del blocco if
+                            wrapBio.registraBioWiki()
+//                            wrapBio.registraBioGrails()  //@todo absolutely
+                            registrata = true
                             break
                         case StatoBio.bioIncompleto:
+                            wrapBio.registraBioWiki()
                             logService.warn "Alla voce '''[[${title}]]''' mancano alcuni campi indispensabili per il funzionamento del '''[[Template:Bio|tmpl Bio]]'''"
                             registrata = false
                             break
@@ -698,12 +709,15 @@ class BioWikiService {
 
                     if (!registrata) {
                         log.error "regolaBloccoNuovoModificato - La voce ${title}, non è stata registrata"
-                    } else {
-                    }// fine del blocco if-else
+                    }// fine del blocco if
                 }// fine del ciclo each
             }// fine del blocco if
 
-            numRec = BioWiki.count()
+            try { // prova ad eseguire il codice
+                numRec = BioWiki.count()
+            } catch (Exception unErrore) { // intercetta l'errore
+                log.error unErrore
+            }// fine del blocco try-catch
             numero = Lib.Txt.formatNum(numRec)
             log.info "Nel database dopo il flushing ci sono ${numero} records"
         }// fine del blocco if
@@ -793,7 +807,7 @@ class BioWikiService {
      * @return record di biografia
      */
     public download(int pageid, boolean esegueUpload) {
-        Bio biografia = null
+        BioWiki biografia = null
         boolean continua = false
         WrapBio wrapBio
         int testoOld

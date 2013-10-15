@@ -1,8 +1,11 @@
 package it.algos.botbio
+
+import grails.test.GrailsUnitTestCase
 import grails.test.mixin.TestFor
 import it.algos.algoswiki.*
 import org.junit.Before
 import org.junit.Test
+
 /**
  * Created with IntelliJ IDEA.
  * User: Gac
@@ -10,7 +13,7 @@ import org.junit.Test
  * Time: 07:55
  */
 @TestFor(LogService)
-class WrapBioTest extends GroovyTestCase {
+class WrapBioTest extends GrailsUnitTestCase {
 
     LogService logService = new LogService()
     private Login loginDelTest
@@ -28,6 +31,62 @@ class WrapBioTest extends GroovyTestCase {
     // Tear down logic here
     void tearDown() {
     } // fine del metodo iniziale
+
+    void estUtf8() {
+        WrapBio wrap
+        String titolo = 'Dušan Uškovič'
+        titolo = 'Pietro Barillà'
+
+        wrap = new WrapBio(titolo)
+        assert wrap != null
+        assert wrap.isValida()
+        assert wrap.getTitoloVoce() == titolo
+        def a = new EditAdd(loginDelTest, titolo, 'provaBot', 'test')
+    } // fine del test
+
+    void testErrore3() {
+        WrapBio wrap
+        String titolo
+        BioWiki bioWiki
+        BioGrails bioGrails
+
+        titolo = 'CJ Adams'
+        wrap = new WrapBio(titolo)
+        assert wrap != null
+        assert wrap.isValida()
+        assert wrap.getTitoloVoce() == titolo
+        bioWiki = wrap.getBioOriginale()
+        bioGrails = wrap.getBioGrails()
+        def stop
+    } // fine del test
+
+
+    void testScrittura() {
+        WrapBio wrap
+        String titolo
+        String template
+        BioWiki bioWiki
+        BioGrails bioGrails
+        int pageid
+        def unGiorno
+
+        titolo = 'Federico Baccomo'
+        pageid = QueryVoce.leggePageid(titolo)
+
+//        unGiorno = new Giorno(normale: 17, bisestile: 51, nome: '13 agosto', titolo: '13 agosto')
+//        mockDomain(Giorno, [unGiorno])
+//        nonServe.save(flush: true)
+
+        wrap = new WrapBio(titolo)
+        assert wrap != null
+        assert wrap.isValida()
+        assert wrap.getTitoloVoce() == titolo
+        template = wrap.getTestoTemplateOriginale()
+
+        bioWiki = wrap.getBioOriginale()
+        bioGrails = wrap.getBioGrails()
+        def stop
+    } // fine del test
 
 
     void testTmplErrato() {
@@ -514,19 +573,13 @@ class WrapBioTest extends GroovyTestCase {
         assert wrap.isValida()
         assert wrap.getTitoloVoce() == titolo
 
-//        titolo = 'Ferdinando Bernini'
-//        wrap = new WrapBio(titolo)
-//        assert wrap != null
-//        assert wrap.isValida()
-//        assert wrap.getTitoloVoce() == titolo
-
         titolo = 'Luigi Belli'
         wrap = new WrapBio(titolo)
         assert wrap != null
         assert wrap.isValida()
         assert wrap.getTitoloVoce() == titolo
 
-        titolo='Hassan Rouhani'
+        titolo = 'Hassan Rouhani'
         wrap = new WrapBio(titolo)
         assert wrap != null
         assert wrap.isValida()

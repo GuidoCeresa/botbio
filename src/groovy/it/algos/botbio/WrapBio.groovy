@@ -69,10 +69,11 @@ public class WrapBio {
     private boolean doppi
     private boolean pipe
     private BioWiki bioOriginale      // esattamente i dati del server wiki
-    private Bio bioModificata     // modificati (ove possibile) i valori dei campi da linkare
-    private Bio bioLinkata        // regolati i campi linkati ad altre tavole
-    private Bio bioFinale         // elaborati i campi in forma definitiva (e registrabile sul server)
-    private Bio bioRegistrabile   // decide cosa registrare sul database
+    private BioWiki bioModificata     // modificati (ove possibile) i valori dei campi da linkare
+    private BioWiki bioLinkata        // regolati i campi linkati ad altre tavole
+    private BioWiki bioFinale         // elaborati i campi in forma definitiva (e registrabile sul server)
+    private BioWiki bioRegistrabile   // decide cosa registrare sul database
+    private BioGrails bioGrails
     private LinkedHashMap mappaFinale   // mappa definitiva (e registrabile sul server)
     private String testoTemplateFinale  // testo definitivo del template (e registrabile sul server)
     private String testoVoceFinale      // testo definitivo della voce (e registrabile sul server)
@@ -165,7 +166,7 @@ public class WrapBio {
      *
      * @param biografia esistente sul db locale
      */
-    public WrapBio(Bio biografia) {
+    public WrapBio(BioWiki biografia) {
         // Metodo iniziale con la mappa dei parametri recuperata da wiki
         this.inizializza(biografia)
     }// fine del metodo costruttore completo
@@ -235,35 +236,41 @@ public class WrapBio {
     public inizializza(HashMap mappaWiki) {
         boolean valida
 
-        // regola le variabili di istanza coi parametri
+        //--Regola le variabili di istanza coi parametri
         this.setMappaPar(mappaWiki)
 
-        // Estrae il testo ed il titolo della voce dai parametri wiki
+        //--Estrae il testo ed il titolo della voce dai parametri wiki
         this.estraeTestoTitolo()
 
-        // Controlla la congruità della voce (testo) prima di proseguire
+        //--Controlla la congruità della voce (testo) prima di proseguire
         valida = checkVoce()
 
-        // Estrae il template originale
-//            this.estraeTemplate()
-
-        // Estrae le mappe dal testo
+        //--Estrae le mappe dal testo
         this.estraeMappe()
 
         if (valida) {
-            // Crea un record di biografia con esattamente i dati del server wiki
-            this.creaBioOriginale()
+            //--Crea un'istanza di BioWiki con esattamente i dati del server wiki
+            //--L'istanza viene mantenuta pronta per la registrazione sul DB
+            this.creaBioWikiOriginale()
 
-            // Modifica (ove possibile) i valori dei campi da linkare
+            //--Crea un'istanza di BioGrails con i dati utilizzabili per giorni, anni e liste
+            //--L'istanza viene mantenuta pronta per la registrazione sul DB
+            this.creaBioGrails()
+
+            //--Crea un template finale ed una voce finale
+            //--Vengono tenuti pronti per registrare eventualmente la voce modificata e corretta
+//            this.creaBioFinale()
+
+//            // Modifica (ove possibile) i valori dei campi da linkare
 //            this.regolaBioModificata()
-
-            // Regola i campi linkati ad altre tavole
+//
+//            // Regola i campi linkati ad altre tavole
 //            this.regolaBioLinkata()
-
-            // Regola i flag dei campi linkati ad altre tavole
+//
+//            // Regola i flag dei campi linkati ad altre tavole
 //            this.regolaFlagLinkati()
-
-            // Elabora (ove possibile) i valori dei campi
+//
+//            // Elabora (ove possibile) i valori dei campi
 //            this.regolaBioFinale()
 
             // Prepara la versione finale per la registrazione
@@ -273,7 +280,7 @@ public class WrapBio {
 //            this.creaMappaFinale()
 
             // Crea il testo definitivo del template
-//            this.creaTestoFinaleTemplate()
+            this.creaTestoFinaleTemplate()
 
             // Crea il testo definitivo della voce
 //            this.creaTestoVoceFinale()
@@ -662,11 +669,11 @@ public class WrapBio {
     } // fine della closure
 
     /**
-     * Crea un nuovo record di biografia
-     * Esattamente uguale ai dati presenti sul servere wiki
+     * Crea un'istanza di BioWiki con esattamente i dati del server wiki
+     * L'istanza viene mantenuta pronta per la registrazione sul DB
      * Di norma dovrebbe essere nuovo. Per errore potrebbe esistere già; in questo caso lo modifica.
      */
-    public creaBioOriginale() {
+    public creaBioWikiOriginale() {
         // variabili e costanti locali di lavoro
         boolean continua = false
         int pageid = 0
@@ -676,9 +683,6 @@ public class WrapBio {
         String valore
         HashMap mappaPar = this.getMappaPar()
         LinkedHashMap mappaBio = this.getMappaBio()
-        String testo = this.getTestoVoce()
-        int id
-        int version
 
         //controllo di congruita
         if (mappaBio) {
@@ -689,14 +693,14 @@ public class WrapBio {
             if (mappaPar.pageid) {
                 pageid = mappaPar.pageid
             } else {
-                log.error 'creaBioOriginale - Manca il pageid dalla mappa' + mappaPar
+                log.error 'creaBioWikiOriginale - Manca il pageid dalla mappa' + mappaPar
             }// fine del blocco if-else
 
             try { // prova ad eseguire il codice
                 bioWiki = BioWiki.findOrCreateByPageid(pageid)
             } catch (Exception unErrore) { // intercetta l'errore
                 try { // prova ad eseguire il codice
-                    log.error 'creaBioOriginale - Non funziona il findByPageid di ' + pageid
+                    log.error 'creaBioWikiOriginale - Non funziona il findByPageid di ' + pageid
                     if (bioWiki) {
                         def a = bioWiki.class
                         log.error 'Pageid di classe ' + a
@@ -712,16 +716,6 @@ public class WrapBio {
                     continua = false
                 }// fine del blocco try-catch
             }// fine del blocco try-catch
-
-//            if (newBio) {
-//                id = newBio.id
-//                version = newBio.version
-//                newBio = new BioWiki()
-//                newBio.id = id
-//                newBio.version = version
-//            } else {
-//                newBio = new BioWiki()
-//            }// fine del blocco if-else
         }// fine del blocco if
 
         if (continua) {
@@ -802,14 +796,33 @@ public class WrapBio {
     } // fine del metodo
 
     /**
+     * Crea un'istanza di BioGrails con i dati utilizzabili per giorni, anni e liste
+     * L'istanza viene mantenuta pronta per la registrazione sul DB
+     */
+    public creaBioGrails() {
+        BioGrails bioGrails
+        BioWiki bioOriginale = this.getBioOriginale()
+
+        if (bioOriginale) {
+            bioGrails = biografiaService.elaboraGrails(bioOriginale)
+            bioGrails = biografiaService.elaboraLink(bioOriginale, bioGrails)
+            bioGrails = biografiaService.elaboraDidascalie(bioOriginale, bioGrails)
+        }// fine del blocco if
+
+        if (bioGrails) {
+            this.setBioGrails(bioGrails)
+        }// fine del blocco if
+    } // fine del metodo
+
+    /**
      * Modifica (ove possibile) i valori dei campi da linkare
      * Modifica (ove possibile) i valori dei parametri
      */
     public regolaBioModificata() {
         // variabili e costanti locali di lavoro
         boolean continua = false
-        Bio bioOriginale = this.getBioOriginale()
-        Bio bioModificata = null
+        BioWiki bioOriginale = this.getBioOriginale()
+        BioWiki bioModificata = null
 
         //controllo di congruita
         if (bioOriginale) {
@@ -827,10 +840,10 @@ public class WrapBio {
         }// fine del blocco if
 
         if (continua) {
-            bioModificata.giornoMeseNascita = this.regolaGiorno(bioOriginale.giornoMeseNascita)
-            bioModificata.giornoMeseMorte = this.regolaGiorno(bioOriginale.giornoMeseMorte)
-            bioModificata.annoNascita = this.regolaAnno(bioOriginale.annoNascita)
-            bioModificata.annoMorte = this.regolaAnno(bioOriginale.annoMorte)
+            bioModificata.giornoMeseNascita = regolaGiorno(bioOriginale.giornoMeseNascita)
+            bioModificata.giornoMeseMorte = regolaGiorno(bioOriginale.giornoMeseMorte)
+            bioModificata.annoNascita = regolaAnno(bioOriginale.annoNascita)
+            bioModificata.annoMorte = regolaAnno(bioOriginale.annoMorte)
 
             //bioModificata = biografiaService.regolaNoteErr(bioModificata, bioModificata)
         }// fine del blocco if
@@ -853,11 +866,11 @@ public class WrapBio {
         // controllo di congruità
         if (giornoIn) {
             giornoOut = giornoIn.trim()
-            giornoOut = Lib.Text.setNoQuadre(giornoOut)
-            giornoOut = LibBio.setPrimoMese(giornoOut)
-            giornoOut = LibBio.setSingoloSpazio(giornoOut)
-            giornoOut = LibBio.setMeseMinuscolo(giornoOut)
-            giornoOut = LibBio.setValoriErratiGiorno(giornoOut)
+            giornoOut = LibWiki.setNoQuadre(giornoOut)
+//            giornoOut = LibBio.setPrimoMese(giornoOut)
+//            giornoOut = LibBio.setSingoloSpazio(giornoOut)
+//            giornoOut = LibBio.setMeseMinuscolo(giornoOut)
+//            giornoOut = LibBio.setValoriErratiGiorno(giornoOut)
         }// fine del blocco if
 
         // valore di ritorno
@@ -877,7 +890,7 @@ public class WrapBio {
         // controllo di congruità
         if (annoIn) {
             annoOut = annoIn.trim()
-            annoOut = Lib.Text.setNoQuadre(annoOut)
+            annoOut = LibWiki.setNoQuadre(annoOut)
             // annoOut = LibBio.setValoriErratiGiorno(annoOut)
         }// fine del blocco if
 
@@ -911,9 +924,9 @@ public class WrapBio {
     public regolaBioLinkata() {
         // variabili e costanti locali di lavoro
         boolean continua = false
-        Bio bioLinkata = null
-        Bio bioOriginale = this.getBioOriginale()
-        Bio bioModificata = this.getBioModificata()
+        BioWiki bioLinkata = null
+        BioWiki bioOriginale = this.getBioOriginale()
+        BioWiki bioModificata = this.getBioModificata()
 
         //controllo di congruita
         if (bioOriginale) {
@@ -987,7 +1000,7 @@ public class WrapBio {
     public regolaFlagLinkati = {
         // variabili e costanti locali di lavoro
         boolean continua = false
-        Bio bioLinkata = this.getBioLinkata()
+        BioWiki bioLinkata = this.getBioLinkata()
 
         //controllo di congruita
         if (bioLinkata) {
@@ -1086,8 +1099,8 @@ public class WrapBio {
     public regolaBioFinale() {
         // variabili e costanti locali di lavoro
         boolean continua = false
-        Bio bioFinale = null
-        Bio bioLinkata = this.getBioLinkata()
+        BioWiki bioFinale = null
+        BioWiki bioLinkata = this.getBioLinkata()
 
         //controllo di congruita
         if (bioLinkata) {
@@ -1116,9 +1129,9 @@ public class WrapBio {
     public regolaBioRegistrabile() {
         // variabili e costanti locali di lavoro
         boolean continua = false
-        Bio bioRegistrabile = null
-        Bio bioOriginale = this.getBioOriginale()
-        Bio bioFinale = this.getBioFinale()
+        BioWiki bioRegistrabile = null
+        BioWiki bioOriginale = this.getBioOriginale()
+        BioWiki bioFinale = this.getBioFinale()
 
         //controllo di congruita
         if (bioFinale) {
@@ -1149,11 +1162,11 @@ public class WrapBio {
      * Costruisce la mappa
      * Aggiunge i parametri extra
      */
-    public creaMappaFinale = {
+    public creaMappaFinale() {
         // variabili e costanti locali di lavoro
         LinkedHashMap mappaFinale = [:]
         boolean continua = false
-        Bio bioFinale = this.getBioFinale()
+        BioWiki bioFinale = this.getBioFinale()
         String chiaveSiAccento
         String chiaveNoAccento
         String chiave
@@ -1215,15 +1228,16 @@ public class WrapBio {
     /**
      * Crea il testo definitivo del template
      */
-    public creaTestoFinaleTemplate = {
+    public creaTestoFinaleTemplate() {
         String grailsTmplBio = ''
         boolean continua
-        def mappaBio = this.getMappaFinale()
+        def mappaBio = this.getMappaBio()
         String tagIni = '{{Bio'
         String aCapo = '\n'
         String tagPipe = '|'
         String tagSep = ' = '
         String tagEnd = '}}'
+        def campo
 
         //controllo di congruita
         continua = (mappaBio && mappaBio.size() > 0)
@@ -1232,6 +1246,7 @@ public class WrapBio {
             grailsTmplBio = tagIni
             grailsTmplBio += aCapo
             mappaBio.each {
+                campo = it
                 grailsTmplBio += tagPipe
                 grailsTmplBio += it.key
                 grailsTmplBio += tagSep
@@ -1278,19 +1293,53 @@ public class WrapBio {
         boolean continua = false
         def bioRegistrata = null
         BioWiki bioOriginale = this.getBioOriginale() //@todo ATTENZIONE
+        String avviso = "Mancata registrazione sul database" + " della voce  " + "'''[[" + bioOriginale.title + "]]'''"
 
         if (bioOriginale) {
             try { // prova ad eseguire il codice
-                bioRegistrata = bioOriginale.save(flush: true)
+                bioRegistrata = bioOriginale.save(failOnError: true)
             } catch (Exception unErrore) { // intercetta l'errore
-                def stop
                 try { // prova ad eseguire il codice
-                    log.error 'Mancata registrazione' + ' per la voce dal titolo ' + bioOriginale.title
+                    log.error(avviso)
+                    logService.warn(avviso)
                 } catch (Exception unErrore2) { // intercetta l'errore
                 }// fine del blocco try-catch
             }// fine del blocco try-catch
             if (bioRegistrata == null) {
-                log.error 'Mancata registrazione' + ' per la voce dal titolo ' + bioOriginale.title
+                log.error(avviso)
+                logService.warn(avviso)
+            } else {
+                registrata = true
+            }// fine del blocco if-else
+        }// fine del blocco if
+
+        // valore di ritorno
+        return registrata
+    } // fine della closure
+
+    /**
+     * Registra il record BioGrails sul database sql
+     */
+    public registraBioGrails() {
+        // variabili e costanti locali di lavoro
+        boolean registrata = false
+        boolean continua = false
+        def bioRegistrata = null
+        BioGrails bioGrails = this.getBioGrails() //@todo ATTENZIONE
+        String avviso = "Mancata registrazione sul database" + " della voce  " + "'''[[" + bioGrails.title + "]]'''"
+
+        if (bioGrails) {
+            try { // prova ad eseguire il codice
+                bioRegistrata = bioGrails.save(flush: true)
+            } catch (Exception unErrore) { // intercetta l'errore
+                def stop
+                try { // prova ad eseguire il codice
+                    log.error(avviso)
+                } catch (Exception unErrore2) { // intercetta l'errore
+                }// fine del blocco try-catch
+            }// fine del blocco try-catch
+            if (bioRegistrata == null) {
+                log.error(avviso)
             } else {
                 registrata = true
             }// fine del blocco if-else
@@ -1308,7 +1357,7 @@ public class WrapBio {
         boolean registrata = false
         boolean continua = false
         def bioRegistrata = null
-        Bio bioRegistrabile = this.getBioRegistrabile() //@todo ATTENZIONE
+        BioWiki bioRegistrabile = this.getBioRegistrabile() //@todo ATTENZIONE
 
         if (bioFinale) {
             continua = true
@@ -1477,42 +1526,42 @@ public class WrapBio {
     }
 
 
-    public void setBioModificata(Bio bioModificata) {
+    public void setBioModificata(BioWiki bioModificata) {
         this.bioModificata = bioModificata
     }
 
 
-    public Bio getBioModificata() {
+    public BioWiki getBioModificata() {
         return bioModificata
     }
 
 
-    private void setBioLinkata(Bio bioLinkata) {
+    private void setBioLinkata(BioWiki bioLinkata) {
         this.bioLinkata = bioLinkata
     }
 
 
-    public Bio getBioLinkata() {
+    public BioWiki getBioLinkata() {
         return bioLinkata
     }
 
 
-    private void setBioFinale(Bio bioFinale) {
+    private void setBioFinale(BioWiki bioFinale) {
         this.bioFinale = bioFinale
     }
 
 
-    public Bio getBioFinale() {
+    public BioWiki getBioFinale() {
         return bioFinale
     }
 
 
-    private void setBioRegistrabile(Bio bioRegistrabile) {
+    private void setBioRegistrabile(BioWiki bioRegistrabile) {
         this.bioRegistrabile = bioRegistrabile
     }
 
 
-    public Bio getBioRegistrabile() {
+    public BioWiki getBioRegistrabile() {
         return bioRegistrabile
     }
 
@@ -1611,4 +1660,13 @@ public class WrapBio {
     void setStatoBio(StatoBio statoBio) {
         this.statoBio = statoBio
     }
+
+    BioGrails getBioGrails() {
+        return bioGrails
+    }
+
+    void setBioGrails(BioGrails bioGrails) {
+        this.bioGrails = bioGrails
+    }
+
 } // fine della classe

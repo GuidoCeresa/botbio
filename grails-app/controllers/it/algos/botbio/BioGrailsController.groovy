@@ -129,7 +129,7 @@ class BioGrailsController {
         //--se campiLista è vuoto, mostra tutti i campi (primi 8)
         render(view: 'list', model: [
                 bioGrailsInstanceList: lista,
-                bioGrailsInstanceTotal: lista.size(),
+                bioGrailsInstanceTotal: recordsTotali,
                 menuExtra: menuExtra,
                 titoloLista: titoloLista,
                 campiLista: campiLista],

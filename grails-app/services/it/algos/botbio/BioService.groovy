@@ -87,6 +87,7 @@ class BioService {
     //--Crea le didascalie
     public int elabora() {
         // variabili e costanti locali di lavoro
+        boolean debug = Preferenze.getBool((String) grailsApplication.config.debug)
         int numVoci
         String numVociTxt
         ArrayList<Integer> listaid
@@ -105,8 +106,11 @@ class BioService {
 
         // valore di ritorno
         numVociTxt = LibTesto.formatNum(numVoci)
-        logService.info "Sono state elaborate ${numVociTxt} voci dopo l'ultimo check"
-        log.info 'Fine del metodo di elaborazione dei records'
+        if (debug) {
+            log.info 'Fine del metodo di elaborazione dei records'
+        } else {
+            logService.info "Sono state elaborate ${numVociTxt} voci dopo l'ultimo check"
+        }// fine del blocco if-else
 
         return numVoci
     } // fine del metodo
@@ -115,7 +119,7 @@ class BioService {
     //--Recupera la lista dei records esistenti nel database Bio
     //--Spazola la lista e crea un record di BioGrails per ogni record di Bio
     //--Copiando SOLO i campi validi di Bio
-    public elaboraGrails(ArrayList<Integer> listaid) {
+    public int elaboraGrails(ArrayList<Integer> listaid) {
         // variabili e costanti locali di lavoro
         int numVoci = 0
         BioWiki bioWiki
@@ -127,24 +131,7 @@ class BioService {
             pageid = (int) it
             bioWiki = BioWiki.findByPageid(pageid)
             if (bioWiki) {
-                bioGrails = elaboraGrails(bioWiki, pageid)
-//                bioGrails = BioGrails.findByPageid(pageid)
-//                if (bioGrails == null) {
-//                    bioGrails = new BioGrails(pageid: pageid)
-//                }// fine del blocco if
-//
-//                bioGrails.title = fixTitolo(bioWiki.title)
-//                bioGrails.nome = fixNome(bioWiki.nome)
-//                bioGrails.cognome = fixCognome(bioWiki.cognome)
-//                bioGrails.forzaOrdinamento = fixOrdinamento(bioWiki.forzaOrdinamento)
-//                bioGrails.sesso = fixSesso(bioWiki.sesso)
-//                bioGrails.localitaNato = fixLuogoNato(bioWiki.luogoNascita, bioWiki.luogoNascitaLink)
-//                bioGrails.localitaMorto = fixLuogoMorto(bioWiki.luogoMorte, bioWiki.luogoMorteLink)
-//                bioGrails.attivita = fixAttivita(bioWiki.attivita)
-//                bioGrails.attivita2 = fixAttivita2(bioWiki.attivita2)
-//                bioGrails.attivita3 = fixAttivita3(bioWiki.attivita3)
-//                bioGrails.nazionalita = fixNazionalita(bioWiki.nazionalita)
-
+                bioGrails = elaboraGrails(bioWiki)
                 if (bioGrails) {
                     bioGrailsRegistrata = bioGrails.save(flush: true)
                     if (bioGrailsRegistrata) {
@@ -162,12 +149,13 @@ class BioService {
 
     //--Crea un record di BioGrails per ogni record di Bio
     //--Copiando SOLO i campi validi di Bio
-    public BioGrails elaboraGrails(BioWiki bioWiki, int pageid) {
+    public BioGrails elaboraGrails(BioWiki bioWiki) {
         // variabili e costanti locali di lavoro
-        ArrayList<Integer> listaid
+        int pageid
         BioGrails bioGrails = null
 
         if (bioWiki) {
+            pageid = bioWiki.pageid
             try { // prova ad eseguire il codice
                 bioGrails = BioGrails.findByPageid(pageid)
             } catch (Exception unErrore) { // intercetta l'errore
@@ -205,24 +193,37 @@ class BioService {
         listaid?.each {
             cont++
             pageid = (int) it
+            bioWiki = BioWiki.findByPageid(pageid)
             bioGrails = BioGrails.findByPageid(pageid)
-            if (bioGrails) {
-                bioWiki = BioWiki.findByPageid(pageid)
-                if (bioWiki) {
-                    bioGrails.giornoMeseNascitaLink = getGiornoNato(bioWiki)
-                    bioGrails.annoNascitaLink = getAnnoNato(bioWiki)
-                    bioGrails.giornoMeseMorteLink = getGiornoMorto(bioWiki)
-                    bioGrails.annoMorteLink = getAnnoMorto(bioWiki)
-                }// fine del blocco if
-
-                bioGrails.attivitaLink = AttivitaService.getAttivita(bioGrails.attivita)
-                bioGrails.attivita2Link = AttivitaService.getAttivita(bioGrails.attivita2)
-                bioGrails.attivita3Link = AttivitaService.getAttivita(bioGrails.attivita3)
-                bioGrails.nazionalitaLink = NazionalitaService.getNazionalita(bioGrails.nazionalita)
+            if (bioWiki && bioGrails) {
+                bioGrails = elaboraLink(bioWiki, bioGrails)
                 bioGrails.save(flush: true)
             }// fine del blocco if
         }// fine di each
 
+    } // fine del metodo
+
+    //--Elabora i link alle tavole collegate
+    public BioGrails elaboraLink(BioWiki bioWiki, BioGrails bioGrails) {
+
+        if (bioWiki && bioGrails) {
+            bioGrails.giornoMeseNascitaLink = getGiornoNato(bioWiki)
+            bioGrails.annoNascitaLink = getAnnoNato(bioWiki)
+            bioGrails.giornoMeseMorteLink = getGiornoMorto(bioWiki)
+            bioGrails.annoMorteLink = getAnnoMorto(bioWiki)
+
+            bioGrails.attivitaLink = AttivitaService.getAttivita(bioGrails.attivita)
+            bioGrails.attivita2Link = AttivitaService.getAttivita(bioGrails.attivita2)
+            bioGrails.attivita3Link = AttivitaService.getAttivita(bioGrails.attivita3)
+            bioGrails.nazionalitaLink = NazionalitaService.getNazionalita(bioGrails.nazionalita)
+            try { // prova ad eseguire il codice
+                bioGrails.save(flush: true)
+            } catch (Exception unErrore) { // intercetta l'errore
+                log.error unErrore
+            }// fine del blocco try-catch
+        }// fine del blocco if
+
+        return bioGrails
     } // fine del metodo
 
     //--Crea le didascalie
@@ -232,24 +233,15 @@ class BioService {
         BioGrails bioGrails
         BioGrails bioGrailsRegistrata
         int pageid
-        DidascaliaBio didascalia
-        long grailsid = 0
         int cont = 0
 
-         listaid?.each {
+        listaid?.each {
             cont++
             pageid = (int) it
             bioWiki = BioWiki.findByPageid(pageid)
             bioGrails = BioGrails.findByPageid(pageid)
-            if (bioGrails) {
-                grailsid = bioGrails.id
-                didascalia = new DidascaliaBio(grailsid)
-                didascalia.setInizializza()
-                bioGrails.didascaliaBase = didascalia.getTestoSemplice()
-                bioGrails.didascaliaGiornoNato = didascalia.getTestoNatiGiorno()
-                bioGrails.didascaliaAnnoNato = didascalia.getTestoNatiAnno()
-                bioGrails.didascaliaGiornoMorto = didascalia.getTestoMortiGiorno()
-                bioGrails.didascaliaAnnoMorto = didascalia.getTestoMortiAnno()
+            if (bioWiki && bioGrails) {
+                bioGrails = elaboraDidascalie(bioWiki, bioGrails)
                 bioGrailsRegistrata = bioGrails.save(flush: true)
 
                 if (bioWiki && bioGrailsRegistrata) {
@@ -259,6 +251,83 @@ class BioService {
             }// fine del blocco if
         }// fine di each
 
+    } // fine del metodo
+
+    //--Crea le didascalie
+    public BioGrails elaboraDidascalie(BioWiki bioWiki, BioGrails bioGrails) {
+        // variabili e costanti locali di lavoro
+        DidascaliaBio didascalia
+        long grailsid = 0
+
+        if (bioWiki && bioGrails) {
+            if (bioGrails.id && bioGrails.id instanceof Long) {
+                grailsid = bioGrails.id
+                didascalia = new DidascaliaBio(grailsid)
+                didascalia.setInizializza()
+                bioGrails.didascaliaBase = didascalia.getTestoSemplice()
+                bioGrails.didascaliaGiornoNato = didascalia.getTestoNatiGiorno()
+                bioGrails.didascaliaAnnoNato = didascalia.getTestoNatiAnno()
+                bioGrails.didascaliaGiornoMorto = didascalia.getTestoMortiGiorno()
+                bioGrails.didascaliaAnnoMorto = didascalia.getTestoMortiAnno()
+            }// fine del blocco if
+        }// fine del blocco if
+
+        return bioGrails
+    } // fine del metodo
+
+    //--fix parameters errors
+    public int uploadSesso() {
+        // variabili e costanti locali di lavoro
+        int numVoci = 0
+        def lista = BioWiki.findAllWhere([sesso: ''])
+        BioWiki bioWiki
+        int pageid
+
+        lista?.each {
+            bioWiki = null
+            if (it instanceof BioWiki) {
+                bioWiki = (BioWiki) it
+            }// fine del blocco if
+
+            if (bioWiki) {
+                pageid = bioWiki.pageid
+                uploadSesso(pageid)
+                numVoci++
+            }// fine del blocco if
+
+        } // fine del ciclo each
+
+        return numVoci
+    } // fine del metodo
+
+    //--fix parameters errors
+    public uploadSesso(int pageid) {
+        // variabili e costanti locali di lavoro
+        WrapBio wrapBio
+        String title
+        String templateVecchio
+        String templateNuovo
+        HashMap mappa
+        String summary= "[[Utente:Biobot|Biobot]] fix par sex"
+
+        if (pageid) {
+            wrapBio = new WrapBio(pageid)
+            if (wrapBio) {
+                title = wrapBio.getTitoloVoce()
+                templateVecchio = wrapBio.getTestoTemplateOriginale()
+                mappa = wrapBio.getMappaBio()
+                if (!mappa['Sesso']) {
+                    mappa.put('Sesso', 'M')
+                }// fine del blocco if
+                wrapBio.creaTestoFinaleTemplate()
+                templateNuovo = wrapBio.getTestoTemplateFinale()
+            }// fine del blocco if
+
+            if (title && templateVecchio && templateNuovo) {
+                new EditSub(title, templateVecchio, templateNuovo, summary)
+            }// fine del blocco if
+
+        }// fine del blocco if
     } // fine del metodo
 
     private static String fixTitolo(String testoIn) {
@@ -274,6 +343,7 @@ class BioService {
         String testoOut = testoIn
 
         if (testoIn) {
+            testoOut = WikiLib.levaRef(testoIn)
         }// fine del blocco if
 
         return testoOut
@@ -283,6 +353,7 @@ class BioService {
         String testoOut = testoIn
 
         if (testoIn) {
+            testoOut = WikiLib.levaRef(testoIn)
         }// fine del blocco if
 
         return testoOut
@@ -292,6 +363,7 @@ class BioService {
         String testoOut = testoIn
 
         if (testoIn) {
+            testoOut = WikiLib.levaRef(testoIn)
         }// fine del blocco if
 
         return testoOut
@@ -301,6 +373,7 @@ class BioService {
         String testoOut = testoIn
 
         if (testoIn) {
+            testoOut = WikiLib.levaRef(testoIn)
         }// fine del blocco if
 
         return testoOut
@@ -315,6 +388,9 @@ class BioService {
             testoOut = luogoNascita
         }// fine del blocco if-else
 
+        if (testoOut) {
+            testoOut = WikiLib.levaRef(testoOut)
+        }// fine del blocco if
         return testoOut
     } // fine del metodo
 
@@ -327,6 +403,9 @@ class BioService {
             testoOut = luogoMorte
         }// fine del blocco if-else
 
+        if (testoOut) {
+            testoOut = WikiLib.levaRef(testoOut)
+        }// fine del blocco if
         return testoOut
     } // fine del metodo
 
@@ -337,6 +416,9 @@ class BioService {
             testoOut = testoIn.trim()
         }// fine del blocco if
 
+        if (testoOut) {
+            testoOut = WikiLib.levaRef(testoOut)
+        }// fine del blocco if
         return testoOut
     } // fine del metodo
 
@@ -347,6 +429,9 @@ class BioService {
             testoOut = testoIn.trim()
         }// fine del blocco if
 
+        if (testoOut) {
+            testoOut = WikiLib.levaRef(testoOut)
+        }// fine del blocco if
         return testoOut
     } // fine del metodo
 
@@ -357,6 +442,9 @@ class BioService {
             testoOut = testoIn.trim()
         }// fine del blocco if
 
+        if (testoOut) {
+            testoOut = WikiLib.levaRef(testoOut)
+        }// fine del blocco if
         return testoOut
     } // fine del metodo
 
@@ -367,6 +455,9 @@ class BioService {
             testoOut = testoIn.trim()
         }// fine del blocco if
 
+        if (testoOut) {
+            testoOut = WikiLib.levaRef(testoOut)
+        }// fine del blocco if
         return testoOut
     } // fine del metodo
 
@@ -376,7 +467,11 @@ class BioService {
 
         if (bioWiki) {
             giornoWiki = bioWiki.giornoMeseNascita
-            giorno = Giorno.findByNome(giornoWiki)
+            try { // prova ad eseguire il codice
+                giorno = Giorno.findByNome(giornoWiki)
+            } catch (Exception unErrore) { // intercetta l'errore
+                log.error unErrore
+            }// fine del blocco try-catch
         }// fine del blocco if
 
         return giorno
@@ -388,7 +483,11 @@ class BioService {
 
         if (bioWiki) {
             giornoWiki = bioWiki.giornoMeseMorte
-            giorno = Giorno.findByNome(giornoWiki)
+            try { // prova ad eseguire il codice
+                giorno = Giorno.findByNome(giornoWiki)
+            } catch (Exception unErrore) { // intercetta l'errore
+                log.error unErrore
+            }// fine del blocco try-catch
         }// fine del blocco if
 
         return giorno
@@ -400,7 +499,11 @@ class BioService {
 
         if (bioWiki) {
             annoWiki = bioWiki.annoNascita
-            anno = Anno.findByTitolo(annoWiki)
+            try { // prova ad eseguire il codice
+                anno = Anno.findByTitolo(annoWiki)
+            } catch (Exception unErrore) { // intercetta l'errore
+                log.error unErrore
+            }// fine del blocco try-catch
         }// fine del blocco if
 
         return anno
@@ -412,7 +515,11 @@ class BioService {
 
         if (bioWiki) {
             annoWiki = bioWiki.annoMorte
-            anno = Anno.findByTitolo(annoWiki)
+            try { // prova ad eseguire il codice
+                anno = Anno.findByTitolo(annoWiki)
+            } catch (Exception unErrore) { // intercetta l'errore
+                log.error unErrore
+            }// fine del blocco try-catch
         }// fine del blocco if
 
         return anno
@@ -518,7 +625,7 @@ class BioService {
     def regolaListaModificata = { listaMappe ->
         // variabili e costanti locali di lavoro
         ArrayList listaPageid = null
-        Bio biografia
+        BioWiki biografia
         def chiave
         def valore
         int lastrevid
@@ -1136,7 +1243,7 @@ class BioService {
      */
     public downloadGrailsId = { grailsId ->
         boolean continua = false
-        Bio biografia = null
+        BioWiki biografia = null
         int pageid = 0
 
         //controllo di congruita
@@ -1174,51 +1281,7 @@ class BioService {
      */
     public formatta = {
         // variabili e costanti locali di lavoro
-        def listaPageId
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                                                                                                                                                                                                                                                                                                                                                \
-
-                                                                                                                                                                                                                                                                                                                                                //Recupera la lista dei records esistenti nel database
+        def listaPageId                                                                                                                                                                                                                                                                                                                                                                                        //Recupera la lista dei records esistenti nel database
         log.info 'Recupera tutti i records di Bio da controllare'
 
         listaPageId = Bio.executeQuery('select pageid from Bio where controllato=false')
@@ -1478,7 +1541,7 @@ class BioService {
      */
     private regolaFlag = { pageIdNonAllineate, pageIdModificate ->
         def listaDaRegolare = pageIdNonAllineate
-        Bio bio
+        BioWiki bio
 
         try { // prova ad eseguire il codice
             listaDaRegolare = Lib.Array.differenzaDisordinata(pageIdNonAllineate, pageIdModificate)
@@ -1513,7 +1576,7 @@ class BioService {
      */
     private cicloSingolaMappa = { mappa ->
         WrapBio wrapBio
-        Bio bio
+        BioWiki bio
 
         if (mappa in HashMap) {
             wrapBio = new WrapBio(mappa)
@@ -1548,7 +1611,7 @@ class BioService {
      */
     private cicloSingola = { pageId ->
         WrapBio wrapBio
-        Bio biografia
+        BioWiki biografia
 
         wrapBio = new WrapBio(pageId)
         if (wrapBio) {
@@ -1619,7 +1682,7 @@ class BioService {
      * @return record di biografia
      */
     def creaWrapBio = { def mappaWiki ->
-        Bio biografia = null
+        BioWiki biografia = null
         boolean continua = false
         HashMap mappa = null
         WrapBio wrapBio
@@ -1695,8 +1758,8 @@ class BioService {
      * @todo obsoleto va in libreria
      */
     def caricaBiografia = { mappaWiki ->
-        Bio biografia = null
-        Bio newBio = new Bio()
+        BioWiki biografia = null
+        BioWiki newBio = new BioWiki()
         def mappaBio = null
         def par
         int pageid
@@ -1714,10 +1777,10 @@ class BioService {
             try { // prova ad eseguire il codice
                 biografia = Bio.findByPageid(pageid)
                 if (!biografia) {
-                    biografia = new Bio()
+                    biografia = new BioWiki()
                 }// fine del blocco if
             } catch (Exception unErrore) { // intercetta l'errore
-                biografia = new Bio()
+                biografia = new BioWiki()
                 try { // prova ad eseguire il codice
                     log.error Risultato.erroreGenerico.getDescrizione()
                 } catch (Exception unAltroErrore) { // intercetta l'errore
@@ -1795,7 +1858,7 @@ class BioService {
     public uploadGrailsId = { grailsId ->
         boolean registrato = false
         boolean continua = false
-        Bio biografia = null
+        BioWiki biografia = null
         int pageid = 0
 
         //controllo di congruita
@@ -1833,7 +1896,7 @@ class BioService {
      */
     public upload = { int pageid ->
         boolean registrata = false
-        Bio biografia
+        BioWiki biografia
         WrapBio wrapBio
 
         //controllo di congruita
@@ -1859,7 +1922,7 @@ class BioService {
      *
      * @return record di biografia
      */
-    public uploadBio = { mappaWiki, Bio biografia ->
+    public uploadBio = { mappaWiki, BioWiki biografia ->
         // variabili e costanti locali di lavoro
         boolean modificaPagine = false
         boolean registrato = false
@@ -1976,7 +2039,7 @@ class BioService {
      * @todo obsoleto
      * @param record di biografia
      */
-    public creaTemplBio = { Bio biografia, String testoOld ->
+    public creaTemplBio = { BioWiki biografia, String testoOld ->
         String grailsTmplBio = ''
         boolean continua = false
         def mappaBio = null
@@ -2026,7 +2089,7 @@ class BioService {
      *
      * @return mappa completa del template biografia da inserire nella voce esistente
      */
-    public creaMappalBio = { Bio biografia, String testoOld ->
+    public creaMappalBio = { BioWiki biografia, String testoOld ->
         def mappaBio = [:]
         boolean continua = false
         //   boolean eliminaParametriVuoti = false
@@ -2781,6 +2844,7 @@ class BioService {
      * -attività
      * -nazionalità
      *
+     * @deprecated
      * @param istanza di biografia originale wiki
      * @param istanza di biografia corretta
      * @param lista di campi da controllare
@@ -3056,6 +3120,65 @@ class BioService {
         }// fine del blocco if
     } // fine della closure
 
+    /**
+     * Regola la presenza del riferimento alle note (lo elimina) per alcuni campi in cui danneggia l'elaborazione
+     *
+     * Il riferimento alle note da noia normalmente ai campi:
+     * -giornoMeseNascita
+     * -annoNascita
+     * -giornoMeseMorte
+     * -annoMorte
+     * -attività
+     * -nazionalità
+     *
+     * @deprecated
+     * @param istanza di biografia originale wiki
+     * @param istanza di biografia corretta
+     * @param lista di campi da controllare
+     */
+    def regRef2 = { biografiaWiki, biografiaCorretta, listaCampi ->
+        // variabili e costanti locali di lavoro
+        String nomeCampo
+
+        // controllo di congruità
+        if (biografiaWiki && biografiaCorretta) {
+            if (listaCampi) {
+                listaCampi.each {
+                    nomeCampo = ParBio.get(it)
+                    regRefCampo(biografiaWiki, biografiaCorretta, nomeCampo)
+                }// fine di each
+            } else {
+                ParBio.each {
+                    nomeCampo = it.toString()
+                    regRefCampo(biografiaWiki, biografiaCorretta, nomeCampo)
+                }// fine di each
+            }// fine del blocco if-else
+        }// fine del blocco if-else
+    } // fine del metodo
+
+    /**
+     * Regola la presenza del riferimento alle note (lo elimina) per un campo
+     *
+     * @param bioWiki istanza di biografia originale wiki
+     * @param bioGrails istanza di biografia database grails
+     * @param nomeCampo da controllare
+     */
+    private static fixRefCampo(BioWiki bioWiki, BioGrails bioGrails, String nomeCampo) {
+        // variabili e costanti locali di lavoro
+        def valore
+        String valCampo
+
+        // controllo di congruità
+        if (bioWiki && bioGrails && nomeCampo) {
+            valore = bioWiki."${nomeCampo}"
+            if (valore && valore instanceof String) {
+                valCampo = (String) valore
+                valCampo = WikiLib.levaRef(valCampo)
+                bioGrails."${nomeCampo}" = valCampo.trim()
+            }// fine del blocco if
+        }// fine del blocco if
+    } // fine del metodo
+
     def creaMappaAttNaz = { String testo ->
         def mappa = null
         String sep = '\\|'
@@ -3144,12 +3267,12 @@ class BioService {
 
     public clonaBiografia = { biografiaOriginale ->
         // variabili e costanti locali di lavoro
-        Bio biografiaCopia = null
+        BioWiki biografiaCopia = null
         String nomeCampo
         String valCampo
 
         if (biografiaOriginale) {
-            biografiaCopia = new Bio()
+            biografiaCopia = new BioWiki()
 
             ParBio.each {
                 nomeCampo = it.toString()

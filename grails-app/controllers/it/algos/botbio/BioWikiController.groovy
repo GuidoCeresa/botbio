@@ -294,6 +294,7 @@ class BioWikiController {
                 numVoci = LibTesto.formatNum(numVoci)
                 flash.message = "Sono state aggiunte ${numVoci} nuove voci"
             }// fine del blocco if-else
+
             numVoci = bioWikiService.aggiornaWiki()
             if (numVoci == 0) {
                 flash.message = 'Le voci presenti nel database erano già aggiornate. Non è stato modificato nulla'
@@ -301,13 +302,14 @@ class BioWikiController {
                 numVoci = LibTesto.formatNum(numVoci)
                 flash.message = "Sono state aggiornate ${numVoci} voci già presenti nel database"
             }// fine del blocco if-else
-            numVoci = bioService.elabora()
-            if (numVoci == 0) {
-                flash.message = 'Le voci presenti nel database erano già elaborate. Non è stato modificato nulla'
-            } else {
-                numVoci = LibTesto.formatNum(numVoci)
-                flash.message = "Sono state elaborate ${numVoci} voci già presenti nel database"
-            }// fine del blocco if-else
+
+//            numVoci = bioService.elabora()
+//            if (numVoci == 0) {
+//                flash.message = 'Le voci presenti nel database erano già elaborate. Non è stato modificato nulla'
+//            } else {
+//                numVoci = LibTesto.formatNum(numVoci)
+//                flash.message = "Sono state elaborate ${numVoci} voci già presenti nel database"
+//            }// fine del blocco if-else
         }// fine del blocco if
 
         if (continua) {
@@ -319,7 +321,11 @@ class BioWikiController {
             avviso += "[[Utente:Biobot|<span style=\"color:green\">'''Biobot'''</span>]]"
             avviso += " gestisce ${numVoci} voci pari al '''${percentuale}'''"
             avviso += " della categoria [[:Categoria:BioBot|'''BioBot''']]"
-            logService.info(avviso)
+            if (debug) {
+                log.info(avviso)
+            } else {
+                logService.info(avviso)
+            }// fine del blocco if-else
         }// fine del blocco if
 
         redirect(action: 'list')
