@@ -15,6 +15,11 @@ class VersioneBootStrap {
         if (versioneService && versioneService.installaVersione(1)) {
             versioneService.newVersione('Applicazione', 'Installazione iniziale')
         }// fine del blocco if
+
+        //--connessione tra applicazione e tomcate
+        if (versioneService && versioneService.installaVersione(2)) {
+            versioneService.newVersione('DataSource', 'Aggiunto autoReconnect=true')
+        }// fine del blocco if
     }// fine della closure
 
     def destroy = {

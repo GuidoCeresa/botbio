@@ -715,3 +715,11 @@ a:link, a:visited, a:hover {
     font-size: 1.25em;
     margin: 1em 0em 0 1.2em;
 }
+td.copyright {
+    background: #abbf78;
+    color: #ffffff;
+    font-size: 0.9em;
+    font-weight: normal;
+    vertical-align: middle;
+    padding: 2px;
+}
