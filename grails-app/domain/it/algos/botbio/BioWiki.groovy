@@ -126,6 +126,9 @@ class BioWiki  {
     //serve per le voci che sono state elaborate e trasferite (creando od aggiornando il record) su BioGrails
     boolean elaborata = false
 
+    //serve per le voci a cui manca uno o più parametri fondamentali
+    boolean incompleta = false
+
     /**
      * regolazione delle proprietà di ogni campo
      * l'ordine con cui vengono elencati qui,
@@ -136,7 +139,7 @@ class BioWiki  {
         wikiUrl(nullable: true)
         testoTemplate(nullable: true)
 
-        pageid(unique: true)
+        pageid(unique: true,nullable: false, blank: false)
         title(unique: true, nullable: false, blank: false)
         ns()
         touched(nullable: true, formatoData: new SimpleDateFormat('d MMM yy'))
@@ -205,6 +208,7 @@ class BioWiki  {
         sizeBio()
         modificaWiki(nullable: true)
         letturaWiki(nullable: true)
+        incompleta()
     } // end of static constraints
 
     /**

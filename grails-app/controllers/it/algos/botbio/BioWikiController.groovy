@@ -12,16 +12,15 @@
 /* flagOverwrite = true */
 
 package it.algos.botbio
-
 import it.algos.algos.DialogoController
 import it.algos.algos.TipoDialogo
 import it.algos.algoslib.Lib
 import it.algos.algoslib.LibTesto
 import it.algos.algospref.Preferenze
-import it.algos.algoswiki.QueryInfoCat
 import org.codehaus.groovy.grails.commons.DefaultGrailsDomainClass
+import org.hibernate.FlushMode
+import org.hibernate.SessionFactory
 import org.springframework.dao.DataIntegrityViolationException
-
 //--gestisce il download delle informazioni
 class BioWikiController {
 
@@ -36,6 +35,7 @@ class BioWikiController {
     def grailsApplication
     def bioService
     def logService
+    SessionFactory sessionFactory
 
     def index() {
         redirect(action: 'list', params: params)
@@ -264,10 +264,6 @@ class BioWikiController {
         def numVoci
         boolean debug = Preferenze.getBool((String) grailsApplication.config.debug)
         flash.message = 'Operazione annullata. Il ciclo non è partito.'
-        int vociCat = 0
-        String percentuale
-        String avviso = ''
-        QueryInfoCat query
 
         if (params.valore) {
             if (params.valore instanceof String) {
@@ -287,6 +283,10 @@ class BioWikiController {
         }// fine del blocco if
 
         if (continua) {
+            if (sessionFactory) {
+                def hibSession = sessionFactory.getCurrentSession()
+                hibSession.setFlushMode(FlushMode.COMMIT)
+            }// fine del blocco if
             numVoci = bioWikiService.aggiungeWiki()
             if (numVoci == 0) {
                 flash.message = 'Non ci sono nuove voci nella categoria. Non sono state aggiunte nuove voci'
@@ -295,13 +295,13 @@ class BioWikiController {
                 flash.message = "Sono state aggiunte ${numVoci} nuove voci"
             }// fine del blocco if-else
 
-            numVoci = bioWikiService.aggiornaWiki()
-            if (numVoci == 0) {
-                flash.message = 'Le voci presenti nel database erano già aggiornate. Non è stato modificato nulla'
-            } else {
-                numVoci = LibTesto.formatNum(numVoci)
-                flash.message = "Sono state aggiornate ${numVoci} voci già presenti nel database"
-            }// fine del blocco if-else
+//            numVoci = bioWikiService.aggiornaWiki()
+//            if (numVoci == 0) {
+//                flash.message = 'Le voci presenti nel database erano già aggiornate. Non è stato modificato nulla'
+//            } else {
+//                numVoci = LibTesto.formatNum(numVoci)
+//                flash.message = "Sono state aggiornate ${numVoci} voci già presenti nel database"
+//            }// fine del blocco if-else
 
 //            numVoci = bioService.elabora()
 //            if (numVoci == 0) {
@@ -313,19 +313,7 @@ class BioWikiController {
         }// fine del blocco if
 
         if (continua) {
-            query = new QueryInfoCat('BioBot')
-            vociCat = query.getSize()
-            numVoci = BioWiki.count()
-            percentuale = LibTesto.formatPercentuale(numVoci, vociCat)
-            numVoci = LibTesto.formatNum(numVoci)
-            avviso += "[[Utente:Biobot|<span style=\"color:green\">'''Biobot'''</span>]]"
-            avviso += " gestisce ${numVoci} voci pari al '''${percentuale}'''"
-            avviso += " della categoria [[:Categoria:BioBot|'''BioBot''']]"
-            if (debug) {
-                log.info(avviso)
-            } else {
-                logService.info(avviso)
-            }// fine del blocco if-else
+            LibBio.gestVoci(logService, debug)
         }// fine del blocco if
 
         redirect(action: 'list')
@@ -376,6 +364,7 @@ class BioWikiController {
                 'graffe',
                 'note',
                 [campo: 'nascosto', title: 'Ref'],
+                [campo: 'incompleta', title: 'KO'],
                 [campo: 'elaborata', title: 'Grails']
         ]
         // fine della definizione

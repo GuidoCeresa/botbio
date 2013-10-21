@@ -45,7 +45,7 @@ public enum ParBio {
     fineIncipit('FineIncipit', false, TipoPar.medio),
     punto('Punto', false, TipoPar.medio),
     immagine('Immagine', false, TipoPar.medio),
-    didascalia('didascalia', false, TipoPar.medio),
+    didascalia('Didascalia', false, TipoPar.medio),
     didascalia2('Didascalia2', false, TipoPar.medio),
     dimImmagine('DimImmagine', false, TipoPar.valorizzabile)
 
@@ -55,7 +55,7 @@ public enum ParBio {
 
 
 
-    ParBio(tag, semplice, tipoPar) {
+    ParBio(String tag, boolean semplice, TipoPar tipoPar) {
         /* regola le variabili di istanza coi parametri */
         this.setTag(tag)
         this.setSemplice(semplice)

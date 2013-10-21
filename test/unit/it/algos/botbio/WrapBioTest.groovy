@@ -32,6 +32,24 @@ class WrapBioTest extends GrailsUnitTestCase {
     void tearDown() {
     } // fine del metodo iniziale
 
+    void testDidascalia() {
+        WrapBio wrap
+        String titolo = 'Robert T. Bakker'
+        String testoTemplate
+        def mappa
+        titolo = 'Dmitrij Baškevič'
+//        titolo = 'Utente:Gac/Sandbox8'
+
+        wrap = new WrapBio(titolo)
+        assert wrap != null
+        assert wrap.isValida()
+
+        testoTemplate = wrap.getTestoTemplateOriginale()
+        mappa = wrap.getMappaBio()
+
+        def stop
+    } // fine del test
+
     void estUtf8() {
         WrapBio wrap
         String titolo = 'Dušan Uškovič'
@@ -97,20 +115,32 @@ class WrapBioTest extends GrailsUnitTestCase {
         StatoBio voceBioOttenuta
         StatoBio voceBioRichiesta
 
-        titolo = 'Utente:Biobot/7'  //testo più template
-        voceBioRichiesta = StatoBio.bioNormale
+        titolo = 'Utente:Biobot/2'  //vuota
+        voceBioRichiesta = StatoBio.vuota
+        wrap = new WrapBio(titolo)
+        assert wrap
+        testoVoce = wrap.getTestoVoce()
+        assert testoVoce == ''
+        testoTemplate = wrap.getTestoTemplateOriginale()
+        assert testoTemplate == ''
+        assert testoTemplate == testoVoce
+        voceBioOttenuta = wrap.getStatoBio()
+        assert voceBioOttenuta == voceBioRichiesta
+
+        titolo = 'Utente:Biobot/3'  //redirect
+        voceBioRichiesta = StatoBio.redirect
         wrap = new WrapBio(titolo)
         assert wrap
         testoVoce = wrap.getTestoVoce()
         assert testoVoce
         testoTemplate = wrap.getTestoTemplateOriginale()
-        assert testoTemplate
+        assert testoTemplate == ''
         assert testoTemplate != testoVoce
         voceBioOttenuta = wrap.getStatoBio()
         assert voceBioOttenuta == voceBioRichiesta
 
-        titolo = 'Utente:Biobot/6'  //solo template
-        voceBioRichiesta = StatoBio.bioNormale
+        titolo = 'Utente:Biobot/4'  //template errato
+        voceBioRichiesta = StatoBio.bioErrato
         wrap = new WrapBio(titolo)
         assert wrap
         testoVoce = wrap.getTestoVoce()
@@ -133,8 +163,8 @@ class WrapBioTest extends GrailsUnitTestCase {
         voceBioOttenuta = wrap.getStatoBio()
         assert voceBioOttenuta == voceBioRichiesta
 
-        titolo = 'Utente:Biobot/4'  //template errato
-        voceBioRichiesta = StatoBio.bioErrato
+        titolo = 'Utente:Biobot/6'  //solo template
+        voceBioRichiesta = StatoBio.bioNormale
         wrap = new WrapBio(titolo)
         assert wrap
         testoVoce = wrap.getTestoVoce()
@@ -145,14 +175,14 @@ class WrapBioTest extends GrailsUnitTestCase {
         voceBioOttenuta = wrap.getStatoBio()
         assert voceBioOttenuta == voceBioRichiesta
 
-        titolo = 'Utente:Biobot/3'  //redirect
-        voceBioRichiesta = StatoBio.redirect
+        titolo = 'Utente:Biobot/7'  //testo più template
+        voceBioRichiesta = StatoBio.bioNormale
         wrap = new WrapBio(titolo)
         assert wrap
         testoVoce = wrap.getTestoVoce()
         assert testoVoce
         testoTemplate = wrap.getTestoTemplateOriginale()
-        assert testoTemplate == ''
+        assert testoTemplate
         assert testoTemplate != testoVoce
         voceBioOttenuta = wrap.getStatoBio()
         assert voceBioOttenuta == voceBioRichiesta
@@ -166,18 +196,6 @@ class WrapBioTest extends GrailsUnitTestCase {
         testoTemplate = wrap.getTestoTemplateOriginale()
         assert testoTemplate == ''
         assert testoTemplate != testoVoce
-        voceBioOttenuta = wrap.getStatoBio()
-        assert voceBioOttenuta == voceBioRichiesta
-
-        titolo = 'Utente:Biobot/2'  //vuota
-        voceBioRichiesta = StatoBio.vuota
-        wrap = new WrapBio(titolo)
-        assert wrap
-        testoVoce = wrap.getTestoVoce()
-        assert testoVoce == ''
-        testoTemplate = wrap.getTestoTemplateOriginale()
-        assert testoTemplate == ''
-        assert testoTemplate == testoVoce
         voceBioOttenuta = wrap.getStatoBio()
         assert voceBioOttenuta == voceBioRichiesta
 
@@ -235,14 +253,6 @@ class WrapBioTest extends GrailsUnitTestCase {
         assert voceBioOttenuta
         assert voceBioOttenuta == voceBioRichiesta
 
-        titolo = 'Artesa' //pagina redirect
-        voceBioRichiesta = StatoBio.disambigua
-        wrap = new WrapBio(titolo)
-        assert wrap
-        voceBioOttenuta = wrap.getStatoBio()
-        assert voceBioOttenuta
-        assert voceBioOttenuta == voceBioRichiesta
-
         titolo = titoloBase + 4 //template errato
         voceBioRichiesta = StatoBio.bioErrato
         wrap = new WrapBio(titolo)
@@ -261,6 +271,14 @@ class WrapBioTest extends GrailsUnitTestCase {
 
         titolo = titoloBase + 6 //template normale e completo
         voceBioRichiesta = StatoBio.bioNormale
+        wrap = new WrapBio(titolo)
+        assert wrap
+        voceBioOttenuta = wrap.getStatoBio()
+        assert voceBioOttenuta
+        assert voceBioOttenuta == voceBioRichiesta
+
+        titolo = 'Artesa' //pagina redirect
+        voceBioRichiesta = StatoBio.disambigua
         wrap = new WrapBio(titolo)
         assert wrap
         voceBioOttenuta = wrap.getStatoBio()
@@ -580,6 +598,42 @@ class WrapBioTest extends GrailsUnitTestCase {
         assert wrap.getTitoloVoce() == titolo
 
         titolo = 'Hassan Rouhani'
+        wrap = new WrapBio(titolo)
+        assert wrap != null
+        assert wrap.isValida()
+        assert wrap.getTitoloVoce() == titolo
+
+        titolo = 'Gregorius Bar-Hebraeus'
+        wrap = new WrapBio(titolo)
+        assert wrap != null
+        assert wrap.isValida()
+        assert wrap.getTitoloVoce() == titolo
+
+        titolo = 'Ibn al-Awwam'
+        wrap = new WrapBio(titolo)
+        assert wrap != null
+        assert wrap.isValida()
+        assert wrap.getTitoloVoce() == titolo
+
+        titolo = 'Manaf Abushgeer'
+        wrap = new WrapBio(titolo)
+        assert wrap != null
+        assert wrap.isValida()
+        assert wrap.getTitoloVoce() == titolo
+
+        titolo = 'Alon Abutbul'
+        wrap = new WrapBio(titolo)
+        assert wrap != null
+        assert wrap.isValida()
+        assert wrap.getTitoloVoce() == titolo
+
+        titolo = 'Sayf al-Dawla'
+        wrap = new WrapBio(titolo)
+        assert wrap != null
+        assert wrap.isValida()
+        assert wrap.getTitoloVoce() == titolo
+
+        titolo = 'Falco Accame'
         wrap = new WrapBio(titolo)
         assert wrap != null
         assert wrap.isValida()

@@ -246,7 +246,9 @@ public class WrapBio {
         valida = checkVoce()
 
         //--Estrae le mappe dal testo
-        this.estraeMappe()
+        if (valida) {
+            this.estraeMappe()
+        }// fine del blocco if
 
         if (valida) {
             //--Crea un'istanza di BioWiki con esattamente i dati del server wiki
@@ -255,7 +257,7 @@ public class WrapBio {
 
             //--Crea un'istanza di BioGrails con i dati utilizzabili per giorni, anni e liste
             //--L'istanza viene mantenuta pronta per la registrazione sul DB
-            this.creaBioGrails()
+//            this.creaBioGrails()
 
             //--Crea un template finale ed una voce finale
             //--Vengono tenuti pronti per registrare eventualmente la voce modificata e corretta
@@ -342,17 +344,16 @@ public class WrapBio {
         }// fine del blocco if
 
         //--controlla l'esistenza del template bio
-        //--se mancano parametri, meglio non registrare e segnalare l'errore
+        //--se manca, meglio non registrare e segnalare l'errore
         if (continua) {
             testoTemplate = this.getTestoTemplateOriginale()
             if (testoTemplate) {
-                if (LibWiki.isGraffePari(testoTemplate)) {
-                } else {
+                if (!LibWiki.isGraffePari(testoTemplate)) {
                     this.setBio(false)
                     this.setStatoBio(StatoBio.bioErrato)
                     continua = false
                     valida = false
-                }// fine del blocco if-else
+                }// fine del blocco if
             } else {
                 this.setBio(false)
                 this.setStatoBio(StatoBio.senzaBio)
@@ -455,8 +456,9 @@ public class WrapBio {
      * Estrae la mappa dei parametri extra (presenti nella voce, ma non previsti nei parametri bio)
      * Costruisce la lista dei soli titoli dei parametri extra
      */
-    public estraeMappe() {
+    public boolean estraeMappe() {
         // variabili e costanti locali di lavoro
+        boolean valida = true
         boolean continua = false
         String titoloVoce = this.getTitoloVoce()
         String testoTemplate = this.getTestoTemplateOriginale()
@@ -491,7 +493,11 @@ public class WrapBio {
         }// fine del blocco if
 
         if (continua) {
-            this.checkValiditàTemplate(mappaBio)
+            if (!checkValiditàTemplate(mappaBio)) {
+                continua = false
+                valida = false
+            }// fine del blocco if
+
         }// fine del blocco if
 
         if (continua) {
@@ -520,6 +526,7 @@ public class WrapBio {
             }// fine del blocco if
         }// fine del blocco if
 
+        return valida
     } // fine del metodo
 
     /**
@@ -529,24 +536,26 @@ public class WrapBio {
      * Controlla che i siano alcuni campi alternativi, quando mancano quelli normali:
      *  Attività e Nazionalità, sostituiti da Categorie e FineIncipit
      */
-    public checkValiditàTemplate(LinkedHashMap mappaBio) {
-        boolean incompleto = false
+    public boolean checkValiditàTemplate(LinkedHashMap mappaBio) {
+        boolean incompleta = false
         ArrayList chiavi
         String titoloVoce = this.getTitoloVoce()
 
         chiavi = mappaBio.keySet().toArray()
         if (!chiavi.contains('Nome')) {
-            incompleto = true
+            incompleta = true
 //            logService.error "Nella voce [[${titoloVoce}]] manca il parametro Nome che è indispensabile per il corretto funzionamento del template"
         }// fine del blocco if
         if (!chiavi.contains('Sesso')) {
-            incompleto = true
+            incompleta = true
 //            logService.error "Nella voce [[${titoloVoce}]] manca il parametro Sesso che è indispensabile per il corretto funzionamento del template"
         }// fine del blocco if
 
-        if (incompleto) {
+        if (incompleta) {
             this.setStatoBio(StatoBio.bioIncompleto)
         }// fine del blocco if-else
+
+        return incompleta
     } // fine del metodo
 
     /**
@@ -788,6 +797,12 @@ public class WrapBio {
             bioWiki.modificaWiki = LibTime.creaData(bioWiki.timestamp)
             bioWiki.letturaWiki = data
             bioWiki.elaborata = false
+        }// fine del blocco if
+
+        if (bioWiki) {
+            if (getStatoBio() == StatoBio.bioIncompleto) {
+                bioWiki.incompleta = true
+            }// fine del blocco if
         }// fine del blocco if
 
         if (continua) {
@@ -1156,6 +1171,19 @@ public class WrapBio {
     } // fine del metodo
 
     /**
+     * Riordina la mappa di parametri Bio
+     * Li ordina secondo la Enumeration
+     */
+    public riordinaMappa() {
+        LinkedHashMap mappa = this.getMappaBio()
+
+        if (mappa) {
+            mappa = LibBio.riordinaMappa(mappa)
+            this.setMappaBio(mappa)
+        }// fine del blocco if
+    }// fine del metodo
+
+    /**
      * Crea la mappa definitiva
      *
      * Recupera la biografia definitiva
@@ -1297,13 +1325,14 @@ public class WrapBio {
 
         if (bioOriginale) {
             try { // prova ad eseguire il codice
-                bioRegistrata = bioOriginale.save(failOnError: true)
+                bioRegistrata = bioOriginale.save(flush: true)
             } catch (Exception unErrore) { // intercetta l'errore
                 try { // prova ad eseguire il codice
                     log.error(avviso)
                     logService.warn(avviso)
                 } catch (Exception unErrore2) { // intercetta l'errore
                 }// fine del blocco try-catch
+
             }// fine del blocco try-catch
             if (bioRegistrata == null) {
                 log.error(avviso)

@@ -19,6 +19,19 @@ class LibBioTest extends GroovyTestCase {
     void tearDown() {
     } // fine del metodo iniziale
 
+    void testVoceOrdinaMappa() {
+        LinkedHashMap mappaBio
+        LinkedHashMap ottenuto
+
+        mappaBio = new LinkedHashMap()
+        mappaBio.put('AnnoMorte', '2145')
+        mappaBio.put('Attività', 'pescatore')
+        mappaBio.put('Nome', 'Mario')
+
+        ottenuto = LibBio.riordinaMappa(mappaBio)
+    } // fine del test
+
+
     void testVoceErrata() {
         LinkedHashMap mappaReali = null
         String titoloVoce
@@ -44,8 +57,6 @@ class LibBioTest extends GroovyTestCase {
         assert mappaReali['Nome'] == 'Imed'
         assert mappaReali['Attività'] == 'ex calciatore'
         assert mappaReali['Nazionalità'] == 'tunisino'
-
-
     } // fine del test
 
 } // fine della classe di test

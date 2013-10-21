@@ -2,6 +2,8 @@ package it.algos.botbio
 
 import groovy.util.logging.Log4j
 import it.algos.algoslib.Lib
+import it.algos.algoslib.LibTesto
+import it.algos.algoswiki.QueryInfoCat
 import it.algos.algoswiki.WikiLib
 
 /**
@@ -329,5 +331,62 @@ class LibBio {
         return Lib.Txt.hasTag(testoVoce, TAG_BIO)
     }// fine del metodo
 
+    /**
+     * Registra le voci gestite
+     *
+     * @param debug log di controllo
+     */
+    public static void gestVoci(def logService, boolean debug) {
+        def numVoci
+        int vociCat
+        String percentuale
+        String avviso = ''
+        QueryInfoCat query
+
+        query = new QueryInfoCat('BioBot')
+        vociCat = query.getSize()
+        numVoci = BioWiki.count()
+        percentuale = LibTesto.formatPercentuale(numVoci, vociCat)
+        numVoci = LibTesto.formatNum(numVoci)
+        avviso += "[[Utente:Biobot|<span style=\"color:green\">'''Biobot'''</span>]]"
+        avviso += " gestisce ${numVoci} voci pari al '''${percentuale}'''"
+        avviso += " della categoria [[:Categoria:BioBot|'''BioBot''']]"
+        if (debug) {
+            log.info(avviso)
+        } else {
+            if (logService) {
+                logService.info(avviso)
+            }// fine del blocco if
+        }// fine del blocco if-else
+    }// fine del metodo
+
+    /**
+     * Riordina la mappa di parametri Bio
+     * Li ordina secondo la Enumeration
+     * Aggiunge quelli ''semplici'', anche se vuoti
+     *
+     * @param mappaIn ingresso
+     * @return mappaOut uscita
+     */
+    public static LinkedHashMap riordinaMappa(LinkedHashMap mappaIn) {
+        LinkedHashMap mappaOut = mappaIn
+        String chiave
+
+        if (mappaOut) {
+            mappaOut = new LinkedHashMap()
+            ParBio?.each {
+                chiave = it.tag
+                if (mappaIn[chiave] && !mappaIn[chiave].equals('null')) {
+                    mappaOut.put(chiave, mappaIn[chiave])
+                } else {
+                    if (it.semplice) {
+                        mappaOut.put(chiave, '')
+                    }// fine del blocco if
+                }// fine del blocco if-else
+            } // fine del ciclo each
+        }// fine del blocco if
+
+        return mappaOut
+    }// fine del metodo
 
 } // fine della classe

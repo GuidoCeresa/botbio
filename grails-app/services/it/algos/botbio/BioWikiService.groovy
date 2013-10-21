@@ -90,7 +90,30 @@ class BioWikiService {
 
         //--Recupera dal server la lista completa delle voci esistenti dalla categoria BioBot
         if (continua) {
-            listaVociServerWiki = this.getListaVociServerWiki()
+            if (debug) {
+                listaVociServerWiki = new ArrayList<Integer>()
+
+                listaVociServerWiki.add(QueryVoce.leggePageid('Utente:Biobot/2'))
+                listaVociServerWiki.add(QueryVoce.leggePageid('Utente:Biobot/3'))
+                listaVociServerWiki.add(QueryVoce.leggePageid('Utente:Biobot/4'))
+                listaVociServerWiki.add(QueryVoce.leggePageid('Utente:Biobot/5'))
+                listaVociServerWiki.add(QueryVoce.leggePageid('Utente:Biobot/6'))
+                listaVociServerWiki.add(QueryVoce.leggePageid('Utente:Biobot/7'))
+                listaVociServerWiki.add(QueryVoce.leggePageid('Artesa'))
+                listaVociServerWiki.add(QueryVoce.leggePageid('Coripe'))
+
+                listaVociServerWiki.add(QueryVoce.leggePageid('Acrotato (figlio di Cleomene II)'))
+                listaVociServerWiki.add(QueryVoce.leggePageid('Luigi Belli'))
+                listaVociServerWiki.add(QueryVoce.leggePageid('Hassan Rouhani'))
+                listaVociServerWiki.add(QueryVoce.leggePageid('Gregorius Bar-Hebraeus'))
+                listaVociServerWiki.add(QueryVoce.leggePageid('Ibn al-Awwam'))
+                listaVociServerWiki.add(QueryVoce.leggePageid('Manaf Abushgeer'))
+                listaVociServerWiki.add(QueryVoce.leggePageid('Alon Abutbul'))
+                listaVociServerWiki.add(QueryVoce.leggePageid('Sayf al-Dawla'))
+                listaVociServerWiki.add(QueryVoce.leggePageid('Falco Accame'))
+            } else {
+                listaVociServerWiki = this.getListaVociServerWiki()
+            }// fine del blocco if-else
             continua = (listaVociServerWiki && listaVociServerWiki.size() > 0)
             tempo()
         }// fine del blocco if
@@ -104,9 +127,6 @@ class BioWikiService {
         //--Recupera la lista delle voci nuove che non hanno ancora records (da creare)
         if (continua) {
             listaNuoviRecordsDaCreare = deltaListe(listaVociServerWiki, listaRecordsDatabase)
-            if (listaNuoviRecordsDaCreare) {
-                vociCreate = listaNuoviRecordsDaCreare.size()
-            }// fine del blocco if
             tempo()
         }// fine del blocco if-else
 
@@ -115,6 +135,9 @@ class BioWikiService {
             if (LibPref.getBool('usaLimiteDownload')) {
                 maxDownload = LibPref.getInt('maxDownload')
                 listaNuoviRecordsDaCreare = LibArray.estraArray(listaNuoviRecordsDaCreare, maxDownload)
+            }// fine del blocco if
+            if (listaNuoviRecordsDaCreare) {
+                vociCreate = listaNuoviRecordsDaCreare.size()
             }// fine del blocco if
         }// fine del blocco if-else
 
@@ -240,6 +263,9 @@ class BioWikiService {
         boolean debug = Preferenze.getBool((String) grailsApplication.config.debug)
         String catDebug = Preferenze.getStr((String) grailsApplication.config.catDebug)
         QueryCatPageid query = null
+        long inizio = System.currentTimeMillis()
+        long fine
+        long durata
 
         if (debug) {
             log.info 'Siamo in modalità debug'
@@ -256,9 +282,9 @@ class BioWikiService {
 
         // recupera una lista di pageId
         if (debug) {
-            log.info "Caricamento della categoria ${titoloCategoria} - Circa 4 minuti (siamo in debug)"
+            log.info "Caricamento della categoria ${titoloCategoria} - Circa 8 minuti (siamo in debug)"
         } else {
-            log.info "Caricamento della categoria ${titoloCategoria} - Circa 2 minuti"
+            log.info "Caricamento della categoria ${titoloCategoria} - Circa 6 minuti"
         }// fine del blocco if-else
 
         try { // prova ad eseguire il codice
@@ -283,17 +309,17 @@ class BioWikiService {
 
         //--patch per la voce Pagina principale @todo non ho capito perche entra nella categoria
         if (continua) {
-            long inizio
-            long fine
+            long inizioLoc
+            long fineLoc
             long differenza
             boolean rimossa
             int pageidPaginaPrincipale = 521472
             if (lista.contains(pageidPaginaPrincipale)) {
-                inizio = System.currentTimeMillis()
+                inizioLoc = System.currentTimeMillis()
                 try { // prova ad eseguire il codice
                     rimossa = lista.remove(lista.indexOf(pageidPaginaPrincipale))
-                    fine = System.currentTimeMillis()
-                    differenza = fine - inizio
+                    fineLoc = System.currentTimeMillis()
+                    differenza = fineLoc - inizioLoc
                     log.info "tempo di cancellazione di un elemento della lista: " + differenza
                 } catch (Exception unErrore) { // intercetta l'errore
                     log.info "errore nella rimozione di un elemento dalla lista"
@@ -311,7 +337,10 @@ class BioWikiService {
         if (lista) {
             num = lista.size()
             num = Lib.Text.formatNum(num)
-            log.info "La categoria contiene ${num} voci"
+            fine = System.currentTimeMillis()
+            durata = fine - inizio
+            durata = durata / 1000
+            log.info "La categoria contiene ${num} voci ed è stata caricata in ${durata} secondi"
         } else {
             logService.warn("La categoria ${titoloCategoria} non contiene nessuna voce")
             log.warn "La categoria non contiene voci"
@@ -354,16 +383,24 @@ class BioWikiService {
     def creaNuoviRecords(ArrayList<Integer> listaNuoviRecords) {
         // variabili e costanti locali di lavoro
         def num = 0
+        String numTxt
+        long inizio
+        long fine
+        long durata
+        long tempoImpiegato
 
         if (listaNuoviRecords) {
             num = listaNuoviRecords.size()
-            num = Lib.Text.formatNum(num)
+            numTxt = Lib.Text.formatNum(num)
             log.info "Ci sono ${num} nuovi records da creare"
 
             //--creo le voci nuove che non hanno ancora records
+            inizio = System.currentTimeMillis()
             this.regolaVociNuoveModificate(listaNuoviRecords)
-//            logService.info "Sono state aggiunte ${num} nuove voci dopo l'ultimo check"
-            log.warn "Fine dei nuovi records"
+            fine = System.currentTimeMillis()
+            durata = fine - inizio
+            tempoImpiegato = durata / num
+            log.warn "Fine dei nuovi records - Tempo impiegato = ${tempoImpiegato} millisecondi a voce"
         } else {
             log.warn "Non ci sono nuovi records da creare"
         }// fine del blocco if-else
@@ -596,6 +633,11 @@ class BioWikiService {
         int cont = 0
         def dimVoci
         int totBlocchi
+        int numRec
+        String numero
+        long inizio
+        long fine
+        long durata
 
         if (listaVoci) {
             if (usaPagineSingole) {
@@ -614,9 +656,19 @@ class BioWikiService {
                 if (listaPageids) {
                     totBlocchi = listaVoci.size() / dimBlocco
                     listaPageids.each {
+                        inizio = System.currentTimeMillis()
                         this.regolaBloccoNuovoModificato((ArrayList) it)
                         cont++
-                        log.info "Caricato il blocco $cont/$totBlocchi"
+                        try { // prova ad eseguire il codice
+                            numRec = BioWiki.count()
+                        } catch (Exception unErrore) { // intercetta l'errore
+                            log.error unErrore
+                        }// fine del blocco try-catch
+                        numero = Lib.Txt.formatNum(numRec)
+                        fine = System.currentTimeMillis()
+                        durata = fine - inizio
+                        durata = durata / 1000
+                        log.info "Caricato il blocco $cont/$totBlocchi (" + durata + " sec.) Nel database dopo il flushing ci sono ${numero} records"
                         tempo()
                     }// fine del ciclo each
                 }// fine del blocco if
@@ -636,8 +688,6 @@ class BioWikiService {
         // variabili e costanti locali di lavoro
         ArrayList listaMappe
         QueryMultiBio query
-        int numRec
-        String numero
         WrapBio wrapBio
         String title
         int pageid
@@ -672,7 +722,7 @@ class BioWikiService {
                             registrata = false
                             break
                         case StatoBio.bioErrato:
-                            logService.error "Il '''[[Template:Bio|tmpl Bio]]''' della voce '''[[${title}]]''' è errato"
+                            logService.error "La voce '''[[${title}]]''' presenta il '''[[Template:Bio|tmpl Bio]]''' completamente errato"
                             registrata = false
                             break
                         case StatoBio.senzaBio:
@@ -684,11 +734,11 @@ class BioWikiService {
                             registrata = false
                             break
                         case StatoBio.redirect:
-                            logService.warn "La voce '''[[${title}]]''' non è una voce biografica, ma un '''[[Aiuto:Redirect|redirect]]'''"
+                            logService.error "La voce '''[[${title}]]''' non è una voce biografica, ma un '''[[Aiuto:Redirect|redirect]]'''"
                             registrata = false
                             break
                         case StatoBio.disambigua:
-                            logService.warn "La voce '''[[${title}]]''' non è una voce biografica, ma una '''[[Aiuto:Disambigua|disambigua]]'''"
+                            logService.error "La voce '''[[${title}]]''' non è una voce biografica, ma una '''[[Aiuto:Disambigua|disambigua]]'''"
                             registrata = false
                             break
                         case StatoBio.maiEsistita:
@@ -712,14 +762,6 @@ class BioWikiService {
                     }// fine del blocco if
                 }// fine del ciclo each
             }// fine del blocco if
-
-            try { // prova ad eseguire il codice
-                numRec = BioWiki.count()
-            } catch (Exception unErrore) { // intercetta l'errore
-                log.error unErrore
-            }// fine del blocco try-catch
-            numero = Lib.Txt.formatNum(numRec)
-            log.info "Nel database dopo il flushing ci sono ${numero} records"
         }// fine del blocco if
     } // fine della closure
 
@@ -821,7 +863,7 @@ class BioWikiService {
 
         if (continua) {
             wrapBio = new WrapBio(pageid)
-            if (wrapBio.isValida()) {
+            if (wrapBio.getStatoBio() == StatoBio.bioNormale || wrapBio.getStatoBio() == StatoBio.bioIncompleto) {
                 wrapBio.registraBioWiki()
             } else {
                 title = wrapBio.getTitoloVoce()

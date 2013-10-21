@@ -1212,6 +1212,25 @@
 <g:datePicker name="letturaWiki" precision="day"  value="${bioWikiInstance?.letturaWiki}" default="none" noSelection="['': '']" />
 </div>
 
+<div class="fieldcontain ${hasErrors(bean: bioWikiInstance, field: 'incompleta', 'error')} ">
+	<label for="incompleta">
+		<g:message code="bioWiki.incompleta.label" default="Incompleta" />
+		
+	</label>
+	
+
+
+
+
+
+
+
+
+
+
+<g:checkBox name="incompleta" value="${bioWikiInstance?.incompleta}" />
+</div>
+
 <div class="fieldcontain ${hasErrors(bean: bioWikiInstance, field: 'allineata', 'error')} ">
 	<label for="allineata">
 		<g:message code="bioWiki.allineata.label" default="Allineata" />

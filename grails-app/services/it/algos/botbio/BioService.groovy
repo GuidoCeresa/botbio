@@ -48,6 +48,7 @@ class BioService {
     // il service viene iniettato automaticamente
     def listaService
     def logService
+    def bioWikiService
 
     private static boolean pagineMultiple = true // controllo e caricamente singolo piuttosto che a pacchetto
 
@@ -282,6 +283,7 @@ class BioService {
         def lista = BioWiki.findAllWhere([sesso: ''])
         BioWiki bioWiki
         int pageid
+        boolean registrata
 
         lista?.each {
             bioWiki = null
@@ -291,24 +293,33 @@ class BioService {
 
             if (bioWiki) {
                 pageid = bioWiki.pageid
-                uploadSesso(pageid)
+                registrata = uploadSesso(pageid)
                 numVoci++
+                if (registrata) {
+                    bioWikiService.download(pageid)
+                }// fine del blocco if
             }// fine del blocco if
-
         } // fine del ciclo each
 
         return numVoci
     } // fine del metodo
 
     //--fix parameters errors
-    public uploadSesso(int pageid) {
+    //--costruisce il wrap
+    //--scarica la mappa dei parametri Bio
+    //--aggiunge il parametro sesso
+    //--riordina la mappa
+    //--costruisce il testo del template
+    public boolean uploadSesso(int pageid) {
         // variabili e costanti locali di lavoro
+        boolean registrata = false
         WrapBio wrapBio
         String title
         String templateVecchio
         String templateNuovo
         HashMap mappa
-        String summary= "[[Utente:Biobot|Biobot]] fix par sex"
+        String summary = "[[Utente:Biobot|Biobot]] fix par tmpl"
+        EditSub voceRegistrata = null
 
         if (pageid) {
             wrapBio = new WrapBio(pageid)
@@ -319,15 +330,21 @@ class BioService {
                 if (!mappa['Sesso']) {
                     mappa.put('Sesso', 'M')
                 }// fine del blocco if
+                wrapBio.riordinaMappa()
+                mappa = wrapBio.getMappaBio()
                 wrapBio.creaTestoFinaleTemplate()
                 templateNuovo = wrapBio.getTestoTemplateFinale()
             }// fine del blocco if
 
             if (title && templateVecchio && templateNuovo) {
-                new EditSub(title, templateVecchio, templateNuovo, summary)
+                voceRegistrata = new EditSub(title, templateVecchio, templateNuovo, summary)
+                if (voceRegistrata) {
+                    registrata = true
+                }// fine del blocco if
             }// fine del blocco if
-
         }// fine del blocco if
+
+        return registrata
     } // fine del metodo
 
     private static String fixTitolo(String testoIn) {
@@ -464,14 +481,27 @@ class BioService {
     private static Giorno getGiornoNato(BioWiki bioWiki) {
         Giorno giorno = null
         String giornoWiki
+        String title = ''
 
         if (bioWiki) {
             giornoWiki = bioWiki.giornoMeseNascita
-            try { // prova ad eseguire il codice
-                giorno = Giorno.findByNome(giornoWiki)
-            } catch (Exception unErrore) { // intercetta l'errore
-                log.error unErrore
-            }// fine del blocco try-catch
+            if (giornoWiki) {
+                try { // prova ad eseguire il codice
+                    giorno = Giorno.findByNome(giornoWiki)
+                    if (!giorno) {
+                        giorno = Giorno.findByTitolo(giornoWiki)
+                        if (giorno) {
+                            log.warn "BioService-getGiornoNato: Voce ${title}, beccato ${giornoWiki} !"
+                        }// fine del blocco if
+                    }// fine del blocco if
+                } catch (Exception unErrore) { // intercetta l'errore
+                    log.error unErrore
+                }// fine del blocco try-catch
+                if (!giorno) {
+                    title = bioWiki.title
+                    log.warn "BioService-getGiornoNato: Voce ${title}, ${giornoWiki} non sembra un giorno valido"
+                }// fine del blocco if
+            }// fine del blocco if
         }// fine del blocco if
 
         return giorno

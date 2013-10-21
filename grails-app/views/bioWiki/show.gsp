@@ -603,6 +603,15 @@
             </li>
         </g:if>
         
+        <g:if test="${bioWikiInstance?.incompleta}">
+            <li class="fieldcontain">
+                <span id="incompleta-label" class="property-label"><g:message code="bioWiki.incompleta.label" default="Incompleta" /></span>
+                
+                <span class="property-value" aria-labelledby="incompleta-label"><g:formatBoolean boolean="${bioWikiInstance?.incompleta}" /></span>
+                
+            </li>
+        </g:if>
+        
         <g:if test="${bioWikiInstance?.allineata}">
             <li class="fieldcontain">
                 <span id="allineata-label" class="property-label"><g:message code="bioWiki.allineata.label" default="Allineata" /></span>
