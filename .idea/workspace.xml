@@ -2,21 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="68254703-7597-4adf-9a44-9a0e7a7facfd" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/services/it/algos/botbio/BioService.groovy" afterPath="$PROJECT_DIR$/grails-app/services/it/algos/botbio/BioService.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/domain/it/algos/botbio/BioWiki.groovy" afterPath="$PROJECT_DIR$/grails-app/domain/it/algos/botbio/BioWiki.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/controllers/it/algos/botbio/BioWikiController.groovy" afterPath="$PROJECT_DIR$/grails-app/controllers/it/algos/botbio/BioWikiController.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/services/it/algos/botbio/BioWikiService.groovy" afterPath="$PROJECT_DIR$/grails-app/services/it/algos/botbio/BioWikiService.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/jobs/DownloadJob.groovy" afterPath="$PROJECT_DIR$/grails-app/jobs/DownloadJob.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/groovy/it/algos/botbio/LibBio.groovy" afterPath="$PROJECT_DIR$/src/groovy/it/algos/botbio/LibBio.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/unit/it/algos/botbio/LibBioTest.groovy" afterPath="$PROJECT_DIR$/test/unit/it/algos/botbio/LibBioTest.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/groovy/it/algos/botbio/ParBio.groovy" afterPath="$PROJECT_DIR$/src/groovy/it/algos/botbio/ParBio.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/groovy/it/algos/botbio/WrapBio.groovy" afterPath="$PROJECT_DIR$/src/groovy/it/algos/botbio/WrapBio.groovy" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/unit/it/algos/botbio/WrapBioTest.groovy" afterPath="$PROJECT_DIR$/test/unit/it/algos/botbio/WrapBioTest.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/views/bioWiki/_form.gsp" afterPath="$PROJECT_DIR$/grails-app/views/bioWiki/_form.gsp" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application.properties" afterPath="$PROJECT_DIR$/application.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/botbio-grailsPlugins.iml" afterPath="$PROJECT_DIR$/botbio-grailsPlugins.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/views/bioWiki/list.gsp" afterPath="$PROJECT_DIR$/grails-app/views/bioWiki/list.gsp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/views/bioWiki/show.gsp" afterPath="$PROJECT_DIR$/grails-app/views/bioWiki/show.gsp" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="botbio.iws" />
@@ -30,7 +17,7 @@
     <file path="/AnnoController.groovy" changelist="68254703-7597-4adf-9a44-9a0e7a7facfd" time="1379054303147" ignored="false" />
     <file path="/Giorno.groovy" changelist="68254703-7597-4adf-9a44-9a0e7a7facfd" time="1376204021200" ignored="false" />
     <file path="/ExportBootStrap.groovy" changelist="68254703-7597-4adf-9a44-9a0e7a7facfd" time="1376212447834" ignored="false" />
-    <file path="/Dummy.txt" changelist="68254703-7597-4adf-9a44-9a0e7a7facfd" time="1382327602238" ignored="false" />
+    <file path="/Dummy.txt" changelist="68254703-7597-4adf-9a44-9a0e7a7facfd" time="1382328135393" ignored="false" />
     <file path="$PROJECT_DIR$/../algos/grails-app/Readme" changelist="68254703-7597-4adf-9a44-9a0e7a7facfd" time="1376212529430" ignored="false" />
     <file path="/Readme" changelist="68254703-7597-4adf-9a44-9a0e7a7facfd" time="1376212504840" ignored="false" />
     <file path="$PROJECT_DIR$/../algos/grails-app/it/algos/algos/Algoslist" changelist="68254703-7597-4adf-9a44-9a0e7a7facfd" time="1379926562737" ignored="false" />
@@ -45,7 +32,7 @@
     <file path="$PROJECT_DIR$/../algos/grails-app/controllers/algos/ProvaController.groovy" changelist="68254703-7597-4adf-9a44-9a0e7a7facfd" time="1376254041817" ignored="false" />
     <file path="$PROJECT_DIR$/../algoslib/src/groovy/it/algos/algoslib/LibHtml.groovy" changelist="68254703-7597-4adf-9a44-9a0e7a7facfd" time="1376225506768" ignored="false" />
     <file path="$PROJECT_DIR$/../algoslib/AlgoslibGrailsPlugin.groovy" changelist="68254703-7597-4adf-9a44-9a0e7a7facfd" time="1381577011912" ignored="false" />
-    <file path="/a.dummy" changelist="68254703-7597-4adf-9a44-9a0e7a7facfd" time="1382269038309" ignored="false" />
+    <file path="/a.dummy" changelist="68254703-7597-4adf-9a44-9a0e7a7facfd" time="1382328132959" ignored="false" />
     <file path="$PROJECT_DIR$/../algoslib/plugin.xml" changelist="68254703-7597-4adf-9a44-9a0e7a7facfd" time="1381577058386" ignored="false" />
     <file path="$PROJECT_DIR$/../algoslib/.idea/workspace.xml" changelist="68254703-7597-4adf-9a44-9a0e7a7facfd" time="1381577065135" ignored="false" />
     <file path="$PROJECT_DIR$/../algos/grails-app/conf/BuildConfig.groovy" changelist="68254703-7597-4adf-9a44-9a0e7a7facfd" time="1381577330609" ignored="false" />
@@ -63,7 +50,7 @@
     <file path="/LibTime.groovy" changelist="68254703-7597-4adf-9a44-9a0e7a7facfd" time="1378561447433" ignored="false" />
     <file path="$PROJECT_DIR$/../algoslib/test/unit/it/algos/algoslib/LibTimeTest.groovy" changelist="68254703-7597-4adf-9a44-9a0e7a7facfd" time="1377678818333" ignored="false" />
     <file path="/LibTimeTest.groovy" changelist="68254703-7597-4adf-9a44-9a0e7a7facfd" time="1377678811358" ignored="false" />
-    <file path="/fragment.java" changelist="68254703-7597-4adf-9a44-9a0e7a7facfd" time="1381431241266" ignored="false" />
+    <file path="/fragment.java" changelist="68254703-7597-4adf-9a44-9a0e7a7facfd" time="1382332945756" ignored="false" />
     <file path="/GiornoService.groovy" changelist="68254703-7597-4adf-9a44-9a0e7a7facfd" time="1378298070060" ignored="false" />
     <file path="/GiornoController.groovy" changelist="68254703-7597-4adf-9a44-9a0e7a7facfd" time="1379054909858" ignored="false" />
     <file path="/Attivita.groovy" changelist="68254703-7597-4adf-9a44-9a0e7a7facfd" time="1376311408915" ignored="false" />
@@ -148,7 +135,7 @@
     <file path="$PROJECT_DIR$/../old/webwikiold/grails-app/services/WikiService.groovy" changelist="68254703-7597-4adf-9a44-9a0e7a7facfd" time="1377694919736" ignored="false" />
     <file path="$USER_HOME$/.grails/2.2.3/projects/algoswiki/plugins/algoslib-0.28/src/groovy/it/algos/algoslib/LibTesto.groovy" changelist="68254703-7597-4adf-9a44-9a0e7a7facfd" time="1377696955448" ignored="false" />
     <file path="/QueryRevPageid.groovy" changelist="68254703-7597-4adf-9a44-9a0e7a7facfd" time="1378014749109" ignored="false" />
-    <file path="/WrapBioTest.groovy" changelist="68254703-7597-4adf-9a44-9a0e7a7facfd" time="1382290203130" ignored="false" />
+    <file path="/WrapBioTest.groovy" changelist="68254703-7597-4adf-9a44-9a0e7a7facfd" time="1382331272793" ignored="false" />
     <file path="$PROJECT_DIR$/../algoswiki/README-Lib" changelist="68254703-7597-4adf-9a44-9a0e7a7facfd" time="1381577220029" ignored="false" />
     <file path="$PROJECT_DIR$/../algoswiki/src/groovy/it/algos/algoswiki/QueryRevPageid.groovy" changelist="68254703-7597-4adf-9a44-9a0e7a7facfd" time="1378014756350" ignored="false" />
     <file path="/LibBio.groovy" changelist="68254703-7597-4adf-9a44-9a0e7a7facfd" time="1382268895498" ignored="false" />
@@ -161,7 +148,7 @@
     <file path="$PROJECT_DIR$/../algoslib/src/groovy/it/algos/algoslib/LibWiki.groovy" changelist="68254703-7597-4adf-9a44-9a0e7a7facfd" time="1378369891882" ignored="false" />
     <file path="$PROJECT_DIR$/../algoslib/test/unit/it/algos/algoslib/LibWikiTest.groovy" changelist="68254703-7597-4adf-9a44-9a0e7a7facfd" time="1378369842926" ignored="false" />
     <file path="$PROJECT_DIR$/../algoswiki/src/groovy/it/algos/algoswiki/WikiLib.groovy" changelist="68254703-7597-4adf-9a44-9a0e7a7facfd" time="1381761011073" ignored="false" />
-    <file path="/WikiLib.groovy" changelist="68254703-7597-4adf-9a44-9a0e7a7facfd" time="1382290438417" ignored="false" />
+    <file path="/WikiLib.groovy" changelist="68254703-7597-4adf-9a44-9a0e7a7facfd" time="1382333264849" ignored="false" />
     <file path="/ParBio.groovy" changelist="68254703-7597-4adf-9a44-9a0e7a7facfd" time="1382259676570" ignored="false" />
     <file path="$PROJECT_DIR$/../webambulanze/grails-app/services/webambulanze/MiliteturnoService.groovy" changelist="68254703-7597-4adf-9a44-9a0e7a7facfd" time="1377961673502" ignored="false" />
     <file path="/MiliteturnoService.groovy" changelist="68254703-7597-4adf-9a44-9a0e7a7facfd" time="1377961673502" ignored="false" />
@@ -397,6 +384,36 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
+      <breakpoint url="file://$PROJECT_DIR$/test/unit/it/algos/botbio/WrapBioTest.groovy" line="50" class="it.algos.botbio.WrapBioTest" package="it.algos.botbio">
+        <option name="ENABLED" value="true" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="REMOVE_AFTER_HIT" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="SUSPEND" value="true" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="true" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+      <breakpoint url="file://$PROJECT_DIR$/test/unit/it/algos/botbio/WrapBioTest.groovy" line="70" class="it.algos.botbio.WrapBioTest" package="it.algos.botbio">
+        <option name="ENABLED" value="true" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="REMOVE_AFTER_HIT" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="SUSPEND" value="true" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="true" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
     </line_breakpoints>
     <breakpoint_any default_suspend_policy="SuspendAll" default_condition_enabled="true">
       <breakpoint>
@@ -447,7 +464,7 @@
       <file leaf-file-name="WrapBio.groovy" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/groovy/it/algos/botbio/WrapBio.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="475" column="0" selection-start="17393" selection-end="17393" vertical-scroll-proportion="0.0">
+            <state line="350" column="38" selection-start="12915" selection-end="12975" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -456,34 +473,7 @@
       <file leaf-file-name="WrapBioTest.groovy" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test/unit/it/algos/botbio/WrapBioTest.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="49" column="0" selection-start="1266" selection-end="1266" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="BioWikiService.groovy" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/grails-app/services/it/algos/botbio/BioWikiService.groovy">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="866" column="33" selection-start="36137" selection-end="36137" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="BioWikiController.groovy" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/grails-app/controllers/it/algos/botbio/BioWikiController.groovy">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="315" column="24" selection-start="14656" selection-end="14656" vertical-scroll-proportion="-15.130435">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="LibBio.groovy" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/groovy/it/algos/botbio/LibBio.groovy">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="337" column="63" selection-start="11388" selection-end="11388" vertical-scroll-proportion="0.0">
+            <state line="82" column="72" selection-start="2363" selection-end="2363" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -492,25 +482,25 @@
       <file leaf-file-name="application.properties" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/application.properties">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="6" column="11" selection-start="137" selection-end="137" vertical-scroll-proportion="0.13761468">
+            <state line="4" column="16" selection-start="110" selection-end="110" vertical-scroll-proportion="0.16901408">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="LogService.groovy" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/.grails/2.2.3/projects/botbio/plugins/algoswiki-0.61/grails-app/services/it/algos/algoswiki/LogService.groovy">
+      <file leaf-file-name="LibBio.groovy" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/groovy/it/algos/botbio/LibBio.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="9" column="6" selection-start="272" selection-end="272" vertical-scroll-proportion="0.0">
+            <state line="84" column="39" selection-start="2940" selection-end="2940" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="WikiLib.groovy" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/.grails/2.2.3/projects/botbio/plugins/algoswiki-0.61/src/groovy/it/algos/algoswiki/WikiLib.groovy">
+      <file leaf-file-name="ParBio.groovy" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/groovy/it/algos/botbio/ParBio.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="2087" column="69" selection-start="72567" selection-end="72567" vertical-scroll-proportion="0.0">
+            <state line="10" column="12" selection-start="156" selection-end="156" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -520,6 +510,15 @@
         <entry file="file://$PROJECT_DIR$/grails-app/services/it/algos/botbio/BioService.groovy">
           <provider selected="true" editor-type-id="text-editor">
             <state line="320" column="63" selection-start="12204" selection-end="12204" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="WikiLib.groovy" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/.grails/2.2.3/projects/botbio/plugins/algoswiki-0.61/src/groovy/it/algos/algoswiki/WikiLib.groovy">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="2081" column="33" selection-start="72228" selection-end="72228" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -627,8 +626,36 @@
               <option name="myItemId" value="test" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
+          </PATH>
+          <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="unit" />
+              <option name="myItemId" value="botbio" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="botbio" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="botbio" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="botbio" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="groovy" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -646,8 +673,20 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="test" />
+              <option name="myItemId" value="src" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="groovy" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="botbio" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="LibBio" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ClassTreeNode" />
             </PATH_ELEMENT>
           </PATH>
           <PATH>
@@ -694,64 +733,6 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="botbio-grailsPlugins" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="botbio" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="botbio-grailsPlugins" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="algoswiki-0.61" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="botbio" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="botbio-grailsPlugins" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="algoswiki-0.61" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="grails-app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="botbio" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="botbio-grailsPlugins" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="algoswiki-0.61" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="grails-app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="services" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="algoswiki" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
           <PATH>
@@ -810,7 +791,7 @@
     <property name="options.splitter.details.proportions" value="0.2" />
     <property name="options.searchVisible" value="true" />
   </component>
-  <component name="RunManager" selected="Grails.Botbio">
+  <component name="RunManager" selected="JUnit.WrapBio">
     <configuration default="true" type="GroovyScriptRunConfiguration" factoryName="Groovy">
       <module name="" />
       <setting name="path" value="" />
@@ -1271,7 +1252,11 @@
       <created>1381956635374</created>
       <updated>1381956635374</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="0.91">
+      <created>1382328118189</created>
+      <updated>1382328118189</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
@@ -1299,15 +1284,18 @@
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Persistence" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2562929" sideWeight="0.48462665" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Persistence" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2562929" sideWeight="0.26061493" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33235726" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3296131" sideWeight="0.5057971" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.5036603" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.43777454" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.38659057" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.48359486" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.42606148" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Grails View" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3296131" sideWeight="0.55675673" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32952926" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.46376812" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="CDI" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3289855" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -1315,15 +1303,12 @@
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3289855" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2562929" sideWeight="0.49633968" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2562929" sideWeight="0.56222546" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.5446559" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.42606148" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3296131" sideWeight="0.62608695" order="4" side_tool="true" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33235726" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.46376812" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32952926" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
@@ -1370,7 +1355,7 @@
     <option name="WRAP_WHEN_TYPING_REACHES_RIGHT_MARGIN" value="false" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="0.8" />
+    <option name="LAST_COMMIT_MESSAGE" value="0.91" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="false" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -1394,6 +1379,7 @@
     <MESSAGE value="elabora" />
     <MESSAGE value="ripartenza" />
     <MESSAGE value="0.8" />
+    <MESSAGE value="0.91" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -1453,44 +1439,9 @@
         <state line="1258" column="0" selection-start="49635" selection-end="49635" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/groovy/it/algos/botbio/ParBio.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="45" column="90" selection-start="2025" selection-end="2025" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/grails-app/services/it/algos/botbio/BioService.groovy">
       <provider selected="true" editor-type-id="text-editor">
         <state line="320" column="63" selection-start="12204" selection-end="12204" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/groovy/it/algos/botbio/WrapBio.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="475" column="0" selection-start="17393" selection-end="17393" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/.grails/2.2.3/projects/botbio/plugins/algoswiki-0.61/src/groovy/it/algos/algoswiki/WikiLib.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="2087" column="69" selection-start="72567" selection-end="72567" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test/unit/it/algos/botbio/WrapBioTest.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="49" column="0" selection-start="1266" selection-end="1266" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/grails-app/controllers/it/algos/botbio/BioWikiController.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="315" column="24" selection-start="14656" selection-end="14656" vertical-scroll-proportion="-15.130435">
           <folding />
         </state>
       </provider>
@@ -1502,16 +1453,51 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/grails-app/controllers/it/algos/botbio/BioWikiController.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="323" column="99" selection-start="14866" selection-end="14866" vertical-scroll-proportion="-0.65217394">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/groovy/it/algos/botbio/ParBio.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="10" column="12" selection-start="156" selection-end="156" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/groovy/it/algos/botbio/LibBio.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="337" column="63" selection-start="11388" selection-end="11388" vertical-scroll-proportion="0.0">
+        <state line="84" column="39" selection-start="2940" selection-end="2940" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/groovy/it/algos/botbio/WrapBio.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="350" column="38" selection-start="12915" selection-end="12975" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.grails/2.2.3/projects/botbio/plugins/algoswiki-0.61/src/groovy/it/algos/algoswiki/WikiLib.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="2081" column="33" selection-start="72228" selection-end="72228" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/unit/it/algos/botbio/WrapBioTest.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="82" column="72" selection-start="2363" selection-end="2363" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/application.properties">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="11" selection-start="137" selection-end="137" vertical-scroll-proportion="0.13761468">
+        <state line="4" column="16" selection-start="110" selection-end="110" vertical-scroll-proportion="0.16901408">
           <folding />
         </state>
       </provider>
