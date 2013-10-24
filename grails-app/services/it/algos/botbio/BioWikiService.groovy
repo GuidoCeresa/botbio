@@ -34,7 +34,7 @@ class BioWikiService {
 
     // utilizzo di un service con la businessLogic per l'elaborazione dei dati
     // il service viene iniettato automaticamente
-    def logService
+    def logWikiService
 
     private static long inizio = System.currentTimeMillis()
     private static String tagAvviso = WrapBio.tagAvviso
@@ -174,7 +174,7 @@ class BioWikiService {
         } else {
             num = listaNuoviRecordsDaCreare.size()
             num = Lib.Text.formatNum(num)
-            logService.info "Sono state aggiunte ${num} nuove voci dopo l'ultimo check"
+            logWikiService.info "Sono state aggiunte ${num} nuove voci dopo l'ultimo check"
         }// fine del blocco if-else
 
         // valore di ritorno
@@ -235,7 +235,7 @@ class BioWikiService {
             log.info "Sono state aggiornate ${numVoci} voci dopo l'ultimo check"
             log.info 'Fine del metodo di aggiornamento dei records'
         } else {
-            logService.info "Sono state aggiornate ${numVoci} voci dopo l'ultimo check"
+            logWikiService.info "Sono state aggiornate ${numVoci} voci dopo l'ultimo check"
         }// fine del blocco if-else
 
         return vociAggiornate
@@ -290,7 +290,7 @@ class BioWikiService {
         try { // prova ad eseguire il codice
             query = new QueryCatPageid(login, titoloCategoria)
         } catch (Exception unErrore) { // intercetta l'errore
-            logService.error "Non sono riuscito a caricare la categoria ${titoloCategoria}"
+            logWikiService.error "Non sono riuscito a caricare la categoria ${titoloCategoria}"
             log.error "Non sono riuscito a caricare la categoria ${titoloCategoria}"
             log.error(unErrore)
             continua = false
@@ -300,7 +300,7 @@ class BioWikiService {
             try { // prova ad eseguire il codice
                 lista = query.getListaIds()
             } catch (Exception unErrore) { // intercetta l'errore
-                logService.error "Non sono riuscito ad estrarre le pageids dalla categoria ${titoloCategoria}"
+                logWikiService.error "Non sono riuscito ad estrarre le pageids dalla categoria ${titoloCategoria}"
                 log.error "Non sono riuscito ad estrarre le pageids dalla categoria ${titoloCategoria}"
                 log.error(unErrore)
                 continua = false
@@ -329,7 +329,7 @@ class BioWikiService {
                 log.info "la lista non conteneva la pagina principale"
             }// fine del blocco if-else
             if (rimossa) {
-//                    logService.warn 'cancellato il pageid della Pagina principale'
+//                    logWikiService.warn 'cancellato il pageid della Pagina principale'
                 log.info 'cancellato il pageid della Pagina principale'
             }// fine del blocco if
         }// fine del blocco if
@@ -342,7 +342,7 @@ class BioWikiService {
             durata = durata / 1000
             log.info "La categoria contiene ${num} voci ed è stata caricata in ${durata} secondi"
         } else {
-            logService.warn("La categoria ${titoloCategoria} non contiene nessuna voce")
+            logWikiService.warn("La categoria ${titoloCategoria} non contiene nessuna voce")
             log.warn "La categoria non contiene voci"
         }// fine del blocco if-else
 
@@ -536,8 +536,8 @@ class BioWikiService {
 
         //test di velocità
         // primi diecimila
-        // blocco da 100: minuti 5,23
         // blocco da  50: minuti 4,52
+        // blocco da 100: minuti 5,23
         // primi ventimila
         // blocco da 100: minuti 8,38
         // blocco da 200: minuti 11.38
@@ -718,37 +718,37 @@ class BioWikiService {
                             break
                         case StatoBio.bioIncompleto:
                             wrapBio.registraBioWiki()
-                            logService.warn "Alla voce '''[[${title}]]''' mancano alcuni campi indispensabili per il funzionamento del '''[[Template:Bio|tmpl Bio]]'''"
+                            logWikiService.warn "Alla voce '''[[${title}]]''' mancano alcuni campi indispensabili per il funzionamento del '''[[Template:Bio|tmpl Bio]]'''"
                             registrata = false
                             break
                         case StatoBio.bioErrato:
-                            logService.error "La voce '''[[${title}]]''' presenta il '''[[Template:Bio|tmpl Bio]]''' completamente errato"
+                            logWikiService.error "La voce '''[[${title}]]''' presenta il '''[[Template:Bio|tmpl Bio]]''' completamente errato"
                             registrata = false
                             break
                         case StatoBio.senzaBio:
-                            logService.error "Nella voce '''[[${title}]]''' manca completamente il '''[[Template:Bio|tmpl Bio]]'''"
+                            logWikiService.error "Nella voce '''[[${title}]]''' manca completamente il '''[[Template:Bio|tmpl Bio]]'''"
                             registrata = false
                             break
                         case StatoBio.vuota:
-                            logService.error "La voce '''[[${title}]]''' non ha nessun contenuto di testo"
+                            logWikiService.error "La voce '''[[${title}]]''' non ha nessun contenuto di testo"
                             registrata = false
                             break
                         case StatoBio.redirect:
-                            logService.error "La voce '''[[${title}]]''' non è una voce biografica, ma un '''[[Aiuto:Redirect|redirect]]'''"
+                            logWikiService.error "La voce '''[[${title}]]''' non è una voce biografica, ma un '''[[Aiuto:Redirect|redirect]]'''"
                             registrata = false
                             break
                         case StatoBio.disambigua:
-                            logService.error "La voce '''[[${title}]]''' non è una voce biografica, ma una '''[[Aiuto:Disambigua|disambigua]]'''"
+                            logWikiService.error "La voce '''[[${title}]]''' non è una voce biografica, ma una '''[[Aiuto:Disambigua|disambigua]]'''"
                             registrata = false
                             break
                         case StatoBio.maiEsistita:
                             if (title) {
-                                logService.error "La voce '''[[${title}]]''' non esiste"
+                                logWikiService.error "La voce '''[[${title}]]''' non esiste"
                             } else {
                                 if (pageid) {
-                                    logService.error "Non esiste la voce col pageid = '''${pageid}'''"
+                                    logWikiService.error "Non esiste la voce col pageid = '''${pageid}'''"
                                 } else {
-                                    logService.error "Non esiste una pagina"
+                                    logWikiService.error "Non esiste una pagina"
                                 }// fine del blocco if-else
                             }// fine del blocco if-else
                             registrata = false

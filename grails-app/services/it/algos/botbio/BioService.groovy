@@ -47,7 +47,7 @@ class BioService {
     // utilizzo di un service con la businessLogic
     // il service viene iniettato automaticamente
     def listaService
-    def logService
+    def logWikiService
     def bioWikiService
 
     private static boolean pagineMultiple = true // controllo e caricamente singolo piuttosto che a pacchetto
@@ -110,7 +110,7 @@ class BioService {
         if (debug) {
             log.info 'Fine del metodo di elaborazione dei records'
         } else {
-            logService.info "Sono state elaborate ${numVociTxt} voci dopo l'ultimo check"
+            logWikiService.info "Sono state elaborate ${numVociTxt} voci dopo l'ultimo check"
         }// fine del blocco if-else
 
         return numVoci
@@ -323,7 +323,7 @@ class BioService {
 
         if (pageid) {
             wrapBio = new WrapBio(pageid)
-            if (wrapBio) {
+            if (wrapBio && wrapBio.isValida()) {
                 title = wrapBio.getTitoloVoce()
                 templateVecchio = wrapBio.getTestoTemplateOriginale()
                 mappa = wrapBio.getMappaBio()
@@ -331,7 +331,6 @@ class BioService {
                     mappa.put('Sesso', 'M')
                 }// fine del blocco if
                 wrapBio.riordinaMappa()
-                mappa = wrapBio.getMappaBio()
                 wrapBio.creaTestoFinaleTemplate()
                 templateNuovo = wrapBio.getTestoTemplateFinale()
             }// fine del blocco if

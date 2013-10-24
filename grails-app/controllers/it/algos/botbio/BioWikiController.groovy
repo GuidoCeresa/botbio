@@ -18,7 +18,6 @@ import it.algos.algoslib.Lib
 import it.algos.algoslib.LibTesto
 import it.algos.algospref.Preferenze
 import org.codehaus.groovy.grails.commons.DefaultGrailsDomainClass
-import org.hibernate.FlushMode
 import org.hibernate.SessionFactory
 import org.springframework.dao.DataIntegrityViolationException
 //--gestisce il download delle informazioni
@@ -34,7 +33,7 @@ class BioWikiController {
     def bioWikiService
     def grailsApplication
     def bioService
-    def logService
+    def logWikiService
     SessionFactory sessionFactory
 
     def index() {
@@ -124,7 +123,7 @@ class BioWikiController {
                 valore = (String) params.valore
                 if (valore.equals(DialogoController.DIALOGO_CONFERMA)) {
                     bioWikiService.importaWiki()
-                    flash.message = 'Operazione effettuata. Sono stati importate tutte le voci della categoria: BioBot.'
+                    flash.message = 'Operazione effettuata. Sono stati importate tutte le voci della categoria: BioBot e creati i records BioWiki'
                 }// fine del blocco if
             }// fine del blocco if
         }// fine del blocco if
@@ -138,18 +137,21 @@ class BioWikiController {
         params.tipo = TipoDialogo.conferma
         params.titolo = 'Aggiunta'
         params.avviso = []
-        params.avviso.add('Vengono caricate (aggiunte) tutte le voci dalla categoria BioBot non ancora presenti nel database.')
+        params.avviso.add('Vengono caricate (aggiunte) tutte le voci dalla categoria BioBot non ancora presenti nel database BioWiki.')
+        params.avviso.add('Crea i nuovi records BioWiki')
         params.avviso.add('Occorrono diverse ore.')
         params.avviso.add('Nelle Preferenze può essere impostato un limite di voci da caricare (aggiungere).')
-        params.avviso.add('Non modifica le voci esistenti')
+        params.avviso.add('Non modifica i records esistenti')
+        params.avviso.add('Elabora i records BioWiki effettivamente aggiunti, creando i relativi records BioGrails')
         params.returnController = 'bioWiki'
         params.returnAction = 'aggiungeWikiDopoConferma'
         redirect(controller: 'dialogo', action: 'box', params: params)
     } // fine del metodo
 
-    //--aggiunge nuove voci
-    //--non aggiorna le voci esistenti
     //--carica i parametri del template Bio, leggendoli dalle voci della categoria
+    //--aggiunge nuovi records BioWiki
+    //--non aggiorna i records BioWiki esistenti
+    //--elabora i records BioWiki aggiunti, creando nuovi records BioGrails
     def aggiungeWikiDopoConferma() {
         String valore
         boolean continua = false
@@ -180,9 +182,20 @@ class BioWikiController {
                 flash.message = 'Non ci sono nuove voci nella categoria. Non sono state aggiunte nuove voci'
             } else {
                 numVoci = LibTesto.formatNum(numVoci)
+                flash.message = "Sono state aggiunte ${numVoci} nuove voci BioWiki"
+            }// fine del blocco if-else
+        }// fine del blocco if
+
+        if (continua) {
+            bioService.elabora()
+            if (numVoci == 0) {
+                flash.message = 'Non ci sono nuove voci nella categoria. Non sono state aggiunte nuove voci'
+            } else {
+                numVoci = LibTesto.formatNum(numVoci)
                 flash.message = "Sono state aggiunte ${numVoci} nuove voci"
             }// fine del blocco if-else
         }// fine del blocco if
+
 
         redirect(action: 'list')
     } // fine del metodo
@@ -283,10 +296,10 @@ class BioWikiController {
         }// fine del blocco if
 
         if (continua) {
-            if (sessionFactory) {
-                def hibSession = sessionFactory.getCurrentSession()
-                hibSession.setFlushMode(FlushMode.COMMIT)
-            }// fine del blocco if
+//            if (sessionFactory) {
+//                def hibSession = sessionFactory.getCurrentSession()
+//                hibSession.setFlushMode(FlushMode.COMMIT)
+//            }// fine del blocco if
             numVoci = bioWikiService.aggiungeWiki()
             if (numVoci == 0) {
                 flash.message = 'Non ci sono nuove voci nella categoria. Non sono state aggiunte nuove voci'
@@ -313,7 +326,7 @@ class BioWikiController {
         }// fine del blocco if
 
         if (continua) {
-            LibBio.gestVoci(logService, debug)
+            LibBio.gestVoci(logWikiService, debug)
         }// fine del blocco if
 
         redirect(action: 'list')

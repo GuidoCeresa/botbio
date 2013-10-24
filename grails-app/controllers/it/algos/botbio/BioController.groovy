@@ -28,7 +28,7 @@ class BioController {
     // il service viene iniettato automaticamente
     def logService
     def grailsApplication
-    def bioService
+    BioService bioService
 
     def index() {
         render(view: 'index')
@@ -129,6 +129,7 @@ class BioController {
         }// fine del blocco if
 
         if (continua) {
+            def a= bioService
             numVoci = bioService.uploadSesso()
             if (numVoci == 0) {
                 flash.message = 'Non è stata modificata (corretta) nessuna voce'
@@ -137,11 +138,23 @@ class BioController {
                 avviso = "Sono state modificate (corrette) ${numVoci} voci che avevano il parametro sesso errato o mancante"
                 flash.message = avviso
                 log.info(avviso)
-//                logService.info(avviso)
+//                logWikiService.info(avviso)
             }// fine del blocco if-else
         }// fine del blocco if
 
         redirect(action: 'index')
+    } // fine del metodo
+
+    def show(Long id) {
+        def bioWikiInstance = BioWiki.get(id)
+
+        if (!bioWikiInstance) {
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'bioWiki.label', default: 'BioWiki'), id])
+            redirect(action: 'parsesso')
+            return
+        }// fine del blocco if e fine anticipata del metodo
+
+        [bioWikiInstance: bioWikiInstance]
     } // fine del metodo
 
     def test() {

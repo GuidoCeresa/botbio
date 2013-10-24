@@ -51,7 +51,7 @@ public class WrapBio {
     BioService biografiaService = new BioService()
 
     // nel package generico groovy/java, il service NON viene iniettato automaticamente
-    LogService logService = new LogService()
+    LogWikiService logWikiService = new LogWikiService()
 
     public static String tagAvviso = ' <!--Parametro bio inesistente-->'
 
@@ -481,13 +481,13 @@ public class WrapBio {
             if (mappaReali) {
                 this.setMappaReali(mappaReali)
             } else {
-                logService.warn "La voce [[${titoloVoce}]], hai dei problemi con la mappa parametri reali"
+                logWikiService.warn "La voce [[${titoloVoce}]], hai dei problemi con la mappa parametri reali"
                 log.warn "La voce ${titoloVoce}, hai dei problemi con la mappa parametri reali"
             }// fine del blocco if-else
             if (mappaBio) {
                 this.setMappaBio(mappaBio)
             } else {
-                logService.warn "La voce [[${titoloVoce}]], hai dei problemi con la mappa parametri bio"
+                logWikiService.warn "La voce [[${titoloVoce}]], hai dei problemi con la mappa parametri bio"
                 log.warn "La voce ${titoloVoce}, hai dei problemi con la mappa parametri bio"
             }// fine del blocco if-else
         }// fine del blocco if
@@ -544,11 +544,11 @@ public class WrapBio {
         chiavi = mappaBio.keySet().toArray()
         if (!chiavi.contains('Nome')) {
             incompleta = true
-//            logService.error "Nella voce [[${titoloVoce}]] manca il parametro Nome che è indispensabile per il corretto funzionamento del template"
+//            logWikiService.error "Nella voce [[${titoloVoce}]] manca il parametro Nome che è indispensabile per il corretto funzionamento del template"
         }// fine del blocco if
         if (!chiavi.contains('Sesso')) {
             incompleta = true
-//            logService.error "Nella voce [[${titoloVoce}]] manca il parametro Sesso che è indispensabile per il corretto funzionamento del template"
+//            logWikiService.error "Nella voce [[${titoloVoce}]] manca il parametro Sesso che è indispensabile per il corretto funzionamento del template"
         }// fine del blocco if
 
         if (incompleta) {
@@ -1329,14 +1329,14 @@ public class WrapBio {
             } catch (Exception unErrore) { // intercetta l'errore
                 try { // prova ad eseguire il codice
                     log.error(avviso)
-                    logService.warn(avviso)
+                    logWikiService.warn(avviso)
                 } catch (Exception unErrore2) { // intercetta l'errore
                 }// fine del blocco try-catch
 
             }// fine del blocco try-catch
             if (bioRegistrata == null) {
                 log.error(avviso)
-                logService.warn(avviso)
+                logWikiService.warn(avviso)
             } else {
                 registrata = true
             }// fine del blocco if-else

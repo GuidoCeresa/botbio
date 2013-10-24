@@ -39,10 +39,10 @@ class BioGrailsController {
     //--passa al metodo effettivo
     def create() {
         params.titolo = 'Elaborazione'
-        if (BioGrails.count() > 0) {
+        if (BioWiki.count() > 0) {
             params.tipo = TipoDialogo.conferma
             params.avviso = []
-            params.avviso.add('Elaborazione di tutte le biografie (BioGrails) esistenti.')
+            params.avviso.add('Elaborazione di tutte le biografie (BioWiki) esistenti.')
             params.avviso.add("Azzera il flag 'elaborata' di tutte le voci (BioWiki)")
             params.avviso.add('Ci vogliono parecchie ore')
             params.returnController = 'bioGrails'

@@ -53,7 +53,7 @@ grails.project.dependency.resolution = {
         //--compile - dependency that is needed at both compile-time and runtime. This is the most common case
         //--test - dependency that is only needed by the tests
         //--provided - dependency that is needed at compile-time but should not be packaged with the app (usually because it is provided by the container). An example is the Servlet API
-        runtime 'mysql:mysql-connector-java:5.1.25'
+        runtime 'mysql:mysql-connector-java:5.1.26'
     }// fine della closure dependencies
 
     plugins {
