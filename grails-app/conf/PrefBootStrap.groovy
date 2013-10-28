@@ -26,7 +26,7 @@ class PrefBootStrap {
         //--alcune preferenze sempre presenti
         Preferenze.findOrCreateByCodeAndTypeAndValue((String) grailsApplication.config.debug, Preferenze.TYPE_BOOL, 'false').save(flush: true)
         Preferenze.findOrCreateByCodeAndTypeAndValue((String) grailsApplication.config.annoDebug, Preferenze.TYPE_STR, '1645').save(flush: true)
-        Preferenze.findOrCreateByCodeAndTypeAndValue((String) grailsApplication.config.catDebug, Preferenze.TYPE_STR, 'Scultori ellenistici').save(flush: true)
+        Preferenze.findOrCreateByCodeAndTypeAndValue((String) grailsApplication.config.catDebug, Preferenze.TYPE_STR, 'Pittori britannici').save(flush: true)
         Preferenze.findOrCreateByCodeAndTypeAndValue((String) grailsApplication.config.usaPagineSingole, Preferenze.TYPE_BOOL, 'false').save(flush: true)
         Preferenze.findOrCreateByCodeAndTypeAndValue((String) grailsApplication.config.usaLimiteDownload, Preferenze.TYPE_BOOL, 'true').save(flush: true)
         Preferenze.findOrCreateByCodeAndTypeAndValue((String) grailsApplication.config.maxDownload, Preferenze.TYPE_INT, '10000').save(flush: true)

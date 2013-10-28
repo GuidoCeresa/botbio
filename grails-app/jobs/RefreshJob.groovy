@@ -18,7 +18,7 @@ class RefreshJob {
     public static int DELAY = 1000 * 60
 
     //--codifica della frequenza
-    // execute job once in 30 minutes
+    // execute job once in 15 minutes
     public static int FREQUENZA = 1000 * 60 * 15
 
     // utilizzo di un service con la businessLogic per l'elaborazione dei dati

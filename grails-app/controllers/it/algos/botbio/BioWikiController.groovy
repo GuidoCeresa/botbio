@@ -12,6 +12,7 @@
 /* flagOverwrite = true */
 
 package it.algos.botbio
+
 import it.algos.algos.DialogoController
 import it.algos.algos.TipoDialogo
 import it.algos.algoslib.Lib
@@ -20,6 +21,7 @@ import it.algos.algospref.Preferenze
 import org.codehaus.groovy.grails.commons.DefaultGrailsDomainClass
 import org.hibernate.SessionFactory
 import org.springframework.dao.DataIntegrityViolationException
+
 //--gestisce il download delle informazioni
 class BioWikiController {
 
@@ -153,6 +155,7 @@ class BioWikiController {
     //--non aggiorna i records BioWiki esistenti
     //--elabora i records BioWiki aggiunti, creando nuovi records BioGrails
     def aggiungeWikiDopoConferma() {
+        ArrayList<Integer> listaNuoviRecordsCreati = null
         String valore
         boolean continua = false
         def numVoci
@@ -177,25 +180,25 @@ class BioWikiController {
         }// fine del blocco if
 
         if (continua) {
-            numVoci = bioWikiService.aggiungeWiki()
+            listaNuoviRecordsCreati = bioWikiService.aggiungeWiki()
+            numVoci = listaNuoviRecordsCreati.size()
             if (numVoci == 0) {
-                flash.message = 'Non ci sono nuove voci nella categoria. Non sono state aggiunte nuove voci'
+                flash.message = 'Non ci sono nuove voci nella categoria. Non sono state aggiunti nuovi records BioWiki'
             } else {
                 numVoci = LibTesto.formatNum(numVoci)
-                flash.message = "Sono state aggiunte ${numVoci} nuove voci BioWiki"
+                flash.message = "Sono state aggiunti ${numVoci} nuovi records BioWiki"
             }// fine del blocco if-else
         }// fine del blocco if
 
         if (continua) {
-            bioService.elabora()
+            numVoci = bioService.elabora(listaNuoviRecordsCreati)
             if (numVoci == 0) {
-                flash.message = 'Non ci sono nuove voci nella categoria. Non sono state aggiunte nuove voci'
+                flash.message = 'Non è stata elaborato nessun record BioWiki e non è stato creato nessun record BioGrails'
             } else {
                 numVoci = LibTesto.formatNum(numVoci)
-                flash.message = "Sono state aggiunte ${numVoci} nuove voci"
+                flash.message = "Sono stati elaborati ${numVoci} records di BioWiki e creati ${numVoci} records corrispondenti di BioGrails"
             }// fine del blocco if-else
         }// fine del blocco if
-
 
         redirect(action: 'list')
     } // fine del metodo
@@ -216,8 +219,8 @@ class BioWikiController {
         redirect(controller: 'dialogo', action: 'box', params: params)
     } // fine del metodo
 
-    //--aggiorna le voci esistenti
     //--carica i parametri del template Bio, leggendoli dalle voci della categoria
+    //--aggiorna i records BioWiki esistenti
     def aggiornaWikiDopoConferma() {
         String valore
         boolean continua = false
@@ -270,13 +273,26 @@ class BioWikiController {
         redirect(controller: 'dialogo', action: 'box', params: params)
     } // fine del metodo
 
-    //--ciclo di aggiunta ed aggiornamento
+    //--ciclo di aggiunta ed aggiornamento ed elaborazione
+    //--carica i parametri del template Bio, leggendoli dalle voci della categoria
+    //--aggiunge nuovi records BioWiki
+    //--aggiorna i records BioWiki esistenti
+    //--elabora i records BioWiki aggiunti/aggiornati, creando nuovi records BioGrails e modificando quelli esistenti
     def cicloWikiDopoConferma() {
+        ArrayList<Integer> listaNuoviRecordsCreati = null
+        ArrayList<Integer> listaRecordsModificati = null
+        ArrayList<Integer> listaRecordsElaborati
         String valore
         boolean continua = false
-        def numVoci
+        int aggiunte = 0
+        int modificate = 0
+        int elaborate = 0
+        String numVociTxt = ''
         boolean debug = Preferenze.getBool((String) grailsApplication.config.debug)
         flash.message = 'Operazione annullata. Il ciclo non è partito.'
+        long inizio = System.currentTimeMillis()
+        long fine
+        long durata
 
         if (params.valore) {
             if (params.valore instanceof String) {
@@ -300,33 +316,49 @@ class BioWikiController {
 //                def hibSession = sessionFactory.getCurrentSession()
 //                hibSession.setFlushMode(FlushMode.COMMIT)
 //            }// fine del blocco if
-            numVoci = bioWikiService.aggiungeWiki()
-            if (numVoci == 0) {
-                flash.message = 'Non ci sono nuove voci nella categoria. Non sono state aggiunte nuove voci'
+            listaNuoviRecordsCreati = bioWikiService.aggiungeWiki()
+            if (listaNuoviRecordsCreati) {
+                aggiunte = listaNuoviRecordsCreati.size()
+            }// fine del blocco if
+            if (aggiunte == 0) {
+                flash.message = 'Non ci sono nuove voci nella categoria. Non sono state aggiunti nuovi records BioWiki'
+                continua = false
             } else {
-                numVoci = LibTesto.formatNum(numVoci)
-                flash.message = "Sono state aggiunte ${numVoci} nuove voci"
+                numVociTxt = LibTesto.formatNum(aggiunte)
+                flash.message = "Sono state aggiunti ${numVociTxt} nuovi records BioWiki"
             }// fine del blocco if-else
-
-//            numVoci = bioWikiService.aggiornaWiki()
-//            if (numVoci == 0) {
-//                flash.message = 'Le voci presenti nel database erano già aggiornate. Non è stato modificato nulla'
-//            } else {
-//                numVoci = LibTesto.formatNum(numVoci)
-//                flash.message = "Sono state aggiornate ${numVoci} voci già presenti nel database"
-//            }// fine del blocco if-else
-
-//            numVoci = bioService.elabora()
-//            if (numVoci == 0) {
-//                flash.message = 'Le voci presenti nel database erano già elaborate. Non è stato modificato nulla'
-//            } else {
-//                numVoci = LibTesto.formatNum(numVoci)
-//                flash.message = "Sono state elaborate ${numVoci} voci già presenti nel database"
-//            }// fine del blocco if-else
         }// fine del blocco if
 
         if (continua) {
-            LibBio.gestVoci(logWikiService, debug)
+            listaRecordsModificati = bioWikiService.aggiornaWiki()
+            if (listaRecordsModificati) {
+                modificate = listaRecordsModificati.size()
+            }// fine del blocco if
+            if (modificate == 0) {
+                flash.message = 'Le voci presenti nel database erano già aggiornate. Non è stato modificato nulla'
+            } else {
+                numVociTxt = LibTesto.formatNum(modificate)
+                flash.message = "Sono state aggiornate ${numVociTxt} voci già presenti nel database"
+            }// fine del blocco if-else
+        }// fine del blocco if
+
+        if (continua) {
+            listaRecordsElaborati = bioService.elabora(listaNuoviRecordsCreati + listaRecordsModificati)
+            if (listaRecordsElaborati) {
+                elaborate = listaRecordsElaborati.size()
+            }// fine del blocco if
+            if (elaborate == 0) {
+                flash.message = 'Le voci presenti nel database erano già elaborate. Non è stato modificato nulla'
+            } else {
+                numVociTxt = LibTesto.formatNum(elaborate)
+                flash.message = "Sono stati elaborati ${numVociTxt} records già presenti nel database"
+            }// fine del blocco if-else
+        }// fine del blocco if
+
+        if (continua) {
+            fine = System.currentTimeMillis()
+            durata = fine - inizio
+            LibBio.gestVoci(logWikiService, false, durata, aggiunte, modificate)
         }// fine del blocco if
 
         redirect(action: 'list')
@@ -370,7 +402,6 @@ class BioWikiController {
                 [campo: 'wikiUrl', title: 'Wiki'],
                 [campo: 'modificaWiki', title: 'Modificata'],
                 [campo: 'letturaWiki', title: 'Letta'],
-                'user',
                 'size',
                 [campo: 'sizeBio', title: 'Bio'],
                 'extra',

@@ -1,5 +1,6 @@
 package it.algos.botbio
 
+import it.algos.algoslib.LibTesto
 import it.algos.algoswiki.QueryPag
 import it.algos.algoswiki.WikiLib
 
@@ -57,6 +58,90 @@ class LibBioTest extends GroovyTestCase {
         assert mappaReali['Nome'] == 'Imed'
         assert mappaReali['Attività'] == 'ex calciatore'
         assert mappaReali['Nazionalità'] == 'tunisino'
+    } // fine del test
+
+    void testPercentuale() {
+        String percentuale
+        int vociTotali
+        int vociCat = 245667
+
+        vociTotali = 255
+        percentuale = LibTesto.formatPercentuale(vociTotali, vociCat)
+        println('Voci ' + vociTotali + ' : percentuale ' + percentuale)
+
+        vociTotali = 1255
+        percentuale = LibTesto.formatPercentuale(vociTotali, vociCat)
+        println('Voci ' + vociTotali + ' : percentuale ' + percentuale)
+
+        vociTotali = 1755
+        percentuale = LibTesto.formatPercentuale(vociTotali, vociCat)
+        println('Voci ' + vociTotali + ' : percentuale ' + percentuale)
+
+        vociTotali = 2255
+        percentuale = LibTesto.formatPercentuale(vociTotali, vociCat)
+        println('Voci ' + vociTotali + ' : percentuale ' + percentuale)
+
+        vociTotali = 3255
+        percentuale = LibTesto.formatPercentuale(vociTotali, vociCat)
+        println('Voci ' + vociTotali + ' : percentuale ' + percentuale)
+
+        vociTotali = 4205
+        percentuale = LibTesto.formatPercentuale(vociTotali, vociCat)
+        println('Voci ' + vociTotali + ' : percentuale ' + percentuale)
+
+        vociTotali = 4505
+        percentuale = LibTesto.formatPercentuale(vociTotali, vociCat)
+        println('Voci ' + vociTotali + ' : percentuale ' + percentuale)
+    } // fine del test
+
+    void testLogVoci() {
+        String avviso
+        boolean debug = true
+        int vociTotali
+        int numVoci
+        long durata
+
+        numVoci = 100
+        durata = 395000
+        vociTotali = 255
+        avviso = LibBio.gestVoci(null, debug, numVoci, durata, vociTotali)
+        println(avviso)
+
+        numVoci = 1000
+        durata = 2263000
+        vociTotali = 1255
+        avviso = LibBio.gestVoci(null, debug, numVoci, durata, vociTotali)
+        println(avviso)
+
+        numVoci = 500
+        durata = 576000
+        vociTotali = 1755
+        avviso = LibBio.gestVoci(null, debug, numVoci, durata, vociTotali)
+        println(avviso)
+
+        numVoci = 500
+        durata = 680000
+        vociTotali = 2255
+        avviso = LibBio.gestVoci(null, debug, numVoci, durata, vociTotali)
+        println(avviso)
+
+        numVoci = 500
+        durata = 828000
+        vociTotali = 3255
+        avviso = LibBio.gestVoci(null, debug, numVoci, durata, vociTotali)
+        println(avviso)
+
+        numVoci = 950
+        durata = 902000
+        vociTotali = 4205
+        avviso = LibBio.gestVoci(null, debug, numVoci, durata, vociTotali)
+        println(avviso)
+
+        numVoci = 300
+        durata = 678000
+        vociTotali = 4505
+        avviso = LibBio.gestVoci(null, debug, numVoci, durata, vociTotali)
+        println(avviso)
     } // fine del test
 
 } // fine della classe di test

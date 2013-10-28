@@ -12,12 +12,11 @@
 /* flagOverwrite = true */
 
 package it.algos.botbio
-
+import it.algos.algos.DialogoController
 import it.algos.algos.TipoDialogo
 import it.algos.algoslib.Lib
 import org.codehaus.groovy.grails.commons.DefaultGrailsDomainClass
 import org.springframework.dao.DataIntegrityViolationException
-
 //--gestisce l'upload delle informazioni
 class BioGrailsController {
 
@@ -35,9 +34,58 @@ class BioGrailsController {
     } // fine del metodo
 
     //--elabora (usa il nome-metodo create, perchè è il primo ed unico della lista standard)
+    //--elaborazione dei dati da BioWiki a BioGrails
+    //--elabora la lista dei records BioWiki col flag 'elaborata'=false
     //--mostra un dialogo di conferma per l'operazione da compiere
     //--passa al metodo effettivo
     def create() {
+        params.titolo = 'Elaborazione'
+        def lista = BioWiki.executeQuery('select id from BioWiki where elaborata=false')
+
+        if (lista && lista.size() > 0) {
+            params.tipo = TipoDialogo.conferma
+            params.avviso = []
+            params.avviso.add('Elaborazione delle biografie (BioWiki) non ancora elaborate.')
+            params.avviso.add("Azzera il flag 'elaborata' dei records (BioWiki) trattati")
+            params.returnController = 'bioGrails'
+            params.returnAction = 'elaboraDopoConferma'
+            redirect(controller: 'dialogo', action: 'box', params: params)
+        } else {
+            params.tipo = TipoDialogo.avviso
+            params.avviso = 'Sorry, non ci sono voci biografiche (BioWiki) da elaborare !'
+            params.returnController = 'bioGrails'
+            redirect(controller: 'dialogo', action: 'box', params: params)
+        }// fine del blocco if-else
+    } // fine del metodo
+
+    //--elaborazione dei dati da BioWiki a BioGrails
+    //--elabora la lista dei records BioWiki col flag 'elaborata'=false
+    def elaboraDopoConferma() {
+        String valore
+        boolean continua = false
+        flash.message = 'Operazione annullata. Le voci biografiche non sono state elaborate.'
+
+        if (params.valore) {
+            if (params.valore instanceof String) {
+                valore = (String) params.valore
+                if (valore.equals(DialogoController.DIALOGO_CONFERMA)) {
+                    continua = true
+                }// fine del blocco if
+            }// fine del blocco if
+        }// fine del blocco if
+
+        if (continua) {
+            bioService.elabora()
+        }// fine del blocco if
+
+        redirect(action: 'list')
+    } // fine del metodo
+
+    //--elaborazione dei dati da BioWiki a BioGrails
+    //--elabora tutti i records esistenti di BioWiki
+    //--mostra un dialogo di conferma per l'operazione da compiere
+    //--passa al metodo effettivo
+    def elaboraAll() {
         params.titolo = 'Elaborazione'
         if (BioWiki.count() > 0) {
             params.tipo = TipoDialogo.conferma
@@ -46,7 +94,7 @@ class BioGrailsController {
             params.avviso.add("Azzera il flag 'elaborata' di tutte le voci (BioWiki)")
             params.avviso.add('Ci vogliono parecchie ore')
             params.returnController = 'bioGrails'
-            params.returnAction = 'elaboraDopoConferma'
+            params.returnAction = 'elaboraAllDopoConferma'
             redirect(controller: 'dialogo', action: 'box', params: params)
         } else {
             params.tipo = TipoDialogo.avviso
@@ -56,10 +104,26 @@ class BioGrailsController {
         }// fine del blocco if-else
     } // fine del metodo
 
-    //--elabora (usa il nome-metodo create, perchè è il primo ed unico della lista standard)
     //--elaborazione dei dati da BioWiki a BioGrails
-    def elaboraDopoConferma() {
-        bioService.elaboraAll()
+    //--elabora tutti i records esistenti di BioWiki
+    def elaboraAllDopoConferma() {
+        String valore
+        boolean continua = false
+        flash.message = 'Operazione annullata. Le voci biografiche non sono state elaborate.'
+
+        if (params.valore) {
+            if (params.valore instanceof String) {
+                valore = (String) params.valore
+                if (valore.equals(DialogoController.DIALOGO_CONFERMA)) {
+                    continua = true
+                }// fine del blocco if
+            }// fine del blocco if
+        }// fine del blocco if
+
+        if (continua) {
+            bioService.elaboraAll()
+        }// fine del blocco if
+
         redirect(action: 'list')
     } // fine del metodo
 
@@ -76,6 +140,7 @@ class BioGrailsController {
         //--solo azione e di default controller=questo; classe e titolo vengono uguali
         //--mappa con [cont:'controller', action:'metodo', icon:'iconaImmagine', title:'titoloVisibile']
         menuExtra = [
+                [cont: 'bioGrails', action: 'elaboraAll', icon: 'database', title: 'Elabora tutti'],
                 [cont: 'bioWiki', action: 'list', icon: 'scambia', title: 'BioWiki']
         ]
         // fine della definizione

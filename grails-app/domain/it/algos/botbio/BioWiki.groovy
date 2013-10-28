@@ -27,11 +27,11 @@ class BioWiki  {
     int pageid
     String title
     int ns
-    Date touched
+    Date touched    //ultima visita effettuata da chicchessia sul server wiki - attualmente (27-10-13) non utilizzato
     int revid
     int size
     String user
-    Timestamp timestamp
+    Timestamp timestamp //ultima modifica effettuata da chicchessia sul server wiki
     String comment
     String logNote
     String logErr
@@ -86,15 +86,20 @@ class BioWiki  {
     String testoTemplate
     int sizeBio
 
+    //--tempo di DOWNLOAD
     //--uso il formato Timestamp, per confrontarla col campo timestamp
     //--molto meglio che siano esattamente dello stesso tipo
+    //--ultima lettura della voce effettuata dal programma Botbio
+    //--momento in cui il record BioWiki è stato modificato in allineamento alla voce sul server wiki
     Timestamp ultimaLettura
 
+    //--tempo di UPLOAD
     //--uso il formato Timestamp, per confrontarla col campo timestamp
     //--molto meglio che siano esattamente dello stesso tipo
+    //--momento in cui la voce sul server wiki è stata modificata con il WrapBio costruito dal programma
     Timestamp ultimaScrittura
 
-    //--ridondante, costruito con il timestamp esatto della pagina
+    //--ridondante, costruito con il timestamp esatto della pagina sul server wiki
     //--serve per visualizzare la data in forma ''breve'' più leggibile,
     //--mentre rimane il valore esatto del campo originario timestamp
     Date modificaWiki
@@ -139,7 +144,7 @@ class BioWiki  {
         wikiUrl(nullable: true)
         testoTemplate(nullable: true)
 
-        pageid(unique: true,nullable: false, blank: false)
+        pageid(unique: true)
         title(unique: true, nullable: false, blank: false)
         ns()
         touched(nullable: true, formatoData: new SimpleDateFormat('d MMM yy'))

@@ -707,6 +707,7 @@ public class WrapBio {
 
             try { // prova ad eseguire il codice
                 bioWiki = BioWiki.findOrCreateByPageid(pageid)
+//                bioWiki = new BioWiki(pageid: pageid)
             } catch (Exception unErrore) { // intercetta l'errore
                 try { // prova ad eseguire il codice
                     log.error 'creaBioWikiOriginale - Non funziona il findByPageid di ' + pageid
@@ -787,15 +788,11 @@ public class WrapBio {
             bioWiki.note = this.isNote()
             bioWiki.nascosto = this.isNascosto()
             bioWiki.testoTemplate = this.getTestoTemplateOriginale()
-            bioWiki.ultimaLettura = new Timestamp(System.currentTimeMillis())
             bioWiki.sizeBio = this.getTestoTemplateOriginale().length()
             bioWiki.wikiUrl = 'https://it.wikipedia.org/wiki/' + bioWiki.title
-
-            Date data = new Date(System.currentTimeMillis())
-            Timestamp tempo = data.toTimestamp()
-            data = LibTime.creaData(tempo)
             bioWiki.modificaWiki = LibTime.creaData(bioWiki.timestamp)
-            bioWiki.letturaWiki = data
+            bioWiki.ultimaLettura = new Timestamp(System.currentTimeMillis())
+            bioWiki.letturaWiki = LibTime.creaData(bioWiki.ultimaLettura)
             bioWiki.elaborata = false
         }// fine del blocco if
 

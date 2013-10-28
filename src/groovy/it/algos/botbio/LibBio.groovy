@@ -361,6 +361,68 @@ class LibBio {
     }// fine del metodo
 
     /**
+     * Registra le voci gestite
+     *
+     * @param debug log di controllo
+     */
+    public static String gestVoci(def logService, boolean debug, long durata, int aggiunte, int modificate) {
+        return gestVoci(logService, debug, durata, aggiunte, modificate, BioWiki.count())
+    }// fine del metodo
+
+    /**
+     * Registra le voci gestite
+     *
+     * @param debug log di controllo
+     */
+    public static String gestVoci(def logService, boolean debug, long durata, int aggiunte, int modificate, int vociTotali) {
+        String avviso = ''
+        int vociCat
+        String aggiunteTxt
+        String modificateTxt
+        String numVociTotaliTxt
+        String percentuale
+        QueryInfoCat query
+        String durataTxt
+        long tempo
+        String tempoTxt
+        int durataInt
+        int tempoInt
+
+        query = new QueryInfoCat('BioBot')
+        vociCat = query.getSize()
+        percentuale = LibTesto.formatPercentuale(vociTotali, vociCat)
+        aggiunteTxt = LibTesto.formatNum(aggiunte)
+        modificateTxt = LibTesto.formatNum(modificate)
+        numVociTotaliTxt = LibTesto.formatNum(vociTotali)
+        tempo = durata / aggiunte
+        durata = durata / 1000
+        durataInt = durata.intValue()
+        durataTxt = LibTesto.formatNum(durataInt)
+        tempo = tempo / 100
+        tempoInt = tempo.intValue()
+        tempoTxt = LibTesto.formatNum(tempoInt)
+        tempoTxt = tempoTxt.substring(0, tempoTxt.length() - 1) + ',' + tempoTxt.substring(tempoTxt.length() - 1)
+        if (tempoTxt.startsWith(',')) {
+            tempoTxt = '0' + tempoTxt
+        }// fine del blocco if
+        avviso += "Ciclo di ${durataTxt} sec (${tempoTxt} sec/voce). "
+        avviso += "Aggiunte: ${aggiunteTxt}. Modificate: ${modificateTxt}. "
+        avviso += "[[Utente:Biobot|<span style=\"color:green\">'''Biobot'''</span>]]"
+        avviso += " gestisce ${numVociTotaliTxt} voci pari al '''${percentuale}'''"
+        avviso += " della categoria [[:Categoria:BioBot|'''BioBot''']]"
+
+        if (debug) {
+            log.info(avviso)
+        } else {
+            if (logService) {
+                logService.info(avviso)
+            }// fine del blocco if
+        }// fine del blocco if-else
+
+        return avviso
+    }// fine del metodo
+
+    /**
      * Riordina la mappa di parametri Bio
      * Li ordina secondo la Enumeration
      * Aggiunge quelli ''semplici'', anche se vuoti
@@ -388,5 +450,24 @@ class LibBio {
 
         return mappaOut
     }// fine del metodo
+
+    public static String getListaRec(ArrayList<Integer> listaRecordsModificati) {
+        String stringa = ''
+        String tagIni = '('
+        String tagEnd = ')'
+        String tagSep = ','
+
+        if (listaRecordsModificati) {
+            stringa += tagIni
+            listaRecordsModificati.each {
+                stringa += it
+                stringa += tagSep
+            } // fine del ciclo each
+            stringa = LibTesto.levaCoda(stringa, tagSep)
+            stringa += tagEnd
+        }// fine del blocco if
+
+        return stringa
+    } // fine del metodo
 
 } // fine della classe

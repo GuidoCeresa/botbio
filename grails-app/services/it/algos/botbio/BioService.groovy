@@ -52,73 +52,117 @@ class BioService {
 
     private static boolean pagineMultiple = true // controllo e caricamente singolo piuttosto che a pacchetto
 
-    //--Cancella il flag 'elaborata' per tutti i recordas di BioWiki
     //--Elaborazione dei dati da BioWiki a BioGrails
-    //--Recupera la lista dei records esistenti nel database Bio
-    //--Spazola la lista e crea un record di BioGrails per ogni record di Bio
-    //--Copiando SOLO i campi validi di Bio
+    //--Recupera la lista di tutti i records esistenti BioWiki
+    //--Spazzola la lista e crea un record di BioGrails per ogni record di BioWiki
+    //--Copiando SOLO i campi validi di BioWiki
+    //--Regola il flag 'elaborata'=true per tutti i recordas elaborati
     //--Elabora i link alle tavole collegate
     //--Crea le didascalie
-    public void elaboraAll() {
-        // variabili e costanti locali di lavoro
-        ArrayList<Integer> listaid
-        BioWiki bio
-        int cont = 0
-
+    public int elaboraAll() {
         //--Azzera il flag
         BioWiki.executeUpdate('update BioWiki set elaborata=false')
+//        log.info 'Fine del metodo di elaborazione di tutti i records'
 
-        //--Recupera la lista dei records esistenti nel database
-        log.info 'Recupera tutti i records di BioWiki (1 minuto circa)'
-
-        listaid = (ArrayList<Integer>) BioWiki.executeQuery('select pageid from BioWiki')
-
-        elaboraGrails(listaid)
-        elaboraLink(listaid)
-        elaboraDidascalie(listaid)
-
-        log.info 'Fine del metodo di elaborazione di tutti i records'
+        return elabora()
     } // fine del metodo
 
     //--Elaborazione dei dati da BioWiki a BioGrails
-    //--Recupera la lista dei records esistenti nel database Bio
-    //--Spazola la lista e crea un record di BioGrails per ogni record di Bio
-    //--Copiando SOLO i campi validi di Bio
+    //--Recupera la lista dei records BioWiki col flag 'elaborata'=false
+    //--Spazzola la lista e crea un record di BioGrails per ogni record di BioWiki
+    //--Copiando SOLO i campi validi di BioWiki
+    //--Regola il flag 'elaborata'=true per tutti i recordas elaborati
     //--Elabora i link alle tavole collegate
     //--Crea le didascalie
-    public int elabora() {
+    public ArrayList<Integer> elabora() {
         // variabili e costanti locali di lavoro
-        boolean debug = Preferenze.getBool((String) grailsApplication.config.debug)
-        int numVoci
-        String numVociTxt
+        ArrayList<Integer> listaRecordsElaborati = null
         ArrayList<Integer> listaid
-
-        //--Recupera la lista dei records esistenti nel database
-        log.info 'Recupera tutti i records di BioWiki (1 minuto circa)'
+        int maxDownload
 
         listaid = (ArrayList<Integer>) BioWiki.executeQuery('select pageid from BioWiki where elaborata=false')
 
-        numVoci = elaboraGrails(listaid)
-        log.info 'Fine del metodo elaboraGrails'
-        elaboraLink(listaid)
-        log.info 'Fine del metodo elaboraLink'
-        elaboraDidascalie(listaid)
-        log.info 'Fine del metodo elaboraDidascalie'
+        if (LibPref.getBool('usaLimiteDownload')) {
+            maxDownload = LibPref.getInt('maxDownload')
+            listaid = LibArray.estraArray(listaid, maxDownload)
+        }// fine del blocco if
 
-        // valore di ritorno
-        numVociTxt = LibTesto.formatNum(numVoci)
-        if (debug) {
-            log.info 'Fine del metodo di elaborazione dei records'
-        } else {
-            logWikiService.info "Sono state elaborate ${numVociTxt} voci dopo l'ultimo check"
-        }// fine del blocco if-else
+        if (listaid) {
+            listaRecordsElaborati = elabora(listaid)
+        }// fine del blocco if
 
-        return numVoci
+        return listaRecordsElaborati
     } // fine del metodo
 
     //--Elaborazione dei dati da BioWiki a BioGrails
-    //--Recupera la lista dei records esistenti nel database Bio
-    //--Spazola la lista e crea un record di BioGrails per ogni record di Bio
+    //--Spazzola la lista e crea un record di BioGrails per ogni record di BioWiki
+    //--Copiando SOLO i campi validi di BioWiki
+    //--Regola il flag 'elaborata'=true per tutti i recordas elaborati
+    //--Elabora i link alle tavole collegate
+    //--Crea le didascalie
+    public ArrayList<Integer> elabora(ArrayList<Integer> listaRecordsDaElaborare) {
+        // variabili e costanti locali di lavoro
+        ArrayList<Integer> listaRecordsElaborati = listaRecordsDaElaborare
+        boolean debug = Preferenze.getBool((String) grailsApplication.config.debug)
+        int numVoci
+        String numVociTxt = 0
+        long inizioInizio = System.currentTimeMillis()
+        long inizio
+        long fine
+        long durata
+        long tempo
+        String tempoTxt
+
+        if (listaRecordsDaElaborare) {
+            numVoci = listaRecordsDaElaborare.size()
+            numVociTxt = LibTesto.formatNum(numVoci)
+        } else {
+            return 0
+        }// fine del blocco if-else
+
+        inizio = System.currentTimeMillis()
+        elaboraGrails(listaRecordsDaElaborare)
+        fine = System.currentTimeMillis()
+        durata = fine - inizio
+        tempo = durata / numVoci
+        tempoTxt = LibTesto.formatNum(tempo)
+        log.info "Eseguito il metodo elaboraGrails su ${numVociTxt} records in ${tempoTxt} millisecondi/ciascuno"
+
+        inizio = System.currentTimeMillis()
+        elaboraLink(listaRecordsDaElaborare)
+        fine = System.currentTimeMillis()
+        durata = fine - inizio
+        tempo = durata / numVoci
+        tempoTxt = LibTesto.formatNum(tempo)
+        log.info "Eseguito il metodo elaboraLink su ${numVociTxt} records in ${tempoTxt} millisecondi/ciascuno"
+
+        inizio = System.currentTimeMillis()
+        elaboraDidascalie(listaRecordsDaElaborare)
+        elaboraLink(listaRecordsDaElaborare)
+        fine = System.currentTimeMillis()
+        durata = fine - inizio
+        tempo = durata / numVoci
+        tempoTxt = LibTesto.formatNum(tempo)
+        log.info "Eseguito il metodo elaboraDidascalie su ${numVociTxt} records in ${tempoTxt} millisecondi/ciascuno"
+
+        // valore di ritorno
+        numVociTxt = LibTesto.formatNum(numVoci)
+        fine = System.currentTimeMillis()
+        durata = fine - inizioInizio
+        tempo = durata / numVoci
+        if (debug) {
+            log.info 'Fine del metodo di elaborazione dei records'
+        } else {
+            log.info "Sono state elaborate ${numVociTxt} voci in ${tempo} millisecondi/ciascuna"
+//            logWikiService.info "Sono state elaborate ${numVociTxt} voci dopo l'ultimo check"
+        }// fine del blocco if-else
+
+        return listaRecordsElaborati
+    } // fine del metodo
+
+    //--Elaborazione dei dati da BioWiki a BioGrails
+    //--Spazzola la lista e crea un record di BioGrails per ogni record di Bio
+    //--Cancella il flag 'elaborata' per tutti i recordas elaborati
     //--Copiando SOLO i campi validi di Bio
     public int elaboraGrails(ArrayList<Integer> listaid) {
         // variabili e costanti locali di lavoro
@@ -239,8 +283,12 @@ class BioService {
         listaid?.each {
             cont++
             pageid = (int) it
-            bioWiki = BioWiki.findByPageid(pageid)
-            bioGrails = BioGrails.findByPageid(pageid)
+
+            if (pageid) {
+                bioWiki = BioWiki.findByPageid(pageid)
+                bioGrails = BioGrails.findByPageid(pageid)
+            }// fine del blocco if
+
             if (bioWiki && bioGrails) {
                 bioGrails = elaboraDidascalie(bioWiki, bioGrails)
                 bioGrailsRegistrata = bioGrails.save(flush: true)
@@ -347,52 +395,23 @@ class BioService {
     } // fine del metodo
 
     private static String fixTitolo(String testoIn) {
-        String testoOut = testoIn
-
-        if (testoIn) {
-        }// fine del blocco if
-
-        return testoOut
+        return fixCampo(testoIn)
     } // fine del metodo
 
     private static String fixNome(String testoIn) {
-        String testoOut = testoIn
-
-        if (testoIn) {
-            testoOut = WikiLib.levaRef(testoIn)
-        }// fine del blocco if
-
-        return testoOut
+        return fixCampo(testoIn)
     } // fine del metodo
 
     private static String fixCognome(String testoIn) {
-        String testoOut = testoIn
-
-        if (testoIn) {
-            testoOut = WikiLib.levaRef(testoIn)
-        }// fine del blocco if
-
-        return testoOut
+        return fixCampo(testoIn)
     } // fine del metodo
 
     private static String fixOrdinamento(String testoIn) {
-        String testoOut = testoIn
-
-        if (testoIn) {
-            testoOut = WikiLib.levaRef(testoIn)
-        }// fine del blocco if
-
-        return testoOut
+        return fixCampo(testoIn)
     } // fine del metodo
 
     private static String fixSesso(String testoIn) {
-        String testoOut = testoIn
-
-        if (testoIn) {
-            testoOut = WikiLib.levaRef(testoIn)
-        }// fine del blocco if
-
-        return testoOut
+        return fixCampo(testoIn)
     } // fine del metodo
 
     private static String fixLuogoNato(String luogoNascita, String luogoNascitaLink) {
@@ -426,55 +445,19 @@ class BioService {
     } // fine del metodo
 
     private static String fixAttivita(String testoIn) {
-        String testoOut = testoIn
-
-        if (testoIn) {
-            testoOut = testoIn.trim()
-        }// fine del blocco if
-
-        if (testoOut) {
-            testoOut = WikiLib.levaRef(testoOut)
-        }// fine del blocco if
-        return testoOut
+        return fixCampo(testoIn)
     } // fine del metodo
 
     private static String fixAttivita2(String testoIn) {
-        String testoOut = testoIn
-
-        if (testoIn) {
-            testoOut = testoIn.trim()
-        }// fine del blocco if
-
-        if (testoOut) {
-            testoOut = WikiLib.levaRef(testoOut)
-        }// fine del blocco if
-        return testoOut
+        return fixCampo(testoIn)
     } // fine del metodo
 
     private static String fixAttivita3(String testoIn) {
-        String testoOut = testoIn
-
-        if (testoIn) {
-            testoOut = testoIn.trim()
-        }// fine del blocco if
-
-        if (testoOut) {
-            testoOut = WikiLib.levaRef(testoOut)
-        }// fine del blocco if
-        return testoOut
+        return fixCampo(testoIn)
     } // fine del metodo
 
     private static String fixNazionalita(String testoIn) {
-        String testoOut = testoIn
-
-        if (testoIn) {
-            testoOut = testoIn.trim()
-        }// fine del blocco if
-
-        if (testoOut) {
-            testoOut = WikiLib.levaRef(testoOut)
-        }// fine del blocco if
-        return testoOut
+        return fixCampo(testoIn)
     } // fine del metodo
 
     private static Giorno getGiornoNato(BioWiki bioWiki) {
@@ -485,13 +468,14 @@ class BioService {
         if (bioWiki) {
             giornoWiki = bioWiki.giornoMeseNascita
             if (giornoWiki) {
+                giornoWiki = fixCampo(giornoWiki)
                 try { // prova ad eseguire il codice
                     giorno = Giorno.findByNome(giornoWiki)
                     if (!giorno) {
                         giorno = Giorno.findByTitolo(giornoWiki)
-                        if (giorno) {
-                            log.warn "BioService-getGiornoNato: Voce ${title}, beccato ${giornoWiki} !"
-                        }// fine del blocco if
+//                        if (giorno) {
+//                            log.warn "BioService-getGiornoNato: Voce ${title}, beccato ${giornoWiki} !"
+//                        }// fine del blocco if
                     }// fine del blocco if
                 } catch (Exception unErrore) { // intercetta l'errore
                     log.error unErrore
@@ -509,14 +493,28 @@ class BioService {
     private static Giorno getGiornoMorto(BioWiki bioWiki) {
         Giorno giorno = null
         String giornoWiki
+        String title = ''
 
         if (bioWiki) {
             giornoWiki = bioWiki.giornoMeseMorte
-            try { // prova ad eseguire il codice
-                giorno = Giorno.findByNome(giornoWiki)
-            } catch (Exception unErrore) { // intercetta l'errore
-                log.error unErrore
-            }// fine del blocco try-catch
+            if (giornoWiki) {
+                giornoWiki = fixCampo(giornoWiki)
+                try { // prova ad eseguire il codice
+                    giorno = Giorno.findByNome(giornoWiki)
+                    if (!giorno) {
+                        giorno = Giorno.findByTitolo(giornoWiki)
+//                        if (giorno) {
+//                            log.warn "BioService-getGiornoMorto: Voce ${title}, beccato ${giornoWiki} !"
+//                        }// fine del blocco if
+                    }// fine del blocco if
+                } catch (Exception unErrore) { // intercetta l'errore
+                    log.error unErrore
+                }// fine del blocco try-catch
+                if (!giorno) {
+                    title = bioWiki.title
+                    log.warn "BioService-getGiornoMorto: Voce ${title}, ${giornoWiki} non sembra un giorno valido"
+                }// fine del blocco if
+            }// fine del blocco if
         }// fine del blocco if
 
         return giorno
@@ -528,6 +526,7 @@ class BioService {
 
         if (bioWiki) {
             annoWiki = bioWiki.annoNascita
+            annoWiki = fixCampo(annoWiki)
             try { // prova ad eseguire il codice
                 anno = Anno.findByTitolo(annoWiki)
             } catch (Exception unErrore) { // intercetta l'errore
@@ -544,6 +543,7 @@ class BioService {
 
         if (bioWiki) {
             annoWiki = bioWiki.annoMorte
+            annoWiki = fixCampo(annoWiki)
             try { // prova ad eseguire il codice
                 anno = Anno.findByTitolo(annoWiki)
             } catch (Exception unErrore) { // intercetta l'errore
@@ -552,6 +552,20 @@ class BioService {
         }// fine del blocco if
 
         return anno
+    } // fine del metodo
+
+    private static String fixCampo(String testoIn) {
+        String testoOut = testoIn
+
+        if (testoOut) {
+            testoOut = testoOut.trim()
+            testoOut = LibTesto.levaDopoRef(testoOut)
+            testoOut = LibTesto.levaDopoNote(testoOut)
+            testoOut = LibTesto.levaDopoGraffe(testoOut)
+            testoOut = testoOut.trim()
+        }// fine del blocco if
+
+        return testoOut
     } // fine del metodo
 
     private static String creaDidascaliaBase(BioGrails bio) {

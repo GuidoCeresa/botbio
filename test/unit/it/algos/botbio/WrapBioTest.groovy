@@ -12,10 +12,10 @@ import org.junit.Test
  * Date: 29-8-13
  * Time: 07:55
  */
-@TestFor(LogService)
+@TestFor(LogWikiService)
 class WrapBioTest extends GrailsUnitTestCase {
 
-    LogService logService = new LogService()
+    LogWikiService logWikiService = new LogWikiService()
     private Login loginDelTest
     private static boolean SCRIVE_SU_UTENTE_BIOBOT_LOG = false //attenzione a rimetterlo che scrive sulla pagina di log
 
@@ -408,7 +408,7 @@ class WrapBioTest extends GrailsUnitTestCase {
         Login login = loginDelTest
 
         if (SCRIVE_SU_UTENTE_BIOBOT_LOG && login) {
-            logService.scriveLogin(login, testo, logTipo)
+            logWikiService.scriveLogin(login, testo, logTipo)
         } else {
             println(testo)
         }// fine del blocco if-else

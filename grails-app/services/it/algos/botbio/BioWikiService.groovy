@@ -19,7 +19,10 @@ import it.algos.algoslib.LibArray
 import it.algos.algoslib.LibTesto
 import it.algos.algospref.LibPref
 import it.algos.algospref.Preferenze
-import it.algos.algoswiki.*
+import it.algos.algoswiki.Login
+import it.algos.algoswiki.QueryCatPageid
+import it.algos.algoswiki.QueryTimestamp
+import it.algos.algoswiki.WrapTime
 
 import java.sql.Timestamp
 
@@ -65,19 +68,22 @@ class BioWikiService {
      * Recupera la lista completa delle voci esistenti dalla categoria Biografie
      * Recupera la lista dei records esistenti nel database
      * Crea la lista delle voci nuove che non hanno ancora records (da creare)
+     * Abbatte la lista se c'è un limite di download
      * Aggiunge i nuovi records:
      *      modificando o meno la voce sul server wiki a seconda del flag modificaPagine
      * Cancella i records eccedenti
      *
-     * @return lista completa delle voci esistenti dalla categoria BioBot
+     * @return listaNuoviRecordsCreati: lista completa delle voci esistenti effettivamente create (pageid)
      */
-    public int aggiungeWiki() {
+    public ArrayList<Integer> aggiungeWiki() {
         // variabili e costanti locali di lavoro
+        ArrayList<Integer> listaNuoviRecordsCreati = null
         int vociCreate = 0
         int maxDownload
         ArrayList<Integer> listaVociServerWiki = null
         boolean continua = true
         ArrayList<Integer> listaRecordsDatabase = null
+        ArrayList<Integer> listaRecordsMancanti = null
         ArrayList<Integer> listaNuoviRecordsDaCreare = null
         ArrayList<Integer> listaRecordsForseDaCancellare = null
         ArrayList<Integer> listaRecordsDaCancellare = null
@@ -91,26 +97,27 @@ class BioWikiService {
         //--Recupera dal server la lista completa delle voci esistenti dalla categoria BioBot
         if (continua) {
             if (debug) {
-                listaVociServerWiki = new ArrayList<Integer>()
-
-                listaVociServerWiki.add(QueryVoce.leggePageid('Utente:Biobot/2'))
-                listaVociServerWiki.add(QueryVoce.leggePageid('Utente:Biobot/3'))
-                listaVociServerWiki.add(QueryVoce.leggePageid('Utente:Biobot/4'))
-                listaVociServerWiki.add(QueryVoce.leggePageid('Utente:Biobot/5'))
-                listaVociServerWiki.add(QueryVoce.leggePageid('Utente:Biobot/6'))
-                listaVociServerWiki.add(QueryVoce.leggePageid('Utente:Biobot/7'))
-                listaVociServerWiki.add(QueryVoce.leggePageid('Artesa'))
-                listaVociServerWiki.add(QueryVoce.leggePageid('Coripe'))
-
-                listaVociServerWiki.add(QueryVoce.leggePageid('Acrotato (figlio di Cleomene II)'))
-                listaVociServerWiki.add(QueryVoce.leggePageid('Luigi Belli'))
-                listaVociServerWiki.add(QueryVoce.leggePageid('Hassan Rouhani'))
-                listaVociServerWiki.add(QueryVoce.leggePageid('Gregorius Bar-Hebraeus'))
-                listaVociServerWiki.add(QueryVoce.leggePageid('Ibn al-Awwam'))
-                listaVociServerWiki.add(QueryVoce.leggePageid('Manaf Abushgeer'))
-                listaVociServerWiki.add(QueryVoce.leggePageid('Alon Abutbul'))
-                listaVociServerWiki.add(QueryVoce.leggePageid('Sayf al-Dawla'))
-                listaVociServerWiki.add(QueryVoce.leggePageid('Falco Accame'))
+//                listaVociServerWiki = new ArrayList<Integer>()
+//
+//                listaVociServerWiki.add(QueryVoce.leggePageid('Utente:Biobot/2'))
+//                listaVociServerWiki.add(QueryVoce.leggePageid('Utente:Biobot/3'))
+//                listaVociServerWiki.add(QueryVoce.leggePageid('Utente:Biobot/4'))
+//                listaVociServerWiki.add(QueryVoce.leggePageid('Utente:Biobot/5'))
+//                listaVociServerWiki.add(QueryVoce.leggePageid('Utente:Biobot/6'))
+//                listaVociServerWiki.add(QueryVoce.leggePageid('Utente:Biobot/7'))
+//                listaVociServerWiki.add(QueryVoce.leggePageid('Artesa'))
+//                listaVociServerWiki.add(QueryVoce.leggePageid('Coripe'))
+//
+//                listaVociServerWiki.add(QueryVoce.leggePageid('Acrotato (figlio di Cleomene II)'))
+//                listaVociServerWiki.add(QueryVoce.leggePageid('Luigi Belli'))
+//                listaVociServerWiki.add(QueryVoce.leggePageid('Hassan Rouhani'))
+//                listaVociServerWiki.add(QueryVoce.leggePageid('Gregorius Bar-Hebraeus'))
+//                listaVociServerWiki.add(QueryVoce.leggePageid('Ibn al-Awwam'))
+//                listaVociServerWiki.add(QueryVoce.leggePageid('Manaf Abushgeer'))
+//                listaVociServerWiki.add(QueryVoce.leggePageid('Alon Abutbul'))
+//                listaVociServerWiki.add(QueryVoce.leggePageid('Sayf al-Dawla'))
+//                listaVociServerWiki.add(QueryVoce.leggePageid('Falco Accame'))
+                listaVociServerWiki = this.getListaVociServerWiki()
             } else {
                 listaVociServerWiki = this.getListaVociServerWiki()
             }// fine del blocco if-else
@@ -126,7 +133,7 @@ class BioWikiService {
 
         //--Recupera la lista delle voci nuove che non hanno ancora records (da creare)
         if (continua) {
-            listaNuoviRecordsDaCreare = deltaListe(listaVociServerWiki, listaRecordsDatabase)
+            listaRecordsMancanti = deltaListe(listaVociServerWiki, listaRecordsDatabase)
             tempo()
         }// fine del blocco if-else
 
@@ -134,8 +141,10 @@ class BioWikiService {
         if (continua) {
             if (LibPref.getBool('usaLimiteDownload')) {
                 maxDownload = LibPref.getInt('maxDownload')
-                listaNuoviRecordsDaCreare = LibArray.estraArray(listaNuoviRecordsDaCreare, maxDownload)
-            }// fine del blocco if
+                listaNuoviRecordsDaCreare = LibArray.estraArray(listaRecordsMancanti, maxDownload)
+            } else {
+                listaNuoviRecordsDaCreare = listaRecordsMancanti
+            }// fine del blocco if-else
             if (listaNuoviRecordsDaCreare) {
                 vociCreate = listaNuoviRecordsDaCreare.size()
             }// fine del blocco if
@@ -143,7 +152,10 @@ class BioWikiService {
 
         //--Crea i nuovi records per il database biografia
         if (continua) {
-            this.creaNuoviRecords(listaNuoviRecordsDaCreare)
+            listaNuoviRecordsCreati = this.creaNuoviRecords(listaNuoviRecordsDaCreare)
+            if (!listaNuoviRecordsCreati) {
+                listaNuoviRecordsCreati = listaNuoviRecordsDaCreare
+            }// fine del blocco if
             tempo()
         }// fine del blocco if-else
 
@@ -174,11 +186,11 @@ class BioWikiService {
         } else {
             num = listaNuoviRecordsDaCreare.size()
             num = Lib.Text.formatNum(num)
-            logWikiService.info "Sono state aggiunte ${num} nuove voci dopo l'ultimo check"
+//            logWikiService.info "Sono state aggiunte ${num} nuove voci dopo l'ultimo check"
         }// fine del blocco if-else
 
         // valore di ritorno
-        return vociCreate
+        return listaNuoviRecordsCreati
     } // fine del metodo
 
     /**
@@ -193,14 +205,17 @@ class BioWikiService {
      * Sporca le tavole Giorno e Anno
      * Registra il records modificato, col nuovo revid
      */
-    public int aggiornaWiki() {
+    public ArrayList<Integer> aggiornaWiki() {
         // variabili e costanti locali di lavoro
-        int vociAggiornate = 0
+        ArrayList<Integer> listaRecordsModificati
         int maxDownload
         boolean debug = Preferenze.getBool((String) grailsApplication.config.debug)
-        def listaRecordsDatabase
-        def listaRecordsModificati
-        def numVoci
+        ArrayList<Integer> listaRecordsDatabase
+        ArrayList<Integer> listaRecordsForseModificati
+        def numVoci = 0
+        long inizio = System.currentTimeMillis()
+        long fine
+        long durata
 
         if (debug) {
             log.info 'Modalita debug'
@@ -214,31 +229,38 @@ class BioWikiService {
         // Recupera la lista completa dei records presenti nel database
         listaRecordsDatabase = getListaRecordsDatabase()
 
-        //--Limitazione del numero di voci da considerare
+        //--Limitazione del numero di records da considerare
         if (LibPref.getBool('usaLimiteDownload')) {
             maxDownload = LibPref.getInt('maxDownload')
-            listaRecordsDatabase = LibArray.estraArray(listaRecordsDatabase, maxDownload)
-        }// fine del blocco if
+            listaRecordsForseModificati = LibArray.estraArray(listaRecordsDatabase, maxDownload)
+        } else {
+            listaRecordsForseModificati = listaRecordsDatabase
+        }// fine del blocco if-else
 
         // regolo le voci modificate
-        listaRecordsModificati = this.getListaModificate(listaRecordsDatabase)
+        listaRecordsModificati = this.getListaModificate(listaRecordsForseModificati)
         this.regolaVociNuoveModificate(listaRecordsModificati)
+        aggiornaUltimaLettura(listaRecordsForseModificati)
         tempo()
 
         if (listaRecordsModificati) {
-            vociAggiornate = listaRecordsModificati.size()
+            numVoci = listaRecordsModificati.size()
         }// fine del blocco if
 
         // valore di ritorno
-        numVoci = LibTesto.formatNum(vociAggiornate)
+        numVoci = LibTesto.formatNum(numVoci)
+        fine = System.currentTimeMillis()
+        durata = fine - inizio
+        durata = durata / 1000
         if (debug) {
-            log.info "Sono state aggiornate ${numVoci} voci dopo l'ultimo check"
+            log.info "Sono state aggiornate ${numVoci} voci dopo l'ultimo check. Tempo ${durata} sec."
             log.info 'Fine del metodo di aggiornamento dei records'
         } else {
-            logWikiService.info "Sono state aggiornate ${numVoci} voci dopo l'ultimo check"
+            log.info "Sono state aggiornate ${numVoci} voci dopo l'ultimo check. Tempo ${durata} sec."
+//            logWikiService.info "Sono state aggiornate ${numVoci} voci dopo l'ultimo check"
         }// fine del blocco if-else
 
-        return vociAggiornate
+        return listaRecordsModificati
     } // fine del metodo
 
     /**
@@ -266,6 +288,7 @@ class BioWikiService {
         long inizio = System.currentTimeMillis()
         long fine
         long durata
+//        titoloCategoria = 'Pittori britannici' //@todo ASSOLUTAMENTE provvisorio
 
         if (debug) {
             log.info 'Siamo in modalità debug'
@@ -352,17 +375,17 @@ class BioWikiService {
 
     /**
      * Recupera la lista dei records esistenti nel database
-     *
+     * Ordinata secondo il timestamp più vecchio; serve per le voci ''modificate''
+     * Mentre per l'aggiunta di voci ''nuove'' è indifferente
      * La lista e composta dal solo campo pageid (int)
      */
     private static ArrayList<Integer> getListaRecordsDatabase() {
         // variabili e costanti locali di lavoro
         ArrayList<Integer> lista
-        int pageid
         def num = 0
 
         log.info 'Recupera dal database tutti i records di BioWiki'
-        lista = (ArrayList<Integer>) BioWiki.executeQuery("select pageid from BioWiki")
+        lista = (ArrayList<Integer>) BioWiki.executeQuery("select pageid from BioWiki order by ultimaLettura asc")
 
         if (lista) {
             num = lista.size()
@@ -380,8 +403,9 @@ class BioWikiService {
      * Crea nuovi records per il database biografia
      * Sporca le tavole Giorno e Anno
      */
-    def creaNuoviRecords(ArrayList<Integer> listaNuoviRecords) {
+    def ArrayList<Integer> creaNuoviRecords(ArrayList<Integer> listaNuoviRecords) {
         // variabili e costanti locali di lavoro
+        ArrayList<Integer> listaNuoviRecordsCreati = null
         def num = 0
         String numTxt
         long inizio
@@ -404,6 +428,8 @@ class BioWikiService {
         } else {
             log.warn "Non ci sono nuovi records da creare"
         }// fine del blocco if-else
+
+        return listaNuoviRecordsCreati
     } // fine del metodo
 
     /**
@@ -713,7 +739,6 @@ class BioWikiService {
                     switch (statoBio) {
                         case StatoBio.bioNormale:
                             wrapBio.registraBioWiki()
-//                            wrapBio.registraBioGrails()  //@todo absolutely
                             registrata = true
                             break
                         case StatoBio.bioIncompleto:
@@ -764,6 +789,23 @@ class BioWikiService {
             }// fine del blocco if
         }// fine del blocco if
     } // fine della closure
+
+    // voci esaminate
+    void aggiornaUltimaLettura(ArrayList<Integer> listaRecordsModificati) {
+        String query
+        String range
+        Timestamp ultimaLettura = new Timestamp(System.currentTimeMillis())
+        def letturaWiki = ultimaLettura.clearTime()
+
+        if (listaRecordsModificati) {
+            range = LibBio.getListaRec(listaRecordsModificati)
+            query = "update BioWiki set ultimaLettura='${ultimaLettura}' where pageid in ${range}"
+            BioWiki.executeUpdate(query)
+            query = "update BioWiki set letturaWiki='${letturaWiki}' where pageid in ${range}"
+            BioWiki.executeUpdate(query)
+        }// fine del blocco if
+
+    } // fine del metodo
 
     /**
      * Regola i collegamenti (link) alle tavole:
