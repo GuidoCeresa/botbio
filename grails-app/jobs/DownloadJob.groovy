@@ -20,8 +20,8 @@ class DownloadJob {
     public static int DELAY = 1000 * 60 * 5
 
     //--codifica della frequenza
-    // execute job once in 30 minutes
-    public static int FREQUENZA = 1000 * 60 * 30
+    // execute job once in 60 minutes
+    public static int FREQUENZA = 1000 * 60 * 60
 
     //--codifica dell'orario di attivazione
     private static String cronExpressionDowload = "1 0 0 * * ?"   //tutti i giorni a mezzanotte
