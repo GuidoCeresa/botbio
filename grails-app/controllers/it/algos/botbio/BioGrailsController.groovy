@@ -12,11 +12,13 @@
 /* flagOverwrite = true */
 
 package it.algos.botbio
+
 import it.algos.algos.DialogoController
 import it.algos.algos.TipoDialogo
 import it.algos.algoslib.Lib
 import org.codehaus.groovy.grails.commons.DefaultGrailsDomainClass
 import org.springframework.dao.DataIntegrityViolationException
+
 //--gestisce l'upload delle informazioni
 class BioGrailsController {
 
@@ -28,6 +30,7 @@ class BioGrailsController {
     def logoService
     def eventoService
     def bioService
+    def bioGrailsService
 
     def index() {
         redirect(action: 'list', params: params)
@@ -127,6 +130,65 @@ class BioGrailsController {
         redirect(action: 'list')
     } // fine del metodo
 
+    //--creazione delle liste partendo da BioGrails
+    //--elabora e crea tutti i giorni modificati
+    //--elabora e crea tutti gli anni modificati
+    //--elabora e crea tutte le attività
+    //--elabora e crea tutte le nazionalità
+    //--mostra un dialogo di conferma per l'operazione da compiere
+    //--passa al metodo effettivo
+    def upload() {
+        params.titolo = 'Liste'
+        if (BioGrails.count() > 0) {
+            params.tipo = TipoDialogo.conferma
+            params.avviso = []
+            params.avviso.add('Creazione delle liste di tutte le voci modificate (BioGrails).')
+            params.avviso.add('Elabora e crea tutti i giorni modificati')
+            params.avviso.add('Elabora e crea tutti gli anni modificati')
+            params.avviso.add('Elabora e crea tutte le attività modificate')
+            params.avviso.add('Elabora e crea tutte le nazionalità modificate')
+            params.avviso.add('Ci vogliono diverse ore')
+            params.returnController = 'bioGrails'
+            params.returnAction = 'uploadDopoConferma'
+            redirect(controller: 'dialogo', action: 'box', params: params)
+        } else {
+            params.tipo = TipoDialogo.avviso
+            params.avviso = 'Sorry, non ci sono voci biografiche da utilizzare !'
+            params.returnController = 'bioGrails'
+            redirect(controller: 'dialogo', action: 'box', params: params)
+        }// fine del blocco if-else
+    } // fine del metodo
+
+    //--creazione delle liste partendo da BioGrails
+    //--elabora e crea tutti i giorni modificati
+    //--elabora e crea tutti gli anni modificati
+    //--elabora e crea tutte le attività
+    //--elabora e crea tutte le nazionalità
+    def uploadDopoConferma() {
+        String valore
+        boolean continua = false
+        flash.message = 'Operazione annullata. Le liste non sono state create.'
+
+        if (params.valore) {
+            if (params.valore instanceof String) {
+                valore = (String) params.valore
+                if (valore.equals(DialogoController.DIALOGO_CONFERMA)) {
+                    if (grailsApplication && grailsApplication.config.login) {
+                        continua = true
+                    } else {
+                        flash.message = 'Devi essere loggato per poter modificare le pagine sul server wiki'
+                    }// fine del blocco if-else
+                }// fine del blocco if
+            }// fine del blocco if
+        }// fine del blocco if
+
+        if (continua) {
+            bioGrailsService.upload()
+        }// fine del blocco if
+
+        redirect(action: 'list')
+    } // fine del metodo
+
     def list(Integer max) {
         params.max = Math.min(max ?: 100, 100)
         ArrayList menuExtra
@@ -141,7 +203,8 @@ class BioGrailsController {
         //--mappa con [cont:'controller', action:'metodo', icon:'iconaImmagine', title:'titoloVisibile']
         menuExtra = [
                 [cont: 'bioGrails', action: 'elaboraAll', icon: 'database', title: 'Elabora tutti'],
-                [cont: 'bioWiki', action: 'list', icon: 'scambia', title: 'BioWiki']
+                [cont: 'bioWiki', action: 'list', icon: 'scambia', title: 'BioWiki'],
+                [cont: 'bioGrails', action: 'upload', icon: 'frecciasu', title: 'Upload liste']
         ]
         // fine della definizione
 

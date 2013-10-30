@@ -3,6 +3,7 @@ package it.algos.botbio
 import groovy.util.logging.Log4j
 import it.algos.algoslib.Lib
 import it.algos.algoslib.LibTesto
+import it.algos.algospref.Preferenze
 import it.algos.algoswiki.QueryInfoCat
 import it.algos.algoswiki.WikiLib
 
@@ -469,5 +470,24 @@ class LibBio {
 
         return stringa
     } // fine del metodo
+
+    /**
+     * Restituisce il summary dal parametro summary e dal parametro version
+     */
+    public static getSummary() {
+        // variabili e costanti locali di lavoro
+        String ritorno
+        String summary = '[[Utente:Biobot#9|Biobot '
+        String versioneCorrente = Preferenze.getStr('version')
+        String ultimaVersione = '9'
+
+        if (!versioneCorrente) {
+            versioneCorrente = ultimaVersione
+        }// fine del blocco if
+        ritorno = summary + versioneCorrente + ']]'
+
+        // valore di ritorno
+        return ritorno
+    }// fine della closure
 
 } // fine della classe
