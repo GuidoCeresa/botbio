@@ -185,8 +185,11 @@ class BioWikiService {
         if (debug) {
             log.info 'Fine del metodo di aggiunta nuovi records'
         } else {
-            num = listaNuoviRecordsDaCreare.size()
-            num = Lib.Text.formatNum(num)
+//            if (listaNuoviRecordsDaCreare) {
+//                num = listaNuoviRecordsDaCreare.size()
+//                num = Lib.Text.formatNum(num)
+//            }// fine del blocco if
+
 //            logWikiService.info "Sono state aggiunte ${num} nuove voci dopo l'ultimo check"
         }// fine del blocco if-else
 
