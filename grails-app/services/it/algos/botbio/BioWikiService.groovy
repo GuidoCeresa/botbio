@@ -38,6 +38,7 @@ class BioWikiService {
     // utilizzo di un service con la businessLogic per l'elaborazione dei dati
     // il service viene iniettato automaticamente
     def logWikiService
+//    BioService bioService = new BioService()
 
     private static long inizio = System.currentTimeMillis()
     private static String tagAvviso = WrapBio.tagAvviso

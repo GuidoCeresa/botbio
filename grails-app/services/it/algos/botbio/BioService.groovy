@@ -95,6 +95,18 @@ class BioService {
     } // fine del metodo
 
     //--Elaborazione dei dati da BioWiki a BioGrails
+    //--Crea un record di BioGrails per ogni record di BioWiki
+    //--Copiando SOLO i campi validi di BioWiki
+    //--Regola il flag 'elaborata'=true per tutti i recordas elaborati
+    //--Elabora i link alle tavole collegate
+    //--Crea le didascalie
+    public elabora(int pageid) {
+        ArrayList<Integer> lista = new ArrayList<Integer>()
+        lista.add(pageid)
+        elabora(lista)
+    } // fine del metodo
+
+    //--Elaborazione dei dati da BioWiki a BioGrails
     //--Spazzola la lista e crea un record di BioGrails per ogni record di BioWiki
     //--Copiando SOLO i campi validi di BioWiki
     //--Regola il flag 'elaborata'=true per tutti i recordas elaborati
@@ -117,7 +129,7 @@ class BioService {
             numVoci = listaRecordsDaElaborare.size()
             numVociTxt = LibTesto.formatNum(numVoci)
         } else {
-            return 0
+            return new ArrayList<Integer>()
         }// fine del blocco if-else
 
         inizio = System.currentTimeMillis()
@@ -178,7 +190,14 @@ class BioService {
             if (bioWiki) {
                 bioGrails = elaboraGrails(bioWiki)
                 if (bioGrails) {
-                    bioGrailsRegistrata = bioGrails.save(flush: true)
+                    try { // prova ad eseguire il codice
+                        bioGrailsRegistrata = bioGrails.save(flush: true)
+                    } catch (Exception unErrore) { // intercetta l'errore
+                        log.error unErrore
+                        String title = ''
+                        title = bioGrails.title
+                        log.error "Non creato BioGrails per ${title}"
+                    }// fine del blocco try-catch
                     if (bioGrailsRegistrata) {
                         bioWiki.elaborata = true
                         bioWiki.save(flush: true)
@@ -328,7 +347,7 @@ class BioService {
     public int uploadSesso() {
         // variabili e costanti locali di lavoro
         int numVoci = 0
-        def lista = BioWiki.findAllWhere([sesso: ''])
+        def lista = getListaSesso()
         BioWiki bioWiki
         int pageid
         boolean registrata
@@ -343,9 +362,11 @@ class BioService {
                 pageid = bioWiki.pageid
                 registrata = uploadSesso(pageid)
                 numVoci++
-                if (registrata) {
-                    bioWikiService.download(pageid)
-                }// fine del blocco if
+//                if (registrata) {
+                bioWikiService.download(pageid)
+                elabora(pageid)
+
+//                }// fine del blocco if
             }// fine del blocco if
         } // fine del ciclo each
 
@@ -3659,4 +3680,26 @@ class BioService {
     private tempoSec() {
 //        log.info LibBio.deltaSec(inizio) + ' secondi dal via'
     }// fine del metodo
+
+    //--lista di voci col parametro sesso mancante
+    public ArrayList getListaSesso() {
+        ArrayList lista = new ArrayList()
+        def results
+
+        def c = BioWiki.createCriteria()
+        results = c.list {
+            isNull("sesso")
+        }
+
+        if (results) {
+            if (results instanceof List) {
+                lista = results
+            } else {
+                lista.add(results)
+            }// fine del blocco if-else
+        }// fine del blocco if
+
+        return lista
+    }// fine del metodo
+
 } // fine della service classe

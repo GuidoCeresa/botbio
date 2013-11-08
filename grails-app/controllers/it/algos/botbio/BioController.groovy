@@ -28,7 +28,7 @@ class BioController {
     // il service viene iniettato automaticamente
     def logService
     def grailsApplication
-    BioService bioService
+    def bioService
 
     def index() {
         render(view: 'index')
@@ -74,7 +74,7 @@ class BioController {
         //--selezione dei records da mostrare
         //--per una lista filtrata (parziale), modificare i parametri
         //--oppure modificare il findAllByInteroGreaterThan()...
-        lista = BioWiki.findAllWhere([sesso: ''])
+        lista = bioService.getListaSesso()
 
         //--titolo visibile sopra la table dei dati
         titoloLista = 'Elenco di ' + Lib.Txt.formatNum(lista.size()) + ' biografie con parametro sesso errato'
@@ -129,7 +129,7 @@ class BioController {
         }// fine del blocco if
 
         if (continua) {
-            def a= bioService
+            def a = bioService
             numVoci = bioService.uploadSesso()
             if (numVoci == 0) {
                 flash.message = 'Non è stata modificata (corretta) nessuna voce'
