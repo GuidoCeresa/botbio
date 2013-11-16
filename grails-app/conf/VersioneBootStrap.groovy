@@ -26,9 +26,19 @@ class VersioneBootStrap {
             versioneService.newVersione('Preferenze', 'Aggiunto cassetto e colonne')
         }// fine del blocco if
 
-        //--aggiunte alcune preferenze
+        //--registra solo se il contenuto (data esclusa) è modificato
         if (versioneService && versioneService.installaVersione(4)) {
             versioneService.newVersione('Upload', 'Aggiunto controllo differenze significative in fase di registrazione voce')
+        }// fine del blocco if
+
+        //--aggiunte alcune preferenze
+        if (versioneService && versioneService.installaVersione(5)) {
+            versioneService.newVersione('Grafica', 'Formattato il numero di persone nel template in testa pagina')
+        }// fine del blocco if
+
+        //--aggiunte alcune preferenze
+        if (versioneService && versioneService.installaVersione(6)) {
+            versioneService.newVersione('Upload', 'Ordinamento alfabetico nei sotogruppi di giorni e anni')
         }// fine del blocco if
     }// fine della closure
 

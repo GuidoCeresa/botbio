@@ -12,6 +12,8 @@
 /* flagOverwrite = true */
 
 package it.algos.botbio
+
+import it.algos.algoslib.LibTesto
 import it.algos.algoslib.LibTime
 import it.algos.algospref.Preferenze
 import it.algos.algoswiki.Risultato
@@ -57,8 +59,11 @@ class BioGrailsService {
     //--creazione delle liste partendo da BioGrails
     //--elabora e crea la lista del giorno di nascita
     def uploadGiornoNascita(Giorno giorno) {
-        ArrayList listaPersone
-        String query
+        ArrayList listaPersone = new ArrayList()
+        ArrayList listaPersoneSenzaAnno
+        ArrayList listaPersoneConAnno
+        String querySenza
+        String queryAnno
         long giornoId
         int numPersone
         String tagNatiMorti = 'Nati'
@@ -70,8 +75,16 @@ class BioGrailsService {
         }// fine del blocco if
 
         if (giornoId) {
-            query = "select didascaliaGiornoNato from BioGrails where giornoMeseNascitaLink=${giornoId} order by annoNascitaLink"
-            listaPersone = BioGrails.executeQuery(query)
+            querySenza = "select didascaliaGiornoNato from BioGrails where (giornoMeseNascitaLink=${giornoId} and annoNascitaLink is null) order by cognome asc"
+            queryAnno = "select didascaliaGiornoNato from BioGrails where (giornoMeseNascitaLink=${giornoId} and annoNascitaLink>0) order by annoNascitaLink,cognome asc"
+            listaPersoneSenzaAnno = BioGrails.executeQuery(querySenza)
+            listaPersoneConAnno = BioGrails.executeQuery(queryAnno)
+            listaPersoneSenzaAnno?.each {
+                listaPersone.add(it)
+            } // fine del ciclo each
+            listaPersoneConAnno?.each {
+                listaPersone.add(it)
+            } // fine del ciclo each
             if (listaPersone) {
                 numPersone = listaPersone.size()
                 registrata = this.caricaPagina(giorno, listaPersone, numPersone, tagNatiMorti, tagNateMorte)
@@ -98,8 +111,11 @@ class BioGrailsService {
     //--creazione delle liste partendo da BioGrails
     //--elabora e crea la lista del giorno di morte
     def uploadGiornoMorte(Giorno giorno) {
-        ArrayList listaPersone
-        String query
+        ArrayList listaPersone = new ArrayList()
+        ArrayList listaPersoneSenzaAnno
+        ArrayList listaPersoneConAnno
+        String querySenza
+        String queryAnno
         long giornoId
         int numPersone
         String tagNatiMorti = 'Morti'
@@ -111,8 +127,16 @@ class BioGrailsService {
         }// fine del blocco if
 
         if (giornoId) {
-            query = "select didascaliaGiornoMorto from BioGrails where giornoMeseMorteLink=${giornoId} order by annoMorteLink"
-            listaPersone = BioGrails.executeQuery(query)
+            querySenza = "select didascaliaGiornoMorto from BioGrails where (giornoMeseMorteLink=${giornoId} and annoMorteLink is null) order by cognome asc"
+            queryAnno = "select didascaliaGiornoMorto from BioGrails where (giornoMeseMorteLink=${giornoId} and annoMorteLink>0) order by annoMorteLink, cognome asc"
+            listaPersoneSenzaAnno = BioGrails.executeQuery(querySenza)
+            listaPersoneConAnno = BioGrails.executeQuery(queryAnno)
+            listaPersoneSenzaAnno?.each {
+                listaPersone.add(it)
+            } // fine del ciclo each
+            listaPersoneConAnno?.each {
+                listaPersone.add(it)
+            } // fine del ciclo each
             if (listaPersone) {
                 numPersone = listaPersone.size()
                 registrata = this.caricaPagina(giorno, listaPersone, numPersone, tagNatiMorti, tagNateMorte)
@@ -146,8 +170,11 @@ class BioGrailsService {
     //--creazione delle liste partendo da BioGrails
     //--elabora e crea la lista dell'anno di nascita
     def uploadAnnoNascita(Anno anno) {
-        ArrayList listaPersone
-        String query
+        ArrayList listaPersone = new ArrayList()
+        ArrayList listaPersoneSenzaGiorno
+        ArrayList listaPersoneConGiorno
+        String querySenza
+        String queryGiorno
         long annoId
         int numPersone
         String tagNatiMorti = 'Nati'
@@ -158,8 +185,16 @@ class BioGrailsService {
         }// fine del blocco if
 
         if (annoId) {
-            query = "select didascaliaAnnoNato from BioGrails where annoNascitaLink=${annoId} order by giornoMeseNascitaLink"
-            listaPersone = BioGrails.executeQuery(query)
+            querySenza = "select didascaliaAnnoNato from BioGrails where (annoNascitaLink=${annoId} and giornoMeseNascitaLink is null) order by cognome asc"
+            queryGiorno = "select didascaliaAnnoNato from BioGrails where (annoNascitaLink=${annoId} and giornoMeseNascitaLink>0) order by giornoMeseNascitaLink,cognome asc"
+            listaPersoneSenzaGiorno = BioGrails.executeQuery(querySenza)
+            listaPersoneConGiorno = BioGrails.executeQuery(queryGiorno)
+            listaPersoneSenzaGiorno?.each {
+                listaPersone.add(it)
+            } // fine del ciclo each
+            listaPersoneConGiorno?.each {
+                listaPersone.add(it)
+            } // fine del ciclo each
             if (listaPersone) {
                 numPersone = listaPersone.size()
                 this.caricaPagina(anno, listaPersone, numPersone, tagNatiMorti, tagNateMorte)
@@ -181,8 +216,11 @@ class BioGrailsService {
     //--creazione delle liste partendo da BioGrails
     //--elabora e crea la lista dell'anno di morte
     def uploadAnnoMorte(Anno anno) {
-        ArrayList listaPersone
-        String query
+        ArrayList listaPersone = new ArrayList()
+        ArrayList listaPersoneSenzaGiorno
+        ArrayList listaPersoneConGiorno
+        String querySenza
+        String queryGiorno
         long annoId
         int numPersone
         String tagNatiMorti = 'Morti'
@@ -193,8 +231,16 @@ class BioGrailsService {
         }// fine del blocco if
 
         if (annoId) {
-            query = "select didascaliaAnnoMorto from BioGrails where annoMorteLink=${annoId} order by giornoMeseMorteLink"
-            listaPersone = BioGrails.executeQuery(query)
+            querySenza = "select didascaliaAnnoMorto from BioGrails where (annoMorteLink=${annoId} and giornoMeseMorteLink is null) order by cognome asc"
+            queryGiorno = "select didascaliaAnnoMorto from BioGrails where (annoMorteLink=${annoId} and giornoMeseMorteLink>0) order by giornoMeseMorteLink,cognome asc"
+            listaPersoneSenzaGiorno = BioGrails.executeQuery(querySenza)
+            listaPersoneConGiorno = BioGrails.executeQuery(queryGiorno)
+            listaPersoneSenzaGiorno?.each {
+                listaPersone.add(it)
+            } // fine del ciclo each
+            listaPersoneConGiorno?.each {
+                listaPersone.add(it)
+            } // fine del ciclo each
             if (listaPersone) {
                 numPersone = listaPersone.size()
                 this.caricaPagina(anno, listaPersone, numPersone, tagNatiMorti, tagNateMorte)
@@ -384,17 +430,19 @@ class BioGrailsService {
         String testo = ''
         String torna
         String dataCorrente
+        String personeTxt
 
         // controllo di congruità
         if (giorno && numPersone) {
             dataCorrente = LibTime.getGioMeseAnnoLungo(new Date())
+            personeTxt = LibTesto.formatNum(numPersone)
             torna = giorno.titolo
 
             testo = "<noinclude>"
             testo += aCapo
             testo += "{{ListaBio"
             testo += "|bio="
-            testo += numPersone
+            testo += personeTxt
             testo += "|data="
             testo += dataCorrente.trim()
             testo += "}}"
@@ -416,17 +464,19 @@ class BioGrailsService {
         String testo = ''
         String torna
         String dataCorrente
+        String personeTxt
 
         // controllo di congruità
         if (anno && numPersone) {
             dataCorrente = LibTime.getGioMeseAnnoLungo(new Date())
+            personeTxt = LibTesto.formatNum(numPersone)
             torna = anno.titolo
 
             testo = "<noinclude>"
             testo += aCapo
             testo += "{{ListaBio"
             testo += "|bio="
-            testo += numPersone
+            testo += personeTxt
             testo += "|data="
             testo += dataCorrente.trim()
             testo += "}}"

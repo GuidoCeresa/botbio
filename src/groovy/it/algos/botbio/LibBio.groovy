@@ -488,7 +488,7 @@ class LibBio {
         String ritorno
         String summary = '[[Utente:Biobot#9|Biobot '
         String versioneCorrente = Preferenze.getStr('version')
-        String ultimaVersione = '9.1'
+        String ultimaVersione = '9.2'
 
         if (!versioneCorrente) {
             versioneCorrente = ultimaVersione
