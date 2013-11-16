@@ -25,6 +25,11 @@ class VersioneBootStrap {
         if (versioneService && versioneService.installaVersione(3)) {
             versioneService.newVersione('Preferenze', 'Aggiunto cassetto e colonne')
         }// fine del blocco if
+
+        //--aggiunte alcune preferenze
+        if (versioneService && versioneService.installaVersione(4)) {
+            versioneService.newVersione('Upload', 'Aggiunto controllo differenze significative in fase di registrazione voce')
+        }// fine del blocco if
     }// fine della closure
 
     def destroy = {
