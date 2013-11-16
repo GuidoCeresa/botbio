@@ -27,8 +27,8 @@ class DownloadJob {
     private static String cronExpressionDowload = "1 0 0 * * ?"   //tutti i giorni a mezzanotte
 
     static triggers = {
-        simple startDelay: DELAY, repeatInterval: FREQUENZA
-//        cron name: 'download', cronExpression: cronExpressionDowload
+//        simple startDelay: DELAY, repeatInterval: FREQUENZA
+        cron name: 'download', cronExpression: cronExpressionDowload
     }// fine del metodo statico
 
 //    def group = "MyGroup"

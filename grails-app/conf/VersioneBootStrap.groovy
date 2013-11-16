@@ -20,6 +20,11 @@ class VersioneBootStrap {
         if (versioneService && versioneService.installaVersione(2)) {
             versioneService.newVersione('DataSource', 'Aggiunto autoReconnect=true')
         }// fine del blocco if
+
+        //--aggiunte alcune preferenze
+        if (versioneService && versioneService.installaVersione(3)) {
+            versioneService.newVersione('Preferenze', 'Aggiunto cassetto e colonne')
+        }// fine del blocco if
     }// fine della closure
 
     def destroy = {

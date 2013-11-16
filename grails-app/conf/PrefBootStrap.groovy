@@ -20,8 +20,13 @@ class PrefBootStrap {
         grailsApplication.config.catDebug = LibBio.CAT_DEBUG
         grailsApplication.config.usaPagineSingole = LibBio.USA_PAGINE_SINGOLE
         grailsApplication.config.usaLimiteDownload = LibBio.USA_LIMITE_DOWNLOAD
-        grailsApplication.config.maxDownload = LibBio.MAX_DOWNLOAD
         grailsApplication.config.usaCronoDownload = LibBio.USA_CRONO_DOWNLOAD
+        grailsApplication.config.maxDownload = LibBio.MAX_DOWNLOAD
+        grailsApplication.config.usaCassetto = LibBio.USA_CASSETTO
+        grailsApplication.config.maxRigheCassetto = LibBio.MAX_RIGHE_CASSETTO
+        grailsApplication.config.usaColonne = LibBio.USA_COLONNE
+        grailsApplication.config.maxRigheColonne = LibBio.MAX_RIGHE_COLONNE
+        grailsApplication.config.registraSoloModificheSostanziali = LibBio.REGISTRA_SOLO_MODIFICHE_SOSTANZIALI
 
         //--alcune preferenze sempre presenti
         Preferenze.findOrCreateByCodeAndTypeAndValue((String) grailsApplication.config.debug, Preferenze.TYPE_BOOL, 'false').save(flush: true)
@@ -29,8 +34,13 @@ class PrefBootStrap {
         Preferenze.findOrCreateByCodeAndTypeAndValue((String) grailsApplication.config.catDebug, Preferenze.TYPE_STR, 'Pittori britannici').save(flush: true)
         Preferenze.findOrCreateByCodeAndTypeAndValue((String) grailsApplication.config.usaPagineSingole, Preferenze.TYPE_BOOL, 'false').save(flush: true)
         Preferenze.findOrCreateByCodeAndTypeAndValue((String) grailsApplication.config.usaLimiteDownload, Preferenze.TYPE_BOOL, 'true').save(flush: true)
-        Preferenze.findOrCreateByCodeAndTypeAndValue((String) grailsApplication.config.maxDownload, Preferenze.TYPE_INT, '10000').save(flush: true)
         Preferenze.findOrCreateByCodeAndTypeAndValue((String) grailsApplication.config.usaCronoDownload, Preferenze.TYPE_BOOL, 'false').save(flush: true)
+        Preferenze.findOrCreateByCodeAndTypeAndValue((String) grailsApplication.config.maxDownload, Preferenze.TYPE_INT, '10000').save(flush: true)
+        Preferenze.findOrCreateByCodeAndTypeAndValue((String) grailsApplication.config.usaCassetto, Preferenze.TYPE_BOOL, 'true').save(flush: true)
+        Preferenze.findOrCreateByCodeAndTypeAndValue((String) grailsApplication.config.maxRigheCassetto, Preferenze.TYPE_INT, '50').save(flush: true)
+        Preferenze.findOrCreateByCodeAndTypeAndValue((String) grailsApplication.config.usaColonne, Preferenze.TYPE_BOOL, 'true').save(flush: true)
+        Preferenze.findOrCreateByCodeAndTypeAndValue((String) grailsApplication.config.maxRigheColonne, Preferenze.TYPE_INT, '10').save(flush: true)
+        Preferenze.findOrCreateByCodeAndTypeAndValue((String) grailsApplication.config.registraSoloModificheSostanziali, Preferenze.TYPE_BOOL, 'true').save(flush: true)
     }// fine della closure
 
     //--metodo invocato direttamente da Grails

@@ -63,15 +63,13 @@ class AnnoService {
      * Sporca o pulisce tutti i records
      */
     public regolaSporco(boolean sporca) {
-        def records = Anno.getAll()
-
-        if (records) {
-            records.each {
-                it.sporcoNato = sporca
-                it.sporcoMorto = sporca
-                it.save(flush: true)
-            }//fine di each
-        }// fine del blocco if
+        if (sporca) {
+            Anno.executeUpdate('update Anno set sporcoNato=true')
+            Anno.executeUpdate('update Anno set sporcoMorto=true')
+        } else {
+            Anno.executeUpdate('update Anno set sporcoNato=false')
+            Anno.executeUpdate('update Anno set sporcoMorto=false')
+        }// fine del blocco if-else
 
         if (sporca) {
             log.info 'Operazione effettuata. Sono stati sporcati tutti gli anni.'

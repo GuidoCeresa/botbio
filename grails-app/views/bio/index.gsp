@@ -129,7 +129,9 @@
         <h2>Operazioni possibili</h2>
         <br/>
         <ul>
-            <li class="controller"><g:link controller="bio" action="parsesso">Controllo parametro sesso</g:link></li>
+            <li class="controller"><g:link controller="bio" action="parsessoassente">Controllo parametro sesso assente</g:link></li>
+            <li class="controller"><g:link controller="bio" action="parsessoerrato">Controllo parametro sesso errato</g:link></li>
+            <li class="controller"><g:link controller="bio" action="pargiorno">Controllo giorni errati</g:link></li>
             <li class="controller"><g:link controller="bio" action="test">Test di prova</g:link></li>
         </ul>
     </div>

@@ -17,6 +17,7 @@ import groovy.util.logging.Log4j
 import it.algos.algoslib.Lib
 import it.algos.algoslib.LibArray
 import it.algos.algoslib.LibTesto
+import it.algos.algoslib.LibTime
 import it.algos.algospref.LibPref
 import it.algos.algospref.Preferenze
 import it.algos.algoswiki.*
@@ -347,7 +348,7 @@ class BioService {
     public int uploadSesso() {
         // variabili e costanti locali di lavoro
         int numVoci = 0
-        def lista = getListaSesso()
+        def lista = getListaSessoAssente()
         BioWiki bioWiki
         int pageid
         boolean registrata
@@ -388,7 +389,7 @@ class BioService {
         String templateNuovo
         HashMap mappa
         String summary = "[[Utente:Biobot|Biobot]] fix par tmpl"
-        EditSub voceRegistrata = null
+        EditSub voceRegistrata
 
         if (pageid) {
             wrapBio = new WrapBio(pageid)
@@ -398,6 +399,87 @@ class BioService {
                 mappa = wrapBio.getMappaBio()
                 if (!mappa['Sesso']) {
                     mappa.put('Sesso', 'M')
+                }// fine del blocco if
+                wrapBio.riordinaMappa()
+                wrapBio.creaTestoFinaleTemplate()
+                templateNuovo = wrapBio.getTestoTemplateFinale()
+            }// fine del blocco if
+
+            if (title && templateVecchio && templateNuovo) {
+                voceRegistrata = new EditSub(title, templateVecchio, templateNuovo, summary)
+                if (voceRegistrata) {
+                    registrata = true
+                }// fine del blocco if
+            }// fine del blocco if
+        }// fine del blocco if
+
+        return registrata
+    } // fine del metodo
+
+    //--fix parameters errors
+    public int uploadGiorni() {
+        // variabili e costanti locali di lavoro
+        int numVoci = 0
+        def lista = getListaPrimiGiorniErrati()
+        BioWiki bioWiki
+        int pageid
+        boolean registrata
+
+        lista?.each {
+            bioWiki = null
+            if (it instanceof BioWiki) {
+                bioWiki = (BioWiki) it
+            }// fine del blocco if
+
+            if (bioWiki) {
+                pageid = bioWiki.pageid
+                registrata = uploadGiorno(pageid)
+                numVoci++
+//                if (registrata) {
+                bioWikiService.download(pageid)
+                elabora(pageid)
+
+//                }// fine del blocco if
+            }// fine del blocco if
+        } // fine del ciclo each
+
+        return numVoci
+    } // fine del metodo
+
+    //--fix parameters errors
+    //--costruisce il wrap
+    //--scarica la mappa dei parametri Bio
+    //--modifica il parametro giorno
+    //--riordina la mappa
+    //--costruisce il testo del template
+    public boolean uploadGiorno(int pageid) {
+        // variabili e costanti locali di lavoro
+        boolean registrata = false
+        WrapBio wrapBio
+        String title
+        String templateVecchio
+        String templateNuovo
+        HashMap mappa
+        String summary = "[[Utente:Biobot|Biobot]] fix par tmpl"
+        EditSub voceRegistrata
+        String valoreCampoGiorno
+        String giornoWiki
+
+        if (pageid) {
+            wrapBio = new WrapBio(pageid)
+            if (wrapBio && wrapBio.isValida()) {
+                title = wrapBio.getTitoloVoce()
+                templateVecchio = wrapBio.getTestoTemplateOriginale()
+                mappa = wrapBio.getMappaBio()
+                if (mappa['GiornoMeseNascita']) {
+                    giornoWiki = mappa['GiornoMeseNascita']
+                    giornoWiki = fixGiorno(giornoWiki)
+                    mappa.put('GiornoMeseNascita', giornoWiki)
+                }// fine del blocco if
+                if (mappa['GiornoMeseMorte']) {
+                    giornoWiki = mappa['GiornoMeseMorte']
+                    giornoWiki = fixGiorno(giornoWiki)
+                    mappa.put('GiornoMeseMorte', giornoWiki)
                 }// fine del blocco if
                 wrapBio.riordinaMappa()
                 wrapBio.creaTestoFinaleTemplate()
@@ -490,6 +572,7 @@ class BioService {
             giornoWiki = bioWiki.giornoMeseNascita
             if (giornoWiki) {
                 giornoWiki = fixCampo(giornoWiki)
+                giornoWiki = fixGiorno(giornoWiki)
                 try { // prova ad eseguire il codice
                     giorno = Giorno.findByNome(giornoWiki)
                     if (!giorno) {
@@ -497,6 +580,10 @@ class BioService {
 //                        if (giorno) {
 //                            log.warn "BioService-getGiornoNato: Voce ${title}, beccato ${giornoWiki} !"
 //                        }// fine del blocco if
+                    }// fine del blocco if
+                    if (giorno) {
+                        giorno.sporcoNato = true
+                        giorno.save(flush: true)
                     }// fine del blocco if
                 } catch (Exception unErrore) { // intercetta l'errore
                     log.error unErrore
@@ -520,6 +607,7 @@ class BioService {
             giornoWiki = bioWiki.giornoMeseMorte
             if (giornoWiki) {
                 giornoWiki = fixCampo(giornoWiki)
+                giornoWiki = fixGiorno(giornoWiki)
                 try { // prova ad eseguire il codice
                     giorno = Giorno.findByNome(giornoWiki)
                     if (!giorno) {
@@ -527,6 +615,10 @@ class BioService {
 //                        if (giorno) {
 //                            log.warn "BioService-getGiornoMorto: Voce ${title}, beccato ${giornoWiki} !"
 //                        }// fine del blocco if
+                    }// fine del blocco if
+                    if (giorno) {
+                        giorno.sporcoMorto = true
+                        giorno.save(flush: true)
                     }// fine del blocco if
                 } catch (Exception unErrore) { // intercetta l'errore
                     log.error unErrore
@@ -550,6 +642,10 @@ class BioService {
             annoWiki = fixCampo(annoWiki)
             try { // prova ad eseguire il codice
                 anno = Anno.findByTitolo(annoWiki)
+                if (anno) {
+                    anno.sporcoNato = true
+                    anno.save(flush: true)
+                }// fine del blocco if
             } catch (Exception unErrore) { // intercetta l'errore
                 log.error unErrore
             }// fine del blocco try-catch
@@ -567,6 +663,10 @@ class BioService {
             annoWiki = fixCampo(annoWiki)
             try { // prova ad eseguire il codice
                 anno = Anno.findByTitolo(annoWiki)
+                if (anno) {
+                    anno.sporcoMorto = true
+                    anno.save(flush: true)
+                }// fine del blocco if
             } catch (Exception unErrore) { // intercetta l'errore
                 log.error unErrore
             }// fine del blocco try-catch
@@ -588,6 +688,42 @@ class BioService {
 
         return testoOut
     } // fine del metodo
+
+    private static String fixGiorno(String testoIn) {
+        String testoOut = testoIn
+        String tag = LibTime.PRIMO
+        String tagA = '1°'
+        String tagB = '1º'
+        String tagC = '1&ordm;'
+        String tagD = '1&nbsp;'
+        String tagE = '1&deg;'
+        String tagF = '1 '
+
+        if (testoOut) {
+            testoOut = testoOut.trim()
+            if (testoOut.startsWith(tagA)) {
+                testoOut = testoOut.replace(tagA, tag)
+            }// fine del blocco if
+            if (testoOut.startsWith(tagB)) {
+                testoOut = testoOut.replace(tagB, tag)
+            }// fine del blocco if
+            if (testoOut.startsWith(tagC)) {
+                testoOut = testoOut.replace(tagC, tag)
+            }// fine del blocco if
+            if (testoOut.startsWith(tagD)) {
+                testoOut = testoOut.replace(tagD, tag)
+            }// fine del blocco if
+            if (testoOut.startsWith(tagE)) {
+                testoOut = testoOut.replace(tagE, tag)
+            }// fine del blocco if
+            if (testoOut.startsWith(tagF)) {
+                testoOut = testoOut.replace(tagF, tag + ' ')
+            }// fine del blocco if
+        }// fine del blocco if
+
+        return testoOut
+    } // fine del metodo
+
 
     private static String creaDidascaliaBase(BioGrails bio) {
         String testoOut = ''
@@ -3682,13 +3818,17 @@ class BioService {
     }// fine del metodo
 
     //--lista di voci col parametro sesso mancante
-    public ArrayList getListaSesso() {
+    public ArrayList getListaSessoAssente() {
         ArrayList lista = new ArrayList()
         def results
 
         def c = BioWiki.createCriteria()
         results = c.list {
-            isNull("sesso")
+            or {
+                like("sesso", "")
+                isNull("sesso")
+                like("sesso", " ")
+            }
         }
 
         if (results) {
@@ -3698,6 +3838,73 @@ class BioService {
                 lista.add(results)
             }// fine del blocco if-else
         }// fine del blocco if
+
+        return lista
+    }// fine del metodo
+
+    //--lista di voci col parametro sesso errato
+    public ArrayList getListaSessoErrato() {
+        ArrayList lista = new ArrayList()
+        def results
+
+        def c = BioWiki.createCriteria()
+        results = c.list {
+            and {
+                ne("sesso", "M")
+                ne("sesso", "F")
+            }
+        }
+
+        if (results) {
+            if (results instanceof List) {
+                lista = results
+            } else {
+                lista.add(results)
+            }// fine del blocco if-else
+        }// fine del blocco if
+
+        return lista
+    }// fine del metodo
+
+    //--lista di voci col parametro 1° giorno del mese errato
+    public ArrayList getListaPrimiGiorniErrati() {
+        ArrayList lista = new ArrayList()
+        def criteria = BioWiki.createCriteria()
+        def results
+        int pageid
+        BioWiki bioWiki
+        def bioGrails
+
+        results = criteria.list {
+            or {
+                like("giornoMeseNascita", "1° %")
+                like("giornoMeseNascita", "1&ordm; %")
+                like("giornoMeseNascita", "1&nbsp;%")
+                like("giornoMeseNascita", "1&deg %")
+
+                like("giornoMeseMorte", "1° %")
+                like("giornoMeseMorte", "1&ordm; %")
+                like("giornoMeseMorte", "1&nbsp;%")
+                like("giornoMeseMorte", "1&deg %")
+            }
+        }
+
+        results?.each {
+            bioWiki = it
+            pageid = bioWiki.pageid
+            bioGrails = BioGrails.findAllByPageid(pageid)
+            if (bioGrails) {
+                if (bioGrails.giornoMeseNascitaLink[0] == null || bioGrails.giornoMeseMorteLink[0] == null) {
+                    if (!lista.contains(bioWiki)) {
+                        lista.add(bioWiki)
+                    }// fine del blocco if
+                }// fine del blocco if
+            } else {
+                if (!lista.contains(bioWiki)) {
+                    lista.add(bioWiki)
+                }// fine del blocco if
+            }// fine del blocco if-else
+        } // fine del ciclo each
 
         return lista
     }// fine del metodo

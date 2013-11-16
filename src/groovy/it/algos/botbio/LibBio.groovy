@@ -23,6 +23,11 @@ class LibBio {
     public static final String USA_LIMITE_DOWNLOAD = 'usaLimiteDownload'
     public static final String MAX_DOWNLOAD = 'maxDownload'
     public static final String USA_CRONO_DOWNLOAD = 'usaCronoDownload'
+    public static final String USA_CASSETTO = 'usaCassetto'
+    public static final String MAX_RIGHE_CASSETTO = 'maxRigheCassetto'
+    public static final String USA_COLONNE = 'usaColonne'
+    public static final String MAX_RIGHE_COLONNE = 'maxRigheColonne'
+    public static final String REGISTRA_SOLO_MODIFICHE_SOSTANZIALI = 'registraSoloModificheSostanziali'
 
     private static String TAG_BIO = '\\{\\{ ?([Tt]emplate:)? ?[Bb]io[ \\|\n\r\t]'
 
@@ -400,7 +405,7 @@ class LibBio {
         tempo = durata / aggiunte
         durata = durata / 1000
         durataSec = durata.intValue()
-        durataMin=durataSec/60
+        durataMin = durataSec / 60
         durataSecondiTxt = LibTesto.formatNum(durataSec)
         durataMinutiTxt = LibTesto.formatNum(durataMin)
         tempo = tempo / 100
@@ -492,6 +497,22 @@ class LibBio {
 
         // valore di ritorno
         return ritorno
+    }// fine della closure
+
+    public static boolean contiene(ArrayList lista, def elemento) {
+        // variabili e costanti locali di lavoro
+        boolean contiene = false
+
+        if (lista && elemento) {
+            lista.each {
+                if (it == elemento) {
+                    contiene = true
+                }// fine del blocco if
+            } // fine del ciclo each
+        }// fine del blocco if
+
+        // valore di ritorno
+        return contiene
     }// fine della closure
 
 } // fine della classe

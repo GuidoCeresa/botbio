@@ -67,15 +67,13 @@ class GiornoService {
      * Sporca o pulisce tutti i records
      */
     public regolaSporco(boolean sporca) {
-        def records = Giorno.getAll()
-
-        if (records) {
-            records.each {
-                it.sporcoNato = sporca
-                it.sporcoMorto = sporca
-                it.save(flush: true)
-            }//fine di each
-        }// fine del blocco if
+        if (sporca) {
+            Giorno.executeUpdate('update Giorno set sporcoNato=true')
+            Giorno.executeUpdate('update Giorno set sporcoMorto=true')
+        } else {
+            Giorno.executeUpdate('update Giorno set sporcoNato=false')
+            Giorno.executeUpdate('update Giorno set sporcoMorto=false')
+        }// fine del blocco if-else
 
         if (sporca) {
             log.info 'Operazione effettuata. Sono stati sporcati tutti i giorni.'

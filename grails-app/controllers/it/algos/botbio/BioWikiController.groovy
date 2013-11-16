@@ -343,8 +343,9 @@ class BioWikiController {
         }// fine del blocco if
 
         if (continua) {
-            listaRecordsElaborati = bioService.elabora(listaNuoviRecordsCreati + listaRecordsModificati)
+            listaRecordsElaborati = listaNuoviRecordsCreati + listaRecordsModificati
             if (listaRecordsElaborati) {
+                listaRecordsElaborati = bioService.elabora(listaRecordsElaborati)
                 elaborate = listaRecordsElaborati.size()
             }// fine del blocco if
             if (elaborate == 0) {

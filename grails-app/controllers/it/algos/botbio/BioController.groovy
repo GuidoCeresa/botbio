@@ -35,7 +35,7 @@ class BioController {
     } // fine del metodo
 
 
-    def parsesso() {
+    def parsessoassente() {
         params.max = 1000
         ArrayList campiLista
         def lista
@@ -74,7 +74,61 @@ class BioController {
         //--selezione dei records da mostrare
         //--per una lista filtrata (parziale), modificare i parametri
         //--oppure modificare il findAllByInteroGreaterThan()...
-        lista = bioService.getListaSesso()
+        lista = bioService.getListaSessoAssente()
+
+        //--titolo visibile sopra la table dei dati
+        titoloLista = 'Elenco di ' + Lib.Txt.formatNum(lista.size()) + ' biografie con parametro sesso assente'
+
+        //--presentazione della view (list), secondo il modello
+        //--menuExtra e campiLista possono essere nulli o vuoti
+        //--se campiLista è vuoto, mostra tutti i campi (primi 8)
+        render(view: 'parsesso', model: [
+                bioWikiInstanceList: lista,
+                titoloLista: titoloLista,
+                campiLista: campiLista],
+                params: params)
+    } // fine del metodo
+
+    def parsessoerrato() {
+        params.max = 1000
+        ArrayList campiLista
+        def lista
+        def campoSort
+        String titoloLista
+
+        //--selezione delle colonne (campi) visibili nella lista
+        //--solo nome e di default il titolo viene uguale
+        //--mappa con [campo:'nomeDelCampo', title:'titoloVisibile', sort:'ordinamento']
+        campiLista = [
+                'pageid',
+                [campo: 'wikiUrl', title: 'Wiki'],
+                'nome',
+                'cognome',
+                'sesso'
+        ]
+        // fine della definizione
+
+        //--regolazione dei campo di ordinamento
+        //--regolazione dei parametri di ordinamento
+        if (!params.sort) {
+            if (campoSort) {
+                params.sort = campoSort
+            }// fine del blocco if
+        }// fine del blocco if-else
+        if (params.order) {
+            if (params.order == 'asc') {
+                params.order = 'desc'
+            } else {
+                params.order = 'asc'
+            }// fine del blocco if-else
+        } else {
+            params.order = 'asc'
+        }// fine del blocco if-else
+
+        //--selezione dei records da mostrare
+        //--per una lista filtrata (parziale), modificare i parametri
+        //--oppure modificare il findAllByInteroGreaterThan()...
+        lista = bioService.getListaSessoErrato()
 
         //--titolo visibile sopra la table dei dati
         titoloLista = 'Elenco di ' + Lib.Txt.formatNum(lista.size()) + ' biografie con parametro sesso errato'
@@ -129,7 +183,6 @@ class BioController {
         }// fine del blocco if
 
         if (continua) {
-            def a = bioService
             numVoci = bioService.uploadSesso()
             if (numVoci == 0) {
                 flash.message = 'Non è stata modificata (corretta) nessuna voce'
@@ -138,11 +191,121 @@ class BioController {
                 avviso = "Sono state modificate (corrette) ${numVoci} voci che avevano il parametro sesso errato o mancante"
                 flash.message = avviso
                 log.info(avviso)
+            }// fine del blocco if-else
+        }// fine del blocco if
+
+        redirect(action: 'index')
+    } // fine del metodo
+
+
+    //--mostra un dialogo di conferma per l'operazione da compiere
+    //--passa al metodo effettivo
+    def uploadGiorni() {
+        params.tipo = TipoDialogo.conferma
+        params.titolo = 'FixPrimoGiornoMese'
+        params.avviso = []
+        params.avviso.add("Vengono modificate su wikipedia tutte le voci col parametro giornoMeseNascita o giornoMeseMorte errato")
+        params.avviso.add("Controlla il primo giorno del mese")
+        params.returnController = 'bio'
+        params.returnAction = 'uploadGiorniDopoConferma'
+        redirect(controller: 'dialogo', action: 'box', params: params)
+    } // fine del metodo
+
+    //--ciclo di correzione ed upload
+    def uploadGiorniDopoConferma() {
+        String valore
+        boolean continua = false
+        def numVoci
+        String avviso
+        boolean debug = Preferenze.getBool((String) grailsApplication.config.debug)
+        flash.message = 'Operazione annullata. Le voci non sono state modificate.'
+
+        if (params.valore) {
+            if (params.valore instanceof String) {
+                valore = (String) params.valore
+                if (valore.equals(DialogoController.DIALOGO_CONFERMA)) {
+                    if (grailsApplication && grailsApplication.config.login) {
+                        continua = true
+                    } else {
+                        if (debug) {
+                            continua = true
+                        } else {
+                            flash.message = 'Devi essere loggato per poter modificare le voci.'
+                        }// fine del blocco if-else
+                    }// fine del blocco if-else
+                }// fine del blocco if
+            }// fine del blocco if
+        }// fine del blocco if
+
+        if (continua) {
+            numVoci = bioService.uploadGiorni()
+            if (numVoci == 0) {
+                flash.message = 'Non è stata modificata (corretta) nessuna voce'
+            } else {
+                numVoci = LibTesto.formatNum(numVoci)
+                avviso = "Sono state modificate (corrette) ${numVoci} voci che avevano il parametro giornoMeseNascita o giornoMeseMorte errato"
+                flash.message = avviso
+                log.info(avviso)
 //                logWikiService.info(avviso)
             }// fine del blocco if-else
         }// fine del blocco if
 
         redirect(action: 'index')
+    } // fine del metodo
+
+    def pargiorno() {
+        params.max = 1000
+        ArrayList campiLista
+        def lista
+        def campoSort
+        String titoloLista
+
+        //--selezione delle colonne (campi) visibili nella lista
+        //--solo nome e di default il titolo viene uguale
+        //--mappa con [campo:'nomeDelCampo', title:'titoloVisibile', sort:'ordinamento']
+        campiLista = [
+                'pageid',
+                [campo: 'wikiUrl', title: 'Wiki'],
+                'nome',
+                'cognome',
+                'giornoMeseNascita',
+                'giornoMeseMorte'
+        ]
+        // fine della definizione
+
+        //--regolazione dei campo di ordinamento
+        //--regolazione dei parametri di ordinamento
+        if (!params.sort) {
+            if (campoSort) {
+                params.sort = campoSort
+            }// fine del blocco if
+        }// fine del blocco if-else
+        if (params.order) {
+            if (params.order == 'asc') {
+                params.order = 'desc'
+            } else {
+                params.order = 'asc'
+            }// fine del blocco if-else
+        } else {
+            params.order = 'asc'
+        }// fine del blocco if-else
+
+        //--selezione dei records da mostrare
+        //--per una lista filtrata (parziale), modificare i parametri
+        //--oppure modificare il findAllByInteroGreaterThan()...
+        lista = bioService.getListaPrimiGiorniErrati()
+
+        //--titolo visibile sopra la table dei dati
+        titoloLista = 'Elenco di ' + Lib.Txt.formatNum(lista.size()) + ' biografie con primo giorno del mese errato'
+
+        //--presentazione della view (list), secondo il modello
+        //--menuExtra e campiLista possono essere nulli o vuoti
+        //--se campiLista è vuoto, mostra tutti i campi (primi 8)
+        render(view: 'pargiorno', model: [
+                bioWikiInstanceList: lista,
+                titoloLista: titoloLista,
+                campiLista: campiLista],
+                params: params)
     } // fine del metodo
 
     def show(Long id) {

@@ -131,13 +131,41 @@ class BioGrailsController {
     } // fine del metodo
 
     //--creazione delle liste partendo da BioGrails
+    //--elabora e crea tutti i giorni modificati (solo nascita)
+    //--passa al metodo effettivo senza nessun dialogo di conferma
+    def uploadGiorniNascita() {
+        bioGrailsService.uploadGiorniNascita()
+    } // fine del metodo
+
+    //--creazione delle liste partendo da BioGrails
+    //--elabora e crea tutti i giorni modificati (solo morte)
+    //--passa al metodo effettivo senza nessun dialogo di conferma
+    def uploadGiorniMorte() {
+        bioGrailsService.uploadGiorniMorte()
+    } // fine del metodo
+
+    //--creazione delle liste partendo da BioGrails
+    //--elabora e crea tutti gli anni modificati (solo nascita)
+    //--passa al metodo effettivo senza nessun dialogo di conferma
+    def uploadAnniNascita() {
+        bioGrailsService.uploadAnniNascita()
+    } // fine del metodo
+
+    //--creazione delle liste partendo da BioGrails
+    //--elabora e crea tutti gli anni modificati (solo morte)
+    //--passa al metodo effettivo senza nessun dialogo di conferma
+    def uploadAnniMorte() {
+        bioGrailsService.uploadAnniMorte()
+    } // fine del metodo
+
+    //--creazione delle liste partendo da BioGrails
     //--elabora e crea tutti i giorni modificati
     //--elabora e crea tutti gli anni modificati
     //--elabora e crea tutte le attività
     //--elabora e crea tutte le nazionalità
     //--mostra un dialogo di conferma per l'operazione da compiere
     //--passa al metodo effettivo
-    def upload() {
+    def uploadAll() {
         params.titolo = 'Liste'
         if (BioGrails.count() > 0) {
             params.tipo = TipoDialogo.conferma
@@ -149,7 +177,7 @@ class BioGrailsController {
             params.avviso.add('Elabora e crea tutte le nazionalità modificate')
             params.avviso.add('Ci vogliono diverse ore')
             params.returnController = 'bioGrails'
-            params.returnAction = 'uploadDopoConferma'
+            params.returnAction = 'uploadAllDopoConferma'
             redirect(controller: 'dialogo', action: 'box', params: params)
         } else {
             params.tipo = TipoDialogo.avviso
@@ -164,7 +192,7 @@ class BioGrailsController {
     //--elabora e crea tutti gli anni modificati
     //--elabora e crea tutte le attività
     //--elabora e crea tutte le nazionalità
-    def uploadDopoConferma() {
+    def uploadAllDopoConferma() {
         String valore
         boolean continua = false
         flash.message = 'Operazione annullata. Le liste non sono state create.'
@@ -183,7 +211,7 @@ class BioGrailsController {
         }// fine del blocco if
 
         if (continua) {
-            bioGrailsService.upload()
+            bioGrailsService.uploadAll()
         }// fine del blocco if
 
         redirect(action: 'list')
@@ -204,7 +232,11 @@ class BioGrailsController {
         menuExtra = [
                 [cont: 'bioGrails', action: 'elaboraAll', icon: 'database', title: 'Elabora tutti'],
                 [cont: 'bioWiki', action: 'list', icon: 'scambia', title: 'BioWiki'],
-                [cont: 'bioGrails', action: 'upload', icon: 'frecciasu', title: 'Upload liste']
+                [cont: 'bioGrails', action: 'uploadGiorniNascita', icon: 'frecciasu', title: 'giorniNascita'],
+                [cont: 'bioGrails', action: 'uploadGiorniMorte', icon: 'frecciasu', title: 'giorniMorte'],
+                [cont: 'bioGrails', action: 'uploadAnniNascita', icon: 'frecciasu', title: 'anniNascita'],
+                [cont: 'bioGrails', action: 'uploadAnniMorte', icon: 'frecciasu', title: 'anniMorte'],
+                [cont: 'bioGrails', action: 'uploadAll', icon: 'frecciasu', title: 'Upload all']
         ]
         // fine della definizione
 
