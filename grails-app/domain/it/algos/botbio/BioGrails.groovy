@@ -13,7 +13,7 @@
 
 package it.algos.botbio
 
-class BioGrails  {
+class BioGrails {
 
     /** nomi interni dei campi (ordine non garantito) */
     //--parametri wiki
@@ -125,6 +125,14 @@ class BioGrails  {
     // per disabilitare l'automatismo, mettere a false la proprietà version nella classe specifica
     static mapping = {
         tablePerHierarchy true  //standard
+
+        // registrazione automatica delle date di creazione e update dei records
+        // default del timestamping è true
+        autoTimestamp true
+
+        // numero di versione del singolo record per l'optimistic locking
+        // default del versioning è true
+        version true
     } // end of static mapping
 
     /**

@@ -1,30 +1,24 @@
-/**
- * Created with IntelliJ IDEA.
- * User: Gac
- * Date: 16-11-13
- * Time: 17:43
- */
 import it.algos.algospref.Preferenze
 import it.algos.botbio.LibBio
 
 /**
  * Created with IntelliJ IDEA.
  * User: Gac
- * Date: 25-9-13
- * Time: 14:38
+ * Date: 18-11-13
+ * Time: 17:14
  */
-class UploadJob {
+class ElaboraJob {
 
     // utilizzo di un service con la businessLogic per l'elaborazione dei dati
     // il service viene iniettato automaticamente
-    def bioGrailsService
+    def bioService
 //    def logWikiService
 
     //--codifica dell'orario di attivazione
-    private static String cronExpressionUpload = "0 0 4 * * ?"   //tutti i giorni alle quattro di notte
+    private static String cronExpressionElabora = "0 0 2 * * ?"   //tutti i giorni alle due di notte
 
     static triggers = {
-        cron name: 'upload', cronExpression: cronExpressionUpload
+        cron name: 'upload', cronExpression: cronExpressionElabora
     }// fine del metodo statico
 
     def execute() {
@@ -38,8 +32,8 @@ class UploadJob {
 
         //--flag di attivazione
         if (Preferenze.getBool(LibBio.USA_CRONO_DOWNLOAD)) {
-            if (bioGrailsService) {
-                bioGrailsService.uploadAll()
+            if (bioService) {
+                bioService.elaboraAll()
             }// fine del blocco if
 //            if (logWikiService) {
 //                fine = System.currentTimeMillis()

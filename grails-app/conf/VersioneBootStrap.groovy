@@ -1,8 +1,15 @@
+import groovy.sql.Sql
+import it.algos.botbio.BioGrails
+
+import javax.sql.DataSource
+
 class VersioneBootStrap {
 
     // utilizzo di un service con la businessLogic per l'elaborazione dei dati
     // il service viene iniettato automaticamente
     def versioneService
+
+    DataSource dataSource
 
     //--metodo invocato direttamente da Grails
     //--tutte le aggiunte, modifiche e patch vengono inserite con una versione
@@ -41,6 +48,12 @@ class VersioneBootStrap {
             versioneService.newVersione('Upload', 'Ordinamento alfabetico nei sotogruppi di giorni e anni')
         }// fine del blocco if
     }// fine della closure
+
+    def allungaCampo(Sql sql, String nomeCampo) {
+        String query = "alter table wiki.bio_grails modify column `${nomeCampo}` varchar(765)"
+        sql.execute(query)
+        println('Allungato (longtext) il campo ${nomeCampo}')
+    }// fine del metodo
 
     def destroy = {
     }// fine della closure

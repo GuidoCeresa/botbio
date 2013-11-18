@@ -18,6 +18,7 @@ import it.algos.algoslib.Lib
 import it.algos.algoslib.LibArray
 import it.algos.algoslib.LibTesto
 import it.algos.algoslib.LibTime
+import it.algos.algoslogo.Evento
 import it.algos.algospref.LibPref
 import it.algos.algospref.Preferenze
 import it.algos.algoswiki.*
@@ -48,7 +49,8 @@ class BioService {
     // utilizzo di un service con la businessLogic
     // il service viene iniettato automaticamente
     def listaService
-    def logWikiService
+    def logoService
+    def eventoService
     def bioWikiService
 
     private static boolean pagineMultiple = true // controllo e caricamente singolo piuttosto che a pacchetto
@@ -60,7 +62,7 @@ class BioService {
     //--Regola il flag 'elaborata'=true per tutti i recordas elaborati
     //--Elabora i link alle tavole collegate
     //--Crea le didascalie
-    public int elaboraAll() {
+    public ArrayList<Integer> elaboraAll() {
         //--Azzera il flag
         BioWiki.executeUpdate('update BioWiki set elaborata=false')
 //        log.info 'Fine del metodo di elaborazione di tutti i records'
@@ -151,7 +153,6 @@ class BioService {
 
         inizio = System.currentTimeMillis()
         elaboraDidascalie(listaRecordsDaElaborare)
-        elaboraLink(listaRecordsDaElaborare)
         fine = System.currentTimeMillis()
         durata = fine - inizio
         tempo = durata / numVoci
@@ -190,22 +191,12 @@ class BioService {
             bioWiki = BioWiki.findByPageid(pageid)
             if (bioWiki) {
                 bioGrails = elaboraGrails(bioWiki)
-                if (bioGrails) {
-                    try { // prova ad eseguire il codice
-                        bioGrailsRegistrata = bioGrails.save(flush: true)
-                    } catch (Exception unErrore) { // intercetta l'errore
-                        log.error unErrore
-                        String title = ''
-                        title = bioGrails.title
-                        log.error "Non creato BioGrails per ${title}"
-                    }// fine del blocco try-catch
-                    if (bioGrailsRegistrata) {
-                        bioWiki.elaborata = true
-                        bioWiki.save(flush: true)
-                        numVoci++
-                    }// fine del blocco if
-                }// fine del blocco if
-
+                bioGrailsRegistrata = bioGrails.save()
+                if (bioGrailsRegistrata) {
+                    bioWiki.elaborata = true
+                    bioWiki.save()
+                    numVoci++
+                }// fine del blocco
             }// fine del blocco if
         }// fine di each
 
@@ -221,27 +212,22 @@ class BioService {
 
         if (bioWiki) {
             pageid = bioWiki.pageid
-            try { // prova ad eseguire il codice
-                bioGrails = BioGrails.findByPageid(pageid)
-            } catch (Exception unErrore) { // intercetta l'errore
-                def stop
-                log.error unErrore
-            }// fine del blocco try-catch
+            bioGrails = BioGrails.findByPageid(pageid)
             if (bioGrails == null) {
                 bioGrails = new BioGrails(pageid: pageid)
             }// fine del blocco if
 
-            bioGrails.title = fixTitolo(bioWiki.title)
-            bioGrails.nome = fixNome(bioWiki.nome)
-            bioGrails.cognome = fixCognome(bioWiki.cognome)
-            bioGrails.forzaOrdinamento = fixOrdinamento(bioWiki.forzaOrdinamento)
-            bioGrails.sesso = fixSesso(bioWiki.sesso)
+            bioGrails.title = fixTitolo(bioWiki)
+            bioGrails.nome = fixNome(bioWiki)
+            bioGrails.cognome = fixCognome(bioWiki)
+            bioGrails.forzaOrdinamento = fixOrdinamento(bioWiki)
+            bioGrails.sesso = fixSesso(bioWiki)
             bioGrails.localitaNato = fixLuogoNato(bioWiki.luogoNascita, bioWiki.luogoNascitaLink)
             bioGrails.localitaMorto = fixLuogoMorto(bioWiki.luogoMorte, bioWiki.luogoMorteLink)
-            bioGrails.attivita = fixAttivita(bioWiki.attivita)
-            bioGrails.attivita2 = fixAttivita2(bioWiki.attivita2)
-            bioGrails.attivita3 = fixAttivita3(bioWiki.attivita3)
-            bioGrails.nazionalita = fixNazionalita(bioWiki.nazionalita)
+            bioGrails.attivita = fixAttivita(bioWiki)
+            bioGrails.attivita2 = fixAttivita2(bioWiki)
+            bioGrails.attivita3 = fixAttivita3(bioWiki)
+            bioGrails.nazionalita = fixNazionalita(bioWiki)
         }// fine del blocco if
 
         return bioGrails
@@ -262,7 +248,7 @@ class BioService {
             bioGrails = BioGrails.findByPageid(pageid)
             if (bioWiki && bioGrails) {
                 bioGrails = elaboraLink(bioWiki, bioGrails)
-                bioGrails.save(flush: true)
+                bioGrails.save(flush: false)
             }// fine del blocco if
         }// fine di each
 
@@ -281,11 +267,7 @@ class BioService {
             bioGrails.attivita2Link = AttivitaService.getAttivita(bioGrails.attivita2)
             bioGrails.attivita3Link = AttivitaService.getAttivita(bioGrails.attivita3)
             bioGrails.nazionalitaLink = NazionalitaService.getNazionalita(bioGrails.nazionalita)
-            try { // prova ad eseguire il codice
-                bioGrails.save(flush: true)
-            } catch (Exception unErrore) { // intercetta l'errore
-                log.error unErrore
-            }// fine del blocco try-catch
+            bioGrails.save(flush: false)
         }// fine del blocco if
 
         return bioGrails
@@ -311,11 +293,11 @@ class BioService {
 
             if (bioWiki && bioGrails) {
                 bioGrails = elaboraDidascalie(bioWiki, bioGrails)
-                bioGrailsRegistrata = bioGrails.save(flush: true)
+                bioGrailsRegistrata = bioGrails.save(flush: false)
 
                 if (bioWiki && bioGrailsRegistrata) {
                     bioWiki.elaborata = true
-                    bioWiki.save(flush: true)
+                    bioWiki.save(flush: false)
                 }// fine del blocco if
             }// fine del blocco if
         }// fine di each
@@ -497,24 +479,24 @@ class BioService {
         return registrata
     } // fine del metodo
 
-    private static String fixTitolo(String testoIn) {
-        return fixCampo(testoIn)
+    private String fixTitolo(BioWiki bioWiki) {
+        return fixCampo(bioWiki, bioWiki.title, 'titolo')
     } // fine del metodo
 
-    private static String fixNome(String testoIn) {
-        return fixCampo(testoIn)
+    private String fixNome(BioWiki bioWiki) {
+        return fixCampo(bioWiki, bioWiki.nome, 'nome')
     } // fine del metodo
 
-    private static String fixCognome(String testoIn) {
-        return fixCampo(testoIn)
+    private String fixCognome(BioWiki bioWiki) {
+        return fixCampo(bioWiki, bioWiki.cognome, 'cognome')
     } // fine del metodo
 
-    private static String fixOrdinamento(String testoIn) {
-        return fixCampo(testoIn)
+    private String fixOrdinamento(BioWiki bioWiki) {
+        return fixCampo(bioWiki, bioWiki.forzaOrdinamento, 'forzaOrdinamento')
     } // fine del metodo
 
-    private static String fixSesso(String testoIn) {
-        return fixCampo(testoIn)
+    private String fixSesso(BioWiki bioWiki) {
+        return fixCampo(bioWiki, bioWiki.sesso, 'sesso')
     } // fine del metodo
 
     private static String fixLuogoNato(String luogoNascita, String luogoNascitaLink) {
@@ -547,23 +529,23 @@ class BioService {
         return testoOut
     } // fine del metodo
 
-    private static String fixAttivita(String testoIn) {
-        return fixCampo(testoIn)
+    private String fixAttivita(BioWiki bioWiki) {
+        return fixCampo(bioWiki, bioWiki.attivita, 'attivita')
     } // fine del metodo
 
-    private static String fixAttivita2(String testoIn) {
-        return fixCampo(testoIn)
+    private String fixAttivita2(BioWiki bioWiki) {
+        return fixCampo(bioWiki, bioWiki.attivita2, 'attivita2')
     } // fine del metodo
 
-    private static String fixAttivita3(String testoIn) {
-        return fixCampo(testoIn)
+    private String fixAttivita3(BioWiki bioWiki) {
+        return fixCampo(bioWiki, bioWiki.attivita3, 'attivita3')
     } // fine del metodo
 
-    private static String fixNazionalita(String testoIn) {
-        return fixCampo(testoIn)
+    private String fixNazionalita(BioWiki bioWiki) {
+        return fixCampo(bioWiki, bioWiki.nazionalita, 'nazionalita')
     } // fine del metodo
 
-    private static Giorno getGiornoNato(BioWiki bioWiki) {
+    private Giorno getGiornoNato(BioWiki bioWiki) {
         Giorno giorno = null
         String giornoWiki
         String title = ''
@@ -571,7 +553,7 @@ class BioService {
         if (bioWiki) {
             giornoWiki = bioWiki.giornoMeseNascita
             if (giornoWiki) {
-                giornoWiki = fixCampo(giornoWiki)
+                giornoWiki = fixCampo(bioWiki, giornoWiki, 'giornoMeseNascita')
                 giornoWiki = fixGiorno(giornoWiki)
                 try { // prova ad eseguire il codice
                     giorno = Giorno.findByNome(giornoWiki)
@@ -598,7 +580,7 @@ class BioService {
         return giorno
     } // fine del metodo
 
-    private static Giorno getGiornoMorto(BioWiki bioWiki) {
+    private Giorno getGiornoMorto(BioWiki bioWiki) {
         Giorno giorno = null
         String giornoWiki
         String title = ''
@@ -606,7 +588,7 @@ class BioService {
         if (bioWiki) {
             giornoWiki = bioWiki.giornoMeseMorte
             if (giornoWiki) {
-                giornoWiki = fixCampo(giornoWiki)
+                giornoWiki = fixCampo(bioWiki, giornoWiki, 'giornoMeseMorte')
                 giornoWiki = fixGiorno(giornoWiki)
                 try { // prova ad eseguire il codice
                     giorno = Giorno.findByNome(giornoWiki)
@@ -633,13 +615,13 @@ class BioService {
         return giorno
     } // fine del metodo
 
-    private static Anno getAnnoNato(BioWiki bioWiki) {
+    private Anno getAnnoNato(BioWiki bioWiki) {
         Anno anno = null
         String annoWiki
 
         if (bioWiki) {
             annoWiki = bioWiki.annoNascita
-            annoWiki = fixCampo(annoWiki)
+            annoWiki = fixCampo(bioWiki, annoWiki, 'annoNascita')
             try { // prova ad eseguire il codice
                 anno = Anno.findByTitolo(annoWiki)
                 if (anno) {
@@ -654,13 +636,13 @@ class BioService {
         return anno
     } // fine del metodo
 
-    private static Anno getAnnoMorto(BioWiki bioWiki) {
+    private Anno getAnnoMorto(BioWiki bioWiki) {
         Anno anno = null
         String annoWiki
 
         if (bioWiki) {
             annoWiki = bioWiki.annoMorte
-            annoWiki = fixCampo(annoWiki)
+            annoWiki = fixCampo(bioWiki, annoWiki, 'annoMorte')
             try { // prova ad eseguire il codice
                 anno = Anno.findByTitolo(annoWiki)
                 if (anno) {
@@ -675,8 +657,16 @@ class BioService {
         return anno
     } // fine del metodo
 
-    private static String fixCampo(String testoIn) {
+    //--regola la lunghezza del campo
+    //--elimina il teasto successivo al ref
+    //--elimina il testo successivo alle note
+    //--elimina il testo successivo alle graffe
+    //--tronca comunque il testo a 255 caratteri
+    private String fixCampo(BioWiki bioWiki, String testoIn, String nomeCampo) {
         String testoOut = testoIn
+        int pageid
+        Evento evento
+        String titolo
 
         if (testoOut) {
             testoOut = testoOut.trim()
@@ -684,6 +674,25 @@ class BioService {
             testoOut = LibTesto.levaDopoNote(testoOut)
             testoOut = LibTesto.levaDopoGraffe(testoOut)
             testoOut = testoOut.trim()
+        }// fine del blocco if
+
+        if (testoOut && testoOut.length() > 253) {
+            testoOut = testoOut.substring(0, 252)
+            pageid = bioWiki.pageid
+            if (logoService) {
+                evento = Evento.findByNome(LibBio.EVENTO_TESTO_TROPPO_LUNGO)
+                if (evento == null) {
+                    if (eventoService) {
+                        evento = eventoService.getGenerico()
+                    }// fine del blocco if
+                }// fine del blocco if
+                if (nomeCampo.equals('title')) {
+                    logoService.setWarn(null, evento, 'Biobot', 'bot', "${nomeCampo} di ${pageid} troppo lungo")
+                } else {
+                    titolo = bioWiki.title
+                    logoService.setWarn(null, evento, 'Biobot', 'bot', "${nomeCampo} di ${titolo} troppo lungo")
+                }// fine del blocco if-else
+            }// fine del blocco if
         }// fine del blocco if
 
         return testoOut

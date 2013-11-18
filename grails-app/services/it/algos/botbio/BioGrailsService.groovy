@@ -287,7 +287,7 @@ class BioGrailsService {
             if ((risultato == Risultato.modificaRegistrata) || (risultato == Risultato.allineata)) {
                 registrata = true
             } else {
-                log.warn "La pagina $titolo è $risultato"
+//                log.warn "La pagina $titolo è $risultato"
             }// fine del blocco if-else
         }// fine del blocco if
 
@@ -324,7 +324,7 @@ class BioGrailsService {
             if ((risultato == Risultato.registrata) || (risultato == Risultato.allineata)) {
                 registrata = true
             } else {
-                log.warn "La pagina $titolo è $risultato"
+//                log.warn "La pagina $titolo è $risultato"
             }// fine del blocco if-else
         }// fine del blocco if
 
