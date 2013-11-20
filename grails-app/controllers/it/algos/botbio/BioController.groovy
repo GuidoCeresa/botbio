@@ -17,6 +17,7 @@ import it.algos.algos.DialogoController
 import it.algos.algos.TipoDialogo
 import it.algos.algoslib.Lib
 import it.algos.algoslib.LibTesto
+import it.algos.algospref.LibPref
 import it.algos.algospref.Preferenze
 
 //--gestisce operazioni aggiuntive e di controllo
@@ -198,6 +199,61 @@ class BioController {
     } // fine del metodo
 
 
+    def pargiorno() {
+        params.max = 1000
+        ArrayList campiLista
+        def lista
+        def campoSort
+        String titoloLista
+
+        //--selezione delle colonne (campi) visibili nella lista
+        //--solo nome e di default il titolo viene uguale
+        //--mappa con [campo:'nomeDelCampo', title:'titoloVisibile', sort:'ordinamento']
+        campiLista = [
+                'pageid',
+                [campo: 'wikiUrl', title: 'Wiki'],
+                'nome',
+                'cognome',
+                'giornoMeseNascita',
+                'giornoMeseMorte'
+        ]
+        // fine della definizione
+
+        //--regolazione dei campo di ordinamento
+        //--regolazione dei parametri di ordinamento
+        if (!params.sort) {
+            if (campoSort) {
+                params.sort = campoSort
+            }// fine del blocco if
+        }// fine del blocco if-else
+        if (params.order) {
+            if (params.order == 'asc') {
+                params.order = 'desc'
+            } else {
+                params.order = 'asc'
+            }// fine del blocco if-else
+        } else {
+            params.order = 'asc'
+        }// fine del blocco if-else
+
+        //--selezione dei records da mostrare
+        //--per una lista filtrata (parziale), modificare i parametri
+        //--oppure modificare il findAllByInteroGreaterThan()...
+        lista = bioService.getListaPrimiGiorniErrati()
+
+        //--titolo visibile sopra la table dei dati
+        titoloLista = 'Elenco di ' + Lib.Txt.formatNum(lista.size()) + ' biografie con primo giorno del mese errato'
+
+        //--presentazione della view (list), secondo il modello
+        //--menuExtra e campiLista possono essere nulli o vuoti
+        //--se campiLista è vuoto, mostra tutti i campi (primi 8)
+        render(view: 'pargiorno', model: [
+                bioWikiInstanceList: lista,
+                titoloLista: titoloLista,
+                campiLista: campiLista],
+                params: params)
+    } // fine del metodo
+
     //--mostra un dialogo di conferma per l'operazione da compiere
     //--passa al metodo effettivo
     def uploadGiorni() {
@@ -253,23 +309,41 @@ class BioController {
         redirect(action: 'index')
     } // fine del metodo
 
-    def pargiorno() {
-        params.max = 1000
+    //--records vuoti
+    def parOrdinamentoVuoti() {
+        params.max = 100
+        params.controller = 'BioGrails'
+        ArrayList menuExtra
         ArrayList campiLista
         def lista
-        def campoSort
+        def campoSort = 'forzaOrdinamento'
         String titoloLista
+        int recordsTotaliVuoti
+        int vociBiograficheTotali
+
+        if (LibPref.getBool(LibBio.USA_LIMITE_ELABORA)) {
+            params.max = LibPref.getInt(LibBio.MAX_ELABORA)
+        }// fine del blocco if
+
+        //--selezione dei menu extra
+        //--solo azione e di default controller=questo; classe e titolo vengono uguali
+        //--mappa con [cont:'controller', action:'metodo', icon:'iconaImmagine', title:'titoloVisibile']
+        menuExtra = [
+                [cont: 'bio', action: 'parOrdinamentoPieni', icon: 'database', title: 'Piene'],
+                [cont: 'bio', action: 'parOrdinamentoAll', icon: 'database', title: 'Tutte'],
+                [cont: 'bio', action: 'fixOrdinamento', icon: 'database', title: 'Fix and elabora']
+        ]
+        // fine della definizione
 
         //--selezione delle colonne (campi) visibili nella lista
         //--solo nome e di default il titolo viene uguale
         //--mappa con [campo:'nomeDelCampo', title:'titoloVisibile', sort:'ordinamento']
         campiLista = [
                 'pageid',
-                [campo: 'wikiUrl', title: 'Wiki'],
-                'nome',
+                'title',
+                'forzaOrdinamento',
                 'cognome',
-                'giornoMeseNascita',
-                'giornoMeseMorte'
+                'nome'
         ]
         // fine della definizione
 
@@ -293,19 +367,242 @@ class BioController {
         //--selezione dei records da mostrare
         //--per una lista filtrata (parziale), modificare i parametri
         //--oppure modificare il findAllByInteroGreaterThan()...
-        lista = bioService.getListaPrimiGiorniErrati()
+        lista = BioGrails.findAllByForzaOrdinamentoIsNull([sort: "title", offset: params.offset, order: "asc", max: params.max])
+
+        //--calcola il numero di record
+        recordsTotaliVuoti = BioGrails.countByForzaOrdinamentoIsNull()
+        vociBiograficheTotali = BioGrails.count()
 
         //--titolo visibile sopra la table dei dati
-        titoloLista = 'Elenco di ' + Lib.Txt.formatNum(lista.size()) + ' biografie con primo giorno del mese errato'
+        titoloLista = 'Elenco di '
+        titoloLista += Lib.Txt.formatNum(params.max) + '/' + Lib.Txt.formatNum(recordsTotaliVuoti)
+        titoloLista += ' records col parametro forzaOrdinamento vuoto'
+        titoloLista += ' su un totale di ' + Lib.Txt.formatNum(vociBiograficheTotali) + ' voci biografiche'
 
         //--presentazione della view (list), secondo il modello
         //--menuExtra e campiLista possono essere nulli o vuoti
         //--se campiLista è vuoto, mostra tutti i campi (primi 8)
-        render(view: 'pargiorno', model: [
-                bioWikiInstanceList: lista,
+        render(view: 'parordinamento', model: [
+                bioGrailsInstanceList: lista,
+                bioGrailsInstanceTotal: recordsTotaliVuoti,
+                menuExtra: menuExtra,
                 titoloLista: titoloLista,
                 campiLista: campiLista],
                 params: params)
+    } // fine del metodo
+
+    //--records vuoti
+    def parOrdinamentoPieni() {
+        params.max = 100
+        params.controller = 'BioGrails'
+        ArrayList menuExtra
+        ArrayList campiLista
+        def lista
+        def campoSort = 'forzaOrdinamento'
+        String titoloLista
+        int recordsTotaliPieni
+        int vociBiograficheTotali
+
+        if (LibPref.getBool(LibBio.USA_LIMITE_ELABORA)) {
+            params.max = LibPref.getInt(LibBio.MAX_ELABORA)
+        }// fine del blocco if
+
+        //--selezione dei menu extra
+        //--solo azione e di default controller=questo; classe e titolo vengono uguali
+        //--mappa con [cont:'controller', action:'metodo', icon:'iconaImmagine', title:'titoloVisibile']
+        menuExtra = [
+                [cont: 'bio', action: 'parOrdinamentoVuoti', icon: 'database', title: 'Vuote'],
+                [cont: 'bio', action: 'parOrdinamentoAll', icon: 'database', title: 'Tutte']
+        ]
+        // fine della definizione
+
+        //--selezione delle colonne (campi) visibili nella lista
+        //--solo nome e di default il titolo viene uguale
+        //--mappa con [campo:'nomeDelCampo', title:'titoloVisibile', sort:'ordinamento']
+        campiLista = [
+                'pageid',
+                'title',
+                'forzaOrdinamento',
+                'cognome',
+                'nome'
+        ]
+        // fine della definizione
+
+        //--regolazione dei campo di ordinamento
+        //--regolazione dei parametri di ordinamento
+        if (!params.sort) {
+            if (campoSort) {
+                params.sort = campoSort
+            }// fine del blocco if
+        }// fine del blocco if-else
+        if (params.order) {
+            if (params.order == 'asc') {
+                params.order = 'desc'
+            } else {
+                params.order = 'asc'
+            }// fine del blocco if-else
+        } else {
+            params.order = 'asc'
+        }// fine del blocco if-else
+
+        //--selezione dei records da mostrare
+        //--per una lista filtrata (parziale), modificare i parametri
+        //--oppure modificare il findAllByInteroGreaterThan()...
+        lista = BioGrails.findAllByForzaOrdinamentoIsNotNull([sort: "forzaOrdinamento", offset: params.offset, order: "asc", max: params.max])
+
+        //--calcola il numero di record
+        recordsTotaliPieni = BioGrails.countByForzaOrdinamentoIsNotNull()
+        vociBiograficheTotali = BioGrails.count()
+
+        //--titolo visibile sopra la table dei dati
+        titoloLista = 'Elenco di '
+        titoloLista += Lib.Txt.formatNum(params.max) + '/' + Lib.Txt.formatNum(recordsTotaliPieni)
+        titoloLista += ' records col parametro forzaOrdinamento pieno'
+        titoloLista += ' su un totale di ' + Lib.Txt.formatNum(vociBiograficheTotali) + ' voci biografiche'
+
+        //--presentazione della view (list), secondo il modello
+        //--menuExtra e campiLista possono essere nulli o vuoti
+        //--se campiLista è vuoto, mostra tutti i campi (primi 8)
+        render(view: 'parordinamento', model: [
+                bioGrailsInstanceList: lista,
+                bioGrailsInstanceTotal: recordsTotaliPieni,
+                menuExtra: menuExtra,
+                titoloLista: titoloLista,
+                campiLista: campiLista],
+                params: params)
+    } // fine del metodo
+
+    //-- tutti i records
+    def parOrdinamentoAll() {
+        params.max = Integer.MAX_VALUE
+        params.controller = 'BioGrails'
+        ArrayList menuExtra
+        ArrayList campiLista
+        def lista
+        def campoSort = 'forzaOrdinamento'
+        String titoloLista
+        int recordsTotali
+
+        if (LibPref.getBool(LibBio.USA_LIMITE_ELABORA)) {
+            params.max = LibPref.getInt(LibBio.MAX_ELABORA)
+        }// fine del blocco if
+
+        //--selezione dei menu extra
+        //--solo azione e di default controller=questo; classe e titolo vengono uguali
+        //--mappa con [cont:'controller', action:'metodo', icon:'iconaImmagine', title:'titoloVisibile']
+        menuExtra = [
+                [cont: 'bio', action: 'parOrdinamentoVuoti', icon: 'database', title: 'Vuote'],
+                [cont: 'bio', action: 'parOrdinamentoPieni', icon: 'database', title: 'Piene']
+        ]
+        // fine della definizione
+
+        //--selezione delle colonne (campi) visibili nella lista
+        //--solo nome e di default il titolo viene uguale
+        //--mappa con [campo:'nomeDelCampo', title:'titoloVisibile', sort:'ordinamento']
+        campiLista = [
+                'pageid',
+                'title',
+                'forzaOrdinamento',
+                'cognome',
+                'nome'
+        ]
+        // fine della definizione
+
+        //--regolazione dei campo di ordinamento
+        //--regolazione dei parametri di ordinamento
+        if (!params.sort) {
+            if (campoSort) {
+                params.sort = campoSort
+            }// fine del blocco if
+        }// fine del blocco if-else
+        if (params.order) {
+            if (params.order == 'asc') {
+                params.order = 'desc'
+            } else {
+                params.order = 'asc'
+            }// fine del blocco if-else
+        } else {
+            params.order = 'asc'
+        }// fine del blocco if-else
+
+        //--selezione dei records da mostrare
+        //--per una lista filtrata (parziale), modificare i parametri
+        //--oppure modificare il findAllByInteroGreaterThan()...
+//        lista = BioGrails.findAll(params)
+        lista = BioGrails.findAll([sort: "forzaOrdinamento", offset: params.offset, order: "asc", max: params.max])
+
+        //--calcola il numero di record
+        recordsTotali = BioGrails.count()
+
+        //--titolo visibile sopra la table dei dati
+        titoloLista = 'Elenco di '
+        titoloLista += Lib.Txt.formatNum(lista.size()) + '/' + Lib.Txt.formatNum(recordsTotali)
+        titoloLista += ' biografie con evidenziato il parametro forzaOrdinamento'
+
+        //--presentazione della view (list), secondo il modello
+        //--menuExtra e campiLista possono essere nulli o vuoti
+        //--se campiLista è vuoto, mostra tutti i campi (primi 8)
+        render(view: 'parordinamento', model: [
+                bioGrailsInstanceList: lista,
+                bioGrailsInstanceTotal: recordsTotali,
+                menuExtra: menuExtra,
+                titoloLista: titoloLista,
+                campiLista: campiLista],
+                params: params)
+    } // fine del metodo
+
+    //--mostra un dialogo di conferma per l'operazione da compiere
+    //--passa al metodo effettivo
+    def fixOrdinamento() {
+        boolean usaLimiteElabora = LibPref.getBool(LibBio.USA_LIMITE_ELABORA)
+        int maxElabora = LibPref.getInt(LibBio.MAX_ELABORA)
+        String maxElaboraTxt
+        params.tipo = TipoDialogo.conferma
+        params.titolo = 'FixOrdinamento'
+        params.avviso = []
+
+        if (usaLimiteElabora && maxElabora > 0) {
+            maxElaboraTxt = Lib.Txt.formatNum(maxElabora)
+            params.avviso.add("Vengono elaborate ${maxElaboraTxt} voci col parametro forzaOrdinamento vuoto")
+        } else {
+            params.avviso.add("Vengono elaborate tutte le voci col parametro forzaOrdinamento vuoto")
+            params.avviso.add("Occorrono decine e decine di ore")
+        }// fine del blocco if-else
+        params.returnController = 'bio'
+        params.returnAction = 'fixOrdinamentoDopoConferma'
+        redirect(controller: 'dialogo', action: 'box', params: params)
+    } // fine del metodo
+
+    //--ciclo di elaborazione
+    def fixOrdinamentoDopoConferma() {
+        String valore
+        boolean continua = false
+        def numVoci
+        String avviso
+        flash.message = 'Operazione annullata. Le voci non sono state modificate.'
+
+        if (params.valore) {
+            if (params.valore instanceof String) {
+                valore = (String) params.valore
+                if (valore.equals(DialogoController.DIALOGO_CONFERMA)) {
+                    continua = true
+                }// fine del blocco if
+            }// fine del blocco if
+        }// fine del blocco if
+
+        if (continua) {
+            numVoci = bioService.elabora()
+            if (numVoci.size() == 0) {
+                flash.message = 'Non è stata elaborata nessuna voce'
+            } else {
+                numVoci = LibTesto.formatNum(numVoci.size())
+                avviso = "Sono state elaborate ${numVoci} voci che avevano il parametro forzaOrdinamento vuoto"
+                flash.message = avviso
+                log.info(avviso)
+            }// fine del blocco if-else
+        }// fine del blocco if
+
+        redirect(action: 'parOrdinamentoVuoti')
     } // fine del metodo
 
     def show(Long id) {

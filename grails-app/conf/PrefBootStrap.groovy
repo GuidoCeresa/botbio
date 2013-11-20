@@ -27,6 +27,8 @@ class PrefBootStrap {
         grailsApplication.config.usaColonne = LibBio.USA_COLONNE
         grailsApplication.config.maxRigheColonne = LibBio.MAX_RIGHE_COLONNE
         grailsApplication.config.registraSoloModificheSostanziali = LibBio.REGISTRA_SOLO_MODIFICHE_SOSTANZIALI
+        grailsApplication.config.usaLimiteElabora = LibBio.USA_LIMITE_ELABORA
+        grailsApplication.config.maxElabora = LibBio.MAX_ELABORA
 
         //--alcune preferenze sempre presenti
         Preferenze.findOrCreateByCodeAndTypeAndValue((String) grailsApplication.config.debug, Preferenze.TYPE_BOOL, 'false').save(flush: true)
@@ -41,6 +43,8 @@ class PrefBootStrap {
         Preferenze.findOrCreateByCodeAndTypeAndValue((String) grailsApplication.config.usaColonne, Preferenze.TYPE_BOOL, 'true').save(flush: true)
         Preferenze.findOrCreateByCodeAndTypeAndValue((String) grailsApplication.config.maxRigheColonne, Preferenze.TYPE_INT, '10').save(flush: true)
         Preferenze.findOrCreateByCodeAndTypeAndValue((String) grailsApplication.config.registraSoloModificheSostanziali, Preferenze.TYPE_BOOL, 'true').save(flush: true)
+        Preferenze.findOrCreateByCodeAndTypeAndValue((String) grailsApplication.config.usaLimiteElabora, Preferenze.TYPE_BOOL, 'true').save(flush: true)
+        Preferenze.findOrCreateByCodeAndTypeAndValue((String) grailsApplication.config.maxElabora, Preferenze.TYPE_INT, '2000').save(flush: true)
     }// fine della closure
 
     //--metodo invocato direttamente da Grails

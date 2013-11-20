@@ -33,7 +33,7 @@ class ElaboraJob {
         //--flag di attivazione
         if (Preferenze.getBool(LibBio.USA_CRONO_DOWNLOAD)) {
             if (bioService) {
-                bioService.elaboraAll()
+                bioService.elabora()
             }// fine del blocco if
 //            if (logWikiService) {
 //                fine = System.currentTimeMillis()

@@ -81,13 +81,13 @@ class BioService {
         // variabili e costanti locali di lavoro
         ArrayList<Integer> listaRecordsElaborati = null
         ArrayList<Integer> listaid
-        int maxDownload
+        int maxElabora
 
         listaid = (ArrayList<Integer>) BioWiki.executeQuery('select pageid from BioWiki where elaborata=false')
 
-        if (LibPref.getBool('usaLimiteDownload')) {
-            maxDownload = LibPref.getInt('maxDownload')
-            listaid = LibArray.estraArray(listaid, maxDownload)
+        if (LibPref.getBool(LibBio.USA_LIMITE_ELABORA)) {
+            maxElabora = LibPref.getInt(LibBio.MAX_ELABORA)
+            listaid = LibArray.estraArray(listaid, maxElabora)
         }// fine del blocco if
 
         if (listaid) {
@@ -492,7 +492,32 @@ class BioService {
     } // fine del metodo
 
     private String fixOrdinamento(BioWiki bioWiki) {
-        return fixCampo(bioWiki, bioWiki.forzaOrdinamento, 'forzaOrdinamento')
+        String testoOut = ''
+        String cognome
+        String nome
+
+        if (bioWiki.forzaOrdinamento) {
+            testoOut = fixCampo(bioWiki, bioWiki.forzaOrdinamento, 'forzaOrdinamento')
+        } else {
+            if (bioWiki.cognome) {
+                cognome = bioWiki.cognome
+            }// fine del blocco if
+            if (bioWiki.nome) {
+                nome = bioWiki.nome
+            }// fine del blocco if
+            if (cognome) {
+                testoOut = cognome
+            }// fine del blocco if
+            if (nome) {
+                if (cognome) {
+                    testoOut += ', ' + nome
+                } else {
+                    testoOut = nome
+                }// fine del blocco if-else
+            }// fine del blocco if
+        }// fine del blocco if-else
+
+        return testoOut
     } // fine del metodo
 
     private String fixSesso(BioWiki bioWiki) {
@@ -3914,6 +3939,53 @@ class BioService {
                 }// fine del blocco if
             }// fine del blocco if-else
         } // fine del ciclo each
+
+        return lista
+    }// fine del metodo
+
+    //--lista di voci col parametro forzaOrdinamento mancante
+    public ArrayList getListaOrdinamentoAssente() {
+        ArrayList lista = new ArrayList()
+        def results
+        int max = Integer.MAX_VALUE
+        int offset
+
+//        if (LibPref.getBool(LibBio.USA_LIMITE_ELABORA)) {
+//            max = LibPref.getInt(LibBio.MAX_ELABORA)
+//        }// fine del blocco if
+
+        results = BioGrails.findAllByForzaOrdinamentoIsNull([sort: "title", offset: offset, order: "asc", max: max])
+
+        if (results) {
+            if (results instanceof List) {
+                lista = results
+            } else {
+                lista.add(results)
+            }// fine del blocco if-else
+        }// fine del blocco if
+
+        return lista
+    }// fine del metodo
+
+    //--lista di voci col parametro forzaOrdinamento presente
+    public ArrayList getListaOrdinamentoPresente() {
+        ArrayList lista = new ArrayList()
+        def results
+        int max = Integer.MAX_VALUE
+
+        if (LibPref.getBool(LibBio.USA_LIMITE_ELABORA)) {
+            max = LibPref.getInt(LibBio.MAX_ELABORA)
+        }// fine del blocco if
+
+        results = BioGrails.findAllByForzaOrdinamentoIsNotNull([sort: "title", order: "asc", max: max])
+
+        if (results) {
+            if (results instanceof List) {
+                lista = results
+            } else {
+                lista.add(results)
+            }// fine del blocco if-else
+        }// fine del blocco if
 
         return lista
     }// fine del metodo
