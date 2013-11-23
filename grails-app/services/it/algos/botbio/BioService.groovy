@@ -190,8 +190,16 @@ class BioService {
             pageid = (int) it
             bioWiki = BioWiki.findByPageid(pageid)
             if (bioWiki) {
-                bioGrails = elaboraGrails(bioWiki)
-                bioGrailsRegistrata = bioGrails.save()
+                try { // prova ad eseguire il codice
+                    bioGrails = elaboraGrails(bioWiki)
+                } catch (Exception unErrore) { // intercetta l'errore
+                    log.error unErrore + bioWiki.title
+                }// fine del blocco try-catch
+                try { // prova ad eseguire il codice
+                    bioGrailsRegistrata = bioGrails.save()
+                } catch (Exception unErrore) { // intercetta l'errore
+                    log.error unErrore + bioWiki.title
+                }// fine del blocco try-catch
                 if (bioGrailsRegistrata) {
                     bioWiki.elaborata = true
                     bioWiki.save()

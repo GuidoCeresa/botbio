@@ -24,7 +24,7 @@ class UploadJob {
     private static String cronExpressionUpload = "0 0 4 * * ?"   //tutti i giorni alle quattro di notte
 
     static triggers = {
-        cron name: 'upload', cronExpression: cronExpressionUpload
+//        cron name: 'upload', cronExpression: cronExpressionUpload
     }// fine del metodo statico
 
     def execute() {

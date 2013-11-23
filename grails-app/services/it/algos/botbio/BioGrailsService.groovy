@@ -32,8 +32,24 @@ class BioGrailsService {
     //--elabora e crea tutte le attività
     //--elabora e crea tutte le nazionalità
     def uploadAll() {
+        long inizio = System.currentTimeMillis()
+        long fine
+        long durata
+
+        def giorniNati = Giorno.countBySporcoNato(true)
+        def giorniMorti = Giorno.countBySporcoMorto(true)
+        def anniNati = Anno.countBySporcoNato(true)
+        def anniMorti = Anno.countBySporcoMorto(true)
+        log.info("Inizio ciclo upload: giorniNati=${giorniNati}, giorniMorti=${giorniMorti}, anniNati=${anniNati}, anniMorti=${anniMorti}")
+
         uploadGiorni()
         uploadAnni()
+        fine = System.currentTimeMillis()
+        durata = fine - inizio
+        durata = durata / 1000
+        durata = durata / 1000
+        log.info("Ciclo upload in ${durata} min")
+
 //        uploadAttivita()
 //        uploadNazionalita()
     } // fine del metodo

@@ -18,7 +18,7 @@ class ElaboraJob {
     private static String cronExpressionElabora = "0 0 2 * * ?"   //tutti i giorni alle due di notte
 
     static triggers = {
-        cron name: 'upload', cronExpression: cronExpressionElabora
+//        cron name: 'upload', cronExpression: cronExpressionElabora
     }// fine del metodo statico
 
     def execute() {

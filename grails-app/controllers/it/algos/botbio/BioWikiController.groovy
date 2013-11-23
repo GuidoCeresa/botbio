@@ -12,7 +12,6 @@
 /* flagOverwrite = true */
 
 package it.algos.botbio
-
 import it.algos.algos.DialogoController
 import it.algos.algos.TipoDialogo
 import it.algos.algoslib.Lib
@@ -21,7 +20,6 @@ import it.algos.algospref.Preferenze
 import org.codehaus.groovy.grails.commons.DefaultGrailsDomainClass
 import org.hibernate.SessionFactory
 import org.springframework.dao.DataIntegrityViolationException
-
 //--gestisce il download delle informazioni
 class BioWikiController {
 
@@ -117,17 +115,10 @@ class BioWikiController {
     //--aggiorna le voci esistenti
     //--carica i parametri del template Bio, leggendoli dalle voci della categoria
     def importaDopoConferma() {
-        String valore
-        flash.message = 'Operazione annullata. Le voci biografiche non sono state importate.'
 
-        if (params.valore) {
-            if (params.valore instanceof String) {
-                valore = (String) params.valore
-                if (valore.equals(DialogoController.DIALOGO_CONFERMA)) {
-                    bioWikiService.importaWiki()
-                    flash.message = 'Operazione effettuata. Sono stati importate tutte le voci della categoria: BioBot e creati i records BioWiki'
-                }// fine del blocco if
-            }// fine del blocco if
+        if (dialogoConfermato()) {
+            bioWikiService.importaWiki()
+            flash.message = 'Operazione effettuata. Sono stati importate tutte le voci della categoria: BioBot e creati i records BioWiki'
         }// fine del blocco if
 
         redirect(action: 'list')
@@ -155,49 +146,9 @@ class BioWikiController {
     //--non aggiorna i records BioWiki esistenti
     //--elabora i records BioWiki aggiunti, creando nuovi records BioGrails
     def aggiungeWikiDopoConferma() {
-        ArrayList<Integer> listaNuoviRecordsCreati = null
-        String valore
-        boolean continua = false
-        def numVoci
-        boolean debug = Preferenze.getBool((String) grailsApplication.config.debug)
-        flash.message = 'Operazione annullata. Le voci biografiche non sono state aggiunte.'
 
-        if (params.valore) {
-            if (params.valore instanceof String) {
-                valore = (String) params.valore
-                if (valore.equals(DialogoController.DIALOGO_CONFERMA)) {
-                    if (grailsApplication && grailsApplication.config.login) {
-                        continua = true
-                    } else {
-                        if (debug) {
-                            continua = true
-                        } else {
-                            flash.message = 'Devi essere loggato per poter scaricare la categoria Biobot'
-                        }// fine del blocco if-else
-                    }// fine del blocco if-else
-                }// fine del blocco if
-            }// fine del blocco if
-        }// fine del blocco if
-
-        if (continua) {
-            listaNuoviRecordsCreati = bioWikiService.aggiungeWiki()
-            numVoci = listaNuoviRecordsCreati.size()
-            if (numVoci == 0) {
-                flash.message = 'Non ci sono nuove voci nella categoria. Non sono state aggiunti nuovi records BioWiki'
-            } else {
-                numVoci = LibTesto.formatNum(numVoci)
-                flash.message = "Sono state aggiunti ${numVoci} nuovi records BioWiki"
-            }// fine del blocco if-else
-        }// fine del blocco if
-
-        if (continua) {
-            numVoci = bioService.elabora(listaNuoviRecordsCreati)
-            if (numVoci == 0) {
-                flash.message = 'Non è stata elaborato nessun record BioWiki e non è stato creato nessun record BioGrails'
-            } else {
-                numVoci = LibTesto.formatNum(numVoci)
-                flash.message = "Sono stati elaborati ${numVoci} records di BioWiki e creati ${numVoci} records corrispondenti di BioGrails"
-            }// fine del blocco if-else
+        if (dialogoConfermato()) {
+            esegueAggiungeWiki()
         }// fine del blocco if
 
         redirect(action: 'list')
@@ -222,37 +173,9 @@ class BioWikiController {
     //--carica i parametri del template Bio, leggendoli dalle voci della categoria
     //--aggiorna i records BioWiki esistenti
     def aggiornaWikiDopoConferma() {
-        String valore
-        boolean continua = false
-        def numVoci
-        boolean debug = Preferenze.getBool((String) grailsApplication.config.debug)
-        flash.message = 'Operazione annullata. Le voci biografiche non sono state aggiornate.'
 
-        if (params.valore) {
-            if (params.valore instanceof String) {
-                valore = (String) params.valore
-                if (valore.equals(DialogoController.DIALOGO_CONFERMA)) {
-                    if (grailsApplication && grailsApplication.config.login) {
-                        continua = true
-                    } else {
-                        if (debug) {
-                            continua = true
-                        } else {
-                            flash.message = 'Devi essere loggato per poter scaricare la categoria Biobot'
-                        }// fine del blocco if-else
-                    }// fine del blocco if-else
-                }// fine del blocco if
-            }// fine del blocco if
-        }// fine del blocco if
-
-        if (continua) {
-            numVoci = bioWikiService.aggiornaWiki()
-            if (numVoci == 0) {
-                flash.message = 'Le voci presenti nel database erano già aggiornate. Non è stato modificato nulla'
-            } else {
-                numVoci = LibTesto.formatNum(numVoci)
-                flash.message = "Sono state aggiornate ${numVoci} voci già presenti nel database"
-            }// fine del blocco if-else
+        if (dialogoConfermato()) {
+            esegueAggiornaWiki()
         }// fine del blocco if
 
         redirect(action: 'list')
@@ -276,33 +199,45 @@ class BioWikiController {
     //--ciclo di aggiunta ed aggiornamento ed elaborazione
     //--carica i parametri del template Bio, leggendoli dalle voci della categoria
     //--aggiunge nuovi records BioWiki
+    //--elabora i records BioWiki aggiunti, creando nuovi records BioGrails
     //--aggiorna i records BioWiki esistenti
-    //--elabora i records BioWiki aggiunti/aggiornati, creando nuovi records BioGrails e modificando quelli esistenti
+    //--elabora i records BioWiki modificati, modificando i records BioGrails
     def cicloWikiDopoConferma() {
-        ArrayList<Integer> listaNuoviRecordsCreati = null
-        ArrayList<Integer> listaRecordsModificati = null
-        ArrayList<Integer> listaRecordsElaborati
-        String valore
-        boolean continua = false
-        int aggiunte = 0
-        int modificate = 0
-        int elaborate = 0
-        String numVociTxt = ''
-        boolean debug = Preferenze.getBool((String) grailsApplication.config.debug)
-        flash.message = 'Operazione annullata. Il ciclo non è partito.'
+        int aggiunte
+        int modificate
         long inizio = System.currentTimeMillis()
         long fine
         long durata
+
+        if (dialogoConfermato()) {
+            aggiunte = esegueAggiungeWiki()
+            modificate = esegueAggiornaWiki()
+            fine = System.currentTimeMillis()
+            durata = fine - inizio
+            LibBio.gestVoci(logWikiService, false, durata, aggiunte, modificate)
+        }// fine del blocco if
+
+        redirect(action: 'list')
+    } // fine del metodo
+
+    //--controllo del dialogo
+    //--controlla la risposta dei bottoni del dialogo
+    //--controlla il login
+    private boolean dialogoConfermato() {
+        boolean isDialogoConfermato = false
+        String valore
+        boolean debug = Preferenze.getBool((String) grailsApplication.config.debug)
+        flash.message = 'Operazione annullata. Le voci biografiche non sono state modificate.'
 
         if (params.valore) {
             if (params.valore instanceof String) {
                 valore = (String) params.valore
                 if (valore.equals(DialogoController.DIALOGO_CONFERMA)) {
                     if (grailsApplication && grailsApplication.config.login) {
-                        continua = true
+                        isDialogoConfermato = true
                     } else {
                         if (debug) {
-                            continua = true
+                            isDialogoConfermato = true
                         } else {
                             flash.message = 'Devi essere loggato per poter scaricare la categoria Biobot'
                         }// fine del blocco if-else
@@ -311,59 +246,59 @@ class BioWikiController {
             }// fine del blocco if
         }// fine del blocco if
 
-        if (continua) {
-//            if (sessionFactory) {
-//                def hibSession = sessionFactory.getCurrentSession()
-//                hibSession.setFlushMode(FlushMode.COMMIT)
-//            }// fine del blocco if
-            listaNuoviRecordsCreati = bioWikiService.aggiungeWiki()
-            if (listaNuoviRecordsCreati) {
-                aggiunte = listaNuoviRecordsCreati.size()
-            }// fine del blocco if
-            if (aggiunte == 0) {
-                flash.message = 'Non ci sono nuove voci nella categoria. Non sono state aggiunti nuovi records BioWiki'
-                continua = false
-            } else {
-                numVociTxt = LibTesto.formatNum(aggiunte)
-                flash.message = "Sono state aggiunti ${numVociTxt} nuovi records BioWiki"
-            }// fine del blocco if-else
-        }// fine del blocco if
-
-        if (continua) {
-            listaRecordsModificati = bioWikiService.aggiornaWiki()
-            if (listaRecordsModificati) {
-                modificate = listaRecordsModificati.size()
-            }// fine del blocco if
-            if (modificate == 0) {
-                flash.message = 'Le voci presenti nel database erano già aggiornate. Non è stato modificato nulla'
-            } else {
-                numVociTxt = LibTesto.formatNum(modificate)
-                flash.message = "Sono state aggiornate ${numVociTxt} voci già presenti nel database"
-            }// fine del blocco if-else
-        }// fine del blocco if
-
-        if (continua) {
-            listaRecordsElaborati = listaNuoviRecordsCreati + listaRecordsModificati
-            if (listaRecordsElaborati) {
-                listaRecordsElaborati = bioService.elabora(listaRecordsElaborati)
-                elaborate = listaRecordsElaborati.size()
-            }// fine del blocco if
-            if (elaborate == 0) {
-                flash.message = 'Le voci presenti nel database erano già elaborate. Non è stato modificato nulla'
-            } else {
-                numVociTxt = LibTesto.formatNum(elaborate)
-                flash.message = "Sono stati elaborati ${numVociTxt} records già presenti nel database"
-            }// fine del blocco if-else
-        }// fine del blocco if
-
-        if (continua) {
-            fine = System.currentTimeMillis()
-            durata = fine - inizio
-            LibBio.gestVoci(logWikiService, false, durata, aggiunte, modificate)
-        }// fine del blocco if
-
-        redirect(action: 'list')
+        return isDialogoConfermato
     } // fine del metodo
+
+    //--ciclo di aggiunta ed elaborazione
+    //--carica i parametri del template Bio, leggendoli dalle voci della categoria
+    //--aggiunge nuovi records BioWiki
+    //--elabora i records BioWiki aggiunti, creando nuovi records BioGrails
+    private int esegueAggiungeWiki() {
+        ArrayList<Integer> listaNuoviRecordsCreati
+        int aggiunte = 0
+        String numVociTxt = ''
+        flash.message = 'Operazione annullata. Il ciclo non è partito.'
+
+        listaNuoviRecordsCreati = bioWikiService.aggiungeWiki()
+        if (listaNuoviRecordsCreati) {
+            bioService.elabora(listaNuoviRecordsCreati)
+            aggiunte = listaNuoviRecordsCreati.size()
+        }// fine del blocco if
+        if (aggiunte == 0) {
+            flash.message = 'Non ci sono nuove voci nella categoria. Non sono state aggiunti nuovi records BioWiki'
+        } else {
+            numVociTxt = LibTesto.formatNum(aggiunte)
+            flash.message = "Sono state aggiunti ed elaborati ${numVociTxt} nuovi records BioWiki e BioGrails"
+        }// fine del blocco if-else
+
+        return listaNuoviRecordsCreati.size()
+    } // fine del metodo
+
+    //--ciclo di aggiornamento ed elaborazione
+    //--carica i parametri del template Bio, leggendoli dalle voci della categoria
+    //--aggiorna i records BioWiki esistenti
+    //--elabora i records BioWiki modificati, modificando i records BioGrails
+    private int esegueAggiornaWiki() {
+        ArrayList<Integer> listaRecordsModificati
+        int modificate = 0
+        String numVociTxt = ''
+        flash.message = 'Operazione annullata. Il ciclo non è partito.'
+
+        listaRecordsModificati = bioWikiService.aggiornaWiki()
+        if (listaRecordsModificati) {
+            bioService.elabora(listaRecordsModificati)
+            modificate = listaRecordsModificati.size()
+        }// fine del blocco if
+        if (modificate == 0) {
+            flash.message = 'Le voci presenti nel database erano già aggiornate. Non è stato modificato nulla'
+        } else {
+            numVociTxt = LibTesto.formatNum(modificate)
+            flash.message = "Sono stati aggiornati ed elaborati ${numVociTxt} records BioWiki e BioGrails già presenti nel database"
+        }// fine del blocco if-else
+
+        return listaRecordsModificati.size()
+    } // fine del metodo
+
 
     //--redirect
     def elabora() {

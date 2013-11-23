@@ -222,7 +222,7 @@ class BioGrailsController {
         ArrayList menuExtra
         ArrayList campiLista
         def lista
-        def campoSort
+        def campoSort  ='forzaOrdinamento'
         String titoloLista
         int recordsTotali
 
@@ -245,7 +245,7 @@ class BioGrailsController {
         //--mappa con [campo:'nomeDelCampo', title:'titoloVisibile', sort:'ordinamento']
         campiLista = [
                 'pageid',
-                'title',
+                'forzaOrdinamento',
                 'didascaliaBase',
                 [campo: 'giornoMeseNascitaLink', title: 'giorno'],
                 [campo: 'annoNascitaLink', title: 'anno'],

@@ -394,7 +394,7 @@ class LibBio {
         String durataSecondiTxt
         String durataMinutiTxt
         long tempo
-        String tempoTxt
+        String tempoTxt = ''
         int durataSec
         int durataMin
         int tempoInt
@@ -405,19 +405,21 @@ class LibBio {
         aggiunteTxt = LibTesto.formatNum(aggiunte)
         modificateTxt = LibTesto.formatNum(modificate)
         numVociTotaliTxt = LibTesto.formatNum(vociTotali)
-        tempo = durata / aggiunte
+        if (aggiunte > 0) {
+            tempo = durata / aggiunte
+            tempo = tempo / 100
+            tempoInt = tempo.intValue()
+            tempoTxt = LibTesto.formatNum(tempoInt)
+            tempoTxt = tempoTxt.substring(0, tempoTxt.length() - 1) + ',' + tempoTxt.substring(tempoTxt.length() - 1)
+            if (tempoTxt.startsWith(',')) {
+                tempoTxt = '0' + tempoTxt
+            }// fine del blocco if
+        }// fine del blocco if
         durata = durata / 1000
         durataSec = durata.intValue()
         durataMin = durataSec / 60
         durataSecondiTxt = LibTesto.formatNum(durataSec)
         durataMinutiTxt = LibTesto.formatNum(durataMin)
-        tempo = tempo / 100
-        tempoInt = tempo.intValue()
-        tempoTxt = LibTesto.formatNum(tempoInt)
-        tempoTxt = tempoTxt.substring(0, tempoTxt.length() - 1) + ',' + tempoTxt.substring(tempoTxt.length() - 1)
-        if (tempoTxt.startsWith(',')) {
-            tempoTxt = '0' + tempoTxt
-        }// fine del blocco if
         avviso += "Ciclo di ${durataMinutiTxt} min (${tempoTxt} sec/voce). "
         avviso += "Aggiunte: ${aggiunteTxt}. Modificate: ${modificateTxt}. "
         avviso += "[[Utente:Biobot|<span style=\"color:green\">'''Biobot'''</span>]]"

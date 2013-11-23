@@ -30,6 +30,9 @@ import java.sql.Timestamp
 class BioWikiService {
 
     public static int idDebug = 734256  //todo ADG
+//    public static final String TITOLO_CATEGORIA = 'BioBot'
+//    public static final String TITOLO_CATEGORIA = 'Pittori britannici' //@todo ASSOLUTAMENTE provvisorio
+    public static final String TITOLO_CATEGORIA = 'Nati nel 1544' //@todo ASSOLUTAMENTE provvisorio
 
     // utilizzo di un service con la businessLogic per l'elaborazione dei dati
     // il service viene iniettato automaticamente
@@ -216,7 +219,10 @@ class BioWikiService {
         boolean debug = Preferenze.getBool((String) grailsApplication.config.debug)
         ArrayList<Integer> listaRecordsDatabase
         ArrayList<Integer> listaRecordsForseModificati
-        def numVoci = 0
+        int vociControllate = 0
+        int vociAggiornate = 0
+        String vociControllateTxt = ''
+        String vociAggiornateTxt = ''
         long inizio = System.currentTimeMillis()
         long fine
         long durata
@@ -228,7 +234,7 @@ class BioWikiService {
         }// fine del blocco if
 
         // messaggio di log
-        log.info 'Metodo di aggiunta ed aggiornamento records esistenti'
+        log.info 'Metodo di controllo voci ed aggiornamento records esistenti'
 
         // Recupera la lista completa dei records presenti nel database
         listaRecordsDatabase = getListaRecordsDatabase()
@@ -240,6 +246,7 @@ class BioWikiService {
         } else {
             listaRecordsForseModificati = listaRecordsDatabase
         }// fine del blocco if-else
+        vociControllate = listaRecordsForseModificati.size()
 
         // regolo le voci modificate
         listaRecordsModificati = this.getListaModificate(listaRecordsForseModificati)
@@ -248,21 +255,17 @@ class BioWikiService {
         tempo()
 
         if (listaRecordsModificati) {
-            numVoci = listaRecordsModificati.size()
+            vociAggiornate = listaRecordsModificati.size()
         }// fine del blocco if
 
         // valore di ritorno
-        numVoci = LibTesto.formatNum(numVoci)
+        vociControllateTxt = LibTesto.formatNum(vociControllate)
+        vociAggiornateTxt = LibTesto.formatNum(vociAggiornate)
         fine = System.currentTimeMillis()
         durata = fine - inizio
         durata = durata / 1000
-        if (debug) {
-            log.info "Sono state aggiornate ${numVoci} voci dopo l'ultimo check. Tempo ${durata} sec."
-            log.info 'Fine del metodo di aggiornamento dei records'
-        } else {
-            log.info "Sono state aggiornate ${numVoci} voci dopo l'ultimo check. Tempo ${durata} sec."
-//            logWikiService.info "Sono state aggiornate ${numVoci} voci dopo l'ultimo check"
-        }// fine del blocco if-else
+        durata = durata / 60
+        log.info "Sono stati controllate ${vociControllateTxt} voci e aggiornati ${vociAggiornateTxt} records. Tempo ${durata} min "
 
         return listaRecordsModificati
     } // fine del metodo
@@ -283,7 +286,7 @@ class BioWikiService {
         // variabili e costanti locali di lavoro
         ArrayList<Integer> lista = null
         boolean continua = true
-        String titoloCategoria = 'BioBot'
+        String titoloCategoria = TITOLO_CATEGORIA
         def num = 0
         Login login = grailsApplication.config.login
         boolean debug = Preferenze.getBool((String) grailsApplication.config.debug)
@@ -292,7 +295,6 @@ class BioWikiService {
         long inizio = System.currentTimeMillis()
         long fine
         long durata
-//        titoloCategoria = 'Pittori britannici' //@todo ASSOLUTAMENTE provvisorio
 
         if (debug) {
             log.info 'Siamo in modalità debug'
@@ -311,7 +313,7 @@ class BioWikiService {
         if (debug) {
             log.info "Caricamento della categoria ${titoloCategoria} - Circa 8 minuti (siamo in debug)"
         } else {
-            log.info "Caricamento della categoria ${titoloCategoria} - Circa 6 minuti"
+//            log.info "Caricamento della categoria ${titoloCategoria} - Circa 6 minuti"
         }// fine del blocco if-else
 
         try { // prova ad eseguire il codice
@@ -367,7 +369,7 @@ class BioWikiService {
             fine = System.currentTimeMillis()
             durata = fine - inizio
             durata = durata / 1000
-            log.info "La categoria contiene ${num} voci ed è stata caricata in ${durata} secondi"
+//            log.info "La categoria contiene ${num} voci ed è stata caricata in ${durata} secondi"
         } else {
             logWikiService.warn("La categoria ${titoloCategoria} non contiene nessuna voce")
             log.warn "La categoria non contiene voci"
@@ -388,13 +390,13 @@ class BioWikiService {
         ArrayList<Integer> lista
         def num = 0
 
-        log.info 'Recupera dal database tutti i records di BioWiki'
+//        log.info 'Recupera dal database tutti i records di BioWiki'
         lista = (ArrayList<Integer>) BioWiki.executeQuery("select pageid from BioWiki order by ultimaLettura asc")
 
         if (lista) {
             num = lista.size()
             num = Lib.Text.formatNum(num)
-            log.info "Creata una lista di soli pageids con ${num} records"
+//            log.info "Creata una lista di soli pageids con ${num} records"
         } else {
             log.warn "La lista di pageids e vuota"
         }// fine del blocco if-else
@@ -588,7 +590,7 @@ class BioWikiService {
         }// fine del blocco if
 
         if (continua) {
-            log.info "Controllo quali sono le voci modificate (60 minuti circa)"
+//            log.info "Controllo quali sono le voci modificate (60 minuti circa)"
             listaModificate = new ArrayList()
 
             blocchi = listaPageids.size()
@@ -680,8 +682,8 @@ class BioWikiService {
                 dimVoci = listaVoci.size()
                 dimVoci = Lib.Text.formatNum(dimVoci)
 
-                log.info "Su wiki ci sono $dimVoci voci che sono state modificate"
-                log.info "Regola le voci modificate a blocchi di ${dimBlocco} voci per volta"
+//                log.info "Su wiki ci sono $dimVoci voci che sono state modificate"
+//                log.info "Regola le voci modificate a blocchi di ${dimBlocco} voci per volta"
                 listaPageids = Lib.Array.splitArray(listaVoci, dimBlocco)
                 if (listaPageids) {
                     totBlocchi = listaVoci.size() / dimBlocco
@@ -698,7 +700,7 @@ class BioWikiService {
                         fine = System.currentTimeMillis()
                         durata = fine - inizio
                         durata = durata / 1000
-                        log.info "Caricato il blocco $cont/$totBlocchi (" + durata + " sec.) Nel database dopo il flushing ci sono ${numero} records"
+//                        log.info "Caricato il blocco $cont/$totBlocchi (" + durata + " sec.) Nel database dopo il flushing ci sono ${numero} records"
                         tempo()
                     }// fine del ciclo each
                 }// fine del blocco if
@@ -955,7 +957,7 @@ class BioWikiService {
         // variabili e costanti locali di lavoro
         ArrayList<Integer> listaDiff = null
 
-        log.info 'Recupera la lista delle voci nuove che non hanno ancora records (da creare)'
+//        log.info 'Recupera la lista delle voci nuove che non hanno ancora records (da creare)'
 
         if (primaLista) {
             if (secondaLista) {
