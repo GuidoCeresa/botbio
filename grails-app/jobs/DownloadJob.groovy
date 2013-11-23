@@ -12,6 +12,7 @@ class DownloadJob {
     // utilizzo di un service con la businessLogic per l'elaborazione dei dati
     // il service viene iniettato automaticamente
     def bioWikiService
+    def bioService
 
     //--delay iniziale
     // execute job 5 minute after start
@@ -30,10 +31,15 @@ class DownloadJob {
     }// fine del metodo statico
 
     def execute() {
+        ArrayList<Integer> listaRecordsModificati
+
         //--flag di attivazione
         if (Preferenze.getBool(LibBio.USA_CRONO_DOWNLOAD)) {
             if (bioWikiService) {
-                bioWikiService.aggiornaWiki()
+                listaRecordsModificati = bioWikiService.aggiornaWiki()
+                if (listaRecordsModificati) {
+                    bioService.elabora(listaRecordsModificati)
+                }// fine del blocco if
             }// fine del blocco if
         }// fine del blocco if
     }// fine del metodo execute
