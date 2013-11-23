@@ -265,7 +265,7 @@ class BioWikiService {
         durata = fine - inizio
         durata = durata / 1000
         durata = durata / 60
-        log.info "Sono stati controllate ${vociControllateTxt} voci e aggiornati ${vociAggiornateTxt} records. Tempo ${durata} min "
+        log.info "Sono state controllate ${vociControllateTxt} voci e aggiornati ${vociAggiornateTxt} records. Tempo ${durata} min "
 
         return listaRecordsModificati
     } // fine del metodo

@@ -141,7 +141,7 @@ class BioService {
         durata = fine - inizio
         tempo = durata / numVoci
         tempoTxt = LibTesto.formatNum(tempo)
-        log.info "Eseguito il metodo elaboraGrails su ${numVociTxt} records in ${tempoTxt} millisecondi/ciascuno"
+//        log.info "Eseguito il metodo elaboraGrails su ${numVociTxt} records in ${tempoTxt} millisecondi/ciascuno"
 
         inizio = System.currentTimeMillis()
         elaboraLink(listaRecordsDaElaborare)
@@ -149,7 +149,7 @@ class BioService {
         durata = fine - inizio
         tempo = durata / numVoci
         tempoTxt = LibTesto.formatNum(tempo)
-        log.info "Eseguito il metodo elaboraLink su ${numVociTxt} records in ${tempoTxt} millisecondi/ciascuno"
+//        log.info "Eseguito il metodo elaboraLink su ${numVociTxt} records in ${tempoTxt} millisecondi/ciascuno"
 
         inizio = System.currentTimeMillis()
         elaboraDidascalie(listaRecordsDaElaborare)
@@ -157,17 +157,19 @@ class BioService {
         durata = fine - inizio
         tempo = durata / numVoci
         tempoTxt = LibTesto.formatNum(tempo)
-        log.info "Eseguito il metodo elaboraDidascalie su ${numVociTxt} records in ${tempoTxt} millisecondi/ciascuno"
+//        log.info "Eseguito il metodo elaboraDidascalie su ${numVociTxt} records in ${tempoTxt} millisecondi/ciascuno"
 
         // valore di ritorno
         numVociTxt = LibTesto.formatNum(numVoci)
         fine = System.currentTimeMillis()
         durata = fine - inizioInizio
         tempo = durata / numVoci
+        durata = durata / 1000
+        durata = durata / 60
         if (debug) {
             log.info 'Fine del metodo di elaborazione dei records'
         } else {
-            log.info "Sono state elaborate ${numVociTxt} voci in ${tempo} millisecondi/ciascuna"
+            log.info "Sono state elaborate ${numVociTxt} voci in ${tempo} millisecondi/ciascuna. Tempo ${durata} min"
 //            logWikiService.info "Sono state elaborate ${numVociTxt} voci dopo l'ultimo check"
         }// fine del blocco if-else
 
@@ -605,7 +607,7 @@ class BioService {
                 }// fine del blocco try-catch
                 if (!giorno) {
                     title = bioWiki.title
-                    log.warn "BioService-getGiornoNato: Voce ${title}, ${giornoWiki} non sembra un giorno valido"
+//                    log.warn "BioService-getGiornoNato: Voce ${title}, ${giornoWiki} non sembra un giorno valido"
                 }// fine del blocco if
             }// fine del blocco if
         }// fine del blocco if
@@ -640,7 +642,7 @@ class BioService {
                 }// fine del blocco try-catch
                 if (!giorno) {
                     title = bioWiki.title
-                    log.warn "BioService-getGiornoMorto: Voce ${title}, ${giornoWiki} non sembra un giorno valido"
+//                    log.warn "BioService-getGiornoMorto: Voce ${title}, ${giornoWiki} non sembra un giorno valido"
                 }// fine del blocco if
             }// fine del blocco if
         }// fine del blocco if

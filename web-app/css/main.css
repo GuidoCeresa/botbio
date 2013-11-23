@@ -639,35 +639,35 @@ a:link, a:visited, a:hover {
 }
 
 /* Icone di navigazione */
-.menuButton a.primo {
-    background: url( ../images/skin/resultset_first.png ) center left no-repeat;
-    color: #333;
-    padding-left: 25px;
-}
+/*.menuButton a.primo {*/
+    /*background: url( ../images/skin/resultset_first.png ) center left no-repeat;*/
+    /*color: #333;*/
+    /*padding-left: 25px;*/
+/*}*/
 
-.menuButton a.precedente {
-    background: url( ../images/skin/resultset_previous.png ) center left no-repeat;
-    color: #333;
-    padding-left: 25px;
-}
+/*.menuButton a.precedente {*/
+    /*background: url( ../images/skin/resultset_previous.png ) center left no-repeat;*/
+    /*color: #333;*/
+    /*padding-left: 25px;*/
+/*}*/
 
-.menuButton a.successivo {
-    background: url( ../images/skin/resultset_next.png ) center left no-repeat;
-    color: #333;
-    padding-left: 25px;
-}
+/*.menuButton a.successivo {*/
+    /*background: url( ../images/skin/resultset_next.png ) center left no-repeat;*/
+    /*color: #333;*/
+    /*padding-left: 25px;*/
+/*}*/
 
-.menuButton a.ultimo {
-    background: url( ../images/skin/resultset_last.png ) center left no-repeat;
-    color: #333;
-    padding-left: 25px;
-}
+/*.menuButton a.ultimo {*/
+    /*background: url( ../images/skin/resultset_last.png ) center left no-repeat;*/
+    /*color: #333;*/
+    /*padding-left: 25px;*/
+/*}*/
 
-.menuButton a.mail {
-    background: url( ../images/skin/email_add.png ) center left no-repeat;
-    color: #333;
-    padding-left: 25px;
-}
+/*.menuButton a.mail {*/
+    /*background: url( ../images/skin/email_add.png ) center left no-repeat;*/
+    /*color: #333;*/
+    /*padding-left: 25px;*/
+/*}*/
 
 .menuButton a.sinistra {
     background: url( ../images/skin/arrow_turn_left.png ) center left no-repeat;
@@ -679,11 +679,11 @@ a:link, a:visited, a:hover {
     color: #333;
     padding-left: 25px;
 }
-.menuButton a.importa {
-    background: url( ../images/skin/import16.gif ) center left no-repeat;
-    color: #333;
-    padding-left: 25px;
-}
+/*.menuButton a.importa {*/
+    /*background: url( ../images/skin/import16.gif ) center left no-repeat;*/
+    /*color: #333;*/
+    /*padding-left: 25px;*/
+/*}*/
 .menuButton a.frecciasu {
     background: url( ../images/skin/arrow_up.png ) center left no-repeat;
     color: #333;
@@ -694,11 +694,11 @@ a:link, a:visited, a:hover {
     color: #333;
     padding-left: 25px;
 }
-.menuButton a.regola {
-    background: url( ../images/skin/cog.png ) center left no-repeat;
-    color: #333;
-    padding-left: 25px;
-}
+/*.menuButton a.regola {*/
+    /*background: url( ../images/skin/cog.png ) center left no-repeat;*/
+    /*color: #333;*/
+    /*padding-left: 25px;*/
+/*}*/
 .menuButton a.deleteAll {
     background: url(../images/skin/database_delete.png) center left no-repeat;
     color: #333;
