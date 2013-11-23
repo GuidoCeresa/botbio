@@ -2,16 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="68254703-7597-4adf-9a44-9a0e7a7facfd" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/controllers/it/algos/botbio/BioGrailsController.groovy" afterPath="$PROJECT_DIR$/grails-app/controllers/it/algos/botbio/BioGrailsController.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/services/it/algos/botbio/BioGrailsService.groovy" afterPath="$PROJECT_DIR$/grails-app/services/it/algos/botbio/BioGrailsService.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/services/it/algos/botbio/BioService.groovy" afterPath="$PROJECT_DIR$/grails-app/services/it/algos/botbio/BioService.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/controllers/it/algos/botbio/BioWikiController.groovy" afterPath="$PROJECT_DIR$/grails-app/controllers/it/algos/botbio/BioWikiController.groovy" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/services/it/algos/botbio/BioWikiService.groovy" afterPath="$PROJECT_DIR$/grails-app/services/it/algos/botbio/BioWikiService.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/jobs/DownloadJob.groovy" afterPath="$PROJECT_DIR$/grails-app/jobs/DownloadJob.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/jobs/ElaboraJob.groovy" afterPath="$PROJECT_DIR$/grails-app/jobs/ElaboraJob.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/groovy/it/algos/botbio/LibBio.groovy" afterPath="$PROJECT_DIR$/src/groovy/it/algos/botbio/LibBio.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/jobs/UploadJob.groovy" afterPath="$PROJECT_DIR$/grails-app/jobs/UploadJob.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application.properties" afterPath="$PROJECT_DIR$/application.properties" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="botbio.iws" />
@@ -25,7 +16,7 @@
     <file path="/AnnoController.groovy" changelist="68254703-7597-4adf-9a44-9a0e7a7facfd" time="1379054303147" ignored="false" />
     <file path="/Giorno.groovy" changelist="68254703-7597-4adf-9a44-9a0e7a7facfd" time="1376204021200" ignored="false" />
     <file path="/ExportBootStrap.groovy" changelist="68254703-7597-4adf-9a44-9a0e7a7facfd" time="1376212447834" ignored="false" />
-    <file path="/Dummy.txt" changelist="68254703-7597-4adf-9a44-9a0e7a7facfd" time="1385112850798" ignored="false" />
+    <file path="/Dummy.txt" changelist="68254703-7597-4adf-9a44-9a0e7a7facfd" time="1385202983118" ignored="false" />
     <file path="$PROJECT_DIR$/../algos/grails-app/Readme" changelist="68254703-7597-4adf-9a44-9a0e7a7facfd" time="1376212529430" ignored="false" />
     <file path="/Readme" changelist="68254703-7597-4adf-9a44-9a0e7a7facfd" time="1376212504840" ignored="false" />
     <file path="$PROJECT_DIR$/../algos/grails-app/it/algos/algos/Algoslist" changelist="68254703-7597-4adf-9a44-9a0e7a7facfd" time="1379926562737" ignored="false" />
@@ -491,19 +482,19 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="application.properties" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="application.properties" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/application.properties">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="6" column="11" selection-start="137" selection-end="137" vertical-scroll-proportion="0.13761468">
+            <state line="6" column="11" selection-start="137" selection-end="137" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="BioWikiService.groovy" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="BioWikiService.groovy" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/grails-app/services/it/algos/botbio/BioWikiService.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="35" column="64" selection-start="1445" selection-end="1445" vertical-scroll-proportion="0.0">
+            <state line="35" column="59" selection-start="1445" selection-end="1445" vertical-scroll-proportion="0.4676259">
               <folding />
             </state>
           </provider>
@@ -588,8 +579,8 @@
         <option value="$PROJECT_DIR$/grails-app/controllers/it/algos/botbio/BioWikiController.groovy" />
         <option value="$PROJECT_DIR$/grails-app/controllers/it/algos/botbio/BioGrailsController.groovy" />
         <option value="$PROJECT_DIR$/src/groovy/it/algos/botbio/LibBio.groovy" />
-        <option value="$PROJECT_DIR$/grails-app/services/it/algos/botbio/BioWikiService.groovy" />
         <option value="$PROJECT_DIR$/application.properties" />
+        <option value="$PROJECT_DIR$/grails-app/services/it/algos/botbio/BioWikiService.groovy" />
       </list>
     </option>
   </component>
@@ -1246,10 +1237,14 @@
       <created>1385097456501</created>
       <updated>1385097456501</updated>
     </task>
-    <option name="localTasksCounter" value="29" />
+    <task id="LOCAL-00029" summary="1.02 del 23/11/13">
+      <created>1385202962018</created>
+      <updated>1385202962018</updated>
+    </task>
+    <option name="localTasksCounter" value="30" />
     <servers />
   </component>
-  <component name="TodoView" selected-index="0">
+  <component name="TodoView" selected-index="4">
     <todo-panel id="selected-file">
       <are-packages-shown value="false" />
       <are-modules-shown value="false" />
@@ -1271,7 +1266,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="45" width="1357" height="803" extended-state="0" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.329429" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Persistence" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2562929" sideWeight="0.26061493" order="2" side_tool="true" content_ui="tabs" />
@@ -1284,21 +1279,21 @@
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2562929" sideWeight="0.46266472" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Grails View" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32951945" sideWeight="0.56661785" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.329429" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.46266472" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="CDI" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32796487" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32796487" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.62608695" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32796487" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2562929" sideWeight="0.522694" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2562929" sideWeight="0.67203516" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.43338212" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.29575402" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3296131" sideWeight="0.62608695" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.46266472" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32952926" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
@@ -1345,7 +1340,7 @@
     <option name="WRAP_WHEN_TYPING_REACHES_RIGHT_MARGIN" value="false" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="1.01 del 22/11/13" />
+    <option name="LAST_COMMIT_MESSAGE" value="1.02 del 23/11/13" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="false" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -1381,6 +1376,7 @@
     <MESSAGE value="0.99" />
     <MESSAGE value="1.0 del 20/11/13" />
     <MESSAGE value="1.01 del 22/11/13" />
+    <MESSAGE value="1.02 del 23/11/13" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -1490,16 +1486,16 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/grails-app/services/it/algos/botbio/BioWikiService.groovy">
+    <entry file="file://$PROJECT_DIR$/application.properties">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="35" column="64" selection-start="1445" selection-end="1445" vertical-scroll-proportion="0.0">
+        <state line="6" column="11" selection-start="137" selection-end="137" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/application.properties">
+    <entry file="file://$PROJECT_DIR$/grails-app/services/it/algos/botbio/BioWikiService.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="11" selection-start="137" selection-end="137" vertical-scroll-proportion="0.13761468">
+        <state line="35" column="59" selection-start="1445" selection-end="1445" vertical-scroll-proportion="0.4676259">
           <folding />
         </state>
       </provider>

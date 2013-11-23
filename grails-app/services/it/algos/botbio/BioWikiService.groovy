@@ -30,9 +30,9 @@ import java.sql.Timestamp
 class BioWikiService {
 
     public static int idDebug = 734256  //todo ADG
-//    public static final String TITOLO_CATEGORIA = 'BioBot'
+    public static final String TITOLO_CATEGORIA = 'BioBot'
 //    public static final String TITOLO_CATEGORIA = 'Pittori britannici' //@todo ASSOLUTAMENTE provvisorio
-    public static final String TITOLO_CATEGORIA = 'Nati nel 1544' //@todo ASSOLUTAMENTE provvisorio
+//    public static final String TITOLO_CATEGORIA = 'Nati nel 1544' //@todo ASSOLUTAMENTE provvisorio
 
     // utilizzo di un service con la businessLogic per l'elaborazione dei dati
     // il service viene iniettato automaticamente
