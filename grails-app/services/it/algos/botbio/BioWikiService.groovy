@@ -268,7 +268,7 @@ class BioWikiService {
         durata = durata / 60
         log.info "BioWiki. Sono state controllate ${vociControllateTxt} voci e aggiornati ${vociAggiornateTxt} records. Tempo ${durata} min "
         oldDataTxt = LibBio.voceVecchia()
-        log.info "La voce più vecchia non aggiornata è del ${oldDataTxt}"
+        log.info "${oldDataTxt}"
 
         return listaRecordsModificati
     } // fine del metodo

@@ -284,7 +284,7 @@ class BioWikiController {
         ArrayList<Integer> listaRecordsModificati
         int modificate = 0
         String numVociTxt = ''
-        String oldDataTxt = ''
+        String oldDataTxt
         flash.message = ''
 
         listaRecordsModificati = bioWikiService.aggiornaWiki()
@@ -300,7 +300,7 @@ class BioWikiController {
             flash.messages.add("Sono stati aggiornati ed elaborati ${numVociTxt} records BioWiki e BioGrails già presenti nel database")
         }// fine del blocco if-else
         oldDataTxt = LibBio.voceVecchia()
-        flash.messages.add("La voce più vecchia non aggiornata è del ${oldDataTxt}")
+        flash.messages.add(oldDataTxt)
 
         return listaRecordsModificati.size()
     } // fine del metodo

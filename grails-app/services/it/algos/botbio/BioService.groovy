@@ -505,15 +505,27 @@ class BioService {
         String testoOut = ''
         String cognome
         String nome
+        Evento evento
+        String titolo
 
         if (bioWiki.forzaOrdinamento) {
             testoOut = fixCampo(bioWiki, bioWiki.forzaOrdinamento, 'forzaOrdinamento')
         } else {
             if (bioWiki.cognome) {
                 cognome = bioWiki.cognome
+                cognome = cognome.trim()
+                cognome = LibTesto.levaDopoRef(cognome)
+                cognome = LibTesto.levaDopoNote(cognome)
+                cognome = LibTesto.levaDopoGraffe(cognome)
+                cognome = cognome.trim()
             }// fine del blocco if
             if (bioWiki.nome) {
                 nome = bioWiki.nome
+                nome = nome.trim()
+                nome = LibTesto.levaDopoRef(nome)
+                nome = LibTesto.levaDopoNote(nome)
+                nome = LibTesto.levaDopoGraffe(nome)
+                nome = nome.trim()
             }// fine del blocco if
             if (cognome) {
                 testoOut = cognome
@@ -525,6 +537,20 @@ class BioService {
                     testoOut = nome
                 }// fine del blocco if-else
             }// fine del blocco if
+            if (testoOut && testoOut.length() > 253) {
+                testoOut = testoOut.substring(0, 252)
+                if (logoService) {
+                    evento = Evento.findByNome(LibBio.EVENTO_TESTO_TROPPO_LUNGO)
+                    if (evento == null) {
+                        if (eventoService) {
+                            evento = eventoService.getGenerico()
+                        }// fine del blocco if
+                    }// fine del blocco if
+                    titolo = bioWiki.title
+                    logoService.setWarn(null, evento, 'Biobot', 'bot', "forzaOrdinamento di ${titolo} troppo lungo")
+                }// fine del blocco if
+            }// fine del blocco if
+
         }// fine del blocco if-else
 
         return testoOut
