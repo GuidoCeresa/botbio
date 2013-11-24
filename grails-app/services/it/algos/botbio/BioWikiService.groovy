@@ -226,6 +226,7 @@ class BioWikiService {
         long inizio = System.currentTimeMillis()
         long fine
         long durata
+        String oldDataTxt
 
         if (debug) {
             log.info 'Modalita debug'
@@ -265,7 +266,9 @@ class BioWikiService {
         durata = fine - inizio
         durata = durata / 1000
         durata = durata / 60
-        log.info "Sono state controllate ${vociControllateTxt} voci e aggiornati ${vociAggiornateTxt} records. Tempo ${durata} min "
+        log.info "BioWiki. Sono state controllate ${vociControllateTxt} voci e aggiornati ${vociAggiornateTxt} records. Tempo ${durata} min "
+        oldDataTxt = LibBio.voceVecchia()
+        log.info "La voce più vecchia non aggiornata è del ${oldDataTxt}"
 
         return listaRecordsModificati
     } // fine del metodo

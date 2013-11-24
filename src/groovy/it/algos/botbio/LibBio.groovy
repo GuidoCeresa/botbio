@@ -3,9 +3,12 @@ package it.algos.botbio
 import groovy.util.logging.Log4j
 import it.algos.algoslib.Lib
 import it.algos.algoslib.LibTesto
+import it.algos.algoslib.LibTime
 import it.algos.algospref.Preferenze
 import it.algos.algoswiki.QueryInfoCat
 import it.algos.algoswiki.WikiLib
+
+import java.sql.Timestamp
 
 /**
  * Created with IntelliJ IDEA.
@@ -518,6 +521,24 @@ class LibBio {
 
         // valore di ritorno
         return contiene
-    }// fine della closure
+    }// fine del metodo
+
+    public static String voceVecchia() {
+        String messaggio
+        String oldDataTxt = ''
+        ArrayList listaTimestamp
+        Timestamp oldStamp
+        def oldData
+
+        listaTimestamp = BioWiki.executeQuery('select letturaWiki from BioWiki order by letturaWiki asc')
+        if (listaTimestamp && listaTimestamp.size() > 0) {
+            oldStamp = (Timestamp) listaTimestamp[0]
+            oldData = LibTime.creaData(oldStamp)
+            oldDataTxt = LibTime.getGioMeseAnno(oldData)
+        }// fine del blocco if
+        messaggio = "La voce più vecchia non aggiornata è del ${oldDataTxt}"
+
+        return messaggio
+    }// fine del metodo
 
 } // fine della classe

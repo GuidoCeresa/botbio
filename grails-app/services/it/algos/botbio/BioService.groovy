@@ -169,7 +169,7 @@ class BioService {
         if (debug) {
             log.info 'Fine del metodo di elaborazione dei records'
         } else {
-            log.info "Sono state elaborate ${numVociTxt} voci in ${tempo} millisecondi/ciascuna. Tempo ${durata} min"
+            log.info "BioGrails. Sono state elaborate ${numVociTxt} voci in ${tempo} millisecondi/ciascuna. Tempo ${durata} min"
 //            logWikiService.info "Sono state elaborate ${numVociTxt} voci dopo l'ultimo check"
         }// fine del blocco if-else
 

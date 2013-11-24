@@ -17,13 +17,10 @@ import it.algos.algos.DialogoController
 import it.algos.algos.TipoDialogo
 import it.algos.algoslib.Lib
 import it.algos.algoslib.LibTesto
-import it.algos.algoslib.LibTime
 import it.algos.algospref.Preferenze
 import org.codehaus.groovy.grails.commons.DefaultGrailsDomainClass
 import org.hibernate.SessionFactory
 import org.springframework.dao.DataIntegrityViolationException
-
-import java.sql.Timestamp
 
 //--gestisce il download delle informazioni
 class BioWikiController {
@@ -287,7 +284,6 @@ class BioWikiController {
         ArrayList<Integer> listaRecordsModificati
         int modificate = 0
         String numVociTxt = ''
-        ArrayList listaTimestamp
         String oldDataTxt = ''
         flash.message = ''
 
@@ -303,12 +299,7 @@ class BioWikiController {
             numVociTxt = LibTesto.formatNum(modificate)
             flash.messages.add("Sono stati aggiornati ed elaborati ${numVociTxt} records BioWiki e BioGrails già presenti nel database")
         }// fine del blocco if-else
-        listaTimestamp = BioWiki.executeQuery('select letturaWiki from BioWiki order by letturaWiki asc')
-        if (listaTimestamp && listaTimestamp.size() > 0) {
-            Timestamp oldStamp = (Timestamp) listaTimestamp[0]
-            def oldData = LibTime.creaData(oldStamp)
-            oldDataTxt = LibTime.getGioMeseAnno(oldData)
-        }// fine del blocco if
+        oldDataTxt = LibBio.voceVecchia()
         flash.messages.add("La voce più vecchia non aggiornata è del ${oldDataTxt}")
 
         return listaRecordsModificati.size()
