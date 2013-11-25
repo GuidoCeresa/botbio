@@ -555,6 +555,7 @@ class BioWikiService {
         boolean continua = false
         ArrayList lista = null
         ArrayList listaWrap = null
+        ArrayList listaErroriWrap = null
         ArrayList listaMappeTmp = null
         ArrayList listaModificateTmp = null
         int dimBlocco = 100
@@ -611,6 +612,12 @@ class BioWikiService {
                         listaWrap = query.getListaWrapTime()
                         if (listaWrap) {
                             listaModificateTmp = chekTimeLista(listaWrap)
+                        }// fine del blocco if
+                        listaErroriWrap = query.getListaErrori()
+                        if (listaErroriWrap) {
+                            listaErroriWrap?.each {
+                                log.error 'Errore querytimestamp in ' + it
+                            } // fine del ciclo each
                         }// fine del blocco if
                     }// fine del blocco if
                 }// fine del blocco if
