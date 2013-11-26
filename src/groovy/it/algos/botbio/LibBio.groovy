@@ -523,7 +523,7 @@ class LibBio {
         return contiene
     }// fine del metodo
 
-    public static String voceVecchia() {
+    public static String voceAggiornataVecchia() {
         String messaggio
         String oldDataTxt = ''
         ArrayList listaTimestamp
@@ -537,6 +537,32 @@ class LibBio {
             oldDataTxt = LibTime.getGioMeseAnno(oldData)
         }// fine del blocco if
         messaggio = "La voce più vecchia non aggiornata è del ${oldDataTxt}"
+
+        return messaggio
+    }// fine del metodo
+
+    public static String voceElaborataVecchia() {
+        String messaggio
+        String oldDataTxt = ''
+        ArrayList listaTimestamp
+        Timestamp oldStamp
+        def oldData
+        def nonElaborate
+
+        nonElaborate = BioWiki.executeQuery('SELECT count(*) FROM BioWiki where elaborata=false')
+        if (nonElaborate && nonElaborate instanceof ArrayList && nonElaborate.size() > 0) {
+            nonElaborate = nonElaborate[0]
+            nonElaborate = LibTesto.formatNum(nonElaborate)
+        }// fine del blocco if
+
+        listaTimestamp = BioWiki.executeQuery('select letturaWiki from BioWiki where elaborata=false order by letturaWiki asc')
+        if (listaTimestamp && listaTimestamp.size() > 0) {
+            oldStamp = (Timestamp) listaTimestamp[0]
+            oldData = LibTime.creaData(oldStamp)
+            oldDataTxt = LibTime.getGioMeseAnno(oldData)
+        }// fine del blocco if
+
+        messaggio = "Ci sono ${nonElaborate} voci non elaborate. La più vecchia è del ${oldDataTxt}"
 
         return messaggio
     }// fine del metodo

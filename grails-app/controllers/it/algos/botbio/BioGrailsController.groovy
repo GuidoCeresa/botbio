@@ -67,6 +67,7 @@ class BioGrailsController {
         String valore
         boolean continua = false
         flash.message = 'Operazione annullata. Le voci biografiche non sono state elaborate.'
+        String oldDataTxt
 
         if (params.valore) {
             if (params.valore instanceof String) {
@@ -79,6 +80,8 @@ class BioGrailsController {
 
         if (continua) {
             bioService.elabora()
+            oldDataTxt = LibBio.voceElaborataVecchia()
+            flash.message = oldDataTxt
         }// fine del blocco if
 
         redirect(action: 'list')
@@ -222,7 +225,7 @@ class BioGrailsController {
         ArrayList menuExtra
         ArrayList campiLista
         def lista
-        def campoSort  ='forzaOrdinamento'
+        def campoSort = 'forzaOrdinamento'
         String titoloLista
         int recordsTotali
 

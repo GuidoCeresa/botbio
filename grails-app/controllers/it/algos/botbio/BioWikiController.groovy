@@ -299,7 +299,7 @@ class BioWikiController {
             numVociTxt = LibTesto.formatNum(modificate)
             flash.messages.add("Sono stati aggiornati ed elaborati ${numVociTxt} records BioWiki e BioGrails già presenti nel database")
         }// fine del blocco if-else
-        oldDataTxt = LibBio.voceVecchia()
+        oldDataTxt = LibBio.voceAggiornataVecchia()
         flash.messages.add(oldDataTxt)
 
         return listaRecordsModificati.size()

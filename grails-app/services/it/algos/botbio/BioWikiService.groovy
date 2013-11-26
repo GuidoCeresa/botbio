@@ -267,7 +267,7 @@ class BioWikiService {
         durata = durata / 1000
         durata = durata / 60
         log.info "BioWiki. Sono state controllate ${vociControllateTxt} voci e aggiornati ${vociAggiornateTxt} records. Tempo ${durata} min "
-        oldDataTxt = LibBio.voceVecchia()
+        oldDataTxt = LibBio.voceAggiornataVecchia()
         log.info "${oldDataTxt}"
 
         return listaRecordsModificati

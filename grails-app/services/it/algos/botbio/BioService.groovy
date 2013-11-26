@@ -83,7 +83,7 @@ class BioService {
         ArrayList<Integer> listaid
         int maxElabora
 
-        listaid = (ArrayList<Integer>) BioWiki.executeQuery('select pageid from BioWiki where elaborata=false')
+        listaid = (ArrayList<Integer>) BioWiki.executeQuery('select pageid from BioWiki where elaborata=false order by letturaWiki asc')
 
         if (LibPref.getBool(LibBio.USA_LIMITE_ELABORA)) {
             maxElabora = LibPref.getInt(LibBio.MAX_ELABORA)
@@ -127,6 +127,7 @@ class BioService {
         long durata
         long tempo
         String tempoTxt
+        String oldDataTxt
 
         if (listaRecordsDaElaborare) {
             numVoci = listaRecordsDaElaborare.size()
@@ -170,7 +171,8 @@ class BioService {
             log.info 'Fine del metodo di elaborazione dei records'
         } else {
             log.info "BioGrails. Sono state elaborate ${numVociTxt} voci in ${tempo} millisecondi/ciascuna. Tempo ${durata} min"
-//            logWikiService.info "Sono state elaborate ${numVociTxt} voci dopo l'ultimo check"
+            oldDataTxt = LibBio.voceElaborataVecchia()
+            log.info "${oldDataTxt}"
         }// fine del blocco if-else
 
         return listaRecordsElaborati
