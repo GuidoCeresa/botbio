@@ -24,7 +24,7 @@ class DownloadJob {
 
     //--codifica dell'orario di attivazione
 //    private static String cronExpressionDowload = "0 0 2-23 * * ?"   //tutti i giorni a tutte le ore meno mezzanotte e l'una
-    private static String cronExpressionDowload = "0 0 2,4,6,8,10,12,14,16,18,20,22 * * ?"   //tutti i giorni ogni due ore meno mezzanotte e l'una
+    private static String cronExpressionDowload = "0 0 2,6,10,14,18,22 * * ?"   //tutti i giorni ogni quattro ore meno mezzanotte e l'una
 
     static triggers = {
 //        simple startDelay: DELAY, repeatInterval: FREQUENZA
