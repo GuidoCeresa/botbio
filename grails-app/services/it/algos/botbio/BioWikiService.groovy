@@ -194,6 +194,7 @@ class BioWikiService {
 //            }// fine del blocco if
 
 //            logWikiService.info "Sono state aggiunte ${num} nuove voci dopo l'ultimo check"
+            log.info 'Fine del metodo di aggiunta nuovi records'
         }// fine del blocco if-else
 
         // valore di ritorno

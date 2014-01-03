@@ -1318,7 +1318,7 @@ public class WrapBio {
         boolean continua = false
         def bioRegistrata = null
         BioWiki bioOriginale = this.getBioOriginale() //@todo ATTENZIONE
-        String avviso = "Mancata registrazione sul database" + " della voce  " + "'''[[" + bioOriginale.title + "]]'''"
+        String avviso = "Mancata registrazione sul database BioWiki" + " della voce  " + "'''[[" + bioOriginale.title + "]]'''"
 
         if (bioOriginale) {
             try { // prova ad eseguire il codice
@@ -1352,7 +1352,7 @@ public class WrapBio {
         boolean continua = false
         def bioRegistrata = null
         BioGrails bioGrails = this.getBioGrails() //@todo ATTENZIONE
-        String avviso = "Mancata registrazione sul database" + " della voce  " + "'''[[" + bioGrails.title + "]]'''"
+        String avviso = "Mancata registrazione sul database BioGrails" + " della voce  " + "'''[[" + bioGrails.title + "]]'''"
 
         if (bioGrails) {
             try { // prova ad eseguire il codice
