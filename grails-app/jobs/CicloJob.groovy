@@ -13,6 +13,7 @@ class CicloJob {
     // il service viene iniettato automaticamente
     def bioWikiService
     def logWikiService
+    def bioService
 
     //--delay iniziale
     // execute job 5 minute after start
@@ -51,6 +52,7 @@ class CicloJob {
                 listaRecordsModificati = bioWikiService.aggiornaWiki()
                 if (listaRecordsModificati) {
                     modificati = listaRecordsModificati.size()
+                    bioService.elabora(listaRecordsModificati)
                 }// fine del blocco if
             }// fine del blocco if
             if (logWikiService) {

@@ -36,6 +36,9 @@ class BioService {
     private static long inizio = System.currentTimeMillis()
     private static String tagAvviso = WrapBio.tagAvviso
 
+    private static String maschile = 'M'
+    private static String femminile = 'F'
+
     long ultimaRegistrazione = 0
 
     // utilizzo di un service con la businessLogic
@@ -342,7 +345,7 @@ class BioService {
     public int uploadSesso() {
         // variabili e costanti locali di lavoro
         int numVoci = 0
-        def lista = getListaSessoAssente()
+        ArrayList lista = getListaSesso()
         BioWiki bioWiki
         int pageid
         boolean registrata
@@ -371,7 +374,8 @@ class BioService {
     //--fix parameters errors
     //--costruisce il wrap
     //--scarica la mappa dei parametri Bio
-    //--aggiunge il parametro sesso
+    //--aggiunge il parametro sesso (se manca; default M)
+    //--modifica il parametro sesso errato (se riesce)
     //--riordina la mappa
     //--costruisce il testo del template
     public boolean uploadSesso(int pageid) {
@@ -384,6 +388,8 @@ class BioService {
         HashMap mappa
         String summary = "[[Utente:Biobot|Biobot]] fix par tmpl"
         EditSub voceRegistrata
+        String sessoForseErrato
+        String sessoCorretto
 
         if (pageid) {
             wrapBio = new WrapBio(pageid)
@@ -393,7 +399,13 @@ class BioService {
                 mappa = wrapBio.getMappaBio()
                 if (!mappa['Sesso']) {
                     mappa.put('Sesso', 'M')
-                }// fine del blocco if
+                } else {
+                    sessoForseErrato = mappa['Sesso']
+                    if (!sessoForseErrato.equals(maschile) && !sessoForseErrato.equals(femminile)) {
+                        sessoCorretto = getSessoCorretto(sessoForseErrato)
+                        mappa.put('Sesso', sessoCorretto)
+                    }// fine del blocco if
+                }// fine del blocco if-else
                 wrapBio.riordinaMappa()
                 wrapBio.creaTestoFinaleTemplate()
                 templateNuovo = wrapBio.getTestoTemplateFinale()
@@ -1553,7 +1565,8 @@ class BioService {
      */
     public formatta = {
         // variabili e costanti locali di lavoro
-        def listaPageId                                                                                                                                                                                                                                                                                                                                                                                        //Recupera la lista dei records esistenti nel database
+        def listaPageId
+        //Recupera la lista dei records esistenti nel database
         log.info 'Recupera tutti i records di Bio da controllare'
 
         listaPageId = Bio.executeQuery('select pageid from Bio where controllato=false')
@@ -3889,6 +3902,12 @@ class BioService {
 //        log.info LibBio.deltaSec(inizio) + ' secondi dal via'
     }// fine del metodo
 
+    private ArrayList getListaSesso() {
+        ArrayList listaA = getListaSessoAssente()
+        ArrayList listaE = getListaSessoErrato()
+        return listaA + listaE
+    }// fine del metodo
+
     //--lista di voci col parametro sesso mancante
     public ArrayList getListaSessoAssente() {
         ArrayList lista = new ArrayList()
@@ -4024,6 +4043,49 @@ class BioService {
                 lista.add(results)
             }// fine del blocco if-else
         }// fine del blocco if
+
+        return lista
+    }// fine del metodo
+
+    //--ripara (se possibile
+    private static String getSessoCorretto(String sessoIn) {
+        String sessoOut
+        ArrayList listaMaschile = getListaMaschile()
+        ArrayList listaFemminile = getListaFemminile()
+
+        if (sessoIn) {
+            sessoOut = sessoIn.trim()
+        } else {
+            sessoOut = sessoIn
+        }// fine del blocco if-else
+
+        if (sessoOut.equals(maschile) || sessoOut.equals(femminile)) {
+            return sessoOut
+        }// fine del blocco if
+
+        if (listaMaschile.contains(sessoOut)) {
+            sessoOut = maschile
+        }// fine del blocco if
+
+        if (listaFemminile.contains(sessoOut)) {
+            sessoOut = femminile
+        }// fine del blocco if
+
+        return sessoOut
+    }// fine del metodo
+
+    //--lista di errori riparabili
+    private static ArrayList getListaMaschile() {
+        ArrayList lista = new ArrayList()
+        lista.add('m')
+
+        return lista
+    }// fine del metodo
+
+    //--lista di errori riparabili
+    private static ArrayList getListaFemminile() {
+        ArrayList lista = new ArrayList()
+        lista.add('f')
 
         return lista
     }// fine del metodo
