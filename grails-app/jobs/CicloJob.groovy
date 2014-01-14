@@ -24,7 +24,8 @@ class CicloJob {
     public static int FREQUENZA = 1000 * 60 * 60
 
     //--codifica dell'orario di attivazione
-    private static String cronExpressionCiclo = "0 0 0 * * ?"   //tutti i giorni a mezzanotte
+//    private static String cronExpressionCiclo = "0 0 0 * * ?"   //tutti i giorni a mezzanotte
+    private static String cronExpressionCiclo = "0 0 2-23 * * ?"   //tutti i giorni a tutte le ore meno mezzanotte e l'una
 
     static triggers = {
 //        simple startDelay: DELAY, repeatInterval: FREQUENZA
@@ -45,16 +46,21 @@ class CicloJob {
         //--flag di attivazione
         if (Preferenze.getBool(LibBio.USA_CRONO_DOWNLOAD)) {
             if (bioWikiService) {
+                //--aggiunge ed elabora quelli aggiunti
                 listaNuoviRecordsAggiunti = bioWikiService.aggiungeWiki()
                 if (listaNuoviRecordsAggiunti) {
+                    bioService.elabora(listaNuoviRecordsAggiunti)
                     aggiunti = listaNuoviRecordsAggiunti.size()
                 }// fine del blocco if
+
+                //--modifica ed elabora quelli modificati
                 listaRecordsModificati = bioWikiService.aggiornaWiki()
                 if (listaRecordsModificati) {
-                    modificati = listaRecordsModificati.size()
                     bioService.elabora(listaRecordsModificati)
+                    modificati = listaRecordsModificati.size()
                 }// fine del blocco if
             }// fine del blocco if
+
             if (logWikiService) {
                 fine = System.currentTimeMillis()
                 durata = fine - inizio

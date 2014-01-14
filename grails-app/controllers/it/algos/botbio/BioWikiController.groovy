@@ -256,24 +256,24 @@ class BioWikiController {
     //--aggiunge nuovi records BioWiki
     //--elabora i records BioWiki aggiunti, creando nuovi records BioGrails
     private int esegueAggiungeWiki() {
-        ArrayList<Integer> listaNuoviRecordsCreati
-        int aggiunte = 0
+        ArrayList<Integer> listaNuoviRecordsAggiunti
+        int aggiunti = 0
         String numVociTxt = ''
         flash.message = 'Operazione annullata. Il ciclo non è partito.'
 
-        listaNuoviRecordsCreati = bioWikiService.aggiungeWiki()
-        if (listaNuoviRecordsCreati) {
-            bioService.elabora(listaNuoviRecordsCreati)
-            aggiunte = listaNuoviRecordsCreati.size()
+        listaNuoviRecordsAggiunti = bioWikiService.aggiungeWiki()
+        if (listaNuoviRecordsAggiunti) {
+            bioService.elabora(listaNuoviRecordsAggiunti)
+            aggiunti = listaNuoviRecordsAggiunti.size()
         }// fine del blocco if
-        if (aggiunte == 0) {
+        if (aggiunti == 0) {
             flash.message = 'Non ci sono nuove voci nella categoria. Non sono state aggiunti nuovi records BioWiki'
         } else {
-            numVociTxt = LibTesto.formatNum(aggiunte)
+            numVociTxt = LibTesto.formatNum(aggiunti)
             flash.message = "Sono state aggiunti ed elaborati ${numVociTxt} nuovi records BioWiki e BioGrails"
         }// fine del blocco if-else
 
-        return listaNuoviRecordsCreati.size()
+        return listaNuoviRecordsAggiunti.size()
     } // fine del metodo
 
     //--ciclo di aggiornamento ed elaborazione
@@ -282,7 +282,7 @@ class BioWikiController {
     //--elabora i records BioWiki modificati, modificando i records BioGrails
     private int esegueAggiornaWiki() {
         ArrayList<Integer> listaRecordsModificati
-        int modificate = 0
+        int modificati = 0
         String numVociTxt = ''
         String oldDataTxt
         flash.message = ''
@@ -290,13 +290,13 @@ class BioWikiController {
         listaRecordsModificati = bioWikiService.aggiornaWiki()
         if (listaRecordsModificati) {
             bioService.elabora(listaRecordsModificati)
-            modificate = listaRecordsModificati.size()
+            modificati = listaRecordsModificati.size()
         }// fine del blocco if
         flash.messages = []
-        if (modificate == 0) {
+        if (modificati == 0) {
             flash.messages.add('Le voci presenti nel database erano già aggiornate. Non è stato modificato nulla')
         } else {
-            numVociTxt = LibTesto.formatNum(modificate)
+            numVociTxt = LibTesto.formatNum(modificati)
             flash.messages.add("Sono stati aggiornati ed elaborati ${numVociTxt} records BioWiki e BioGrails già presenti nel database")
         }// fine del blocco if-else
         oldDataTxt = LibBio.voceAggiornataVecchia()
