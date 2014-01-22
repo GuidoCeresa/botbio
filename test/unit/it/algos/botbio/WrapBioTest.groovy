@@ -69,6 +69,16 @@ class WrapBioTest extends GrailsUnitTestCase {
         templateOriginale = wrap.getTestoTemplateOriginale()
         templateFinale = wrap.getTestoTemplateFinale()
         def stop2
+
+        titolo = 'Mario Bergara'
+        wrap = new WrapBio(titolo)
+        assert wrap != null
+        assert wrap.isValida()
+        mappaReali = wrap.getMappaReali()
+        mappaBio = wrap.getMappaBio()
+        templateOriginale = wrap.getTestoTemplateOriginale()
+        templateFinale = wrap.getTestoTemplateFinale()
+        def stop55
     } // fine del test
 
     void testDidascalia() {

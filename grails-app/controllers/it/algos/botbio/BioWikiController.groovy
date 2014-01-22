@@ -273,7 +273,7 @@ class BioWikiController {
             flash.message = "Sono state aggiunti ed elaborati ${numVociTxt} nuovi records BioWiki e BioGrails"
         }// fine del blocco if-else
 
-        return listaNuoviRecordsAggiunti.size()
+        return aggiunti
     } // fine del metodo
 
     //--ciclo di aggiornamento ed elaborazione

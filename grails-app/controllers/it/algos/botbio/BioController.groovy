@@ -620,29 +620,38 @@ class BioController {
     def test() {
         String titoloA
         String titoloB
+        String titoloC
         WrapBio wrapA
         WrapBio wrapB
+        WrapBio wrapC
         BioWiki bioWikiA
         BioWiki bioWikiB
+        BioWiki bioWikiC
         def registrata
 
         titoloA = 'Pietro Barillà'
-        titoloB = 'Pietro Barilla'
+        titoloB = 'Mario Bergara'
+        titoloC = 'San Giorgio'
 
         wrapA = new WrapBio(titoloA)
         wrapB = new WrapBio(titoloB)
+        wrapC = new WrapBio(titoloC)
 
         wrapA.registraBioWiki()
         wrapB.registraBioWiki()
+        wrapC.registraBioWiki()
 
         bioWikiA = wrapA.getBioOriginale()
         bioWikiB = wrapB.getBioOriginale()
+        bioWikiC = wrapB.getBioOriginale()
 
-        bioWikiA.attivita3 = 'pippoz'
-        bioWikiB.attivita3 = 'plutox'
+        bioWikiA?.attivita3 = 'pippoz'
+        bioWikiB?.attivita3 = 'plutox'
+        bioWikiC?.attivita3 = 'pap'
 
-        registrata = bioWikiA.save(failOnError: true)
-        registrata = bioWikiB.save(failOnError: true)
+        registrata = bioWikiA?.save(failOnError: true)
+        registrata = bioWikiB?.save(failOnError: true)
+        registrata = bioWikiC?.save(failOnError: true)
 
         render(view: 'index')
     } // fine del metodo

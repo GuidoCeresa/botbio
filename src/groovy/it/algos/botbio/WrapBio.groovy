@@ -1318,13 +1318,15 @@ public class WrapBio {
         boolean continua = false
         def bioRegistrata = null
         BioWiki bioOriginale = this.getBioOriginale() //@todo ATTENZIONE
-        String avviso = "Mancata registrazione sul database BioWiki" + " della voce  " + "'''[[" + bioOriginale.title + "]]'''"
+        String avviso = ''
 
         if (bioOriginale) {
+            avviso = "Mancata registrazione sul database BioWiki" + " della voce  " + "'''[[" + bioOriginale.title + "]]'''"
             try { // prova ad eseguire il codice
                 bioRegistrata = bioOriginale.save(flush: true)
             } catch (Exception unErrore) { // intercetta l'errore
                 try { // prova ad eseguire il codice
+                    def a = unErrore
                     log.error(avviso)
                     logWikiService.warn(avviso)
                 } catch (Exception unErrore2) { // intercetta l'errore
@@ -1337,7 +1339,9 @@ public class WrapBio {
             } else {
                 registrata = true
             }// fine del blocco if-else
-        }// fine del blocco if
+        } else {
+            avviso = "Fallita registrazione sul database BioWiki" + " della voce  " + titoloVoce
+        }// fine del blocco if-else
 
         // valore di ritorno
         return registrata

@@ -4078,6 +4078,13 @@ class BioService {
     private static ArrayList getListaMaschile() {
         ArrayList lista = new ArrayList()
         lista.add('m')
+        lista.add('Uomo')
+        lista.add('uomo')
+        lista.add('H')
+        lista.add('maschile')
+        lista.add('Maschile')
+        lista.add('Maschio')
+        lista.add('maschio')
 
         return lista
     }// fine del metodo
@@ -4086,6 +4093,12 @@ class BioService {
     private static ArrayList getListaFemminile() {
         ArrayList lista = new ArrayList()
         lista.add('f')
+        lista.add('Femmina')
+        lista.add('femmina')
+        lista.add('donna')
+        lista.add('Donna')
+        lista.add('femminile')
+        lista.add('Femminile')
 
         return lista
     }// fine del metodo
