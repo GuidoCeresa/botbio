@@ -2,15 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="68254703-7597-4adf-9a44-9a0e7a7facfd" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/controllers/it/algos/botbio/BioController.groovy" afterPath="$PROJECT_DIR$/grails-app/controllers/it/algos/botbio/BioController.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/services/it/algos/botbio/BioService.groovy" afterPath="$PROJECT_DIR$/grails-app/services/it/algos/botbio/BioService.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/controllers/it/algos/botbio/BioWikiController.groovy" afterPath="$PROJECT_DIR$/grails-app/controllers/it/algos/botbio/BioWikiController.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/conf/BuildConfig.groovy" afterPath="$PROJECT_DIR$/grails-app/conf/BuildConfig.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/jobs/CicloJob.groovy" afterPath="$PROJECT_DIR$/grails-app/jobs/CicloJob.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/groovy/it/algos/botbio/WrapBio.groovy" afterPath="$PROJECT_DIR$/src/groovy/it/algos/botbio/WrapBio.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/unit/it/algos/botbio/WrapBioTest.groovy" afterPath="$PROJECT_DIR$/test/unit/it/algos/botbio/WrapBioTest.groovy" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application.properties" afterPath="$PROJECT_DIR$/application.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/botbio-grailsPlugins.iml" afterPath="$PROJECT_DIR$/botbio-grailsPlugins.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="botbio.iws" />
@@ -146,7 +138,17 @@
     <favorites_list name="botbio" />
   </component>
   <component name="FileEditorManager">
-    <leaf />
+    <leaf>
+      <file leaf-file-name="application.properties" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/application.properties">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="4" column="16" selection-start="110" selection-end="110" vertical-scroll-proportion="0.08797654" vertical-offset="0" max-vertical-offset="682">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FindManager">
     <FindUsagesManager>
@@ -187,8 +189,8 @@
         <option value="$PROJECT_DIR$/grails-app/conf/Config.groovy" />
         <option value="$USER_HOME$/.grails/2.2.3/projects/botbio/plugins/algoswiki-0.71/src/groovy/it/algos/algoswiki/QueryCat.groovy" />
         <option value="$PROJECT_DIR$/grails-app/conf/BuildConfig.groovy" />
-        <option value="$PROJECT_DIR$/application.properties" />
         <option value="$PROJECT_DIR$/grails-app/services/it/algos/botbio/BioService.groovy" />
+        <option value="$PROJECT_DIR$/application.properties" />
       </list>
     </option>
   </component>
@@ -794,7 +796,7 @@
       <workItem from="1390116306934" duration="5182000" />
       <workItem from="1390128960162" duration="6008000" />
       <workItem from="1390200393915" duration="251000" />
-      <workItem from="1390374554272" duration="21000" />
+      <workItem from="1390374554272" duration="512000" />
     </task>
     <task id="LOCAL-00001" summary="working">
       <created>1379825094196</created>
@@ -968,11 +970,15 @@
       <created>1389690746325</created>
       <updated>1389690746325</updated>
     </task>
-    <option name="localTasksCounter" value="44" />
+    <task id="LOCAL-00044" summary="ripart&#10;">
+      <created>1390374596932</created>
+      <updated>1390374596932</updated>
+    </task>
+    <option name="localTasksCounter" value="45" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="32817000" />
+    <option name="totallyTimeSpent" value="33308000" />
   </component>
   <component name="TodoView" selected-index="4">
     <todo-panel id="selected-file">
@@ -996,32 +1002,33 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="50" y="70" width="1357" height="803" extended-state="0" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.329429" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Persistence" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25598803" sideWeight="0.29787233" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Bean Validation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32911393" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3296131" sideWeight="0.5057971" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3296131" sideWeight="0.5057971" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Java Enterprise" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Spring" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.49085796" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.38653" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.329429" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32796487" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32796487" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25627378" sideWeight="0.6994681" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4331927" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32911393" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Bean Validation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.49085796" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2562929" sideWeight="0.46266472" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Grails View" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32951945" sideWeight="0.56661785" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.329429" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.46266472" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32796487" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.62608695" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32796487" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25627378" sideWeight="0.6994681" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4331927" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.29113925" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="CDI" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3296131" sideWeight="0.62608695" order="7" side_tool="true" content_ui="tabs" />
@@ -1029,7 +1036,6 @@
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32911393" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.46266472" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32952926" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
@@ -1082,7 +1088,6 @@
     <option name="myTodoPanelSettings">
       <TodoPanelSettings />
     </option>
-    <MESSAGE value="0.8" />
     <MESSAGE value="0.91" />
     <MESSAGE value="graffe finali" />
     <MESSAGE value="work before modifiche" />
@@ -1107,7 +1112,8 @@
     <MESSAGE value="vai" />
     <MESSAGE value="vai&#10;" />
     <MESSAGE value="ripart" />
-    <option name="LAST_COMMIT_MESSAGE" value="ripart" />
+    <MESSAGE value="ripart&#10;" />
+    <option name="LAST_COMMIT_MESSAGE" value="ripart&#10;" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -1147,7 +1153,9 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/grails-app/jobs/CicloJob.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="32" column="76" selection-start="1172" selection-end="1172" vertical-scroll-proportion="0.0" vertical-offset="480" max-vertical-offset="1155" />
+        <state line="32" column="76" selection-start="1172" selection-end="1172" vertical-scroll-proportion="0.0" vertical-offset="480" max-vertical-offset="1155">
+          <folding />
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/grails-app/services/it/algos/botbio/BioWikiService.groovy">
@@ -1366,16 +1374,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/application.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="7" column="33" selection-start="143" selection-end="143" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="195">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/grails-app/jobs/CicloJob.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="55" column="43" selection-start="1985" selection-end="1985" vertical-scroll-proportion="0.0" vertical-offset="450" max-vertical-offset="1155" />
+        <state line="55" column="43" selection-start="1985" selection-end="1985" vertical-scroll-proportion="0.0" vertical-offset="450" max-vertical-offset="1155">
+          <folding />
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/grails-app/controllers/it/algos/botbio/BioWikiController.groovy">
@@ -1402,6 +1405,13 @@
     <entry file="file://$PROJECT_DIR$/grails-app/services/it/algos/botbio/BioService.groovy">
       <provider selected="true" editor-type-id="text-editor">
         <state line="4086" column="26" selection-start="142716" selection-end="142716" vertical-scroll-proportion="0.4694486" vertical-offset="60840" max-vertical-offset="61545">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="4" column="16" selection-start="110" selection-end="110" vertical-scroll-proportion="0.08797654" vertical-offset="0" max-vertical-offset="682">
           <folding />
         </state>
       </provider>
