@@ -21,7 +21,7 @@ class NazionalitaService {
     // il service NON viene iniettato automaticamente (perché è nel plugin)
     WikiService wikiService = new WikiService()
 
-    private static String TITOLO = 'Template:Bio/plurale_nazionalità'
+    private static String TITOLO = 'Modulo:Bio/Plurale nazionalità'
 
     /**
      * Aggiorna i records leggendoli dalla pagina wiki
@@ -56,7 +56,7 @@ class NazionalitaService {
         // Legge la pagina di servizio
         // Recupera la mappa dalla pagina wiki
         try { // prova ad eseguire il codice
-            mappa = wikiService.leggeSwitchMappa(TITOLO)
+            mappa = wikiService.leggeModuloMappa(TITOLO)
         } catch (Exception unErrore) { // intercetta l'errore
             log.error 'getMappa - ' + unErrore
         }// fine del blocco try-catch

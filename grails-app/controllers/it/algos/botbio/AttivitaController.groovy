@@ -38,7 +38,7 @@ class AttivitaController {
     //--passa al metodo effettivo
     def create() {
         params.tipo = TipoDialogo.conferma
-        params.avviso = 'Download dalla pagina Template:Bio/plurale_attività. Vengono aggiunte nuove attività e aggiornate quelle esistenti. Vuoi procedere?'
+        params.avviso = 'Download dalla pagina Modulo:Bio/Plurale attività. Vengono aggiunte nuove attività e aggiornate quelle esistenti.'
         params.returnController = 'attivita'
         params.returnAction = 'downloadDopoConferma'
         redirect(controller: 'dialogo', action: 'box', params: params)

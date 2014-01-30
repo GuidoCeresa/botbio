@@ -21,7 +21,9 @@ class AttivitaService {
     // il service NON viene iniettato automaticamente (perché è nel plugin)
     WikiService wikiService = new WikiService()
 
-    private static String TITOLO = 'Template:Bio/plurale_attività'
+//    private static String TITOLO = 'Template:Bio/plurale_attività'
+//    private static String TITOLO = 'Modulo:Bio/Link attività'
+    private static String TITOLO = 'Modulo:Bio/Plurale attività'
 
     /**
      * Aggiorna i records leggendoli dalla pagina wiki
@@ -55,7 +57,7 @@ class AttivitaService {
 
         // Legge la pagina di servizio
         // Recupera la mappa dalla pagina wiki
-        mappa = wikiService.leggeSwitchMappa(TITOLO)
+        mappa = wikiService.leggeModuloMappa(TITOLO)
 
         if (!mappa) {
             log.warn 'Non sono riuscito a leggere la pagina plurale attività dal server wiki'

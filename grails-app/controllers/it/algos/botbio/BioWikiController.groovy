@@ -36,6 +36,8 @@ class BioWikiController {
     def grailsApplication
     def bioService
     def logWikiService
+    def attivitaService
+    def nazionalitaService
     SessionFactory sessionFactory
 
     def index() {
@@ -189,6 +191,8 @@ class BioWikiController {
         params.tipo = TipoDialogo.conferma
         params.titolo = 'Ciclo'
         params.avviso = []
+        params.avviso.add('Download dalla pagina Modulo:Bio/Plurale attività. Vengono aggiunte nuove attività e aggiornate quelle esistenti.')
+        params.avviso.add('Download dalla pagina Modulo:Bio/Plurale nazionalità. Vengono aggiunte nuove nazionalità e aggiornate quelle esistenti.')
         params.avviso.add('Vengono caricate (aggiunte) tutte le voci dalla categoria BioBot non ancora presenti nel database.')
         params.avviso.add("Vengono modificate (aggiornate) tutte le voci presenti nel database BioWiki e modificate dopo l'ultimo check")
         params.avviso.add("Vengono elaborate (elabora) tutte le voci presenti nel database BioGrails e modificate dopo l'ultimo check")
@@ -212,6 +216,8 @@ class BioWikiController {
         long durata
 
         if (dialogoConfermato()) {
+            attivitaService.download()
+            nazionalitaService.download()
             aggiunte = esegueAggiungeWiki()
             modificate = esegueAggiornaWiki()
             fine = System.currentTimeMillis()
