@@ -48,6 +48,9 @@ class BotbioTagLib {
         testoOut += tagController('BioWiki')
         testoOut += tagController('BioGrails')
 
+        //--controllers di ulteriori sviluppi collaterali (nomi, liste attività, città, ecc.)
+        testoOut += tagController('Antroponimo')
+
         out << testoOut
     }// fine della closure
 

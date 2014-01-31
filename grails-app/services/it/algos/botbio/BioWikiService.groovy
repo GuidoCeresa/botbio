@@ -126,6 +126,7 @@ class BioWikiService {
                 listaVociServerWiki = this.getListaVociServerWiki()
             }// fine del blocco if-else
             continua = (listaVociServerWiki && listaVociServerWiki.size() > 0)
+            log.info 'Nella categoria ci sono ' + LibTesto.formatNum(listaVociServerWiki.size()) + ' pagine'
             tempo()
         }// fine del blocco if
 
