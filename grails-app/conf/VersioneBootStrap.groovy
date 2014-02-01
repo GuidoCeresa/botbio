@@ -47,6 +47,11 @@ class VersioneBootStrap {
         if (versioneService && versioneService.installaVersione(6)) {
             versioneService.newVersione('Upload', 'Ordinamento alfabetico nei sotogruppi di giorni e anni')
         }// fine del blocco if
+
+        //--aggiunte alcune preferenze
+        if (versioneService && versioneService.installaVersione(7)) {
+            versioneService.newVersione('Preferenze', 'Aggiunto taglio per antroponimi')
+        }// fine del blocco if
     }// fine della closure
 
     def allungaCampo(Sql sql, String nomeCampo) {

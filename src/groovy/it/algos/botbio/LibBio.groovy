@@ -34,6 +34,7 @@ class LibBio {
     public static final String MAX_RIGHE_COLONNE = 'maxRigheColonne'
     public static final String REGISTRA_SOLO_MODIFICHE_SOSTANZIALI = 'registraSoloModificheSostanziali'
     public static final String EVENTO_TESTO_TROPPO_LUNGO = 'DataTooLong'
+    public static final String TAGLIO_ANTROPONIMI = 'taglioAntroponimi'
 
     private static String TAG_BIO = '\\{\\{ ?([Tt]emplate:)? ?[Bb]io[ \\|\n\r\t]'
 

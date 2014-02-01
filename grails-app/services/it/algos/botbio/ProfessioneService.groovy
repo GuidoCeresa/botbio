@@ -15,13 +15,13 @@ package it.algos.botbio
 
 import it.algos.algoswiki.WikiService
 
-class AttivitaService {
+class ProfessioneService {
 
     // utilizzo di un service con la businessLogic
     // il service NON viene iniettato automaticamente (perché è nel plugin)
     WikiService wikiService = new WikiService()
 
-    private static String TITOLO = 'Modulo:Bio/Plurale attività'
+    private static String TITOLO = 'Modulo:Bio/Link attività'
 
     /**
      * Aggiorna i records leggendoli dalla pagina wiki
@@ -42,7 +42,7 @@ class AttivitaService {
             mappa?.each {
                 this.aggiungeRecord(it)
             }// fine di each
-            log.info 'Aggiornati sul DB i records di attività (plurale)'
+            log.info 'Aggiornati sul DB i records di professione'
         }// fine del blocco if
     } // fine del metodo
 
@@ -58,7 +58,7 @@ class AttivitaService {
         mappa = wikiService.leggeModuloMappa(TITOLO)
 
         if (!mappa) {
-            log.warn 'Non sono riuscito a leggere la pagina plurale attività dal server wiki'
+            log.warn 'Non sono riuscito a leggere la pagina link attività dal server wiki'
         }// fine del blocco if
 
         // valore di ritorno
@@ -71,45 +71,44 @@ class AttivitaService {
     def aggiungeRecord(record) {
         // variabili e costanti locali di lavoro
         String singolare
-        String plurale
-        Attivita attivita
+        String voce
+        Professione professione
 
         if (record) {
             singolare = record.key
-            plurale = record.value
-            if (plurale) {
-                attivita = Attivita.findBySingolare(singolare)
-                if (!attivita) {
-                    attivita = new Attivita()
+            voce = record.value
+            if (voce) {
+                professione = Professione.findBySingolare(singolare)
+                if (!professione) {
+                    professione = new Professione()
                 }// fine del blocco if
-                attivita.singolare = singolare
-                attivita.plurale = plurale
-                attivita.save(flush: true)
+                professione.singolare = singolare
+                professione.voce = voce
+                professione.save(flush: true)
             }// fine del blocco if
         }// fine del blocco if
     } // fine del metodo
 
     /**
-     * Ritorna l'attività dal nome al singolare
+     * Ritorna la voce di professione dal nome al singolare
      * Se non esiste, ritorna false
      */
-    public static getAttivita(nomeAttivita) {
+    public static getProfessione(String nomeProfessione) {
         // variabili e costanti locali di lavoro
-        Attivita attivita = null
+        Professione professione = null
 
-        if (nomeAttivita) {
+        if (nomeProfessione) {
             try { // prova ad eseguire il codice
-                attivita = Attivita.findBySingolare(nomeAttivita)
+                professione = Professione.findBySingolare(nomeProfessione)
             } catch (Exception unErrore) { // intercetta l'errore
                 try { // prova ad eseguire il codice
-//                    log.error Risultato.erroreGenerico.getDescrizione()
                 } catch (Exception unAltroErrore) { // intercetta l'errore
                 }// fine del blocco if
             }// fine del blocco try-catch
         }// fine del blocco if
 
         // valore di ritorno
-        return attivita
+        return professione
     } // fine del metodo
 
 } // fine della service classe

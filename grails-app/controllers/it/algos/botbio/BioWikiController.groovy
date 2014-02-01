@@ -38,6 +38,7 @@ class BioWikiController {
     def logWikiService
     def attivitaService
     def nazionalitaService
+    def professioneService
     SessionFactory sessionFactory
 
     def index() {
@@ -218,6 +219,7 @@ class BioWikiController {
         if (dialogoConfermato()) {
             attivitaService.download()
             nazionalitaService.download()
+            professioneService.download()
             aggiunte = esegueAggiungeWiki()
             modificate = esegueAggiornaWiki()
             fine = System.currentTimeMillis()

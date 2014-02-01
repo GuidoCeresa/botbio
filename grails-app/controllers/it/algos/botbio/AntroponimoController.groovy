@@ -16,6 +16,7 @@ package it.algos.botbio
 import it.algos.algos.DialogoController
 import it.algos.algos.TipoDialogo
 import it.algos.algoslib.LibTesto
+import it.algos.algospref.Preferenze
 import org.codehaus.groovy.grails.commons.DefaultGrailsDomainClass
 import org.springframework.dao.DataIntegrityViolationException
 
@@ -45,7 +46,7 @@ class AntroponimoController {
         params.avviso.add('Vengono creati tutti i records coi nomi presenti nelle voci (bioGrails)')
         params.avviso.add('Tempo indicativo: quattro ore')
         params.returnController = 'antroponimo'
-        params.returnAction = 'costruisciDopoConferma'
+        params.returnAction = 'costruisceDopoConferma'
         redirect(controller: 'dialogo', action: 'box', params: params)
     } // fine del metodo
 
@@ -53,7 +54,7 @@ class AntroponimoController {
     //--a seconda del valore ritornato come parametro, esegue o meno l'operazione
     //--cancella i precedenti records
     //--crea i records estraendoli dalle voci esistenti (bioGrails)
-    def costruisciDopoConferma() {
+    def costruisceDopoConferma() {
         String valore
         flash.message = 'Operazione annullata. Antroponimi non modificati.'
 
@@ -92,6 +93,49 @@ class AntroponimoController {
         log.info 'Fine costruzione antroponimi'
     }// fine del metodo
 
+    //--mostra un dialogo di conferma per l'operazione da compiere
+    //--passa al metodo effettivo
+    def elabora() {
+        params.tipo = TipoDialogo.conferma
+        params.titolo = 'Ciclo'
+        params.avviso = []
+        params.avviso.add('Upload dalle pagina antroponimi. Vengono create/aggiornate tutte le voci.')
+        params.returnController = 'antroponimo'
+        params.returnAction = 'elaboraDopoConferma'
+        redirect(controller: 'dialogo', action: 'box', params: params)
+    } // fine del metodo
+
+    //--ritorno dal dialogo di conferma
+    //--a seconda del valore ritornato come parametro, esegue o meno l'operazione
+    //--crea/aggiorna le pagine antroponimi
+    def elaboraDopoConferma() {
+        String valore
+        boolean debug = Preferenze.getBool((String) grailsApplication.config.debug)
+        flash.message = 'Operazione annullata. Pagine antroponimi non modificate.'
+
+        if (params.valore) {
+            if (params.valore instanceof String) {
+                valore = (String) params.valore
+                if (valore.equals(DialogoController.DIALOGO_CONFERMA)) {
+                    if (grailsApplication && grailsApplication.config.login) {
+                        antroponimoService.elabora()
+                        flash.message = 'Operazione effettuata. Sono stati creati/aggiornate le pagine antroponimi'
+                    } else {
+                        if (debug) {
+                            antroponimoService.elabora()
+                            flash.message = 'Operazione effettuata. Sono stati creati/aggiornate le pagine antroponimi'
+                        } else {
+                            flash.error = 'Devi essere loggato per poter caricare gli antroponimi'
+                        }// fine del blocco if-else
+                    }// fine del blocco if-else
+                }// fine del blocco if
+            }// fine del blocco if
+        }// fine del blocco if
+
+        redirect(action: 'list')
+    } // fine del metodo
+
+
     def list(Integer max) {
         params.max = Math.min(max ?: 1000, 1000)
         ArrayList menuExtra
@@ -103,7 +147,9 @@ class AntroponimoController {
         //--selezione dei menu extra
         //--solo azione e di default controller=questo; classe e titolo vengono uguali
         //--mappa con [cont:'controller', action:'metodo', icon:'iconaImmagine', title:'titoloVisibile']
-        menuExtra = []
+        menuExtra = [
+                [cont: 'antroponimo', action: 'elabora', icon: 'frecciasu', title: 'Upload antroponimi'],
+        ]
         // fine della definizione
 
         //--selezione delle colonne (campi) visibili nella lista
@@ -154,11 +200,11 @@ class AntroponimoController {
                 params: params)
     } // fine del metodo
 
-    //--metodo di esportazione dei dati
-    //--funziona SOLO se il flag -usaExport- è true (iniettato e regolato in ExportBootStrap)
-    //--se non si regola la variabile -titleReport- non mette nessun titolo al report
-    //--se non si regola la variabile -records- esporta tutti i records
-    //--se non si regola la variabile -fields- esporta tutti i campi
+//--metodo di esportazione dei dati
+//--funziona SOLO se il flag -usaExport- è true (iniettato e regolato in ExportBootStrap)
+//--se non si regola la variabile -titleReport- non mette nessun titolo al report
+//--se non si regola la variabile -records- esporta tutti i records
+//--se non si regola la variabile -fields- esporta tutti i campi
     def export = {
         String titleReport = new Date()
         def records = null

@@ -16,6 +16,7 @@ class CicloJob {
     def bioService
     def attivitaService
     def nazionalitaService
+    def professioneService
 
     //--delay iniziale
     // execute job 5 minute after start
@@ -32,7 +33,7 @@ class CicloJob {
 //        private static String cronExpressionCiclo = "0 0 0,2,4,6,8,10,12,14,16,18,20,22 * * ?"   //tutti i giorni ogni quattro ore
     static triggers = {
 //        simple startDelay: DELAY, repeatInterval: FREQUENZA
-//        cron name: 'ciclo', cronExpression: cronExpressionCiclo
+        cron name: 'ciclo', cronExpression: cronExpressionCiclo
     }// fine del metodo statico
 
 //    def group = "MyGroup"
@@ -53,6 +54,9 @@ class CicloJob {
             }// fine del blocco if
             if (nazionalitaService) {
                 nazionalitaService.download()
+            }// fine del blocco if
+            if (professioneService) {
+                professioneService.download()
             }// fine del blocco if
 
             if (bioWikiService) {

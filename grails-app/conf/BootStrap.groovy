@@ -1,3 +1,5 @@
+import it.algos.algosvers.Versione
+
 /* Created by Algos s.r.l. */
 /* Date: mag 2013 */
 /* Il plugin Algos ha inserito (solo la prima volta) questo header per controllare */
@@ -17,7 +19,7 @@ class BootStrap {
     def init = { servletContext ->
 
         //--iniezione di una property/variabile globale
-       grailsApplication.config.mostraControllerSpecifici = 'alcuni'
+        grailsApplication.config.mostraControllerSpecifici = 'alcuni'
     }// fine della closure
 
     //--metodo invocato direttamente da Grails

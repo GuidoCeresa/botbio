@@ -27,13 +27,13 @@ class AntroponimoJob {
 
     //--codifica dell'orario di attivazione
 //    private static String cronExpressionCiclo = "0 0 0 * * ?"   //tutti i giorni a mezzanotte
-    private static String cronExpressionCiclo = "0 0 1 * * ?"   //tutti i giorni all'una
+//    private static String cronExpressionCiclo = "0 0 1 * * ?"   //tutti i giorni all'una
 //    private static String cronExpressionCiclo = "0 0 * * * ?"   //tutti i giorni a tutte le ore
 //    private static String cronExpressionCiclo = "0 0 2-23 * * ?"   //tutti i giorni a tutte le ore meno mezzanotte e l'una
 //        private static String cronExpressionCiclo = "0 0 0,2,4,6,8,10,12,14,16,18,20,22 * * ?"   //tutti i giorni ogni quattro ore
     static triggers = {
 //        simple startDelay: DELAY, repeatInterval: FREQUENZA
-        cron name: 'ciclo', cronExpression: cronExpressionCiclo
+//        cron name: 'ciclo', cronExpression: cronExpressionCiclo
     }// fine del metodo statico
 
     def execute() {

@@ -49,6 +49,7 @@ class BotbioTagLib {
         testoOut += tagController('BioGrails')
 
         //--controllers di ulteriori sviluppi collaterali (nomi, liste attività, città, ecc.)
+        testoOut += tagController('Professione')
         testoOut += tagController('Antroponimo')
 
         out << testoOut

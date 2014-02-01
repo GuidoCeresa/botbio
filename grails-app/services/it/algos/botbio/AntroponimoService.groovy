@@ -14,9 +14,14 @@
 package it.algos.botbio
 
 import it.algos.algoslib.LibTesto
+import it.algos.algoslib.LibTime
 import it.algos.algospref.Preferenze
+import it.algos.algoswiki.Edit
 
 class AntroponimoService {
+
+    private tagTitolo = 'Lista di persone di nome '
+    private static String aCapo = '\n'
 
     public void costruisce() {
         ArrayList<String> listaNomiCompleta
@@ -199,6 +204,57 @@ class AntroponimoService {
         return numVoci
     }// fine del metodo
 
+    // Elabora tutte le pagine
+    def elabora() {
+        int taglio = Preferenze.getInt(LibBio.TAGLIO_ANTROPONIMI)
+        ArrayList listaNomi
+        String query = 'select nome from Antroponimo where voci>'
+        query += taglio
+        query += ' order by nome'
+
+        //esegue la query
+        listaNomi = Antroponimo.executeQuery(query)
+
+        //crea le pagine dei singoli nomi
+        listaNomi?.each {
+            elaboraSingoloNome((String) it)
+        }// fine del ciclo each
+
+        //crea la pagina di controllo didascalie
+//        this.creaPaginaDidascalie()
+
+        //crea la pagina riepilogativa
+//        if (listaNomi) {
+//            creaPaginaRiepilogativa(listaNomi)
+//        }// fine del blocco if
+
+    }// fine del metodo
+
+    /**
+     * Elabora la pagina per un singolo nome
+     */
+    public void elaboraSingoloNome(String nome) {
+        String titolo
+        String testo = ''
+        String summary = 'BioBot'
+        ArrayList<BioGrails> listaBiografieDiversePerAccento
+
+        titolo = tagTitolo + nome
+        listaBiografieDiversePerAccento = biografieDiversePerAccento(nome)
+
+        //header
+        testo += this.getNomeHead(listaBiografieDiversePerAccento.size())
+
+        //body
+        testo += this.getNomeBody(listaBiografieDiversePerAccento, nome)
+
+        //footer
+        testo += this.getNomeFooter(nome)
+
+        //registra la pagina
+        new Edit(titolo, testo, summary)
+    }// fine del metodo
+
     //--costruisce una lista di biografie che 'usano' il nome
     //--se il flag usaNomeSingolo è vero, il nome della voce deve coincidere esattamente col parametro in ingresso
     //--se il flag usaNomeSingolo è falso, il nome della voce deve iniziare col parametro
@@ -210,16 +266,10 @@ class AntroponimoService {
         ArrayList<BioGrails> listaGrezza = null
 
         //--recupera una lista 'grezza' di tutti i nomi
+        //@todo non sono riuscito a sviluppare la differenza (per ora)
         if (usaNomeSingolo) {
-            // query = "select id from Biografia where nome='${nome}' order by nome desc"
             listaGrezza = BioGrails.findAllByNome(nome, [order: 'nome'])
-//            def c = Biografia.createCriteria()
-//            listaGrezza = c.list {
-//                like("nome", "${nome} %")
-//                order("nome", "desc")
-//            }
         } else {
-            //query = "select id from Biografia where nome like '${nome} %' order by nome desc"
             listaGrezza = BioGrails.findAllByNome(nome, [order: 'nome'])
         }// fine del blocco if-else
 
@@ -234,6 +284,208 @@ class AntroponimoService {
         } // fine del ciclo each
 
         return listaBiografieDiversePerAccento
+    }// fine del metodo
+
+
+    public String getNomeHead(int num) {
+        String testo = ''
+        String dataCorrente = LibTime.getGioMeseAnnoLungo(new Date())
+        String numero = ''
+        boolean eliminaIndice = false
+
+        if (num) {
+            numero = LibTesto.formatNum(num)
+        }// fine del blocco if
+
+        if (eliminaIndice) {
+            testo += '__NOTOC__'
+        }// fine del blocco if
+        testo += '<noinclude>'
+        testo += "{{StatBio"
+        if (numero) {
+            testo += "|bio=$numero"
+        }// fine del blocco if
+        testo += "|data=$dataCorrente}}"
+        testo += aCapo
+
+        return testo
+    }// fine del metodo
+
+
+    public String getNomeBody(ArrayList listaVoci, String nome) {
+        String testo = ''
+        String tagMaschio = 'M'
+        String tagFemmina = 'F'
+        ArrayList listaVociMaschili
+        ArrayList listaVociFemminili
+        boolean usaTerzoLivello = false
+
+        listaVociMaschili = this.selezionaGenere(listaVoci, tagMaschio)
+        listaVociFemminili = this.selezionaGenere(listaVoci, tagFemmina)
+
+        if (listaVociMaschili && listaVociFemminili) {
+            usaTerzoLivello = true
+            testo += '\n==Uomini==\n'
+            testo += this.getNomeBodyBase(listaVociMaschili, usaTerzoLivello)
+            testo += '\n==Donne==\n'
+            testo += this.getNomeBodyBase(listaVociFemminili, usaTerzoLivello)
+        } else {
+            if (listaVociMaschili) {
+                testo += this.getNomeBodyBase(listaVociMaschili, usaTerzoLivello)
+            }// fine del blocco if
+            if (listaVociFemminili) {
+                testo += this.getNomeBodyBase(listaVociFemminili, usaTerzoLivello)
+            }// fine del blocco if
+        }// fine del blocco if-else
+
+        return testo
+    }// fine del metodo
+
+    public String getNomeBodyBase(ArrayList listaVoci, boolean usaTerzoLivello) {
+        String testo = ''
+        Map mappa
+        String aCapo = '\n'
+        String chiave
+        def lista
+        int num = 0
+        String tagIni = '=='
+        String tagEnd = '=='
+
+        if (usaTerzoLivello) {
+            tagIni = '==='
+            tagEnd = '===\n----\n'
+        }// fine del blocco if-else
+
+        mappa = this.getMappaAttività(listaVoci)
+        mappa = this.ordinaMappa(mappa)
+        if (mappa) {
+            mappa?.each {
+                chiave = it.key
+                lista = mappa.get(chiave)
+                num += lista.size()
+                testo += tagIni
+                testo += chiave
+                testo += tagEnd
+                testo += aCapo
+                testo += getParagrafoDidascalia(lista)
+                testo += aCapo
+                testo += aCapo
+            }// fine del ciclo each
+        }// fine del blocco if
+
+        return testo
+    }// fine del metodo
+
+    public ArrayList selezionaGenere(ArrayList<BioGrails> listaVoci, String tag) {
+        ArrayList lista = null
+        BioGrails bio
+
+        if (listaVoci && listaVoci.size() > 0 && tag) {
+            lista = new ArrayList()
+            listaVoci?.each {
+                bio = it
+                if (bio.sesso.equals(tag)) {
+                    lista.add(bio)
+                }// fine del blocco if
+            } // fine del ciclo each
+        }// fine del blocco if
+
+        return lista
+    }// fine del metodo
+
+    // raggruppa per attività una lista di biografie
+    // costruisce una mappa con:
+    // una chiave per ogni attività
+    // una lista di didascalie
+    // inserisce solo le attività utilizzate
+    public Map getMappaAttività(ArrayList<BioGrails> listaVoci) {
+        LinkedHashMap<String, ArrayList<String>> mappa = null
+        String didascalia = ''
+        String chiaveOld = ''
+        String chiave = ''
+        ArrayList<String> lista
+        BioGrails bio
+        String attivita
+
+        if (listaVoci) {
+            mappa = new LinkedHashMap<String, ArrayList<String>>()
+            listaVoci?.each {
+                bio = it
+                didascalia = bio.didascaliaBase
+                attivita = bio.attivita
+                if (attivita) {
+                    chiave = this.getAttivita(bio)
+                    if (!chiave) {
+                        chiave = tagPunti
+                    }// fine del blocco if
+                } else {
+                    chiave = tagPunti
+                }// fine del blocco if-else
+
+                if (chiave.equals(chiaveOld)) {
+                    lista = mappa.get(chiave)
+                    lista.add(didascalia)
+                } else {
+                    if (mappa.get(chiave)) {
+                        lista = mappa.get(chiave)
+                        lista.add(didascalia)
+                    } else {
+                        lista = new ArrayList<String>()
+                        lista.add(didascalia)
+                        mappa.put(chiave, lista)
+                        chiaveOld = chiave
+                    }// fine del blocco if-else
+                }// fine del blocco if-else
+            }// fine del ciclo each
+        }// fine del blocco if
+
+        return mappa
+    }// fine del metodo
+
+
+    // restituisce il nome dell'attività
+    // restituisce il plurale
+    // restituisce il primo carattere maiuscolo
+    // aggiunge un link alla voce di riferimento
+    public String getAttivita(BioGrails bio) {
+        String attivitaLinkata = ''
+        String attivita = ''
+        String singolare
+        String plurale
+        Attivita attivitaRecord
+        boolean link = this.titoloParagrafoConLink
+
+        if (bio) {
+            singolare = bio.attivita
+            if (singolare) {
+                attivitaRecord = Attivita.findBySingolare(singolare)
+                if (attivitaRecord) {
+                    plurale = attivitaRecord.plurale
+                    if (plurale) {
+                        attivita = LibTesto.primaMaiuscola(plurale)
+                        if (attivita) {
+                            attivita = attivita.trim()
+                            if (link) {
+                                def professione = Professione.findBySingolare(singolare)
+                                attivitaLinkata = '[['
+                                if (professione) {
+                                    attivitaLinkata += LibTesto.primaMaiuscola(professione.voce)
+                                } else {
+                                    attivitaLinkata += LibTesto.primaMaiuscola(singolare)
+                                }// fine del blocco if-else
+                                attivitaLinkata += '|'
+                                attivitaLinkata += attivita
+                                attivitaLinkata += ']]'
+                            } else {
+                                attivitaLinkata = attivita
+                            }// fine del blocco if-else
+                        }// fine del blocco if
+                    }// fine del blocco if
+                }// fine del blocco if
+            }// fine del blocco if
+        }// fine del blocco if
+
+        return attivitaLinkata
     }// fine del metodo
 
 } // fine della service classe
