@@ -35,6 +35,7 @@ class LibBio {
     public static final String REGISTRA_SOLO_MODIFICHE_SOSTANZIALI = 'registraSoloModificheSostanziali'
     public static final String EVENTO_TESTO_TROPPO_LUNGO = 'DataTooLong'
     public static final String TAGLIO_ANTROPONIMI = 'taglioAntroponimi'
+    public static final String USA_OCCORRENZE_ANTROPONIMI = 'usaOccorrenzeAntroponimi'
 
     private static String TAG_BIO = '\\{\\{ ?([Tt]emplate:)? ?[Bb]io[ \\|\n\r\t]'
 
@@ -567,5 +568,35 @@ class LibBio {
 
         return messaggio
     }// fine del metodo
+
+    /**
+     * Aggiunge il tag ref in testa e coda della stringa.
+     * Aggiunge SOLO se gia non esistono
+     *
+     * @param stringaIn testo da elaborare
+     * @return stringa con ref iniziale e finale aggiunto
+     */
+    public static String setRef(String stringaIn) {
+        /* variabili e costanti locali di lavoro */
+        String stringaOut = "";
+        String tagIni = "<ref>";
+        String tagEnd = "</ref>";
+
+        try { // prova ad eseguire il codice
+            stringaOut = stringaIn;
+            if (!stringaIn.startsWith(tagIni)) {
+                stringaOut = tagIni + stringaIn;
+            }// fine del blocco if
+
+            if (!stringaIn.endsWith(tagEnd)) {
+                stringaOut += tagEnd;
+            }// fine del blocco if
+
+        } catch (Exception unErrore) { // intercetta l'errore
+        }// fine del blocco try-catch
+
+        /* valore di ritorno */
+        return stringaOut;
+    }
 
 } // fine della classe

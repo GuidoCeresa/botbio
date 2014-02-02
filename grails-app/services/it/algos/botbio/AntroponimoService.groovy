@@ -12,9 +12,9 @@
 /* flagOverwrite = true */
 
 package it.algos.botbio
-
 import it.algos.algoslib.LibTesto
 import it.algos.algoslib.LibTime
+import it.algos.algospref.LibPref
 import it.algos.algospref.Preferenze
 import it.algos.algoswiki.Edit
 
@@ -24,6 +24,7 @@ class AntroponimoService {
     private static String aCapo = '\n'
     private tagPunti = 'Altre...'
     private boolean titoloParagrafoConLink = true
+    private String progetto = 'Progetto:Antroponimi/'
 
     public void costruisce() {
         ArrayList<String> listaNomiCompleta
@@ -223,13 +224,12 @@ class AntroponimoService {
         }// fine del ciclo each
 
         //crea la pagina di controllo didascalie
-//        this.creaPaginaDidascalie()
+        this.creaPaginaDidascalie()
 
         //crea la pagina riepilogativa
-//        if (listaNomi) {
-//            creaPaginaRiepilogativa(listaNomi)
-//        }// fine del blocco if
-
+        if (listaNomi) {
+            creaPaginaRiepilogativa(listaNomi)
+        }// fine del blocco if
     }// fine del metodo
 
     /**
@@ -454,14 +454,14 @@ class AntroponimoService {
     // se manca la didascalia, la crea al volo
     public String creaDidascaliaAlVolo(BioGrails bio) {
         String didascaliaTxt = ''
-        long grailsid
+        long grailsId
         DidascaliaBio didascaliaObj
 
         if (bio) {
-            grailsid = bio.id
-            didascaliaObj = new DidascaliaBio(grailsid)
+            grailsId = bio.id
+            didascaliaObj = new DidascaliaBio(grailsId)
             didascaliaObj.setInizializza()
-            didascaliaTxt = didascaliaObj.getTestoEstesa()
+            didascaliaTxt = didascaliaObj.getTestoEstesaSimboli()
         }// fine del blocco if
 
         return didascaliaTxt
@@ -583,6 +583,288 @@ class AntroponimoService {
         testo += "[[Categoria:Liste di persone per nome|${nome}]]"
         testo += '</noinclude>'
         testo += aCapo
+
+        return testo
+    }// fine del metodo
+
+    // pagina di controllo/servizio
+    private creaPaginaDidascalie() {
+        String titolo = progetto + 'Didascalie'
+        String testo = ''
+        String summary = 'Biobot'
+
+        testo += getDidascalieHeader()
+        testo += getDidascalieBody()
+        testo += getDidascalieFooter()
+
+        //registra la pagina
+        new Edit(titolo, testo, summary)
+    }// fine della closure
+
+
+    private static String getDidascalieHeader() {
+        String testo = ''
+        String dataCorrente = LibTime.getGioMeseAnnoLungo(new Date())
+        String aCapo = '\n'
+        String bot = getBotLink()
+
+        testo += '__NOTOC__'
+        testo += '<noinclude>'
+        testo += "{{StatBio"
+        testo += "|data=$dataCorrente}}"
+        testo += aCapo
+
+        testo += "Pagina di servizio per il '''controllo'''<ref>Attualmente il ${bot} usa il tipo '''8''' (estesa con simboli)</ref> delle didascalie utilizzate nelle ''Liste di persone di nome''..."
+        testo += aCapo
+        testo += 'Le didascalie possono essere di diversi tipi:'
+        testo += aCapo
+
+        return testo
+    }// fine della closure
+
+    private static String getDidascalieBody() {
+        String testo = ''
+        String titoloEsempio = 'Silvio Spaventa'
+        WrapBio bio = new WrapBio(titoloEsempio)
+        BioGrails bioGrails = BioGrails.findByTitle(titoloEsempio)
+        long grailsId = 0
+
+        if (bioGrails) {
+            grailsId = bioGrails.id
+        }// fine del blocco if
+
+        if (grailsId) {
+            DidascaliaTipo.values().each {
+                if (it.stampaTest) {
+                    testo += rigaDidascalia(it)
+                    testo += rigaEsempio(it, grailsId)
+                }// fine del blocco if
+            }// fine di each
+        }// fine del blocco if
+
+        return testo
+    }// fine della closure
+
+    private static String rigaDidascalia(DidascaliaTipo tipo) {
+        String testo = ''
+        String tag = ': '
+        boolean usaRef = true
+        String ref;
+        ref = tipo.getRef();
+
+        testo += '#'
+        // testo += "'''"
+        testo += LibTesto.primaMaiuscola(tipo.getSigla())
+        // testo += "'''"
+        testo += tag
+        testo += tipo.getDescrizione()
+        if (usaRef) {
+            if (ref != null) {
+                if (!ref.equals("")) {
+                    testo += ref
+                }// fine del blocco if
+            }// fine del blocco if
+        }// fine del blocco if
+
+        return testo
+    }// fine della closure
+
+    private static String rigaEsempio(DidascaliaTipo tipo, long grailsId) {
+        String testo = ''
+        String aCapo = '\n'
+        String testoDidascalia = ''
+        DidascaliaBio didascalia
+
+        didascalia = new DidascaliaBio(grailsId)
+        didascalia.setInizializza()
+
+        switch (tipo) {
+            case DidascaliaTipo.base:
+                testoDidascalia = didascalia.getTestoBase()
+                break
+            case DidascaliaTipo.crono:
+                testoDidascalia = didascalia.getTestoCrono()
+                break
+            case DidascaliaTipo.cronoSimboli:
+                testoDidascalia = didascalia.getTestoCrono()
+                break
+            case DidascaliaTipo.semplice:
+                testoDidascalia = didascalia.getTestoSemplice()
+                break
+            case DidascaliaTipo.completa:
+                testoDidascalia = didascalia.getTestoCompleta()
+                break
+            case DidascaliaTipo.completaSimboli:
+                testoDidascalia = didascalia.getTestoCompletaSimboli()
+                break
+            case DidascaliaTipo.estesa:
+                testoDidascalia = didascalia.getTestoEstesa()
+                break
+            case DidascaliaTipo.estesaSimboli:
+                testoDidascalia = didascalia.getTestoEstesaSimboli()
+                break
+            default: // caso non definito
+                break
+        } // fine del blocco switch
+
+        testo += '<BR>'
+        testo += "'''"
+        testo += testoDidascalia
+        testo += "'''"
+        testo += aCapo
+
+        return testo
+    }// fine della closure
+
+    private static String getDidascalieFooter() {
+        String testoFooter = ''
+        String aCapo = '\n'
+
+        testoFooter += '==Note=='
+        testoFooter += aCapo
+        testoFooter += '<references/>'
+        testoFooter += aCapo
+        testoFooter += '==Voci correlate=='
+        testoFooter += aCapo
+        testoFooter += '*[[Progetto:Antroponimi]]'
+        testoFooter += aCapo
+        testoFooter += '*[[Progetto:Antroponimi/Nomi]]'
+        testoFooter += aCapo
+        testoFooter += '*[[Progetto:Antroponimi/Liste]]'
+        testoFooter += aCapo
+        testoFooter += aCapo
+        testoFooter += '<noinclude>'
+        testoFooter += '[[Categoria:Liste di persone per nome| ]]'
+        testoFooter += '</noinclude>'
+
+        return testoFooter
+    }// fine della closure
+
+    private static String getBotLink() {
+        String testo = ''
+
+        testo += "'''"
+        testo += '[[Utente:Biobot|<span style="color:green;">bot</span>]]'
+        testo += "'''"
+
+        return testo
+    }// fine della closure
+
+    /**
+     * Crea la pagina riepilogativa
+     */
+    public creaPaginaRiepilogativa(ArrayList<String> listaVoci) {
+        String testo = ''
+        String titolo = progetto + 'Nomi'
+        String summary = 'Biobot'
+
+        testo += getRiepilogoHead()
+        testo += getRiepilogoBody(listaVoci)
+        testo += getRiepilogoFooter()
+
+        new Edit(titolo, testo, summary)
+    }// fine del metodo
+
+
+    public String getRiepilogoHead() {
+        String testo = ''
+        String dataCorrente = LibTime.getGioMeseAnnoLungo(new Date())
+        String aCapo = '\n'
+
+        testo += '__NOTOC__'
+        testo += '<noinclude>'
+        testo += "{{StatBio|data=$dataCorrente}}"
+        testo += '</noinclude>'
+        testo += aCapo
+
+        return testo
+    }// fine del metodo
+
+
+    public String getRiepilogoBody(ArrayList<String> listaVoci) {
+        String testo = ''
+        int taglio = Preferenze.getInt(LibBio.TAGLIO_ANTROPONIMI)
+        LinkedHashMap mappa = null
+        String chiave
+        String nome
+        def lista
+        def ricorrenze = LibTesto.formatNum(taglio)
+        String aCapo = '\n'
+
+        testo += '==Nomi=='
+        testo += aCapo
+        testo += 'Elenco dei '
+        testo += "''' "
+        testo += LibTesto.formatNum(listaVoci.size())
+        testo += "'''"
+        testo += ' nomi che hanno più di '
+        testo += "'''"
+        testo += ricorrenze
+        testo += "'''"
+        testo += ' ricorrenze nelle voci biografiche'
+        testo += aCapo
+
+        testo += aCapo
+        testo += '{{Div col|cols=3}}'
+        if (listaVoci) {
+            listaVoci.each {
+                nome = it
+                testo += aCapo
+                testo += this.getRiga(nome)
+            }// fine del ciclo each
+        }// fine del blocco if
+        testo += aCapo
+        testo += '{{Div col end}}'
+        testo += aCapo
+
+        return testo
+    }// fine del metodo
+
+    public String getRiga(String nome) {
+        String testo = ''
+        String tag
+        String aCapo = '\n'
+        String numVoci
+
+        if (nome) {
+            tag = tagTitolo + nome
+            testo += '*'
+            testo += '[['
+            testo += tag
+            testo += '|'
+            testo += nome
+            testo += ']]'
+            if (LibPref.getBool('usaOccorrenzeAntroponimi')) {
+                numVoci = numeroVociCheUsanoNome(nome)
+                testo += ' ('
+                testo += "'''"
+                testo += LibTesto.formatNum(numVoci)
+                testo += "'''"
+                testo += ' )'
+            }// fine del blocco if
+            testo += aCapo
+        }// fine del blocco if
+
+        return testo.trim()
+    }// fine del metodo
+
+    public String getRiepilogoFooter() {
+        String testo = ''
+        String aCapo = '\n'
+
+        testo += aCapo
+        testo += '==Voci correlate=='
+        testo += aCapo
+        testo += '*[[Progetto:Antroponimi]]'
+        testo += aCapo
+        testo += '*[[Progetto:Antroponimi/Liste]]'
+        testo += aCapo
+        testo += '*[[Progetto:Antroponimi/Didascalie]]'
+        testo += aCapo
+        testo += aCapo
+        testo += '<noinclude>'
+        testo += '[[Categoria:Liste di persone per nome| ]]'
+        testo += '</noinclude>'
 
         return testo
     }// fine del metodo

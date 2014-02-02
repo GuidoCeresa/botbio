@@ -1,6 +1,6 @@
-/* Created by Algos s.r.l. */
+/* Created by Gac */
 /* Date: mag 2013 */
-/* Il plugin Algos ha creato o sovrascritto il templates che ha creato questo file. */
+/* Il plugin  ha creato o sovrascritto il templates che ha creato questo file. */
 /* L'header del templates serve per controllare le successive release */
 /* (tramite il flag di controllo aggiunto) */
 /* Tipicamente VERRA sovrascritto (il template, non il file) ad ogni nuova release */

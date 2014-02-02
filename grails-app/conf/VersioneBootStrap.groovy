@@ -57,6 +57,16 @@ class VersioneBootStrap {
         if (versioneService && versioneService.installaVersione(8)) {
             versioneService.newVersione('Applicazione', 'Aggiunta tavola Professione')
         }// fine del blocco if
+
+        //--aggiunte alcune preferenze
+        if (versioneService && versioneService.installaVersione(9)) {
+            versioneService.newVersione('Applicazione', 'Riattivate liste di nomi')
+        }// fine del blocco if
+
+        //--aggiunte alcune preferenze
+        if (versioneService && versioneService.installaVersione(10)) {
+            versioneService.newVersione('Preferenze', 'Aggiunto usaOccorrenzeAntroponimi')
+        }// fine del blocco if
     }// fine della closure
 
     def allungaCampo(Sql sql, String nomeCampo) {
