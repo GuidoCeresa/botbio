@@ -300,6 +300,8 @@ class BioService {
         listaid?.each {
             cont++
             pageid = (int) it
+            bioWiki = null
+            bioGrails = null
 
             if (pageid) {
                 bioWiki = BioWiki.findByPageid(pageid)

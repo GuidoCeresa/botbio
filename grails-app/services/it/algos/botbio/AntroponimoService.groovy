@@ -22,6 +22,8 @@ class AntroponimoService {
 
     private tagTitolo = 'Lista di persone di nome '
     private static String aCapo = '\n'
+    private tagPunti = 'Altre...'
+    private boolean titoloParagrafoConLink = true
 
     public void costruisce() {
         ArrayList<String> listaNomiCompleta
@@ -346,7 +348,7 @@ class AntroponimoService {
         Map mappa
         String aCapo = '\n'
         String chiave
-        def lista
+        ArrayList<String> lista
         int num = 0
         String tagIni = '=='
         String tagEnd = '=='
@@ -361,7 +363,7 @@ class AntroponimoService {
         if (mappa) {
             mappa?.each {
                 chiave = it.key
-                lista = mappa.get(chiave)
+                lista = (ArrayList<String>) mappa.get(chiave)
                 num += lista.size()
                 testo += tagIni
                 testo += chiave
@@ -411,7 +413,14 @@ class AntroponimoService {
             mappa = new LinkedHashMap<String, ArrayList<String>>()
             listaVoci?.each {
                 bio = it
-                didascalia = bio.didascaliaBase
+                try { // prova ad eseguire il codice
+                    if (bio.didascaliaListe) {
+                        didascalia = bio.didascaliaListe
+                    }// fine del blocco if
+                } catch (Exception unErrore) { // intercetta l'errore
+                    didascalia = creaDidascaliaAlVolo(bio)
+                }// fine del blocco try-catch
+//                didascalia = bio.didascaliaBase
                 attivita = bio.attivita
                 if (attivita) {
                     chiave = this.getAttivita(bio)
@@ -442,6 +451,21 @@ class AntroponimoService {
         return mappa
     }// fine del metodo
 
+    // se manca la didascalia, la crea al volo
+    public String creaDidascaliaAlVolo(BioGrails bio) {
+        String didascaliaTxt = ''
+        long grailsid
+        DidascaliaBio didascaliaObj
+
+        if (bio) {
+            grailsid = bio.id
+            didascaliaObj = new DidascaliaBio(grailsid)
+            didascaliaObj.setInizializza()
+            didascaliaTxt = didascaliaObj.getTestoEstesa()
+        }// fine del blocco if
+
+        return didascaliaTxt
+    }// fine del metodo
 
     // restituisce il nome dell'attività
     // restituisce il plurale
@@ -486,6 +510,81 @@ class AntroponimoService {
         }// fine del blocco if
 
         return attivitaLinkata
+    }// fine del metodo
+
+    /**
+     * Ordina una mappa
+     *
+     * @param mappa non ordinata
+     * @return mappa ordinata
+     */
+    public Map ordinaMappa(Map mappaIn) {
+        // variabili e costanti locali di lavoro
+        Map mappaOut = mappaIn
+        ArrayList<String> listaChiavi
+        String chiave
+        def valore
+
+        if (mappaIn && mappaIn.size() > 1) {
+            listaChiavi = mappaIn.keySet()
+            listaChiavi.remove(tagPunti) //elimino l'asterisco (per metterlo in fondo)
+            listaChiavi.sort()
+            if (listaChiavi) {
+                mappaOut = new LinkedHashMap()
+                listaChiavi?.each {
+                    chiave = it
+                    valore = mappaIn.get(chiave)
+                    mappaOut.put(chiave, valore)
+                }// fine del blocco if
+
+                // aggiungo (in fondo) l'asterisco. Se c'è.
+                valore = mappaIn.get(tagPunti)
+                if (valore) {
+                    mappaOut.put(tagPunti, valore)
+                }// fine del blocco if
+            }// fine del blocco if
+        }// fine del blocco if
+
+        // valore di ritorno
+        return mappaOut
+    }// fine della closure
+
+    public String getParagrafoDidascalia(ArrayList<String> nomi) {
+        String testo = ''
+        String nome
+        String tag = ''
+
+        if (nomi) {
+            nomi?.each {
+                nome = it
+                testo += '*'
+                testo += nome
+                testo += '\n'
+            }// fine del ciclo each
+        }// fine del blocco if
+
+        return testo.trim()
+    }// fine del metodo
+
+
+    public String getNomeFooter(String nome) {
+        String testo = ''
+        String aCapo = '\n'
+
+        testo += '==Voci correlate=='
+        testo += aCapo
+        testo += aCapo
+        testo += '*[[Progetto:Antroponimi/Nomi]]'
+        testo += aCapo
+        testo += '*[[Progetto:Antroponimi/Didascalie]]'
+        testo += aCapo
+        testo += aCapo
+        testo += '<noinclude>'
+        testo += "[[Categoria:Liste di persone per nome|${nome}]]"
+        testo += '</noinclude>'
+        testo += aCapo
+
+        return testo
     }// fine del metodo
 
 } // fine della service classe
