@@ -138,6 +138,7 @@ class BioGrailsController {
     //--passa al metodo effettivo senza nessun dialogo di conferma
     def uploadGiorniNascita() {
         bioGrailsService.uploadGiorniNascita()
+        redirect(action: 'list')
     } // fine del metodo
 
     //--creazione delle liste partendo da BioGrails
@@ -145,6 +146,7 @@ class BioGrailsController {
     //--passa al metodo effettivo senza nessun dialogo di conferma
     def uploadGiorniMorte() {
         bioGrailsService.uploadGiorniMorte()
+        redirect(action: 'list')
     } // fine del metodo
 
     //--creazione delle liste partendo da BioGrails
@@ -152,6 +154,7 @@ class BioGrailsController {
     //--passa al metodo effettivo senza nessun dialogo di conferma
     def uploadAnniNascita() {
         bioGrailsService.uploadAnniNascita()
+        redirect(action: 'list')
     } // fine del metodo
 
     //--creazione delle liste partendo da BioGrails
@@ -159,6 +162,7 @@ class BioGrailsController {
     //--passa al metodo effettivo senza nessun dialogo di conferma
     def uploadAnniMorte() {
         bioGrailsService.uploadAnniMorte()
+        redirect(action: 'list')
     } // fine del metodo
 
     //--creazione delle liste partendo da BioGrails

@@ -107,7 +107,8 @@ class BioGrailsService {
             }// fine del blocco if
         }// fine del blocco if
 
-        if (giorno && registrata) {
+//        if (giorno && registrata) {
+        if (giorno) {
             giorno.sporcoNato = false
             giorno.save(flush: true)
         }// fine del blocco if
@@ -159,7 +160,8 @@ class BioGrailsService {
             }// fine del blocco if
         }// fine del blocco if
 
-        if (giorno && registrata) {
+//        if (giorno && registrata) {
+        if (giorno) {
             giorno.sporcoMorto = false
             giorno.save(flush: true)
         }// fine del blocco if
@@ -216,6 +218,11 @@ class BioGrailsService {
                 this.caricaPagina(anno, listaPersone, numPersone, tagNatiMorti, tagNateMorte)
             }// fine del blocco if
         }// fine del blocco if
+
+        if (anno) {
+            anno.sporcoNato = false
+            anno.save(flush: true)
+        }// fine del blocco if
     } // fine del metodo
 
     //--creazione delle liste partendo da BioGrails
@@ -261,6 +268,11 @@ class BioGrailsService {
                 numPersone = listaPersone.size()
                 this.caricaPagina(anno, listaPersone, numPersone, tagNatiMorti, tagNateMorte)
             }// fine del blocco if
+        }// fine del blocco if
+
+        if (anno) {
+            anno.sporcoMorto = false
+            anno.save(flush: true)
         }// fine del blocco if
     } // fine del metodo
 
@@ -405,7 +417,8 @@ class BioGrailsService {
     /**
      * Costruisce il testo della pagina
      */
-    private static String getTesto(Giorno giorno, ArrayList lista, int numPersone, String tagNatiMorti, String tagNateMorte) {
+    private
+    static String getTesto(Giorno giorno, ArrayList lista, int numPersone, String tagNatiMorti, String tagNateMorte) {
         // variabili e costanti locali di lavoro
         String testo = ''
 
@@ -423,7 +436,8 @@ class BioGrailsService {
     /**
      * Costruisce il testo della pagina
      */
-    private static String getTesto(Anno anno, ArrayList lista, int numPersone, String tagNatiMorti, String tagNateMorte) {
+    private
+    static String getTesto(Anno anno, ArrayList lista, int numPersone, String tagNatiMorti, String tagNateMorte) {
         // variabili e costanti locali di lavoro
         String testo = ''
 
@@ -583,7 +597,8 @@ class BioGrailsService {
     /**
      * Inserisce l'eventuale cassetto
      */
-    private static String fixTestoCassetto(String testoIn, int numPersone, String tagNateMorte, boolean usaSempreCassetto) {
+    private
+    static String fixTestoCassetto(String testoIn, int numPersone, String tagNateMorte, boolean usaSempreCassetto) {
         // variabili e costanti locali di lavoro
         String testoOut = testoIn
         String titolo
