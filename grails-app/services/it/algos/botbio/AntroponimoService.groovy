@@ -12,11 +12,14 @@
 /* flagOverwrite = true */
 
 package it.algos.botbio
+
 import it.algos.algoslib.LibTesto
 import it.algos.algoslib.LibTime
 import it.algos.algospref.LibPref
 import it.algos.algospref.Preferenze
 import it.algos.algoswiki.Edit
+import it.algos.algoswiki.TipoAllineamento
+import it.algos.algoswiki.WikiLib
 
 class AntroponimoService {
 
@@ -25,6 +28,7 @@ class AntroponimoService {
     private tagPunti = 'Altre...'
     private boolean titoloParagrafoConLink = true
     private String progetto = 'Progetto:Antroponimi/'
+    private String templateIncipit = 'incipit lista nomi'
 
     public void costruisce() {
         ArrayList<String> listaNomiCompleta
@@ -209,27 +213,135 @@ class AntroponimoService {
 
     // Elabora tutte le pagine
     def elabora() {
-        int taglio = Preferenze.getInt(LibBio.TAGLIO_ANTROPONIMI)
-        ArrayList listaNomi
-        String query = 'select nome from Antroponimo where voci>'
-        query += taglio
-        query += ' order by nome'
+        ArrayList<String> listaNomi
 
         //esegue la query
-        listaNomi = Antroponimo.executeQuery(query)
+        listaNomi = getListaNomi()
 
         //crea le pagine dei singoli nomi
         listaNomi?.each {
             elaboraSingoloNome((String) it)
         }// fine del ciclo each
 
-        //crea la pagina di controllo didascalie
-        this.creaPaginaDidascalie()
-
         //crea la pagina riepilogativa
         if (listaNomi) {
             creaPaginaRiepilogativa(listaNomi)
         }// fine del blocco if
+
+        //crea le pagine di riepilogo di tutti i nomi
+        elencoNomi()
+
+        //crea la pagina di controllo didascalie
+        this.creaPaginaDidascalie()
+    }// fine del metodo
+
+    def elencoNomi() {
+        int taglio = Preferenze.getInt(LibBio.TAGLIO_ANTROPONIMI)
+        int soglia = Preferenze.getInt(LibBio.SOGLIA_ANTROPONIMI)
+        String testo = ''
+        String titolo = progetto + 'Liste'
+        String summary = BioService.summarySetting()
+        int k = 0
+        def listaNomi
+        Antroponimo antro
+        ArrayList lista = new ArrayList()
+        String nome
+        int voci
+        String vociTxt
+
+        listaNomi = Antroponimo.findAllByVociGreaterThan(soglia - 1, [sort: 'voci', order: 'desc'])
+        lista.add(['#', 'Nome', 'Voci'])
+        listaNomi?.each {
+            vociTxt = ''
+            antro = (Antroponimo) it
+            nome = antro.nome
+            voci = antro.voci
+            if (voci > taglio) {
+                nome = "'''[[Lista di persone di nome " + nome + "|" + nome + "]]'''"
+            }// fine del blocco if-else
+            k++
+            vociTxt = LibTesto.formatNum((String) voci)
+            lista.add([k, nome, voci])
+        } // fine del ciclo each
+
+        testo += getElencoHead(k)
+        testo += getElencoBody(lista)
+        testo += getElencoFooter()
+
+        new Edit(titolo, testo, summary)
+    }// fine del metodo
+
+    private static String getElencoHead(int numNomi) {
+        String testoTitolo = ''
+        String dataCorrente = LibTime.getGioMeseAnnoLungo(new Date())
+        int soglia = Preferenze.getInt(LibBio.SOGLIA_ANTROPONIMI)
+        int numBio = BioGrails.count()
+
+        testoTitolo += '<noinclude>'
+        testoTitolo += "{{StatBio|data=$dataCorrente}}"
+        testoTitolo += '</noinclude>'
+        testoTitolo += aCapo
+        testoTitolo += '==Nomi=='
+        testoTitolo += aCapo
+        testoTitolo += "Elenco dei '''"
+        testoTitolo += LibTesto.formatNum(numNomi)
+        testoTitolo += "''' nomi '''differenti''' "
+        testoTitolo += "<ref>Gli apostrofi vengono rispettati. Pertanto: '''María, Marià, Maria, Mária, Marìa, Mariâ''' sono nomi diversi</ref>"
+        testoTitolo += "<ref>I nomi ''doppi'' ('''Maria Cristina'''), vengono considerati nella loro completezza</ref>"
+        testoTitolo += "<ref>Per motivi tecnici, non vengono riportati nomi che iniziano con '''apici''' od '''apostrofi'''</ref>"
+        testoTitolo += "<ref>Non vengono riportati nomi che iniziano con '''['''</ref>"
+        testoTitolo += "<ref>Non vengono riportati nomi che iniziano con '''{'''</ref>"
+        testoTitolo += "<ref>Non vengono riportati nomi che iniziano con '''('''</ref>"
+        testoTitolo += "<ref>Non vengono riportati nomi che iniziano con '''.'''</ref>"
+        testoTitolo += "<ref>Non vengono riportati nomi che iniziano con '''&'''</ref>"
+        testoTitolo += "<ref>Non vengono riportati nomi che iniziano con '''<'''</ref>"
+        testoTitolo += " utilizzati nelle '''"
+        testoTitolo += LibTesto.formatNum(numBio)
+        testoTitolo += "''' voci biografiche con occorrenze maggiori od uguali a '''"
+        testoTitolo += soglia
+        testoTitolo += "'''"
+        testoTitolo += aCapo
+        testoTitolo += aCapo
+
+        return testoTitolo
+    }// fine del metodo
+
+    //costruisce il testo della tabella
+    private static String getElencoBody(ArrayList listaVoci) {
+        String testoTabella
+        Map mappa = new HashMap()
+
+        mappa.put('lista', listaVoci)
+        mappa.put('width', '160')
+        mappa.put('align', TipoAllineamento.secondaSinistra)
+        testoTabella = WikiLib.creaTabellaSortable(mappa)
+
+        return testoTabella
+    }// fine del metodo
+
+    private static String getElencoFooter() {
+        String testoFooter = ''
+
+        testoFooter += aCapo
+        testoFooter += '==Note=='
+        testoFooter += aCapo
+        testoFooter += '<references/>'
+        testoFooter += aCapo
+        testoFooter += aCapo
+        testoFooter += '==Voci correlate=='
+        testoFooter += aCapo
+        testoFooter += '*[[Progetto:Antroponimi]]'
+        testoFooter += aCapo
+        testoFooter += '*[[Progetto:Antroponimi/Nomi]]'
+        testoFooter += aCapo
+        testoFooter += '*[[Progetto:Antroponimi/Didascalie]]'
+        testoFooter += aCapo
+        testoFooter += aCapo
+        testoFooter += '<noinclude>'
+        testoFooter += '[[Categoria:Liste di persone per nome| ]]'
+        testoFooter += '</noinclude>'
+
+        return testoFooter
     }// fine del metodo
 
     /**
@@ -239,16 +351,16 @@ class AntroponimoService {
         String titolo
         String testo = ''
         String summary = 'BioBot'
-        ArrayList<BioGrails> listaBiografieDiversePerAccento
+        ArrayList<BioGrails> listaBiografie
 
         titolo = tagTitolo + nome
-        listaBiografieDiversePerAccento = biografieDiversePerAccento(nome)
+        listaBiografie = getListaBiografie(nome)
 
         //header
-        testo += this.getNomeHead(listaBiografieDiversePerAccento.size())
+        testo += this.getNomeHead(nome,listaBiografie.size())
 
         //body
-        testo += this.getNomeBody(listaBiografieDiversePerAccento, nome)
+        testo += this.getNomeBody(listaBiografie, nome)
 
         //footer
         testo += this.getNomeFooter(nome)
@@ -257,43 +369,83 @@ class AntroponimoService {
         new Edit(titolo, testo, summary)
     }// fine del metodo
 
+    //--costruisce una lista di nomi
+    private static ArrayList<String> getListaNomi() {
+        ArrayList<String> listaNomi
+        int taglio = Preferenze.getInt(LibBio.TAGLIO_ANTROPONIMI)
+        String query = "select nome from Antroponimo where voci>'${taglio}' order by nome asc"
+
+        //esegue la query
+        listaNomi = (ArrayList<String>) Antroponimo.executeQuery(query)
+
+        return listaNomi
+    }// fine del metodo
+
     //--costruisce una lista di biografie che 'usano' il nome
     //--se il flag usaNomeSingolo è vero, il nome della voce deve coincidere esattamente col parametro in ingresso
     //--se il flag usaNomeSingolo è falso, il nome della voce deve iniziare col parametro
-    private static ArrayList<BioGrails> biografieDiversePerAccento(String nome) {
-        ArrayList<BioGrails> listaBiografieDiversePerAccento = new ArrayList()
+    private static ArrayList<BioGrails> getListaBiografie(String nome) {
+        ArrayList<BioGrails> listaBiografie = new ArrayList()
         BioGrails bio
         String nomeBio
-        boolean usaNomeSingolo = Preferenze.getBool('usaNomeSingolo')
-        ArrayList<BioGrails> listaGrezza = null
+        boolean confrontaSoloPrimo = Preferenze.getBool(LibBio.CONFRONTA_SOLO_PRIMO_NOME_ANTROPONIMI)
+        ArrayList<BioGrails> listaGrezza
 
         //--recupera una lista 'grezza' di tutti i nomi
-        //@todo non sono riuscito a sviluppare la differenza (per ora)
-        if (usaNomeSingolo) {
-            listaGrezza = BioGrails.findAllByNome(nome, [order: 'nome'])
+        if (confrontaSoloPrimo) {
+            def criterio = BioGrails.createCriteria()
+            listaBiografie = criterio.list() {
+                or {
+                    like("nome", "${nome}")
+                    like("nome", "${nome} %")
+                }
+                order("title", "asc")
+            }
         } else {
-            listaGrezza = BioGrails.findAllByNome(nome, [order: 'nome'])
+            def criterio = BioGrails.createCriteria()
+            listaGrezza = criterio.list() {
+                like("nome", "${nome}")
+                order("title", "asc")
+            }
+            //--i nomi sono differenziati in base all'accento
+            listaGrezza?.each {
+                bio = (BioGrails) it
+                nomeBio = bio.nome
+                //nomeBio = nomeBio.toLowerCase()       //@todo va in errore per GianCarlo
+                if (nomeBio.equalsIgnoreCase(nome)) {
+                    listaBiografie.add(bio)
+                }// fine del blocco if
+            } // fine del ciclo each
         }// fine del blocco if-else
 
-        //--i nomi sono differenziati in base all'accento
-        listaGrezza?.each {
-            bio = (BioGrails) it
-            nomeBio = bio.nome
-            //nomeBio = nomeBio.toLowerCase()       //@todo va in errore per GianCarlo
-            if (nomeBio.equalsIgnoreCase(nome)) {
-                listaBiografieDiversePerAccento.add(bio)
-            }// fine del blocco if
-        } // fine del ciclo each
-
-        return listaBiografieDiversePerAccento
+        return listaBiografie
     }// fine del metodo
 
+    public String getNomeSingolo(String nomeIn) {
+        String nomeOut = nomeIn
+        boolean confrontaSoloPrimo = Preferenze.getBool(LibBio.CONFRONTA_SOLO_PRIMO_NOME_ANTROPONIMI)
+        String tagSpazio = ' '
+        int pos
 
-    public String getNomeHead(int num) {
+        // per i confronti solo il primo nome viene considerato
+        // @todo Maria e Maria Cristina sono uguali
+        if (nomeIn && confrontaSoloPrimo) {
+            if (nomeOut.contains(tagSpazio)) {
+                pos = nomeOut.indexOf(tagSpazio)
+                nomeOut = nomeOut.substring(0, pos)
+                nomeOut = nomeOut.trim()
+            }// fine del blocco if
+        }// fine del blocco if
+
+        return nomeOut
+    }// fine del metodo
+
+    public String getNomeHead(String nome, int num) {
         String testo = ''
         String dataCorrente = LibTime.getGioMeseAnnoLungo(new Date())
         String numero = ''
         boolean eliminaIndice = false
+        String template = templateIncipit
 
         if (num) {
             numero = LibTesto.formatNum(num)
@@ -303,11 +455,16 @@ class AntroponimoService {
             testo += '__NOTOC__'
         }// fine del blocco if
         testo += '<noinclude>'
+        testo += aCapo
         testo += "{{StatBio"
         if (numero) {
             testo += "|bio=$numero"
         }// fine del blocco if
         testo += "|data=$dataCorrente}}"
+        testo += aCapo
+
+        testo += "{{${template}|nome=${nome}}}"
+        testo += aCapo
         testo += aCapo
 
         return testo
@@ -571,14 +728,14 @@ class AntroponimoService {
         String testo = ''
         String aCapo = '\n'
 
-        testo += '==Voci correlate=='
-        testo += aCapo
-        testo += aCapo
-        testo += '*[[Progetto:Antroponimi/Nomi]]'
-        testo += aCapo
-        testo += '*[[Progetto:Antroponimi/Didascalie]]'
-        testo += aCapo
-        testo += aCapo
+//        testo += '==Voci correlate=='
+//        testo += aCapo
+//        testo += aCapo
+//        testo += '*[[Progetto:Antroponimi/Nomi]]'
+//        testo += aCapo
+//        testo += '*[[Progetto:Antroponimi/Didascalie]]'
+//        testo += aCapo
+//        testo += aCapo
         testo += '<noinclude>'
         testo += "[[Categoria:Liste di persone per nome|${nome}]]"
         testo += '</noinclude>'

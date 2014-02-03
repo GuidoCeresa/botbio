@@ -35,7 +35,9 @@ class LibBio {
     public static final String REGISTRA_SOLO_MODIFICHE_SOSTANZIALI = 'registraSoloModificheSostanziali'
     public static final String EVENTO_TESTO_TROPPO_LUNGO = 'DataTooLong'
     public static final String TAGLIO_ANTROPONIMI = 'taglioAntroponimi'
+    public static final String SOGLIA_ANTROPONIMI = 'sogliaAntroponimi'
     public static final String USA_OCCORRENZE_ANTROPONIMI = 'usaOccorrenzeAntroponimi'
+    public static final String CONFRONTA_SOLO_PRIMO_NOME_ANTROPONIMI = 'confrontaSoloPrimoNomeAntroponimi'
 
     private static String TAG_BIO = '\\{\\{ ?([Tt]emplate:)? ?[Bb]io[ \\|\n\r\t]'
 
