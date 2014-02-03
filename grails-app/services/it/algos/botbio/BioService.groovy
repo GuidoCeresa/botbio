@@ -3831,7 +3831,7 @@ class BioService {
         String ritorno
         String summary = Preferenze.getStr('summary')
         String versioneCorrente = Preferenze.getStr('version')
-        String ultimaVersione = '9.0'
+        String ultimaVersione = '9.3'
 
         if (!versioneCorrente) {
             versioneCorrente = ultimaVersione

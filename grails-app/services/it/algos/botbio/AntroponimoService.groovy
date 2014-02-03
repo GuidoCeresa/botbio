@@ -23,7 +23,7 @@ import it.algos.algoswiki.WikiLib
 
 class AntroponimoService {
 
-    private tagTitolo = 'Lista di persone di nome '
+    private tagTitolo = 'Persone di nome '
     private static String aCapo = '\n'
     private tagPunti = 'Altre...'
     private boolean titoloParagrafoConLink = true
