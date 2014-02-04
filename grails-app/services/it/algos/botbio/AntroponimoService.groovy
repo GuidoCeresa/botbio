@@ -257,7 +257,7 @@ class AntroponimoService {
             nome = antro.nome
             voci = antro.voci
             if (voci > taglio) {
-                nome = "'''[[Lista di persone di nome " + nome + "|" + nome + "]]'''"
+                nome = "'''[[Persone di nome " + nome + "|" + nome + "]]'''"
             }// fine del blocco if-else
             k++
             vociTxt = LibTesto.formatNum((String) voci)

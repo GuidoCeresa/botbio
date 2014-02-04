@@ -80,6 +80,11 @@ class AntroponimoController {
         int totaleVoci = BioGrails.count()
         log.info 'Inizio costruzione antroponimi'
 
+        query = "select nome from BioGrails where nome <>'' order by nome asc"
+        def listaA=  BioGrails.executeQuery(query)
+        query = "select distint nome from BioGrails where nome <>'' order by nome asc"
+        def listaB=  BioGrails.executeQuery(query)
+
         antroponimoService.cancellaTutto()
 
         //ciclo
