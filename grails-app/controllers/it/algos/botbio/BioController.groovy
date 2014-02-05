@@ -605,6 +605,81 @@ class BioController {
         redirect(action: 'parOrdinamentoVuoti')
     } // fine del metodo
 
+    //--parametro didascaliaListe
+    def didascaliaListe() {
+        params.max = 100
+        params.controller = 'BioGrails'
+        ArrayList menuExtra
+        ArrayList campiLista
+        def lista
+        def campoSort = 'didascaliaListe'
+        String titoloLista
+        int recordsTotaliVuoti
+        int vociBiograficheTotali
+
+        //--selezione dei menu extra
+        //--solo azione e di default controller=questo; classe e titolo vengono uguali
+        //--mappa con [cont:'controller', action:'metodo', icon:'iconaImmagine', title:'titoloVisibile']
+        menuExtra = [
+        ]
+        // fine della definizione
+
+        //--selezione delle colonne (campi) visibili nella lista
+        //--solo nome e di default il titolo viene uguale
+        //--mappa con [campo:'nomeDelCampo', title:'titoloVisibile', sort:'ordinamento']
+        campiLista = [
+                'pageid',
+                'title',
+                'didascaliaListe',
+                'nome',
+                'cognome'
+        ]
+        // fine della definizione
+
+        //--regolazione dei campo di ordinamento
+        //--regolazione dei parametri di ordinamento
+        if (!params.sort) {
+            if (campoSort) {
+                params.sort = campoSort
+            }// fine del blocco if
+        }// fine del blocco if-else
+        if (params.order) {
+            if (params.order == 'asc') {
+                params.order = 'desc'
+            } else {
+                params.order = 'asc'
+            }// fine del blocco if-else
+        } else {
+            params.order = 'asc'
+        }// fine del blocco if-else
+
+        //--selezione dei records da mostrare
+        //--per una lista filtrata (parziale), modificare i parametri
+        //--oppure modificare il findAllByInteroGreaterThan()...
+        lista = BioGrails.findAllByDidascaliaListeIsNull([sort: "title", offset: params.offset, order: "asc", max: params.max])
+
+        //--calcola il numero di record
+        recordsTotaliVuoti = BioGrails.countByDidascaliaListeIsNull()
+        vociBiograficheTotali = BioGrails.count()
+
+        //--titolo visibile sopra la table dei dati
+        titoloLista = 'Elenco di '
+        titoloLista += Lib.Txt.formatNum(params.max) + '/' + Lib.Txt.formatNum(recordsTotaliVuoti)
+        titoloLista += ' records col parametro didascaliaListe vuoto'
+        titoloLista += ' su un totale di ' + Lib.Txt.formatNum(vociBiograficheTotali) + ' voci biografiche'
+
+        //--presentazione della view (list), secondo il modello
+        //--menuExtra e campiLista possono essere nulli o vuoti
+        //--se campiLista è vuoto, mostra tutti i campi (primi 8)
+        render(view: 'parordinamento', model: [
+                bioGrailsInstanceList: lista,
+                bioGrailsInstanceTotal: recordsTotaliVuoti,
+                menuExtra: menuExtra,
+                titoloLista: titoloLista,
+                campiLista: campiLista],
+                params: params)
+    } // fine del metodo
+
     def show(Long id) {
         def bioWikiInstance = BioWiki.get(id)
 

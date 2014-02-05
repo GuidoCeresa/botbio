@@ -189,6 +189,15 @@
             </li>
         </g:if>
         
+        <g:if test="${bioGrailsInstance?.didascaliaListe}">
+            <li class="fieldcontain">
+                <span id="didascaliaListe-label" class="property-label"><g:message code="bioGrails.didascaliaListe.label" default="Didascalia Liste" /></span>
+                
+                <span class="property-value" aria-labelledby="didascaliaListe-label"><g:fieldValue bean="${bioGrailsInstance}" field="didascaliaListe"/></span>
+                
+            </li>
+        </g:if>
+        
         <g:if test="${bioGrailsInstance?.giornoMeseNascitaLink}">
             <li class="fieldcontain">
                 <span id="giornoMeseNascitaLink-label" class="property-label"><g:message code="bioGrails.giornoMeseNascitaLink.label" default="Giorno Mese Nascita Link" /></span>

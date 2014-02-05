@@ -75,6 +75,11 @@ class VersioneBootStrap {
         if (versioneService && versioneService.installaVersione(12)) {
             versioneService.newVersione('Antroponimi', 'Modificato titolo delle pagine')
         }// fine del blocco if
+
+        //--aggiunte alcuni parametri
+        if (versioneService && versioneService.installaVersione(13)) {
+            versioneService.newVersione('BioGrails', 'Nuovo parametro didascaliaListe')
+        }// fine del blocco if
     }// fine della closure
 
     def allungaCampo(Sql sql, String nomeCampo) {

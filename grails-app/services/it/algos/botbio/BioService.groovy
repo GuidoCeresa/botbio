@@ -190,7 +190,7 @@ class BioService {
         int numVoci = 0
         BioWiki bioWiki
         BioGrails bioGrails = null
-        BioGrails bioGrailsRegistrata
+        BioGrails bioGrailsRegistrata = null
         int pageid
 
         listaid?.each {
@@ -325,7 +325,7 @@ class BioService {
     public BioGrails elaboraDidascalie(BioWiki bioWiki, BioGrails bioGrails) {
         // variabili e costanti locali di lavoro
         DidascaliaBio didascalia
-        long grailsid = 0
+        long grailsid
 
         if (bioWiki && bioGrails) {
             if (bioGrails.id && bioGrails.id instanceof Long) {
@@ -337,6 +337,7 @@ class BioService {
                 bioGrails.didascaliaAnnoNato = didascalia.getTestoNatiAnno()
                 bioGrails.didascaliaGiornoMorto = didascalia.getTestoMortiGiorno()
                 bioGrails.didascaliaAnnoMorto = didascalia.getTestoMortiAnno()
+                bioGrails.didascaliaListe = didascalia.getTestoEstesaSimboli()
             }// fine del blocco if
         }// fine del blocco if
 

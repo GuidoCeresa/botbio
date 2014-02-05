@@ -338,6 +338,25 @@
 <g:textField name="didascaliaAnnoMorto" value="${bioGrailsInstance?.didascaliaAnnoMorto}"/>
 </div>
 
+<div class="fieldcontain ${hasErrors(bean: bioGrailsInstance, field: 'didascaliaListe', 'error')} ">
+	<label for="didascaliaListe">
+		<g:message code="bioGrails.didascaliaListe.label" default="Didascalia Liste" />
+		
+	</label>
+	
+
+
+
+
+
+
+
+
+
+
+<g:textField name="didascaliaListe" value="${bioGrailsInstance?.didascaliaListe}"/>
+</div>
+
 <div class="fieldcontain ${hasErrors(bean: bioGrailsInstance, field: 'giornoMeseNascitaLink', 'error')} ">
 	<label for="giornoMeseNascitaLink">
 		<g:message code="bioGrails.giornoMeseNascitaLink.label" default="Giorno Mese Nascita Link" />

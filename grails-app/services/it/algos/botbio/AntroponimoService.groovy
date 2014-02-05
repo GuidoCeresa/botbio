@@ -357,7 +357,7 @@ class AntroponimoService {
         listaBiografie = getListaBiografie(nome)
 
         //header
-        testo += this.getNomeHead(nome,listaBiografie.size())
+        testo += this.getNomeHead(nome, listaBiografie.size())
 
         //body
         testo += this.getNomeBody(listaBiografie, nome)
@@ -573,7 +573,9 @@ class AntroponimoService {
                 try { // prova ad eseguire il codice
                     if (bio.didascaliaListe) {
                         didascalia = bio.didascaliaListe
-                    }// fine del blocco if
+                    } else {
+                        didascalia = creaDidascaliaAlVolo(bio)
+                    }// fine del blocco if-else
                 } catch (Exception unErrore) { // intercetta l'errore
                     didascalia = creaDidascaliaAlVolo(bio)
                 }// fine del blocco try-catch

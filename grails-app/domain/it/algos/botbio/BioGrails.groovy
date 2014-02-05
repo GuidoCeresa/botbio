@@ -39,6 +39,7 @@ class BioGrails {
     String didascaliaGiornoMorto
     String didascaliaAnnoNato
     String didascaliaAnnoMorto
+    String didascaliaListe
 
     // altri campi di collegamenti alle altre tavole specializzate
     Giorno giornoMeseNascitaLink = null
@@ -96,6 +97,7 @@ class BioGrails {
         didascaliaGiornoMorto(nullable: true, blank: true)
         didascaliaAnnoNato(nullable: true, blank: true)
         didascaliaAnnoMorto(nullable: true, blank: true)
+        didascaliaListe(nullable: true, blank: true)
 
         giornoMeseNascitaLink(nullable: true)
         giornoMeseMorteLink(nullable: true)
