@@ -16,10 +16,10 @@ class ElaboraJob {
 
     //--codifica dell'orario di attivazione
 //    private static String cronExpressionElabora = "0 0 2 * * ?"   //tutti i giorni alle due di notte
-    private static String cronExpressionCiclo = "0 0 5-23 * * ?"   //tutti i giorni dalle 5 alle 11 di sera
+    private static String cronExpressionElabora = "0 0 5-23 * * ?"   //tutti i giorni dalle 5 alle 11 di sera
 
     static triggers = {
-//        cron name: 'upload', cronExpression: cronExpressionElabora
+        cron name: 'upload', cronExpression: cronExpressionElabora
     }// fine del metodo statico
 
     def execute() {
