@@ -96,7 +96,7 @@ class BioWikiService {
 
         // messaggio di log
         inizio = System.currentTimeMillis()
-        log.info 'Metodo di aggiunta nuovi records'
+        log.info 'Metodo di aggiunta nuovi records (anche cancellazioni)'
 
         //--Recupera dal server la lista completa delle voci esistenti dalla categoria BioBot
         if (continua) {
@@ -187,7 +187,7 @@ class BioWikiService {
         }// fine del blocco if-else
 
         if (debug) {
-            log.info 'Fine del metodo di aggiunta nuovi records'
+            log.info 'Fine del metodo di aggiunta nuovi records ed eventuali cancellazioni di records esistenti'
         } else {
 //            if (listaNuoviRecordsDaCreare) {
 //                num = listaNuoviRecordsDaCreare.size()
@@ -195,7 +195,7 @@ class BioWikiService {
 //            }// fine del blocco if
 
 //            logWikiService.info "Sono state aggiunte ${num} nuove voci dopo l'ultimo check"
-            log.info 'Fine del metodo di aggiunta nuovi records'
+            log.info 'Fine del metodo di aggiunta nuovi records ed eventuali cancellazioni di records esistenti'
         }// fine del blocco if-else
 
         // valore di ritorno

@@ -320,7 +320,7 @@ class BioWikiController {
     } // fine del metodo
 
     def list(Integer max) {
-        params.max = Math.min(max ?: 1000, 1000)
+        params.max = Math.min(max ?: 100, 100)
         ArrayList menuExtra
         ArrayList campiLista
         def lista

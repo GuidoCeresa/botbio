@@ -96,9 +96,10 @@ class BioGrailsController {
         if (BioWiki.count() > 0) {
             params.tipo = TipoDialogo.conferma
             params.avviso = []
-            params.avviso.add('Elaborazione di tutte le biografie (BioWiki) esistenti.')
-            params.avviso.add("Azzera il flag 'elaborata' di tutte le voci (BioWiki)")
-            params.avviso.add('Ci vogliono parecchie ore')
+            params.avviso.add('Elaborazione delle biografie (BioWiki) esistenti per avere la corrispondente voce (BioGrails) allineata.')
+            params.avviso.add("Se il flag globale usaLimiteElabora è falso, azzera il flag 'elaborata' di tutte le voci (BioWiki) e le elabora tutte")
+            params.avviso.add("Se il flag globale usaLimiteElabora è true, elabora solo le prime maxElabora in ordine dalla più vecchia")
+            params.avviso.add('Ci vuole diverso tempo. Parecchie ore se usaLimiteElabora è falso')
             params.returnController = 'bioGrails'
             params.returnAction = 'elaboraAllDopoConferma'
             redirect(controller: 'dialogo', action: 'box', params: params)
@@ -237,7 +238,7 @@ class BioGrailsController {
         //--solo azione e di default controller=questo; classe e titolo vengono uguali
         //--mappa con [cont:'controller', action:'metodo', icon:'iconaImmagine', title:'titoloVisibile']
         menuExtra = [
-                [cont: 'bioGrails', action: 'elaboraAll', icon: 'database', title: 'Elabora tutti'],
+                [cont: 'bioGrails', action: 'elaboraAll', icon: 'database', title: 'Elabora'],
                 [cont: 'bioWiki', action: 'list', icon: 'scambia', title: 'BioWiki'],
                 [cont: 'bioGrails', action: 'uploadGiorniNascita', icon: 'frecciasu', title: 'giorniNascita'],
                 [cont: 'bioGrails', action: 'uploadGiorniMorte', icon: 'frecciasu', title: 'giorniMorte'],

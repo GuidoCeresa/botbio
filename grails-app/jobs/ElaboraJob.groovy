@@ -15,7 +15,8 @@ class ElaboraJob {
 //    def logWikiService
 
     //--codifica dell'orario di attivazione
-    private static String cronExpressionElabora = "0 0 2 * * ?"   //tutti i giorni alle due di notte
+//    private static String cronExpressionElabora = "0 0 2 * * ?"   //tutti i giorni alle due di notte
+    private static String cronExpressionCiclo = "0 0 5-23 * * ?"   //tutti i giorni dalle 5 alle 11 di sera
 
     static triggers = {
 //        cron name: 'upload', cronExpression: cronExpressionElabora
@@ -31,7 +32,7 @@ class ElaboraJob {
         int modificate = 0
 
         //--flag di attivazione
-        if (Preferenze.getBool(LibBio.USA_CRONO_DOWNLOAD)) {
+        if (Preferenze.getBool(LibBio.USA_CRONO_ELABORA)) {
             if (bioService) {
                 bioService.elabora()
             }// fine del blocco if

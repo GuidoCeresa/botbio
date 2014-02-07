@@ -27,6 +27,7 @@ class PrefBootStrap {
         grailsApplication.config.usaColonne = LibBio.USA_COLONNE
         grailsApplication.config.maxRigheColonne = LibBio.MAX_RIGHE_COLONNE
         grailsApplication.config.registraSoloModificheSostanziali = LibBio.REGISTRA_SOLO_MODIFICHE_SOSTANZIALI
+        grailsApplication.config.usaCronoElabora = LibBio.USA_CRONO_ELABORA
         grailsApplication.config.usaLimiteElabora = LibBio.USA_LIMITE_ELABORA
         grailsApplication.config.maxElabora = LibBio.MAX_ELABORA
         grailsApplication.config.taglioAntroponimi = LibBio.TAGLIO_ANTROPONIMI
@@ -47,6 +48,7 @@ class PrefBootStrap {
         Preferenze.findOrCreateByCodeAndTypeAndValue((String) grailsApplication.config.usaColonne, Preferenze.TYPE_BOOL, 'true').save(flush: true)
         Preferenze.findOrCreateByCodeAndTypeAndValue((String) grailsApplication.config.maxRigheColonne, Preferenze.TYPE_INT, '10').save(flush: true)
         Preferenze.findOrCreateByCodeAndTypeAndValue((String) grailsApplication.config.registraSoloModificheSostanziali, Preferenze.TYPE_BOOL, 'true').save(flush: true)
+        Preferenze.findOrCreateByCodeAndTypeAndValue((String) grailsApplication.config.usaCronoElabora, Preferenze.TYPE_BOOL, 'false').save(flush: true)
         Preferenze.findOrCreateByCodeAndTypeAndValue((String) grailsApplication.config.usaLimiteElabora, Preferenze.TYPE_BOOL, 'true').save(flush: true)
         Preferenze.findOrCreateByCodeAndTypeAndValue((String) grailsApplication.config.maxElabora, Preferenze.TYPE_INT, '2000').save(flush: true)
         Preferenze.findOrCreateByCodeAndTypeAndValue((String) grailsApplication.config.taglioAntroponimi, Preferenze.TYPE_INT, '100').save(flush: true)

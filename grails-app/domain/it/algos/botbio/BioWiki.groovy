@@ -129,7 +129,7 @@ class BioWiki  {
     boolean controllato = false
 
     //serve per le voci che sono state elaborate e trasferite (creando od aggiornando il record) su BioGrails
-    boolean elaborata = false
+    boolean elaborata=false
 
     //serve per le voci a cui manca uno o più parametri fondamentali
     boolean incompleta = false

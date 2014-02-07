@@ -28,6 +28,7 @@ class LibBio {
     public static final String MAX_DOWNLOAD = 'maxDownload'
     public static final String MAX_ELABORA = 'maxElabora'
     public static final String USA_CRONO_DOWNLOAD = 'usaCronoDownload'
+    public static final String USA_CRONO_ELABORA = 'usaCronoElabora'
     public static final String USA_CASSETTO = 'usaCassetto'
     public static final String MAX_RIGHE_CASSETTO = 'maxRigheCassetto'
     public static final String USA_COLONNE = 'usaColonne'

@@ -66,9 +66,11 @@ class BioService {
     //--Elabora i link alle tavole collegate
     //--Crea le didascalie
     public ArrayList<Integer> elaboraAll() {
-        //--Azzera il flag
-        BioWiki.executeUpdate('update BioWiki set elaborata=false')
-//        log.info 'Fine del metodo di elaborazione di tutti i records'
+
+        if (!LibPref.getBool(LibBio.USA_LIMITE_ELABORA)) {
+            //--Azzera il flag
+            BioWiki.executeUpdate('update BioWiki set elaborata=false')
+        }// fine del blocco if
 
         return elabora()
     } // fine del metodo
@@ -122,8 +124,7 @@ class BioService {
         // variabili e costanti locali di lavoro
         ArrayList<Integer> listaRecordsElaborati = listaRecordsDaElaborare
         boolean debug = Preferenze.getBool((String) grailsApplication.config.debug)
-        int numVoci
-        String numVociTxt = 0
+        String numVociTxt
         long inizioInizio = System.currentTimeMillis()
         long inizio
         long fine
@@ -131,52 +132,92 @@ class BioService {
         long tempo
         String tempoTxt
         String oldDataTxt
-
-        if (listaRecordsDaElaborare) {
-            numVoci = listaRecordsDaElaborare.size()
-            numVociTxt = LibTesto.formatNum(numVoci)
-        } else {
-            return new ArrayList<Integer>()
-        }// fine del blocco if-else
+        int numVoci = 0
+        BioWiki bioWiki
+        BioGrails bioGrails = null
+        BioGrails bioGrailsRegistrata = null
+        int pageid
 
         inizio = System.currentTimeMillis()
-        elaboraGrails(listaRecordsDaElaborare)
+
+        listaRecordsDaElaborare?.each {
+            pageid = (int) it
+            bioWiki = BioWiki.findByPageid(pageid)
+            if (bioWiki) {
+                try { // prova ad eseguire il codice
+                    bioGrails = elaboraGrails(bioWiki)
+                } catch (Exception unErrore) { // intercetta l'errore
+                    log.error unErrore + bioWiki.title
+                }// fine del blocco try-catch
+                if (bioGrails) {
+                    bioGrails = elaboraLink(bioWiki, bioGrails)
+                    bioGrails = elaboraDidascalie(bioWiki, bioGrails)
+                }// fine del blocco if
+
+                try { // prova ad eseguire il codice
+                    bioGrailsRegistrata = bioGrails.save()
+                } catch (Exception unErrore) { // intercetta l'errore
+                    log.error unErrore + bioWiki.title
+                }// fine del blocco try-catch
+                if (bioGrailsRegistrata) {
+                    bioWiki.elaborata = true
+                    bioWiki.save(flush: true)
+                    numVoci++
+                }// fine del blocco
+            }// fine del blocco if
+        }// fine di each
+
+//        if (listaRecordsDaElaborare) {
+//            numVoci = listaRecordsDaElaborare.size()
+//            numVociTxt = LibTesto.formatNum(numVoci)
+//        } else {
+//            return new ArrayList<Integer>()
+//        }// fine del blocco if-else
+
+//        inizio = System.currentTimeMillis()
+//        elaboraGrails(listaRecordsDaElaborare)
+//        fine = System.currentTimeMillis()
+//        durata = fine - inizio
+//        tempo = durata / numVoci
+//        tempoTxt = LibTesto.formatNum(tempo)
+////        log.info "Eseguito il metodo elaboraGrails su ${numVociTxt} records in ${tempoTxt} millisecondi/ciascuno"
+//
+//        inizio = System.currentTimeMillis()
+//        elaboraLink(listaRecordsDaElaborare)
+//        fine = System.currentTimeMillis()
+//        durata = fine - inizio
+//        tempo = durata / numVoci
+//        tempoTxt = LibTesto.formatNum(tempo)
+////        log.info "Eseguito il metodo elaboraLink su ${numVociTxt} records in ${tempoTxt} millisecondi/ciascuno"
+//
+//        inizio = System.currentTimeMillis()
+//        elaboraDidascalie(listaRecordsDaElaborare)
+//        fine = System.currentTimeMillis()
+//        durata = fine - inizio
+//        tempo = durata / numVoci
+//        tempoTxt = LibTesto.formatNum(tempo)
+////        log.info "Eseguito il metodo elaboraDidascalie su ${numVociTxt} records in ${tempoTxt} millisecondi/ciascuno"
+
+//        // valore di ritorno
+//        numVociTxt = LibTesto.formatNum(numVoci)
+//        fine = System.currentTimeMillis()
+//        durata = fine - inizioInizio
+//        tempo = durata / numVoci
+//        durata = durata / 1000
+//        durata = durata / 60
+//        if (debug) {
+//            log.info 'Fine del metodo di elaborazione dei records'
+//        } else {
+//            log.info "BioGrails. Sono state elaborate ${numVociTxt} voci in ${tempo} millisecondi/ciascuna. Tempo ${durata} min"
+//            oldDataTxt = LibBio.voceElaborataVecchia()
+//            log.info "${oldDataTxt}"
+//        }// fine del blocco if-else
+
         fine = System.currentTimeMillis()
         durata = fine - inizio
         tempo = durata / numVoci
         tempoTxt = LibTesto.formatNum(tempo)
-//        log.info "Eseguito il metodo elaboraGrails su ${numVociTxt} records in ${tempoTxt} millisecondi/ciascuno"
-
-        inizio = System.currentTimeMillis()
-        elaboraLink(listaRecordsDaElaborare)
-        fine = System.currentTimeMillis()
-        durata = fine - inizio
-        tempo = durata / numVoci
-        tempoTxt = LibTesto.formatNum(tempo)
-//        log.info "Eseguito il metodo elaboraLink su ${numVociTxt} records in ${tempoTxt} millisecondi/ciascuno"
-
-        inizio = System.currentTimeMillis()
-        elaboraDidascalie(listaRecordsDaElaborare)
-        fine = System.currentTimeMillis()
-        durata = fine - inizio
-        tempo = durata / numVoci
-        tempoTxt = LibTesto.formatNum(tempo)
-//        log.info "Eseguito il metodo elaboraDidascalie su ${numVociTxt} records in ${tempoTxt} millisecondi/ciascuno"
-
-        // valore di ritorno
-        numVociTxt = LibTesto.formatNum(numVoci)
-        fine = System.currentTimeMillis()
-        durata = fine - inizioInizio
-        tempo = durata / numVoci
-        durata = durata / 1000
-        durata = durata / 60
-        if (debug) {
-            log.info 'Fine del metodo di elaborazione dei records'
-        } else {
-            log.info "BioGrails. Sono state elaborate ${numVociTxt} voci in ${tempo} millisecondi/ciascuna. Tempo ${durata} min"
-            oldDataTxt = LibBio.voceElaborataVecchia()
-            log.info "${oldDataTxt}"
-        }// fine del blocco if-else
+        log.info "Eseguito il metodo elabora su ${numVoci} records in ${tempoTxt} millisecondi/ciascuno"
 
         return listaRecordsElaborati
     } // fine del metodo
@@ -282,7 +323,7 @@ class BioService {
             bioGrails.attivita2Link = AttivitaService.getAttivita(bioGrails.attivita2)
             bioGrails.attivita3Link = AttivitaService.getAttivita(bioGrails.attivita3)
             bioGrails.nazionalitaLink = NazionalitaService.getNazionalita(bioGrails.nazionalita)
-            bioGrails.save(flush: false)
+//            bioGrails.save(flush: false)
         }// fine del blocco if
 
         return bioGrails
