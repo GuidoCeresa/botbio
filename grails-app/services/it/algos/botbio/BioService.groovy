@@ -139,6 +139,8 @@ class BioService {
         int pageid
 
         inizio = System.currentTimeMillis()
+        numVociTxt= LibTesto.formatNum(listaRecordsDaElaborare.size())
+        log.info "Inizio del metodo elabora per ${numVociTxt} records"
 
         listaRecordsDaElaborare?.each {
             pageid = (int) it

@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="68254703-7597-4adf-9a44-9a0e7a7facfd" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/jobs/ElaboraJob.groovy" afterPath="$PROJECT_DIR$/grails-app/jobs/ElaboraJob.groovy" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/services/it/algos/botbio/BioService.groovy" afterPath="$PROJECT_DIR$/grails-app/services/it/algos/botbio/BioService.groovy" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application.properties" afterPath="$PROJECT_DIR$/application.properties" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
@@ -98,7 +98,16 @@
       <file leaf-file-name="application.properties" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/application.properties">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="4" column="16" selection-start="110" selection-end="110" vertical-scroll-proportion="0.12605043" vertical-offset="0" max-vertical-offset="476">
+            <state line="6" column="10" selection-start="136" selection-end="136" vertical-scroll-proportion="0.1319648" vertical-offset="0" max-vertical-offset="682">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="BioService.groovy" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/grails-app/services/it/algos/botbio/BioService.groovy">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="139" column="60" selection-start="5514" selection-end="5514" vertical-scroll-proportion="0.0" vertical-offset="2816" max-vertical-offset="62235">
               <folding />
             </state>
           </provider>
@@ -107,7 +116,7 @@
       <file leaf-file-name="ElaboraJob.groovy" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/grails-app/jobs/ElaboraJob.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="21" column="74" selection-start="695" selection-end="695" vertical-scroll-proportion="0.0" vertical-offset="109" max-vertical-offset="780">
+            <state line="36" column="31" selection-start="1143" selection-end="1143" vertical-scroll-proportion="0.0" vertical-offset="109" max-vertical-offset="780">
               <folding />
             </state>
           </provider>
@@ -184,11 +193,11 @@
         <option value="$PROJECT_DIR$/test/unit/it/algos/botbio/WrapBioTest.groovy" />
         <option value="$PROJECT_DIR$/grails-app/controllers/it/algos/botbio/BioWikiController.groovy" />
         <option value="$PROJECT_DIR$/grails-app/controllers/it/algos/botbio/BioGrailsController.groovy" />
-        <option value="$PROJECT_DIR$/grails-app/services/it/algos/botbio/BioService.groovy" />
         <option value="$PROJECT_DIR$/grails-app/services/it/algos/botbio/BioWikiService.groovy" />
         <option value="$PROJECT_DIR$/src/groovy/it/algos/botbio/LibBio.groovy" />
         <option value="$PROJECT_DIR$/grails-app/conf/PrefBootStrap.groovy" />
         <option value="$PROJECT_DIR$/grails-app/jobs/ElaboraJob.groovy" />
+        <option value="$PROJECT_DIR$/grails-app/services/it/algos/botbio/BioService.groovy" />
         <option value="$PROJECT_DIR$/application.properties" />
       </list>
     </option>
@@ -837,7 +846,7 @@
       <workItem from="1391493403042" duration="306000" />
       <workItem from="1391507565082" duration="8801000" />
       <workItem from="1391666532211" duration="70000" />
-      <workItem from="1391666637190" duration="8290000" />
+      <workItem from="1391666637190" duration="8878000" />
     </task>
     <task id="LOCAL-00001" summary="working">
       <created>1379825094196</created>
@@ -1067,11 +1076,15 @@
       <created>1391780329719</created>
       <updated>1391780329719</updated>
     </task>
-    <option name="localTasksCounter" value="58" />
+    <task id="LOCAL-00058" summary="fix ciclo elabora">
+      <created>1391794861718</created>
+      <updated>1391794861718</updated>
+    </task>
+    <option name="localTasksCounter" value="59" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="112493000" />
+    <option name="totallyTimeSpent" value="113081000" />
   </component>
   <component name="TodoView" selected-index="0">
     <todo-panel id="selected-file">
@@ -1105,7 +1118,7 @@
       <window_info id="Java Enterprise" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Spring" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.38653" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.28973278" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.28973278" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.329429" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32770744" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32796487" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -1181,7 +1194,6 @@
     <option name="myTodoPanelSettings">
       <TodoPanelSettings />
     </option>
-    <MESSAGE value="1.02 del 23/11/13" />
     <MESSAGE value="1.03 del 23/11/13" />
     <MESSAGE value="1.04 del 24/11/13" />
     <MESSAGE value="1.05 del 24/11/13" />
@@ -1206,7 +1218,8 @@
     <MESSAGE value="0.24 titolo delle voci nella pagina di servizio&#10;" />
     <MESSAGE value="working" />
     <MESSAGE value="ciclo elabora" />
-    <option name="LAST_COMMIT_MESSAGE" value="ciclo elabora" />
+    <MESSAGE value="fix ciclo elabora" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix ciclo elabora" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -1534,13 +1547,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/grails-app/services/it/algos/botbio/BioService.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="84" column="95" selection-start="3378" selection-end="3378" vertical-scroll-proportion="0.3323442" vertical-offset="1013" max-vertical-offset="62205">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/grails-app/jobs/CicloJob.groovy">
       <provider selected="true" editor-type-id="text-editor">
         <state line="41" column="61" selection-start="1451" selection-end="1451" vertical-scroll-proportion="0.0" vertical-offset="365" max-vertical-offset="1365">
@@ -1550,14 +1556,21 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/grails-app/jobs/ElaboraJob.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="21" column="74" selection-start="695" selection-end="695" vertical-scroll-proportion="0.0" vertical-offset="109" max-vertical-offset="780">
+        <state line="36" column="31" selection-start="1143" selection-end="1143" vertical-scroll-proportion="0.0" vertical-offset="109" max-vertical-offset="780">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/grails-app/services/it/algos/botbio/BioService.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="139" column="60" selection-start="5514" selection-end="5514" vertical-scroll-proportion="0.0" vertical-offset="2816" max-vertical-offset="62235">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/application.properties">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="16" selection-start="110" selection-end="110" vertical-scroll-proportion="0.12605043" vertical-offset="0" max-vertical-offset="476">
+        <state line="6" column="10" selection-start="136" selection-end="136" vertical-scroll-proportion="0.1319648" vertical-offset="0" max-vertical-offset="682">
           <folding />
         </state>
       </provider>
