@@ -66,7 +66,6 @@ class BioService {
     //--Elabora i link alle tavole collegate
     //--Crea le didascalie
     public ArrayList<Integer> elaboraAll() {
-
         if (!LibPref.getBool(LibBio.USA_LIMITE_ELABORA)) {
             //--Azzera il flag
             BioWiki.executeUpdate('update BioWiki set elaborata=false')
@@ -139,7 +138,7 @@ class BioService {
         int pageid
 
         inizio = System.currentTimeMillis()
-        numVociTxt= LibTesto.formatNum(listaRecordsDaElaborare.size())
+        numVociTxt = LibTesto.formatNum(listaRecordsDaElaborare.size())
         log.info "Inizio del metodo elabora per ${numVociTxt} records"
 
         listaRecordsDaElaborare?.each {

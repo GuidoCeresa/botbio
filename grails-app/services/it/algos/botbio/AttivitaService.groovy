@@ -112,4 +112,13 @@ class AttivitaService {
         return attivita
     } // fine del metodo
 
+    /**
+     * Ritorna una lista di tutte le attività plurali distinte
+     *
+     * @return lista ordinata (stringhe) di tutti i plurali delle attività
+     */
+    public static ArrayList<String> getListaPlurali() {
+        return (ArrayList<String>) Attivita.executeQuery('select distinct plurale from Attivita order by plurale')
+    } // fine del metodo
+
 } // fine della service classe

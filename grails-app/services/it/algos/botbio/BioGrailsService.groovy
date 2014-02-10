@@ -95,11 +95,16 @@ class BioGrailsService {
             queryAnno = "select didascaliaGiornoNato from BioGrails where (giornoMeseNascitaLink=${giornoId} and annoNascitaLink>0) order by annoNascitaLink,cognome asc"
             listaPersoneSenzaAnno = BioGrails.executeQuery(querySenza)
             listaPersoneConAnno = BioGrails.executeQuery(queryAnno)
+
             listaPersoneSenzaAnno?.each {
-                listaPersone.add(it)
+                if (it) {
+                    listaPersone.add(it)
+                }// fine del blocco if
             } // fine del ciclo each
             listaPersoneConAnno?.each {
-                listaPersone.add(it)
+                if (it) {
+                    listaPersone.add(it)
+                }// fine del blocco if
             } // fine del ciclo each
             if (listaPersone) {
                 numPersone = listaPersone.size()
@@ -149,10 +154,14 @@ class BioGrailsService {
             listaPersoneSenzaAnno = BioGrails.executeQuery(querySenza)
             listaPersoneConAnno = BioGrails.executeQuery(queryAnno)
             listaPersoneSenzaAnno?.each {
-                listaPersone.add(it)
+                if (it) {
+                    listaPersone.add(it)
+                }// fine del blocco if
             } // fine del ciclo each
             listaPersoneConAnno?.each {
-                listaPersone.add(it)
+                if (it) {
+                    listaPersone.add(it)
+                }// fine del blocco if
             } // fine del ciclo each
             if (listaPersone) {
                 numPersone = listaPersone.size()
@@ -208,10 +217,14 @@ class BioGrailsService {
             listaPersoneSenzaGiorno = BioGrails.executeQuery(querySenza)
             listaPersoneConGiorno = BioGrails.executeQuery(queryGiorno)
             listaPersoneSenzaGiorno?.each {
-                listaPersone.add(it)
+                if (it) {
+                    listaPersone.add(it)
+                }// fine del blocco if
             } // fine del ciclo each
             listaPersoneConGiorno?.each {
-                listaPersone.add(it)
+                if (it) {
+                    listaPersone.add(it)
+                }// fine del blocco if
             } // fine del ciclo each
             if (listaPersone) {
                 numPersone = listaPersone.size()
@@ -259,10 +272,14 @@ class BioGrailsService {
             listaPersoneSenzaGiorno = BioGrails.executeQuery(querySenza)
             listaPersoneConGiorno = BioGrails.executeQuery(queryGiorno)
             listaPersoneSenzaGiorno?.each {
-                listaPersone.add(it)
+                if (it) {
+                    listaPersone.add(it)
+                }// fine del blocco if
             } // fine del ciclo each
             listaPersoneConGiorno?.each {
-                listaPersone.add(it)
+                if (it) {
+                    listaPersone.add(it)
+                }// fine del blocco if
             } // fine del ciclo each
             if (listaPersone) {
                 numPersone = listaPersone.size()

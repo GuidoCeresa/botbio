@@ -31,17 +31,17 @@ class BioGrailsController {
     def eventoService
     def bioService
     def bioGrailsService
+    def listaService
 
     def index() {
         redirect(action: 'list', params: params)
     } // fine del metodo
 
-    //--elabora (usa il nome-metodo create, perchè è il primo ed unico della lista standard)
     //--elaborazione dei dati da BioWiki a BioGrails
     //--elabora la lista dei records BioWiki col flag 'elaborata'=false
     //--mostra un dialogo di conferma per l'operazione da compiere
     //--passa al metodo effettivo
-    def create() {
+    def resetElabora() {
         params.titolo = 'Elaborazione'
         def lista = BioWiki.executeQuery('select id from BioWiki where elaborata=false')
 
@@ -138,7 +138,11 @@ class BioGrailsController {
     //--elabora e crea tutti i giorni modificati (solo nascita)
     //--passa al metodo effettivo senza nessun dialogo di conferma
     def uploadGiorniNascita() {
-        bioGrailsService.uploadGiorniNascita()
+        if (grailsApplication && grailsApplication.config.login) {
+            bioGrailsService.uploadGiorniNascita()
+        } else {
+            flash.error = 'Devi essere loggato per effettuare un upload di pagine sul server wiki'
+        }// fine del blocco if-else
         redirect(action: 'list')
     } // fine del metodo
 
@@ -146,7 +150,11 @@ class BioGrailsController {
     //--elabora e crea tutti i giorni modificati (solo morte)
     //--passa al metodo effettivo senza nessun dialogo di conferma
     def uploadGiorniMorte() {
-        bioGrailsService.uploadGiorniMorte()
+        if (grailsApplication && grailsApplication.config.login) {
+            bioGrailsService.uploadGiorniMorte()
+        } else {
+            flash.error = 'Devi essere loggato per effettuare un upload di pagine sul server wiki'
+        }// fine del blocco if-else
         redirect(action: 'list')
     } // fine del metodo
 
@@ -154,7 +162,11 @@ class BioGrailsController {
     //--elabora e crea tutti gli anni modificati (solo nascita)
     //--passa al metodo effettivo senza nessun dialogo di conferma
     def uploadAnniNascita() {
-        bioGrailsService.uploadAnniNascita()
+        if (grailsApplication && grailsApplication.config.login) {
+            bioGrailsService.uploadAnniNascita()
+        } else {
+            flash.error = 'Devi essere loggato per effettuare un upload di pagine sul server wiki'
+        }// fine del blocco if-else
         redirect(action: 'list')
     } // fine del metodo
 
@@ -162,7 +174,35 @@ class BioGrailsController {
     //--elabora e crea tutti gli anni modificati (solo morte)
     //--passa al metodo effettivo senza nessun dialogo di conferma
     def uploadAnniMorte() {
-        bioGrailsService.uploadAnniMorte()
+        if (grailsApplication && grailsApplication.config.login) {
+            bioGrailsService.uploadAnniMorte()
+        } else {
+            flash.error = 'Devi essere loggato per effettuare un upload di pagine sul server wiki'
+        }// fine del blocco if-else
+        redirect(action: 'list')
+    } // fine del metodo
+
+    //--creazione delle liste partendo da BioGrails
+    //--elabora e crea tutti le pagine di attività
+    //--passa al metodo effettivo senza nessun dialogo di conferma
+    def uploadAttivita() {
+        if (grailsApplication && grailsApplication.config.login) {
+            listaService.uploadAttivita()
+        } else {
+            flash.error = 'Devi essere loggato per effettuare un upload di pagine sul server wiki'
+        }// fine del blocco if-else
+        redirect(action: 'list')
+    } // fine del metodo
+
+    //--creazione delle liste partendo da BioGrails
+    //--elabora e crea tutti le pagine di nazionalità
+    //--passa al metodo effettivo senza nessun dialogo di conferma
+    def uploadNazionalita() {
+        if (grailsApplication && grailsApplication.config.login) {
+            listaService.uploadNazionalita
+        } else {
+            flash.error = 'Devi essere loggato per effettuare un upload di pagine sul server wiki'
+        }// fine del blocco if-else
         redirect(action: 'list')
     } // fine del metodo
 
@@ -233,18 +273,22 @@ class BioGrailsController {
         def campoSort = 'forzaOrdinamento'
         String titoloLista
         int recordsTotali
+        def noMenuCreate = true
 
         //--selezione dei menu extra
         //--solo azione e di default controller=questo; classe e titolo vengono uguali
         //--mappa con [cont:'controller', action:'metodo', icon:'iconaImmagine', title:'titoloVisibile']
         menuExtra = [
+                [cont: 'bioGrails', action: 'resetElabora', icon: 'database', title: 'Reset elabora'],
                 [cont: 'bioGrails', action: 'elaboraAll', icon: 'database', title: 'Elabora'],
-                [cont: 'bioWiki', action: 'list', icon: 'scambia', title: 'BioWiki'],
                 [cont: 'bioGrails', action: 'uploadGiorniNascita', icon: 'frecciasu', title: 'giorniNascita'],
                 [cont: 'bioGrails', action: 'uploadGiorniMorte', icon: 'frecciasu', title: 'giorniMorte'],
                 [cont: 'bioGrails', action: 'uploadAnniNascita', icon: 'frecciasu', title: 'anniNascita'],
                 [cont: 'bioGrails', action: 'uploadAnniMorte', icon: 'frecciasu', title: 'anniMorte'],
-                [cont: 'bioGrails', action: 'uploadAll', icon: 'frecciasu', title: 'Upload all']
+                [cont: 'bioGrails', action: 'uploadAttivita', icon: 'frecciasu', title: 'Attività'],
+                [cont: 'bioGrails', action: 'uploadNazionalita', icon: 'frecciasu', title: 'Nazionalità'],
+                [cont: 'bioGrails', action: 'uploadAll', icon: 'frecciasu', title: 'Upload all'],
+                [cont: 'bioWiki', action: 'list', icon: 'scambia', title: 'BioWiki']
         ]
         // fine della definizione
 
@@ -300,7 +344,8 @@ class BioGrailsController {
                 bioGrailsInstanceTotal: recordsTotali,
                 menuExtra: menuExtra,
                 titoloLista: titoloLista,
-                campiLista: campiLista],
+                campiLista: campiLista,
+                noMenuCreate: noMenuCreate],
                 params: params)
     } // fine del metodo
 

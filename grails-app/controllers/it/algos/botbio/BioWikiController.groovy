@@ -45,10 +45,9 @@ class BioWikiController {
         redirect(action: 'list', params: params)
     } // fine del metodo
 
-    //--importa (usa il nome-metodo create, perchè è il primo ed unico della lista standard)
     //--mostra un avviso di spiegazione per l'operazione da compiere
     //--passa al metodo effettivo
-    def create() {
+    def importa() {
         params.tipo = TipoDialogo.avviso
         params.titolo = 'Importazione iniziale'
         params.avviso = []
@@ -327,19 +326,18 @@ class BioWikiController {
         def campoSort
         String titoloLista
         int recordsTotali
-
-//        <span class="menuButton"><g:link class="regola" action="regola"><g:message code="Regola"/></g:link></span>
-//        <span class="menuButton"><g:link class="regola" action="formatta"><g:message code="Formatta"/></g:link></span>
-//        <span class="menuButton"><g:link class="regola" action="soloListe"><g:message code="Liste attnaz"/></g:link></span>
+        def noMenuCreate = true
 
         //--selezione dei menu extra
         //--solo azione e di default controller=questo; classe e titolo vengono uguali
         //--mappa con [cont:'controller', action:'metodo', icon:'iconaImmagine', title:'titoloVisibile']
         menuExtra = [
+                [cont: 'bioWiki', action: 'importa', icon: 'database', title: 'Importa'],
                 [cont: 'bioWiki', action: 'aggiungeWiki', icon: 'frecciagiu', title: 'AggiungeWiki'],
                 [cont: 'bioWiki', action: 'aggiornaWiki', icon: 'frecciagiu', title: 'AggiornaWiki'],
                 [cont: 'bioWiki', action: 'cicloWiki', icon: 'frecciagiu', title: 'CicloWiki'],
-//                [cont: 'bioWiki', action: 'elabora', icon: 'pippo', title: 'Elabora'],
+                [cont: 'bioGrails', action: 'resetElabora', icon: 'database', title: 'Reset elabora'],
+                [cont: 'bioGrails', action: 'elaboraAll', icon: 'database', title: 'Elabora'],
                 [cont: 'bioGrails', action: 'list', icon: 'scambia', title: 'BioGrails']
         ]
         // fine della definizione
@@ -402,7 +400,8 @@ class BioWikiController {
                 bioWikiInstanceTotal: recordsTotali,
                 menuExtra: menuExtra,
                 titoloLista: titoloLista,
-                campiLista: campiLista],
+                campiLista: campiLista,
+                noMenuCreate: noMenuCreate],
                 params: params)
     } // fine del metodo
 
