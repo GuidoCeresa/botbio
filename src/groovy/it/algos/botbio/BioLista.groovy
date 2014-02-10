@@ -1,5 +1,8 @@
 package it.algos.botbio
 
+import it.algos.algoslib.LibTesto
+import it.algos.algoslib.LibTime
+import it.algos.algoswiki.Edit
 import org.apache.commons.logging.LogFactory
 
 /**
@@ -19,6 +22,8 @@ class BioLista {
     protected static int NUM_RIGHE_PER_SOTTOPAGINA = 50
     protected static boolean CARATTERE_SOTTOPAGINA = true
     protected static int NUM_RIGHE_PER_CARATTERE_SOTTOPAGINA = 50
+    protected static String INI_RIGA = '*'
+    protected static String A_CAPO = '\n'
 
     private ArrayList listaWrapper
     protected String plurale
@@ -114,6 +119,7 @@ class BioLista {
      */
 
     protected String getContenuto() {
+        return ''
     }// fine del metodo
 
     /**
@@ -121,31 +127,27 @@ class BioLista {
      */
 
     public registra() {
-        // variabili e costanti locali di lavoro
         String titolo = this.titoloPagina
         String testo = this.getContenuto()
-        String summary = BiografiaService.summarySetting()
+        String summary = BioService.summarySetting()
 
         // registra la pagina solo se ci sono differente significative
         // al di la della prima riga con il richiamo al template e che contiene la data
         if (titolo && testo && this.listaWrapper && this.listaWrapper.size() > 0) {
-            LibBio.caricaPaginaDiversa(titolo, testo, summary, false)
-            def stop
+//            LibBio.caricaPaginaDiversa(titolo, testo, summary, false)
+
+            Edit edit = new Edit(titolo, testo, summary)
         }// fine del blocco if
-        def stop
     }// fine del metodo
 
 
-    protected String getTestoIni(int numRec) {
+    protected static String getTestoIni(int numRec) {
         // variabili e costanti locali di lavoro
         String testo = ''
-        String dataCorrente
-        String numero
+        String dataCorrente = LibTime.getGioMeseAnnoLungo(new Date())
+        String numero = LibTesto.formatNum(numRec)
         String tag = '__NOTOC__'
         String aCapo = '\n'
-
-        dataCorrente = WikiLib.getData('DMY')
-        numero = WikiLib.formatNumero(numRec)
 
         testo += tag
         testo += aCapo
@@ -172,10 +174,10 @@ class BioLista {
         String attNazMaiuscola
         String attNazMinuscola
 
-        categoria = WikiLib.primaMaiuscola(categoria)
-        plurale = WikiLib.primaMaiuscola(plurale)
-        attNazMaiuscola = WikiLib.primaMaiuscola(attNaz)
-        attNazMinuscola = WikiLib.primaMinuscola(attNaz)
+        categoria = LibTesto.primaMaiuscola(categoria)
+        plurale = LibTesto.primaMaiuscola(plurale)
+        attNazMaiuscola = LibTesto.primaMaiuscola(attNaz)
+        attNazMinuscola = LibTesto.primaMinuscola(attNaz)
 
         testo += '==Voci correlate=='
         testo += aCapo
@@ -223,7 +225,7 @@ class BioLista {
     }
 
 
-    protected ArrayList getListaWrapper() {
+    public ArrayList getListaWrapper() {
         return listaWrapper
     }
 
@@ -247,4 +249,11 @@ class BioLista {
         return campiParagrafi
     }
 
+    String getTesto() {
+        return testo
+    }
+
+    void setTesto(String testo) {
+        this.testo = testo
+    }
 }// fine della classe

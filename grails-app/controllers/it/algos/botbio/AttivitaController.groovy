@@ -29,6 +29,7 @@ class AttivitaController {
     def logoService
     def eventoService
     def attivitaService
+    def listaService
 
     def index() {
         redirect(action: 'list', params: params)
@@ -67,6 +68,18 @@ class AttivitaController {
     } // fine del metodo
 
 
+    //--creazione delle liste partendo da BioGrails
+    //--elabora e crea tutti le pagine di attività
+    //--passa al metodo effettivo senza nessun dialogo di conferma
+    def uploadAttivita() {
+        if (grailsApplication && grailsApplication.config.login) {
+            listaService.uploadAttivita()
+        } else {
+            flash.error = 'Devi essere loggato per effettuare un upload di pagine sul server wiki'
+        }// fine del blocco if-else
+        redirect(action: 'list')
+    } // fine del metodo
+
     def list(Integer max) {
         params.max = Math.min(max ?: 100, 100)
         ArrayList menuExtra
@@ -79,7 +92,9 @@ class AttivitaController {
         //--selezione dei menu extra
         //--solo azione e di default controller=questo; classe e titolo vengono uguali
         //--mappa con [cont:'controller', action:'metodo', icon:'iconaImmagine', title:'titoloVisibile']
-        menuExtra = []
+        menuExtra = [
+                [cont: 'attivita', action: 'uploadAttivita', icon: 'frecciasu', title: 'Upload pagine'],
+        ]
         // fine della definizione
 
         //--selezione delle colonne (campi) visibili nella lista

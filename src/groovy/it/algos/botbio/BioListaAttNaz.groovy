@@ -1,5 +1,7 @@
 package it.algos.botbio
 
+import it.algos.algoslib.LibTesto
+
 /**
  * Created by IntelliJ IDEA.
  * User: Gac
@@ -24,22 +26,19 @@ class BioListaAttNaz extends BioLista {
      */
 
     protected creaTitolo() {
-        // variabili e costanti locali di lavoro
-        String titoloPagina = ''
+        String titoloPagina
 
         if (this.plurale) {
-            titoloPagina = this.path + WikiLib.primaMaiuscola(this.plurale)
+            titoloPagina = this.path + LibTesto.primaMaiuscola(this.plurale)
             if (titoloPagina) {
                 this.titoloPagina = titoloPagina
             }// fine del blocco if
         }// fine del blocco if
-
     }// fine del metodo
 
     /**
      * Regola l'ordinamento
      */
-
     protected regolaOrdinamento() {
         // variabili e costanti locali di lavoro
         ArrayList listaWrapper = this.getListaWrapper()
@@ -75,14 +74,28 @@ class BioListaAttNaz extends BioLista {
         String testo = ''
         String testoDidascalie = ''
         ArrayList listaDidascalie
-        String aCapo = '\n'
+        BioLista bioListaObj
+        DidascaliaBio didascaliaObj
+        String didascaliaTxt
 
         if (this.listaWrapper) {
             listaDidascalie = this.listaWrapper
 
             listaDidascalie?.each {
-                testoDidascalie += it.testo
-                testoDidascalie += aCapo
+                didascaliaTxt = ''
+                if (it instanceof DidascaliaBio) {
+                    didascaliaObj = (DidascaliaBio) it
+                    didascaliaTxt = didascaliaObj.getTestoEstesaSimboli()
+                }// fine del blocco if
+                if (it instanceof BioLista) {
+                    bioListaObj = (BioLista) it
+                    didascaliaTxt = bioListaObj.getTesto()
+                }// fine del blocco if
+                if (didascaliaTxt && !didascaliaTxt.startsWith('=')) {
+                    testoDidascalie += INI_RIGA
+                }// fine del blocco if
+                testoDidascalie += didascaliaTxt
+                testoDidascalie += A_CAPO
             }// fine di each
         }// fine del blocco if
 
@@ -105,7 +118,7 @@ class BioListaAttNaz extends BioLista {
 
         numRec = this.numPersone
 
-        testo += this.getTestoIni(numRec)
+        testo += getTestoIni(numRec)
         testo += aCapo
         if (DOPPIO_SPAZIO) {
             testo += aCapo

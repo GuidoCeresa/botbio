@@ -182,29 +182,6 @@ class BioGrailsController {
         redirect(action: 'list')
     } // fine del metodo
 
-    //--creazione delle liste partendo da BioGrails
-    //--elabora e crea tutti le pagine di attività
-    //--passa al metodo effettivo senza nessun dialogo di conferma
-    def uploadAttivita() {
-        if (grailsApplication && grailsApplication.config.login) {
-            listaService.uploadAttivita()
-        } else {
-            flash.error = 'Devi essere loggato per effettuare un upload di pagine sul server wiki'
-        }// fine del blocco if-else
-        redirect(action: 'list')
-    } // fine del metodo
-
-    //--creazione delle liste partendo da BioGrails
-    //--elabora e crea tutti le pagine di nazionalità
-    //--passa al metodo effettivo senza nessun dialogo di conferma
-    def uploadNazionalita() {
-        if (grailsApplication && grailsApplication.config.login) {
-            listaService.uploadNazionalita
-        } else {
-            flash.error = 'Devi essere loggato per effettuare un upload di pagine sul server wiki'
-        }// fine del blocco if-else
-        redirect(action: 'list')
-    } // fine del metodo
 
     //--creazione delle liste partendo da BioGrails
     //--elabora e crea tutti i giorni modificati
@@ -285,8 +262,6 @@ class BioGrailsController {
                 [cont: 'bioGrails', action: 'uploadGiorniMorte', icon: 'frecciasu', title: 'giorniMorte'],
                 [cont: 'bioGrails', action: 'uploadAnniNascita', icon: 'frecciasu', title: 'anniNascita'],
                 [cont: 'bioGrails', action: 'uploadAnniMorte', icon: 'frecciasu', title: 'anniMorte'],
-                [cont: 'bioGrails', action: 'uploadAttivita', icon: 'frecciasu', title: 'Attività'],
-                [cont: 'bioGrails', action: 'uploadNazionalita', icon: 'frecciasu', title: 'Nazionalità'],
                 [cont: 'bioGrails', action: 'uploadAll', icon: 'frecciasu', title: 'Upload all'],
                 [cont: 'bioWiki', action: 'list', icon: 'scambia', title: 'BioWiki']
         ]

@@ -17,7 +17,7 @@ class BioAttivita {
     private String plurale
     private ArrayList<Long> listaSingolariID
     private ArrayList<Long> listaVociId
-    private ArrayList<String> listaDidascalie
+    private ArrayList listaDidascalie
     private BioLista bioLista
 
     public BioAttivita(String plurale) {
@@ -44,7 +44,7 @@ class BioAttivita {
         this.creaListaDidascalie()
 
         // Crea paragrafo/pagina con le didascalie
-//        this.bioLista = new BioListaAtt(this.plurale, this.listaDidascalie)
+        this.bioLista = new BioListaAtt(getPlurale(), getListaDidascalie())
     } // fine del metodo
 
     /**
@@ -120,16 +120,15 @@ class BioAttivita {
         return listaVociId
     } // fine del metodo
 
-
     /**
      * Crea una query (parziale) col nome del campo
      *
      * @param num di attività (principale, secondaria o terziaria)
      * @return query
      */
-    private static String getQueryParziale(int num){
+    private static String getQueryParziale(int num) {
         // variabili e costanti locali di lavoro
-        String query     =''
+        String query = ''
         String tag = "select id from BioGrails where "
         String attivitaUno = 'attivita_link_id'
         String attivitaDue = 'attivita2link_id'
@@ -162,21 +161,25 @@ class BioAttivita {
     private creaListaDidascalie() {
         // variabili e costanti locali di lavoro
         boolean continua = false
-        ArrayList<Long> listaVociId  = this.getListaVociId()
-        ArrayList<String> listaDidascalie = new ArrayList<String>()
+        ArrayList<Long> listaVociId = this.getListaVociId()
+        ArrayList listaDidascalie = new ArrayList()
         BioGrails bioGrails
+        boolean perAdessoFalso = false
 
         // controllo di congruità
         if (listaVociId) {
             listaVociId?.each {
                 bioGrails = BioGrails.findById(it)
                 if (bioGrails) {
-                    if (bioGrails.didascaliaListe) {
-                        listaDidascalie.add(bioGrails.didascaliaListe)
+                    if (perAdessoFalso) {
+                        if (bioGrails.didascaliaListe) {
+                            listaDidascalie.add(bioGrails.didascaliaListe)
+                        } else {
+                            listaDidascalie.add(creaTestoDidascaliaAlVolo(bioGrails))
+                        }// fine del blocco if-else
                     } else {
                         listaDidascalie.add(creaDidascaliaAlVolo(bioGrails))
                     }// fine del blocco if-else
-                    listaDidascalie.add(bioGrails.didascaliaListe)
                 }// fine del blocco if
             }// fine di each
 
@@ -185,7 +188,7 @@ class BioAttivita {
     } // fine del metodo
 
     // se manca la didascalia, la crea al volo
-    public static String creaDidascaliaAlVolo(BioGrails bio) {
+    public static String creaTestoDidascaliaAlVolo(BioGrails bio) {
         String didascaliaTxt = ''
         long grailsId
         DidascaliaBio didascaliaObj
@@ -198,6 +201,20 @@ class BioAttivita {
         }// fine del blocco if
 
         return didascaliaTxt
+    }// fine del metodo
+
+    // se manca la didascalia, la crea al volo
+    public static DidascaliaBio creaDidascaliaAlVolo(BioGrails bio) {
+        DidascaliaBio didascalia = null
+        long grailsId
+
+        if (bio) {
+            grailsId = bio.id
+            didascalia = new DidascaliaBio(grailsId)
+            didascalia.setInizializza()
+        }// fine del blocco if
+
+        return didascalia
     }// fine del metodo
 
     /**
@@ -234,11 +251,11 @@ class BioAttivita {
         this.listaVociId = listaVociId
     }
 
-    ArrayList<String> getListaDidascalie() {
+    ArrayList getListaDidascalie() {
         return listaDidascalie
     }
 
-    void setListaDidascalie(ArrayList<String> listaDidascalie) {
+    void setListaDidascalie(ArrayList listaDidascalie) {
         this.listaDidascalie = listaDidascalie
     }
 } // fine della classe

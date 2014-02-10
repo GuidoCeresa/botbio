@@ -803,8 +803,8 @@ class DidascaliaBio {
         boolean simboli = false
         boolean virgolaNato = false
         boolean virgolaMorto = false
-        String tagAnnoNato = DidascaliaBio.PUNTI
-        String tagAnnoMorto = DidascaliaBio.PUNTI
+        String tagAnnoNato = PUNTI
+        String tagAnnoMorto = PUNTI
 
         annoNascita = this.annoNascita
         annoMorte = this.annoMorte
@@ -909,6 +909,9 @@ class DidascaliaBio {
                     if (luogoNascitaLink) {
                         testo += LibWiki.setQuadre(luogoNascitaLink + "|" + luogoNascita)
                     } else {
+                        if (luogoNascita.contains(')')) {
+                            luogoNascita+='|'
+                        }// fine del blocco if
                         testo += LibWiki.setQuadre(luogoNascita)
                     }// fine del blocco if-else
                 }// fine del blocco if
@@ -929,6 +932,9 @@ class DidascaliaBio {
                     if (luogoMorteLink) {
                         testo += LibWiki.setQuadre(luogoMorteLink + "|" + luogoMorte)
                     } else {
+                        if (luogoMorte.contains(')')) {
+                            luogoMorte+='|'
+                        }// fine del blocco if
                         testo += LibWiki.setQuadre(luogoMorte)
                     }// fine del blocco if-else
                 }// fine del blocco if

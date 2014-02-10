@@ -5,10 +5,14 @@ import it.algos.algoslib.Lib
 import it.algos.algoslib.LibTesto
 import it.algos.algoslib.LibTime
 import it.algos.algospref.Preferenze
+import it.algos.algoswiki.Pagina
 import it.algos.algoswiki.QueryInfoCat
+import it.algos.algoswiki.Risultato
 import it.algos.algoswiki.WikiLib
 
 import java.sql.Timestamp
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 
 /**
  * Created with IntelliJ IDEA.
@@ -391,7 +395,8 @@ class LibBio {
      *
      * @param debug log di controllo
      */
-    public static String gestVoci(def logService, boolean debug, long durata, int aggiunte, int modificate, int vociTotali) {
+    public static String gestVoci(
+            def logService, boolean debug, long durata, int aggiunte, int modificate, int vociTotali) {
         String avviso = ''
         int vociCat
         String aggiunteTxt
@@ -580,26 +585,563 @@ class LibBio {
      * @return stringa con ref iniziale e finale aggiunto
      */
     public static String setRef(String stringaIn) {
-        /* variabili e costanti locali di lavoro */
-        String stringaOut = "";
-        String tagIni = "<ref>";
-        String tagEnd = "</ref>";
+        String stringaOut = ""
+        String tagIni = "<ref>"
+        String tagEnd = "</ref>"
 
         try { // prova ad eseguire il codice
-            stringaOut = stringaIn;
+            stringaOut = stringaIn
             if (!stringaIn.startsWith(tagIni)) {
-                stringaOut = tagIni + stringaIn;
+                stringaOut = tagIni + stringaIn
             }// fine del blocco if
 
             if (!stringaIn.endsWith(tagEnd)) {
-                stringaOut += tagEnd;
+                stringaOut += tagEnd
             }// fine del blocco if
 
         } catch (Exception unErrore) { // intercetta l'errore
         }// fine del blocco try-catch
 
         /* valore di ritorno */
-        return stringaOut;
-    }
+        return stringaOut
+    }// fine del metodo
+
+    /**
+     * Divide le liste attività/nazionalità per paragrafi di gruppi nazionalità/attività
+     * Crea una lista di wrapper
+     *
+     * @param bioLista
+     * @return lista di liste di wrapper
+     */
+    public static divideParagrafi(BioLista bioLista) {
+        // variabili e costanti locali di lavoro
+        ArrayList liste = new ArrayList()
+        ArrayList listaNomiParagrafi = new ArrayList()
+        ArrayList listaWrapper = bioLista.getListaWrapper()
+        ArrayList listaParagrafo
+        String nomeParagrafo
+        BioLista bioListaPar
+
+        // crea una lista di attività/nazionalità utilizzate
+        listaNomiParagrafi = getListaChiavi(bioLista)
+
+        // spazzola la lista di attività/nazionalità utilizzate
+        listaNomiParagrafi?.each {
+            nomeParagrafo = it
+            nomeParagrafo = nomeParagrafo.trim()
+
+            listaParagrafo = getListaDidascalieParagrafo(bioLista, nomeParagrafo, listaWrapper)
+
+            if (listaParagrafo && listaParagrafo.size() > 0) {
+                if (nomeParagrafo == '') {
+                    nomeParagrafo = BioLista.PUNTI
+                }// fine del blocco if
+
+                bioListaPar = new BioListaPar(nomeParagrafo, listaParagrafo, bioLista)
+                liste.add(bioListaPar)
+            }// fine del blocco if
+        }// fine di each
+
+        // valore di ritorno
+        return liste
+    }// fine del metodo
+
+    /**
+     * Ordina una lista di oggetti secondo il campo indicato
+     *
+     * @param lista non ordinata
+     * @param nomeCampo di ordinamento
+     * @return lista ordinata
+     */
+    public static ordinaLista(ArrayList lista, String nomeCampo) {
+        // variabili e costanti locali di lavoro
+        ArrayList listaOrdinata = null
+        ArrayList listaChiavi
+        def chiave
+
+        if (lista && lista.size() > 0 && nomeCampo) {
+            listaOrdinata = new ArrayList()
+            listaChiavi = LibBio.listaChiavi(lista, nomeCampo)
+
+            // prima gli anni zero (se ce ne sono)
+            listaChiavi.each {
+                chiave = it
+                lista.each {
+                    if (chiave == it."${nomeCampo}") {
+                        if (!listaOrdinata.contains(it)) {
+                            listaOrdinata.add(it)
+                        }// fine del blocco if
+                    }// fine del blocco if
+                }// fine di each
+            }// fine di each
+        }// fine del blocco if
+
+        // valore di ritorno
+        return listaOrdinata
+    }// fine del metodo
+
+    /**
+     * Recupera una lista di nomi/chiave per i paragrafi
+     *
+     * @param bioLista
+     * @return lista di nomi di paragrafi
+     */
+    public static getListaChiavi(BioLista bioLista) {
+        // variabili e costanti locali di lavoro
+        ArrayList listaNomiParagrafi = new ArrayList()
+        ArrayList listaWrapper
+        String paragrafo
+        ArrayList paragrafi
+
+        // crea una lista di nazionalità utilizzate
+        if (bioLista) {
+
+            listaWrapper = bioLista.getListaWrapper()
+            paragrafo = bioLista.campoParagrafo
+            paragrafi = bioLista.getCampiParagrafi()
+
+            if (paragrafi && BioLista.TRIPLA_ATTIVITA) {
+                listaNomiParagrafi = listaChiavi(listaWrapper, paragrafi)
+            } else {
+                listaNomiParagrafi = listaChiavi(listaWrapper, paragrafo)
+            }// fine del blocco if-else
+        }// fine del blocco if
+
+        // valore di ritorno
+        return listaNomiParagrafi
+    }// fine del metodo
+
+    /**
+     * Crea una lista di attività/nazionalità per ogni paragrafi
+     *
+     * @param nomeParagrafo
+     * @return listaWrapper completa
+     */
+    public static getListaDidascalieParagrafo(bioLista, nomeParagrafo, listaWrapper) {
+        // variabili e costanti locali di lavoro
+        ArrayList listaParagrafo = null
+
+        // controllo di congruità
+        if (bioLista && listaWrapper && listaWrapper.size() > 0) {
+            if (nomeParagrafo == '') {
+                listaParagrafo = getListaDidascalieParagrafoVuoto(bioLista, listaWrapper)
+            } else {
+                listaParagrafo = getListaDidascalieParagrafoPieno(bioLista, nomeParagrafo, listaWrapper)
+            }// fine del blocco if-else
+        }// fine del blocco if
+
+        // valore di ritorno
+        return listaParagrafo
+    }// fine del metodo
+
+    /**
+     * Crea una lista di attività/nazionalità per ogni paragrafi vuoto
+     *
+     * @return listaWrapper completa
+     */
+    public static getListaDidascalieParagrafoVuoto(bioLista, listaWrapper) {
+        // variabili e costanti locali di lavoro
+        ArrayList listaParagrafo = new ArrayList()
+        String paragrafo = bioLista.campoParagrafo
+        ArrayList paragrafi = bioLista.getCampiParagrafi()
+        String nomeWrapper = ''
+        String nome2Wrapper = ''
+        String nome3Wrapper = ''
+
+        // controllo di congruità
+        if (bioLista && listaWrapper && listaWrapper.size() > 0) {
+            listaWrapper.each {
+                nomeWrapper = ''
+                nome2Wrapper = ''
+                nome3Wrapper = ''
+                try { // prova ad eseguire il codice
+                    if (paragrafi) {
+                        nomeWrapper = it."${paragrafi[0]}"
+                        nome2Wrapper = it."${paragrafi[1]}"
+                        nome3Wrapper = it."${paragrafi[2]}"
+                    } else {
+                        nomeWrapper = it."${paragrafo}"
+                        nome2Wrapper = nomeWrapper
+                        nome3Wrapper = nomeWrapper
+                    }// fine del blocco if-else
+                } catch (Exception unErrore) { // intercetta l'errore
+                }// fine del blocco try-catch
+                nomeWrapper = nomeWrapper.trim()
+                nome2Wrapper = nome2Wrapper.trim()
+                nome3Wrapper = nome3Wrapper.trim()
+
+                if (nomeWrapper.equals('') && nome2Wrapper.equals('') && nome3Wrapper.equals('')) {
+                    if (!listaParagrafo.contains(it)) {
+                        listaParagrafo.add(it)
+                    }// fine del blocco if
+                }// fine del blocco if-else
+            }// fine di each
+        }// fine del blocco if
+
+        // valore di ritorno
+        return listaParagrafo
+    } // fine della closure
+
+    /**
+     * Crea una lista di attività/nazionalità per ogni paragrafi
+     *
+     * @param nomeParagrafo
+     * @return listaWrapper completa
+     */
+    public static getListaDidascalieParagrafoPieno(bioLista, nomeParagrafo, listaWrapper) {
+        // variabili e costanti locali di lavoro
+        ArrayList listaParagrafo = new ArrayList()
+        ArrayList liste = new ArrayList()
+        ArrayList listaNomi = new ArrayList()
+        String paragrafo = bioLista.campoParagrafo
+        ArrayList paragrafi = bioLista.getCampiParagrafi()
+        ArrayList listaTmp
+        String nomeWrapper = ''
+        String nome2Wrapper = ''
+        String nome3Wrapper = ''
+        BioLista bioListaPar
+        boolean attivitaVuota
+        boolean daInserire
+
+        // controllo di congruità
+        if (bioLista && nomeParagrafo && listaWrapper && listaWrapper.size() > 0) {
+            listaWrapper.each {
+                daInserire = false
+                nomeWrapper = ''
+                nome2Wrapper = ''
+                nome3Wrapper = ''
+                try { // prova ad eseguire il codice
+                    if (paragrafi) {
+                        nomeWrapper = it."${paragrafi[0]}"
+                        nome2Wrapper = it."${paragrafi[1]}"
+                        nome3Wrapper = it."${paragrafi[2]}"
+                    } else {
+                        nomeWrapper = it."${paragrafo}"
+                        nome2Wrapper = nomeWrapper
+                        nome3Wrapper = nomeWrapper
+                    }// fine del blocco if-else
+                } catch (Exception unErrore) { // intercetta l'errore
+                }// fine del blocco try-catch
+                nomeWrapper = nomeWrapper.trim()
+                nome2Wrapper = nome2Wrapper.trim()
+                nome3Wrapper = nome3Wrapper.trim()
+
+                if (BioLista.TRIPLA_ATTIVITA) {
+                    if (nomeWrapper.equals(nomeParagrafo) || nome2Wrapper.equals(nomeParagrafo) || nome3Wrapper.equals(nomeParagrafo)) {
+                        daInserire = true
+                    }// fine del blocco if-else
+                } else {
+                    if (nomeWrapper.equals(nomeParagrafo)) {
+                        daInserire = true
+                    }// fine del blocco if-else
+                }// fine del blocco if-else
+
+                if (daInserire) {
+                    if (!listaParagrafo.contains(it)) {
+                        listaParagrafo.add(it)
+                    }// fine del blocco if
+                }// fine del blocco if-else
+            }// fine di each
+
+        }// fine del blocco if
+
+        // valore di ritorno
+        return listaParagrafo
+    } // fine della closure
+
+    /**
+     * Recupera una lista di oggetti del campo indicato
+     *
+     * @param lista
+     * @param nomeCampo da recuperare
+     * @return lista ordinata
+     */
+    public static listaChiavi(ArrayList lista, String nomeCampo) {
+        // variabili e costanti locali di lavoro
+        ArrayList listaChiavi = null
+        boolean continua = false
+        def chiave
+
+        // controllo di congruità
+        if (lista && lista.size() > 0 && nomeCampo) {
+            continua = true
+        }// fine del blocco if
+
+        if (continua) {
+            listaChiavi = new ArrayList()
+
+            // lista delle chiavi
+            try { // prova ad eseguire il codice
+                lista.each {
+                    chiave = it."${nomeCampo}"
+                    if (!listaChiavi.contains(chiave)) {
+                        listaChiavi.add(chiave)
+                    }// fine del blocco if
+                }// fine di each
+            } catch (Exception unErrore) { // intercetta l'errore
+                log.error "listaChiavi: non esiste il campo $nomeCampo"
+                continua = false
+            }// fine del blocco try-catch
+        }// fine del blocco if
+
+        // ordina
+        if (continua) {
+            listaChiavi.sort()
+        }// fine del blocco if
+
+        // valore di ritorno
+        return listaChiavi
+    }// fine del metodo
+
+    /**
+     * Recupera una lista di oggetti dei campi indicato
+     *
+     * @param lista
+     * @param nomiCampo da recuperare
+     * @return lista ordinata
+     */
+    public static listaChiavi(ArrayList lista, ArrayList nomiCampo) {
+        // variabili e costanti locali di lavoro
+        ArrayList listaChiavi = null
+        boolean continua = false
+        ArrayList listaTmp
+
+        // controllo di congruità
+        if (lista && lista.size() > 0 && nomiCampo && nomiCampo.size() > 0) {
+            continua = true
+        }// fine del blocco if
+
+        if (continua) {
+            listaChiavi = new ArrayList()
+            if (nomiCampo.size() == 3) {
+                listaTmp = LibBio.listaChiavi(lista, nomiCampo.get(0))
+                listaTmp.each {
+                    if (!listaChiavi.contains(it)) {
+                        listaChiavi.add(it)
+                    }// fine del blocco if
+                }// fine di each
+                listaTmp = LibBio.listaChiavi(lista, nomiCampo.get(1))
+                listaTmp.each {
+                    if (listaChiavi.contains(it) || it.equals('')) {
+                    } else {
+                        listaChiavi.add(it)
+                    }// fine del blocco if-else
+                }// fine di each
+                listaTmp = LibBio.listaChiavi(lista, nomiCampo.get(2))
+                listaTmp.each {
+                    if (listaChiavi.contains(it) || it.equals('')) {
+                    } else {
+                        listaChiavi.add(it)
+                    }// fine del blocco if-else
+                }// fine di each
+            } else {
+                nomiCampo.each {
+                    listaTmp = LibBio.listaChiavi(lista, it)
+                    listaTmp.each {
+                        if (!listaChiavi.contains(it)) {
+                            listaChiavi.add(it)
+                        }// fine del blocco if
+                    }// fine di each
+                }// fine di each
+            }// fine del blocco if-else
+        }// fine del blocco if
+
+        // ordina
+        if (continua) {
+            listaChiavi.sort()
+        }// fine del blocco if
+
+        // valore di ritorno
+        return listaChiavi
+    }// fine del metodo
+
+    /**
+     * Divide le liste attività/nazionalità per paragrafi sul primo carattere
+     * Crea una lista di wrapper
+     *
+     * @param classe per il costruttore di BioListaPar
+     * @param nomeCampo di ordinamento
+     * @return lista di liste di wrapper
+     */
+    public static divideCarattere(BioLista bioLista) {
+        // variabili e costanti locali di lavoro
+        ArrayList liste = new ArrayList()
+        ArrayList listaParagrafi = new ArrayList()
+        ArrayList listaWrapper = bioLista.getListaWrapper()
+        String paragrafo = bioLista.campoParagrafo
+        ArrayList listaTmp
+        String nomeLista
+        String ordine
+        BioLista bioListaPar
+
+        // crea una lista di paragrafi
+        listaParagrafi = getListaParagrafi(listaWrapper, 'ordineAlfabetico')
+
+        // spazzola la lista dei paragrafi
+        if (listaParagrafi) {
+            listaParagrafi.each {
+                nomeLista = it
+                listaTmp = new ArrayList()
+                listaWrapper.each {
+                    ordine = it.ordineAlfabetico
+                    if (ordine) {
+                        ordine = ordine.substring(0, 1)
+                        if (ordine == nomeLista) {
+                            if (!listaTmp.contains(it)) {
+                                listaTmp.add(it)
+                            }// fine del blocco if
+                        }// fine del blocco if
+                    } else {
+                        log.warn "divideCarattere: ${it}"
+                    }// fine del blocco if-else
+                }// fine di each
+
+                bioListaPar = new BioListaFin(nomeLista, listaTmp, bioLista)
+                if (bioListaPar && bioListaPar.getListaWrapper() && bioListaPar.getListaWrapper().size() > 0) {
+                    liste.add(bioListaPar)
+                }// fine del blocco if
+            }// fine di each
+        }// fine del blocco if
+
+        // valore di ritorno
+        return liste
+    }// fine del metodo
+
+    /**
+     * Crea una lista di paragrafi (prima lettera delle voci) usati
+     *
+     * @param listaWrapper
+     * @return lista di nomi paragrafi
+     */
+    public static getListaParagrafi(ArrayList listaWrapper, String nomeCampo) {
+        // variabili e costanti locali di lavoro
+        ArrayList listaParagrafi = new ArrayList()
+        String ordine
+        String carIniziale
+
+        // crea una lista di lettere utilizzate
+        if (listaWrapper) {
+            listaWrapper.each {
+                ordine = it."${nomeCampo}"
+                if (ordine) {
+                    carIniziale = ordine.substring(0, 1)
+                    carIniziale = carIniziale.toUpperCase()
+                    if (!listaParagrafi.contains(carIniziale)) {
+                        listaParagrafi.add(carIniziale)
+                    }// fine del blocco if
+                } else {
+                    log.warn "getListaParagrafi: ${it}"
+                }// fine del blocco if-else
+            }// fine di each
+        }// fine del blocco if
+
+        // ordina
+        listaParagrafi.sort()
+
+        // valore di ritorno
+        return listaParagrafi
+    }// fine del metodo
+
+    /**
+     * Aggiorna la pagina solo se è significativamente diversa,
+     * al di la della prima riga con il richiamo al template e che contiene la data
+     *
+     * @param titolo della pagina da controllare
+     * @param testoNew eventualmente da registrare
+     * @param summary eventualmente da registrare
+     */
+    public static caricaPaginaDiversa(String titolo, String testoNew, String summary, boolean biografia) {
+        // variabili e costanti locali di lavoro
+        Risultato risultato = Risultato.nonElaborata
+        boolean continua = false
+        Pagina pagina
+        String testoOld = ''
+        long adesso
+        long attesa
+
+        // controllo di congruita
+        if (titolo && testoNew) {
+            continua = true
+        }// fine del blocco if
+
+        if (continua) {
+            try { // prova ad eseguire il codice
+                pagina = new Pagina(titolo)
+                testoOld = pagina.getContenuto()
+                if (LibBio.isDiversa(testoOld, testoNew, biografia)) {
+                    if (attesa > 0) {
+                        Thread.currentThread().sleep(attesa)
+                    }// fine del blocco if
+                    risultato = pagina.scrive(testoNew, summary)
+                } else {
+                    risultato = Risultato.allineata
+                }// fine del blocco if-else
+            } catch (Exception unErrore) { // intercetta l'errore
+                // log.error unErrore
+            }// fine del blocco try-catch
+        }// fine del blocco if
+
+        // valore di ritorno
+        return risultato
+    }// fine del metodo
+
+    /**
+     * Controlla che la voce sia effettivamente diversa,
+     * al di la della prima riga con il richiamo al template e che contiene la data
+     *
+     * @param testoOld esistente sul server wiki
+     * @param testoNew eventualmente da registrare
+     * @return vero se i testi sono differenti (al la del primo template)
+     */
+    public static isDiversa(String testoOld, String testoNew, boolean biografia) {
+        // variabili e costanti locali di lavoro
+        boolean diversa = true
+        boolean continua = false
+        String tag = '\\{\\{.+\\}\\}'
+        Pattern pattern = Pattern.compile(tag)
+        Matcher matcher
+        int pos
+
+        // controllo di congruita
+        if (testoOld && testoNew) {
+            continua = true
+        }// fine del blocco if
+
+        if (continua) {
+            if (biografia) {
+                diversa == (!testoNew.equals(testoOld))
+                continua = false
+            }// fine del blocco if
+        }// fine del blocco if
+
+        if (continua) {
+            matcher = pattern.matcher(testoOld)
+            if (matcher.find()) {
+                pos = matcher.end()
+                testoOld = testoOld.substring(pos)
+            } else {
+                continua = false
+            }// fine del blocco if-else
+
+            matcher = pattern.matcher(testoNew)
+            if (matcher.find()) {
+                pos = matcher.end()
+                testoNew = testoNew.substring(pos)
+            } else {
+                continua = false
+            }// fine del blocco if-else
+        }// fine del blocco if
+
+        if (continua) {
+            if (testoNew.equals(testoOld)) {
+                diversa = false
+            } else {
+                diversa = true
+            }// fine del blocco if-else
+        }// fine del blocco if
+
+        // valore di ritorno
+        return diversa
+    } // fine della closure
 
 } // fine della classe

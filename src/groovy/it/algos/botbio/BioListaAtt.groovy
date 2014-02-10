@@ -26,7 +26,6 @@ class BioListaAtt extends BioListaAttNaz {
     /**
      * Regola i tag
      */
-
     protected regolaTag() {
         super.path = PATH + ATT_NAZ + '/'
         super.attNaz = ATT_NAZ
