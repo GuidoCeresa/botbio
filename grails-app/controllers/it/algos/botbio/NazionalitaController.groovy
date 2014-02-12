@@ -72,7 +72,7 @@ class NazionalitaController {
     //--passa al metodo effettivo senza nessun dialogo di conferma
     def uploadNazionalita() {
         if (grailsApplication && grailsApplication.config.login) {
-            listaService.uploadNazionalita
+            listaService.uploadNazionalita()
         } else {
             flash.error = 'Devi essere loggato per effettuare un upload di pagine sul server wiki'
         }// fine del blocco if-else

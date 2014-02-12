@@ -31,7 +31,7 @@ class BioListaNaz extends BioListaAttNaz {
         super.path = PATH + ATT_NAZ + '/'
         super.attNaz = ATT_NAZ
 
-        if (BioLista.TRIPLA_ATTIVITA) {
+        if (TRIPLA_ATTIVITA) {
             super.setCampiParagrafi(['attivitaPlurale', 'attivita2Plurale', 'attivita3Plurale'])
         } else {
             super.setCampoParagrafo('attivitaPlurale')
@@ -46,7 +46,7 @@ class BioListaNaz extends BioListaAttNaz {
         int dimWrapper = this.dimWrapper()
         boolean dimDiversa = (dimWrapper > dimPagina)
 
-        if (BioLista.TRIPLA_ATTIVITA && this.ordinamento == Ordinamento.attivitaAlfabetico && dimDiversa) {
+        if (TRIPLA_ATTIVITA && this.ordinamento == Ordinamento.attivitaAlfabetico && dimDiversa) {
             testo += '==Note=='
             testo += aCapo
             testo += 'Alcune persone sono citate più volte perché hanno diverse attività'

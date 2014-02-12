@@ -136,7 +136,7 @@ class BioLista {
         if (titolo && testo && this.listaWrapper && this.listaWrapper.size() > 0) {
 //            LibBio.caricaPaginaDiversa(titolo, testo, summary, false)
 
-            Edit edit = new Edit(titolo, testo, summary)
+            Edit edit = new EditBio(titolo, testo, summary)
         }// fine del blocco if
     }// fine del metodo
 

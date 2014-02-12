@@ -70,7 +70,7 @@ class ListaService {
      */
     public uploadNazionalita() {
         // variabili e costanti locali di lavoro
-        ArrayList listaNazionalitaPlurali
+        ArrayList<String> listaNazionalitaPlurali
         BioNazionalita wrapNazionalita
 
         // Recupera tutte le attività esistenti (circa 250)
@@ -80,7 +80,6 @@ class ListaService {
         listaNazionalitaPlurali.each {
             wrapNazionalita = new BioNazionalita(it)
             wrapNazionalita.registraPagina()
-            def step
         }// fine di each
     } // fine del metodo
 

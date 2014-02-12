@@ -30,6 +30,7 @@ class AttivitaController {
     def eventoService
     def attivitaService
     def listaService
+    def statisticheService
 
     def index() {
         redirect(action: 'list', params: params)
@@ -73,7 +74,8 @@ class AttivitaController {
     //--passa al metodo effettivo senza nessun dialogo di conferma
     def uploadAttivita() {
         if (grailsApplication && grailsApplication.config.login) {
-            listaService.uploadAttivita()
+//            listaService.uploadAttivita()
+            statisticheService.attivitaUsate()
         } else {
             flash.error = 'Devi essere loggato per effettuare un upload di pagine sul server wiki'
         }// fine del blocco if-else

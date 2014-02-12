@@ -97,7 +97,7 @@ class NazionalitaService {
      * Ritorna la nazionalità dal nome al singolare
      * Se non esiste, ritorna false
      */
-    public static getNazionalita(nomeNazionalita) {
+    public static getNazionalita(String nomeNazionalita) {
         // variabili e costanti locali di lavoro
         Nazionalita nazionalita = null
 
@@ -105,15 +105,21 @@ class NazionalitaService {
             try { // prova ad eseguire il codice
                 nazionalita = Nazionalita.findBySingolare(nomeNazionalita)
             } catch (Exception unErrore) { // intercetta l'errore
-                try { // prova ad eseguire il codice
-//                    log.error Risultato.erroreGenerico.getDescrizione()
-                } catch (Exception unAltroErrore) { // intercetta l'errore
-                }// fine del blocco if
+                log.error unErrore
             }// fine del blocco try-catch
         }// fine del blocco if
 
         // valore di ritorno
         return nazionalita
+    } // fine del metodo
+
+    /**
+     * Ritorna una lista di tutte le nazionalità plurali distinte
+     *
+     * @return lista ordinata (stringhe) di tutti i plurali delle nazionalità
+     */
+    public static ArrayList<String> getListaPlurali() {
+        return (ArrayList<String>) Nazionalita.executeQuery('select distinct plurale from Nazionalita order by plurale')
     } // fine del metodo
 
 } // fine della service classe

@@ -93,7 +93,7 @@ class AttivitaService {
      * Ritorna l'attività dal nome al singolare
      * Se non esiste, ritorna false
      */
-    public static getAttivita(nomeAttivita) {
+    public static getAttivita(String nomeAttivita) {
         // variabili e costanti locali di lavoro
         Attivita attivita = null
 
@@ -101,10 +101,7 @@ class AttivitaService {
             try { // prova ad eseguire il codice
                 attivita = Attivita.findBySingolare(nomeAttivita)
             } catch (Exception unErrore) { // intercetta l'errore
-                try { // prova ad eseguire il codice
-//                    log.error Risultato.erroreGenerico.getDescrizione()
-                } catch (Exception unAltroErrore) { // intercetta l'errore
-                }// fine del blocco if
+                log.error unErrore
             }// fine del blocco try-catch
         }// fine del blocco if
 
@@ -119,6 +116,140 @@ class AttivitaService {
      */
     public static ArrayList<String> getListaPlurali() {
         return (ArrayList<String>) Attivita.executeQuery('select distinct plurale from Attivita order by plurale')
+    } // fine del metodo
+
+    /**
+     * Ritorna una lista di una mappa per ogni attività distinta
+     *
+     * La mappa contiene:
+     *  -plurale dell'attività
+     *  -numero di voci che nel campo attivitaLink usano tutti records di attività che hanno quel plurale
+     *  -numero di voci che nel campo attivita2Link usano tutti records di attività che hanno quel plurale
+     *  -numero di voci che nel campo attivita3Link usano tutti records di attività che hanno quel plurale
+     */
+    public static getLista() {
+        // variabili e costanti locali di lavoro
+        def lista = new ArrayList()
+        def listaPlurali
+        def mappa
+        def singolari
+        int numAtt
+        int numAtt2
+        int numAtt3
+        int totale
+
+        listaPlurali = getListaPlurali()
+
+        listaPlurali?.each {
+            mappa = new LinkedHashMap()
+            numAtt = 0
+            numAtt2 = 0
+            numAtt3 = 0
+            singolari = Attivita.findAllByPlurale(it)
+
+            singolari?.each {
+                numAtt += BioGrails.countByAttivitaLink(it)
+                numAtt2 += BioGrails.countByAttivita2Link(it)
+                numAtt3 += BioGrails.countByAttivita3Link(it)
+            }// fine di each
+            totale = numAtt + numAtt2 + numAtt3
+
+            mappa.put('plurale', it)
+            mappa.put('attivita', numAtt)
+            mappa.put('attivita2', numAtt2)
+            mappa.put('attivita3', numAtt3)
+            mappa.put('attivita3', numAtt3)
+            mappa.put('totale', totale)
+
+            if (totale > 0) {
+                lista.add(mappa)
+            }// fine del blocco if
+        }// fine di each
+
+        // valore di ritorno
+        return lista
+    } // fine del metodo
+
+    /**
+     * Ritorna una lista di una mappa per ogni attività distinta NON utilizzata
+     *
+     * Lista del campo ''plurale'' come stringa
+     */
+    public static getListaNonUsate() {
+        // variabili e costanti locali di lavoro
+        def lista = new ArrayList()
+        def listaPlurali
+        def mappa
+        def singolari
+        int numAtt
+        int numAtt2
+        int numAtt3
+        int totale
+
+        listaPlurali = getListaPlurali()
+
+        listaPlurali?.each {
+            mappa = new LinkedHashMap()
+            numAtt = 0
+            numAtt2 = 0
+            numAtt3 = 0
+            singolari = Attivita.findAllByPlurale(it)
+
+            singolari?.each {
+                numAtt += BioGrails.countByAttivitaLink(it)
+                numAtt2 += BioGrails.countByAttivita2Link(it)
+                numAtt3 += BioGrails.countByAttivita3Link(it)
+            }// fine di each
+            totale = numAtt + numAtt2 + numAtt3
+
+            mappa.put('plurale', it)
+            mappa.put('attivita', numAtt)
+            mappa.put('attivita2', numAtt2)
+            mappa.put('attivita3', numAtt3)
+            mappa.put('attivita3', numAtt3)
+            mappa.put('totale', totale)
+
+            if (totale < 1) {
+                lista.add(it)
+            }// fine del blocco if
+        }// fine di each
+
+        // valore di ritorno
+        return lista
+    } // fine del metodo
+
+    /**
+     * Totale attività distinte
+     */
+    public static numAttivita() {
+        // variabili e costanti locali di lavoro
+        int numero = 0
+        def lista
+
+        lista = getLista()
+        if (lista) {
+            numero = lista.size()
+        }// fine del blocco if
+
+        // valore di ritorno
+        return numero
+    } // fine del metodo
+
+    /**
+     * Totale attività distinte e NON utilizzate
+     */
+    public static numAttivitaNonUsate() {
+        // variabili e costanti locali di lavoro
+        int numero = 0
+        def lista
+
+        lista = getListaNonUsate()
+        if (lista) {
+            numero = lista.size()
+        }// fine del blocco if
+
+        // valore di ritorno
+        return numero
     } // fine del metodo
 
 } // fine della service classe
