@@ -30,6 +30,7 @@ class NazionalitaController {
     def eventoService
     def nazionalitaService
     def listaService
+    def statisticheService
 
     def index() {
         redirect(action: 'list', params: params)
@@ -73,6 +74,7 @@ class NazionalitaController {
     def uploadNazionalita() {
         if (grailsApplication && grailsApplication.config.login) {
             listaService.uploadNazionalita()
+            statisticheService.nazionalitaUsate()
         } else {
             flash.error = 'Devi essere loggato per effettuare un upload di pagine sul server wiki'
         }// fine del blocco if-else

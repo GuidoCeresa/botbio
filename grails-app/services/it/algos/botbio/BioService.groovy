@@ -3868,6 +3868,7 @@ class BioService {
 
     /**
      * Restituisce il summary dal parametro summary e dal parametro version
+     * @deprecated
      */
     public static summarySetting = {
         // variabili e costanti locali di lavoro

@@ -68,7 +68,6 @@ class AttivitaController {
         redirect(action: 'list')
     } // fine del metodo
 
-
     //--creazione delle liste partendo da BioGrails
     //--elabora e crea tutti le pagine di attività
     //--passa al metodo effettivo senza nessun dialogo di conferma

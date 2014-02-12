@@ -173,6 +173,54 @@ class AttivitaService {
     } // fine del metodo
 
     /**
+     * Ritorna una lista di una mappa per ogni attività distinta NON utilizzata
+     *
+     * Lista del campo ''plurale'' come stringa
+     */
+    public static getListaNonUsate() {
+        // variabili e costanti locali di lavoro
+        def lista = new ArrayList()
+        def listaPlurali
+        def mappa
+        def singolari
+        int numAtt
+        int numAtt2
+        int numAtt3
+        int totale
+
+        listaPlurali = getListaPlurali()
+
+        listaPlurali?.each {
+            mappa = new LinkedHashMap()
+            numAtt = 0
+            numAtt2 = 0
+            numAtt3 = 0
+            singolari = Attivita.findAllByPlurale(it)
+
+            singolari?.each {
+                numAtt += BioGrails.countByAttivitaLink(it)
+                numAtt2 += BioGrails.countByAttivita2Link(it)
+                numAtt3 += BioGrails.countByAttivita3Link(it)
+            }// fine di each
+            totale = numAtt + numAtt2 + numAtt3
+
+            mappa.put('plurale', it)
+            mappa.put('attivita', numAtt)
+            mappa.put('attivita2', numAtt2)
+            mappa.put('attivita3', numAtt3)
+            mappa.put('attivita3', numAtt3)
+            mappa.put('totale', totale)
+
+            if (totale < 1) {
+                lista.add(it)
+            }// fine del blocco if
+        }// fine di each
+
+        // valore di ritorno
+        return lista
+    } // fine del metodo
+
+    /**
      * Restituisce l'array delle riga del parametro per le attività
      * La mappa contiene:
      *  -plurale dell'attività
@@ -225,85 +273,35 @@ class AttivitaService {
     } // fine della closure
 
     /**
-     * Ritorna una lista di una mappa per ogni attività distinta NON utilizzata
+     * Restituisce l'array delle riga del parametro per le attività NON utilizzate
      *
-     * Lista del campo ''plurale'' come stringa
+     *  -plurale dell'attività
      */
-    public static getListaNonUsate() {
+    public getRigaAttivitaNonUsate(num, plurale) {
         // variabili e costanti locali di lavoro
-        def lista = new ArrayList()
-        def listaPlurali
-        def mappa
-        def singolari
-        int numAtt
-        int numAtt2
-        int numAtt3
-        int totale
+        def riga = new ArrayList()
 
-        listaPlurali = getListaPlurali()
-
-        listaPlurali?.each {
-            mappa = new LinkedHashMap()
-            numAtt = 0
-            numAtt2 = 0
-            numAtt3 = 0
-            singolari = Attivita.findAllByPlurale(it)
-
-            singolari?.each {
-                numAtt += BioGrails.countByAttivitaLink(it)
-                numAtt2 += BioGrails.countByAttivita2Link(it)
-                numAtt3 += BioGrails.countByAttivita3Link(it)
-            }// fine di each
-            totale = numAtt + numAtt2 + numAtt3
-
-            mappa.put('plurale', it)
-            mappa.put('attivita', numAtt)
-            mappa.put('attivita2', numAtt2)
-            mappa.put('attivita3', numAtt3)
-            mappa.put('attivita3', numAtt3)
-            mappa.put('totale', totale)
-
-            if (totale < 1) {
-                lista.add(it)
-            }// fine del blocco if
-        }// fine di each
+        if (plurale) {
+            riga.add(LibTesto.formatNum(num))
+            riga.add(plurale)
+        }// fine del blocco if
 
         // valore di ritorno
-        return lista
-    } // fine del metodo
+        return riga
+    } // fine della closure
 
     /**
      * Totale attività distinte
      */
     public static numAttivita() {
-        // variabili e costanti locali di lavoro
-        int numero = 0
-        def lista
-
-        lista = getLista()
-        if (lista) {
-            numero = lista.size()
-        }// fine del blocco if
-
-        // valore di ritorno
-        return numero
+        return getLista()?.size()
     } // fine del metodo
 
     /**
      * Totale attività distinte e NON utilizzate
      */
     public static numAttivitaNonUsate() {
-        // variabili e costanti locali di lavoro
-        int numero = 0
-        def lista
-
-        lista = getListaNonUsate()
-        if (lista) {
-            numero = lista.size()
-        }// fine del blocco if
-
-        // valore di ritorno
-        return numero
+        return getListaNonUsate()?.size()
     } // fine del metodo
 
 } // fine della service classe

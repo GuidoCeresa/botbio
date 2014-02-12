@@ -34,6 +34,7 @@ class PrefBootStrap {
         grailsApplication.config.sogliaAntroponimi = LibBio.SOGLIA_ANTROPONIMI
         grailsApplication.config.usaOccorrenzeAntroponimi = LibBio.USA_OCCORRENZE_ANTROPONIMI
         grailsApplication.config.confrontaSoloPrimoNomeAntroponimi = LibBio.CONFRONTA_SOLO_PRIMO_NOME_ANTROPONIMI
+        grailsApplication.config.summary = LibBio.SUMMARY
 
         //--alcune preferenze sempre presenti
         Preferenze.findOrCreateByCodeAndTypeAndValue((String) grailsApplication.config.debug, Preferenze.TYPE_BOOL, 'false').save(flush: true)
@@ -55,6 +56,8 @@ class PrefBootStrap {
         Preferenze.findOrCreateByCodeAndTypeAndValue((String) grailsApplication.config.sogliaAntroponimi, Preferenze.TYPE_INT, '10').save(flush: true)
         Preferenze.findOrCreateByCodeAndTypeAndValue((String) grailsApplication.config.usaOccorrenzeAntroponimi, Preferenze.TYPE_BOOL, 'true').save(flush: true)
         Preferenze.findOrCreateByCodeAndTypeAndValue((String) grailsApplication.config.confrontaSoloPrimoNomeAntroponimi, Preferenze.TYPE_BOOL, 'true').save(flush: true)
+        Preferenze.findOrCreateByCodeAndTypeAndValue((String) grailsApplication.config.summary, Preferenze.TYPE_STR, '[[Utente:Biobot#9|Biobot 9.4]]').save(flush: true)
+
     }// fine della closure
 
     //--metodo invocato direttamente da Grails
