@@ -97,7 +97,7 @@ class NazionalitaService {
      * Ritorna la nazionalità dal nome al singolare
      * Se non esiste, ritorna false
      */
-    public static getNazionalita(String nomeNazionalita) {
+    public  getNazionalita(String nomeNazionalita) {
         // variabili e costanti locali di lavoro
         Nazionalita nazionalita = null
 

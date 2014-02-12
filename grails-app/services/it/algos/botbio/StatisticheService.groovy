@@ -15,10 +15,13 @@ package it.algos.botbio
 
 import it.algos.algoslib.LibTime
 import it.algos.algoswiki.Edit
+import it.algos.algoswiki.WikiLib
 
 class StatisticheService {
 
-    private static String PATH = 'Progetto:Biografie/'
+    def attivitaService
+
+    public static String PATH = 'Progetto:Biografie/'
     private static String A_CAPO = '\n'
 
     /**
@@ -44,7 +47,7 @@ class StatisticheService {
         testo += A_CAPO
         testo += "'''$num''' attività '''effettivamente utilizzate''' nelle voci biografiche che usano il [[template:Bio|template Bio]]."
         testo += A_CAPO
-//        testo += this.creaPrettyTableAttivita()
+        testo += this.creaTabellaAttivita()
         testo += A_CAPO
         testo += A_CAPO
         testo += '==Non usate=='
@@ -80,6 +83,50 @@ class StatisticheService {
         testo += '</noinclude>'
 
         new Edit(titolo, testo, summary)
+    }// fine del metodo
+
+    /**
+     * Costruisce la tabella delle attività
+     *
+     * @return testo
+     */
+    def creaTabellaAttivita() {
+        // variabili e costanti locali di lavoro
+        String testo
+        String testoTabella
+        ArrayList listaRighe = new ArrayList()
+        def listaAttivita
+        def mappa = new HashMap()
+        int k = 0
+
+        listaRighe.add(getRigaTitoloAttivita())
+        listaAttivita = AttivitaService.getLista()
+        listaAttivita?.each {
+            k++
+            listaRighe.add(attivitaService.getRigaAttivita(k, it))
+        }// fine di each
+
+        //costruisce il testo della tabella
+        mappa.put('lista', listaRighe)
+        mappa.put('width', '60')
+//        mappa.putAt('align', TipoAllineamento.secondaSinistra)
+        testoTabella = WikiLib.creaTabellaSortable(mappa)
+
+        // valore di ritorno
+        return testoTabella
+    }// fine del metodo
+
+    /**
+     * Restituisce l'array delle riga del titolo della tabella delle attività
+     */
+    def getRigaTitoloAttivita() {
+        // variabili e costanti locali di lavoro
+        def riga
+
+        riga = ["'''#'''", "'''attività utilizzate'''", "'''prima'''", "'''seconda'''", "'''terza'''", "'''totale'''"]
+
+        // valore di ritorno
+        return riga
     }// fine del metodo
 
 } // fine della service classe

@@ -13,6 +13,8 @@
 
 package it.algos.botbio
 
+import it.algos.algoslib.LibTesto
+import it.algos.algoslib.LibWiki
 import it.algos.algoswiki.WikiService
 
 class AttivitaService {
@@ -93,7 +95,7 @@ class AttivitaService {
      * Ritorna l'attività dal nome al singolare
      * Se non esiste, ritorna false
      */
-    public static getAttivita(String nomeAttivita) {
+    public getAttivita(String nomeAttivita) {
         // variabili e costanti locali di lavoro
         Attivita attivita = null
 
@@ -169,6 +171,58 @@ class AttivitaService {
         // valore di ritorno
         return lista
     } // fine del metodo
+
+    /**
+     * Restituisce l'array delle riga del parametro per le attività
+     * La mappa contiene:
+     *  -plurale dell'attività
+     *  -numero di voci che nel campo attivita usano tutti records di attività che hanno quel plurale
+     *  -numero di voci che nel campo attivita2 usano tutti records di attività che hanno quel plurale
+     *  -numero di voci che nel campo attivita3 usano tutti records di attività che hanno quel plurale
+     */
+    def getRigaAttivita = { num, mappa ->
+        // variabili e costanti locali di lavoro
+        def riga = new ArrayList()
+        boolean usaListe = true
+        String tagCat = ':Categoria:'
+        String tagListe = StatisticheService.PATH + 'Attività/'
+        String pipe = '|'
+        String attivita
+        int numAtt
+        int numAtt2
+        int numAtt3
+        int numTot
+        String plurale
+
+        if (mappa) {
+            plurale = mappa.plurale
+            if (usaListe) {
+                if (true) { // possibilità di cambiare idea da programma
+                    attivita = tagListe + LibTesto.primaMaiuscola(plurale) + pipe + LibTesto.primaMinuscola(plurale)
+                } else {
+                    attivita = tagCat + LibTesto.primaMaiuscola(plurale) + pipe + LibTesto.primaMinuscola(plurale)
+                }// fine del blocco if-else
+                attivita = LibWiki.setQuadre(attivita)
+            } else {
+                attivita = plurale
+            }// fine del blocco if-else
+
+            numAtt = mappa.attivita
+            numAtt2 = mappa.attivita2
+            numAtt3 = mappa.attivita3
+            numTot = numAtt + numAtt2 + numAtt3
+
+            riga.add(num)
+            riga.add(attivita)
+            riga.add(numAtt)
+            riga.add(numAtt2)
+            riga.add(numAtt3)
+            riga.add(numTot)
+        }// fine del blocco if
+
+        // valore di ritorno
+        return riga
+    } // fine della closure
 
     /**
      * Ritorna una lista di una mappa per ogni attività distinta NON utilizzata
