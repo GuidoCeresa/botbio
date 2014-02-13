@@ -29,8 +29,6 @@ class BioGrailsService {
     //--creazione delle liste partendo da BioGrails
     //--elabora e crea tutti i giorni modificati
     //--elabora e crea tutti gli anni modificati
-    //--elabora e crea tutte le attività
-    //--elabora e crea tutte le nazionalità
     def uploadAll() {
         long inizio = System.currentTimeMillis()
         long fine

@@ -29,6 +29,7 @@ class AnnoController {
     def logoService
     def eventoService
     def annoService
+    def bioGrailsService
 
     def index() {
         redirect(action: 'list', params: params)
@@ -142,6 +143,43 @@ class AnnoController {
         redirect(action: 'list')
     } // fine del metodo
 
+    //--creazione delle liste partendo da BioGrails
+    //--elabora e crea tutti gli anni modificati (solo nascita)
+    //--passa al metodo effettivo senza nessun dialogo di conferma
+    def uploadAnniNascita() {
+        if (grailsApplication && grailsApplication.config.login) {
+            bioGrailsService.uploadAnniNascita()
+        } else {
+            flash.error = 'Devi essere loggato per effettuare un upload di pagine sul server wiki'
+        }// fine del blocco if-else
+        redirect(action: 'list')
+    } // fine del metodo
+
+    //--creazione delle liste partendo da BioGrails
+    //--elabora e crea tutti gli anni modificati (solo morte)
+    //--passa al metodo effettivo senza nessun dialogo di conferma
+    def uploadAnniMorte() {
+        if (grailsApplication && grailsApplication.config.login) {
+            bioGrailsService.uploadAnniMorte()
+        } else {
+            flash.error = 'Devi essere loggato per effettuare un upload di pagine sul server wiki'
+        }// fine del blocco if-else
+        redirect(action: 'list')
+    } // fine del metodo
+
+    //--creazione delle liste partendo da BioGrails
+    //--elabora e crea tutti gli anni modificati
+    //--passa al metodo effettivo senza nessun dialogo di conferma
+    def uploadAllAnni() {
+        if (grailsApplication && grailsApplication.config.login) {
+            bioGrailsService.uploadAnniNascita()
+            bioGrailsService.uploadAnniMorte()
+        } else {
+            flash.error = 'Devi essere loggato per effettuare un upload di pagine sul server wiki'
+        }// fine del blocco if-else
+        redirect(action: 'list')
+    } // fine del metodo
+
     def list(Integer max) {
         params.max = Math.min(max ?: 100, 100)
         ArrayList menuExtra
@@ -160,7 +198,10 @@ class AnnoController {
                         title: 'Sporca tutto'],
                 [action: 'pulisce',
                         icon: 'list',
-                        title: 'Pulisce tutto']
+                        title: 'Pulisce tutto'],
+                [cont: 'bioGrails', action: 'uploadAnniNascita', icon: 'frecciasu', title: 'Upload nascita'],
+                [cont: 'bioGrails', action: 'uploadAnniMorte', icon: 'frecciasu', title: 'Upload morte'],
+                [cont: 'bioGrails', action: 'uploadAllAnni', icon: 'frecciasu', title: 'Upload all anni']
         ]
         // fine della definizione
 

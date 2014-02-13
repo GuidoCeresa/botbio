@@ -29,11 +29,11 @@ class GiornoController {
     def logoService
     def eventoService
     def giornoService
+    def bioGrailsService
 
     def index() {
         redirect(action: 'list', params: params)
     } // fine del metodo
-
 
     //--mostra un avviso di spiegazione per l'operazione da compiere
     //--passa al metodo effettivo
@@ -143,6 +143,43 @@ class GiornoController {
         redirect(action: 'list')
     } // fine del metodo
 
+    //--creazione delle liste partendo da BioGrails
+    //--elabora e crea tutti i giorni modificati (solo nascita)
+    //--passa al metodo effettivo senza nessun dialogo di conferma
+    def uploadGiorniNascita() {
+        if (grailsApplication && grailsApplication.config.login) {
+            bioGrailsService.uploadGiorniNascita()
+        } else {
+            flash.error = 'Devi essere loggato per effettuare un upload di pagine sul server wiki'
+        }// fine del blocco if-else
+        redirect(action: 'list')
+    } // fine del metodo
+
+    //--creazione delle liste partendo da BioGrails
+    //--elabora e crea tutti i giorni modificati (solo morte)
+    //--passa al metodo effettivo senza nessun dialogo di conferma
+    def uploadGiorniMorte() {
+        if (grailsApplication && grailsApplication.config.login) {
+            bioGrailsService.uploadGiorniMorte()
+        } else {
+            flash.error = 'Devi essere loggato per effettuare un upload di pagine sul server wiki'
+        }// fine del blocco if-else
+        redirect(action: 'list')
+    } // fine del metodo
+
+    //--creazione delle liste partendo da BioGrails
+    //--elabora e crea tutti i giorni modificati
+    //--passa al metodo effettivo senza nessun dialogo di conferma
+    def uploadAllGiorni() {
+        if (grailsApplication && grailsApplication.config.login) {
+            bioGrailsService.uploadGiorniNascita()
+            bioGrailsService.uploadGiorniMorte()
+        } else {
+            flash.error = 'Devi essere loggato per effettuare un upload di pagine sul server wiki'
+        }// fine del blocco if-else
+        redirect(action: 'list')
+    } // fine del metodo
+
     def list(Integer max) {
         params.max = Math.min(max ?: 100, 100)
         ArrayList menuExtra
@@ -161,7 +198,10 @@ class GiornoController {
                         title: 'Sporca tutto'],
                 [action: 'pulisce',
                         icon: 'list',
-                        title: 'Pulisce tutto']
+                        title: 'Pulisce tutto'],
+                [cont: 'bioGrails', action: 'uploadGiorniNascita', icon: 'frecciasu', title: 'Upload nascita'],
+                [cont: 'bioGrails', action: 'uploadGiorniMorte', icon: 'frecciasu', title: 'Upload morte'],
+                [cont: 'bioGrails', action: 'uploadAllGiorni', icon: 'frecciasu', title: 'Upload all giorni']
         ]
         // fine della definizione
 

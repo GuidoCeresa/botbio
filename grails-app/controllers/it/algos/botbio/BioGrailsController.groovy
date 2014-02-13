@@ -135,55 +135,6 @@ class BioGrailsController {
     } // fine del metodo
 
     //--creazione delle liste partendo da BioGrails
-    //--elabora e crea tutti i giorni modificati (solo nascita)
-    //--passa al metodo effettivo senza nessun dialogo di conferma
-    def uploadGiorniNascita() {
-        if (grailsApplication && grailsApplication.config.login) {
-            bioGrailsService.uploadGiorniNascita()
-        } else {
-            flash.error = 'Devi essere loggato per effettuare un upload di pagine sul server wiki'
-        }// fine del blocco if-else
-        redirect(action: 'list')
-    } // fine del metodo
-
-    //--creazione delle liste partendo da BioGrails
-    //--elabora e crea tutti i giorni modificati (solo morte)
-    //--passa al metodo effettivo senza nessun dialogo di conferma
-    def uploadGiorniMorte() {
-        if (grailsApplication && grailsApplication.config.login) {
-            bioGrailsService.uploadGiorniMorte()
-        } else {
-            flash.error = 'Devi essere loggato per effettuare un upload di pagine sul server wiki'
-        }// fine del blocco if-else
-        redirect(action: 'list')
-    } // fine del metodo
-
-    //--creazione delle liste partendo da BioGrails
-    //--elabora e crea tutti gli anni modificati (solo nascita)
-    //--passa al metodo effettivo senza nessun dialogo di conferma
-    def uploadAnniNascita() {
-        if (grailsApplication && grailsApplication.config.login) {
-            bioGrailsService.uploadAnniNascita()
-        } else {
-            flash.error = 'Devi essere loggato per effettuare un upload di pagine sul server wiki'
-        }// fine del blocco if-else
-        redirect(action: 'list')
-    } // fine del metodo
-
-    //--creazione delle liste partendo da BioGrails
-    //--elabora e crea tutti gli anni modificati (solo morte)
-    //--passa al metodo effettivo senza nessun dialogo di conferma
-    def uploadAnniMorte() {
-        if (grailsApplication && grailsApplication.config.login) {
-            bioGrailsService.uploadAnniMorte()
-        } else {
-            flash.error = 'Devi essere loggato per effettuare un upload di pagine sul server wiki'
-        }// fine del blocco if-else
-        redirect(action: 'list')
-    } // fine del metodo
-
-
-    //--creazione delle liste partendo da BioGrails
     //--elabora e crea tutti i giorni modificati
     //--elabora e crea tutti gli anni modificati
     //--elabora e crea tutte le attività
@@ -198,8 +149,9 @@ class BioGrailsController {
             params.avviso.add('Creazione delle liste di tutte le voci modificate (BioGrails).')
             params.avviso.add('Elabora e crea tutti i giorni modificati')
             params.avviso.add('Elabora e crea tutti gli anni modificati')
-            params.avviso.add('Elabora e crea tutte le attività modificate')
-            params.avviso.add('Elabora e crea tutte le nazionalità modificate')
+//            params.avviso.add('Elabora e crea tutte le attività modificate')
+//            params.avviso.add('Elabora e crea tutte le nazionalità modificate')
+            params.avviso.add('Crea le pagine base di statistiche')
             params.avviso.add('Ci vogliono diverse ore')
             params.returnController = 'bioGrails'
             params.returnAction = 'uploadAllDopoConferma'
@@ -258,10 +210,6 @@ class BioGrailsController {
         menuExtra = [
                 [cont: 'bioGrails', action: 'resetElabora', icon: 'database', title: 'Reset elabora'],
                 [cont: 'bioGrails', action: 'elaboraAll', icon: 'database', title: 'Elabora'],
-                [cont: 'bioGrails', action: 'uploadGiorniNascita', icon: 'frecciasu', title: 'giorniNascita'],
-                [cont: 'bioGrails', action: 'uploadGiorniMorte', icon: 'frecciasu', title: 'giorniMorte'],
-                [cont: 'bioGrails', action: 'uploadAnniNascita', icon: 'frecciasu', title: 'anniNascita'],
-                [cont: 'bioGrails', action: 'uploadAnniMorte', icon: 'frecciasu', title: 'anniMorte'],
                 [cont: 'bioGrails', action: 'uploadAll', icon: 'frecciasu', title: 'Upload all'],
                 [cont: 'bioWiki', action: 'list', icon: 'scambia', title: 'BioWiki']
         ]

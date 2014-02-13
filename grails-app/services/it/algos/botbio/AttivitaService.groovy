@@ -95,7 +95,7 @@ class AttivitaService {
      * Ritorna l'attività dal nome al singolare
      * Se non esiste, ritorna false
      */
-    public getAttivita(String nomeAttivita) {
+    public static getAttivita(String nomeAttivita) {
         // variabili e costanti locali di lavoro
         Attivita attivita = null
 
@@ -103,7 +103,6 @@ class AttivitaService {
             try { // prova ad eseguire il codice
                 attivita = Attivita.findBySingolare(nomeAttivita)
             } catch (Exception unErrore) { // intercetta l'errore
-                log.error unErrore
             }// fine del blocco try-catch
         }// fine del blocco if
 

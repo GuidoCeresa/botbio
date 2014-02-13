@@ -99,7 +99,7 @@ class NazionalitaService {
      * Ritorna la nazionalità dal nome al singolare
      * Se non esiste, ritorna false
      */
-    public getNazionalita(String nomeNazionalita) {
+    public static getNazionalita(String nomeNazionalita) {
         // variabili e costanti locali di lavoro
         Nazionalita nazionalita = null
 
@@ -107,7 +107,6 @@ class NazionalitaService {
             try { // prova ad eseguire il codice
                 nazionalita = Nazionalita.findBySingolare(nomeNazionalita)
             } catch (Exception unErrore) { // intercetta l'errore
-                log.error unErrore
             }// fine del blocco try-catch
         }// fine del blocco if
 
