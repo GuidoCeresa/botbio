@@ -85,6 +85,11 @@ class VersioneBootStrap {
         if (versioneService && versioneService.installaVersione(14)) {
             versioneService.newVersione('Preferenze', 'Aggiunto summary')
         }// fine del blocco if
+
+        //--aggiunte alcune preferenze
+        if (versioneService && versioneService.installaVersione(15)) {
+            versioneService.newVersione('Preferenze', 'Aggiunti valori per le statistiche')
+        }// fine del blocco if
     }// fine della closure
 
     def allungaCampo(Sql sql, String nomeCampo) {

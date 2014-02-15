@@ -13,8 +13,8 @@
           <root url="file://$USER_HOME$/.grails/2.2.3/projects/botbio/plugins/algoslogo-0.25/grails-app/views" relative="/" />
           <root url="file://$USER_HOME$/.grails/2.2.3/projects/botbio/plugins/quartz-monitor-0.3-RC2/web-app" relative="/" />
           <root url="file://$USER_HOME$/.grails/2.2.3/projects/botbio/plugins/quartz-monitor-0.3-RC2/grails-app/views" relative="/" />
-          <root url="file://$USER_HOME$/.grails/2.2.3/projects/botbio/plugins/algoswiki-0.77/web-app" relative="/" />
-          <root url="file://$USER_HOME$/.grails/2.2.3/projects/botbio/plugins/algoswiki-0.77/grails-app/views" relative="/" />
+          <root url="file://$USER_HOME$/.grails/2.2.3/projects/botbio/plugins/algoswiki-0.82/web-app" relative="/" />
+          <root url="file://$USER_HOME$/.grails/2.2.3/projects/botbio/plugins/algoswiki-0.82/grails-app/views" relative="/" />
         </webroots>
         <sourceRoots />
       </configuration>
@@ -128,11 +128,11 @@
       <sourceFolder url="file://$USER_HOME$/.grails/2.2.3/projects/botbio/plugins/algosvers-0.30/grails-app/domain" isTestSource="false" />
       <sourceFolder url="file://$USER_HOME$/.grails/2.2.3/projects/botbio/plugins/algosvers-0.30/grails-app/services" isTestSource="false" />
     </content>
-    <content url="file://$USER_HOME$/.grails/2.2.3/projects/botbio/plugins/algoswiki-0.77">
-      <sourceFolder url="file://$USER_HOME$/.grails/2.2.3/projects/botbio/plugins/algoswiki-0.77/src/groovy" isTestSource="false" />
-      <sourceFolder url="file://$USER_HOME$/.grails/2.2.3/projects/botbio/plugins/algoswiki-0.77/grails-app/i18n" isTestSource="false" />
-      <sourceFolder url="file://$USER_HOME$/.grails/2.2.3/projects/botbio/plugins/algoswiki-0.77/grails-app/controllers" isTestSource="false" />
-      <sourceFolder url="file://$USER_HOME$/.grails/2.2.3/projects/botbio/plugins/algoswiki-0.77/grails-app/services" isTestSource="false" />
+    <content url="file://$USER_HOME$/.grails/2.2.3/projects/botbio/plugins/algoswiki-0.82">
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.3/projects/botbio/plugins/algoswiki-0.82/src/groovy" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.3/projects/botbio/plugins/algoswiki-0.82/grails-app/i18n" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.3/projects/botbio/plugins/algoswiki-0.82/grails-app/controllers" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.3/projects/botbio/plugins/algoswiki-0.82/grails-app/services" isTestSource="false" />
     </content>
     <content url="file://$USER_HOME$/.grails/2.2.3/projects/botbio/plugins/cache-1.0.1">
       <sourceFolder url="file://$USER_HOME$/.grails/2.2.3/projects/botbio/plugins/cache-1.0.1/src/java" isTestSource="false" />
@@ -217,6 +217,22 @@
           <root url="jar://$USER_HOME$/.grails/ivy-cache/org.codehaus.plexus/plexus-container-default/jars/plexus-container-default-1.0-alpha-9-stable-1.jar!/" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/classworlds/classworlds/jars/classworlds-1.1-alpha-2.jar!/" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.maven/maven-ant-tasks/jars/maven-ant-tasks-2.1.3.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.grails.plugins/algoslogo/zips/algoslogo-0.25.zip!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.grails.plugins/algoslib/zips/algoslib-0.43.zip!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.grails.plugins/algospref/zips/algospref-0.46.zip!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.grails.plugins/resources/zips/resources-1.2.zip!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.grails.plugins/hibernate/zips/hibernate-2.2.3.zip!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.grails.plugins/algosvers/zips/algosvers-0.30.zip!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.grails.plugins/algos/zips/algos-0.82.zip!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.grails.plugins/mail/zips/mail-1.0.1.zip!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.grails.plugins/quartz/zips/quartz-1.0.1.zip!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.grails.plugins/export/zips/export-1.5.zip!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.grails.plugins/webxml/zips/webxml-1.4.1.zip!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.grails.plugins/cache/zips/cache-1.0.1.zip!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.grails.plugins/rest-client-builder/zips/rest-client-builder-1.0.3.zip!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.grails.plugins/release/zips/release-2.2.1.zip!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.grails.plugins/tomcat/zips/tomcat-2.2.3.zip!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.grails.plugins/algoswiki/zips/algoswiki-0.82.zip!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

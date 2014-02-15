@@ -35,6 +35,13 @@ class PrefBootStrap {
         grailsApplication.config.usaOccorrenzeAntroponimi = LibBio.USA_OCCORRENZE_ANTROPONIMI
         grailsApplication.config.confrontaSoloPrimoNomeAntroponimi = LibBio.CONFRONTA_SOLO_PRIMO_NOME_ANTROPONIMI
         grailsApplication.config.summary = LibBio.SUMMARY
+        grailsApplication.config.numeroVociGestite = LibBio.VOCI
+        grailsApplication.config.numeroGiorniGestiti = LibBio.GIORNI
+        grailsApplication.config.numeroAnniGestiti = LibBio.ANNI
+        grailsApplication.config.numeroAttivitaGestite = LibBio.ATTIVITA
+        grailsApplication.config.numeroNazionalitaGestite = LibBio.NAZIONALITA
+        grailsApplication.config.giorniAttesa = LibBio.ATTESA
+        grailsApplication.config.ultimaSintesi = LibBio.ULTIMA_SINTESI
 
         //--alcune preferenze sempre presenti
         Preferenze.findOrCreateByCodeAndTypeAndValue((String) grailsApplication.config.debug, Preferenze.TYPE_BOOL, 'false').save(flush: true)
@@ -57,7 +64,13 @@ class PrefBootStrap {
         Preferenze.findOrCreateByCodeAndTypeAndValue((String) grailsApplication.config.usaOccorrenzeAntroponimi, Preferenze.TYPE_BOOL, 'true').save(flush: true)
         Preferenze.findOrCreateByCodeAndTypeAndValue((String) grailsApplication.config.confrontaSoloPrimoNomeAntroponimi, Preferenze.TYPE_BOOL, 'true').save(flush: true)
         Preferenze.findOrCreateByCodeAndTypeAndValue((String) grailsApplication.config.summary, Preferenze.TYPE_STR, '[[Utente:Biobot#9|Biobot 9.4]]').save(flush: true)
-
+        Preferenze.findOrCreateByCodeAndTypeAndValue((String) grailsApplication.config.numeroVociGestite, Preferenze.TYPE_INT, '250000').save(flush: true)
+        Preferenze.findOrCreateByCodeAndTypeAndValue((String) grailsApplication.config.numeroGiorniGestiti, Preferenze.TYPE_INT, '365').save(flush: true)
+        Preferenze.findOrCreateByCodeAndTypeAndValue((String) grailsApplication.config.numeroAnniGestiti, Preferenze.TYPE_INT, '2000').save(flush: true)
+        Preferenze.findOrCreateByCodeAndTypeAndValue((String) grailsApplication.config.numeroAttivitaGestite, Preferenze.TYPE_INT, '500').save(flush: true)
+        Preferenze.findOrCreateByCodeAndTypeAndValue((String) grailsApplication.config.numeroNazionalitaGestite, Preferenze.TYPE_INT, '250').save(flush: true)
+        Preferenze.findOrCreateByCodeAndTypeAndValue((String) grailsApplication.config.giorniAttesa, Preferenze.TYPE_INT, '15').save(flush: true)
+        Preferenze.findOrCreateByCodeAndTypeAndValue((String) grailsApplication.config.ultimaSintesi, Preferenze.TYPE_STR, '13 feb 2014').save(flush: true)
     }// fine della closure
 
     //--metodo invocato direttamente da Grails

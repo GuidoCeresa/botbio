@@ -44,6 +44,13 @@ class LibBio {
     public static final String USA_OCCORRENZE_ANTROPONIMI = 'usaOccorrenzeAntroponimi'
     public static final String CONFRONTA_SOLO_PRIMO_NOME_ANTROPONIMI = 'confrontaSoloPrimoNomeAntroponimi'
     public static final String SUMMARY = 'summary'
+    public static final String VOCI = 'numeroVociGestite'
+    public static final String GIORNI = 'numeroGiorniGestiti'
+    public static final String ANNI = 'numeroAnniGestiti'
+    public static final String ATTIVITA = 'numeroAttivitaGestite'
+    public static final String NAZIONALITA = 'numeroNazionalitaGestite'
+    public static final String ATTESA = 'giorniAttesa'
+    public static final String ULTIMA_SINTESI = 'ultimaSintesi'
 
     private static String TAG_BIO = '\\{\\{ ?([Tt]emplate:)? ?[Bb]io[ \\|\n\r\t]'
 

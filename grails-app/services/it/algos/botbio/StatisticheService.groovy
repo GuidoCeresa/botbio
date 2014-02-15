@@ -13,9 +13,12 @@
 
 package it.algos.botbio
 
+import it.algos.algoslib.LibTesto
 import it.algos.algoslib.LibTime
+import it.algos.algoslib.LibWiki
 import it.algos.algospref.Preferenze
 import it.algos.algoswiki.Edit
+import it.algos.algoswiki.TipoAllineamento
 import it.algos.algoswiki.WikiLib
 
 class StatisticheService {
@@ -25,6 +28,7 @@ class StatisticheService {
 
     public static String PATH = 'Progetto:Biografie/'
     private static String A_CAPO = '\n'
+    private static HashMap mappaSintesi = new HashMap()
 
     /**
      * Aggiorna la pagina wiki di servizio delle attività
@@ -343,10 +347,318 @@ class StatisticheService {
 
         // valore di ritorno
         return riga
-    } // fine della closure
+    }// fine del metodo
 
     public enum AttivitaNazionalita {
         attivita, nazionalita
     } // fine della Enumeration
+
+    /**
+     * Crea la tabella
+     *
+     * Legge la terza colonna della tabella esistente
+     * Recupera i dati per costruire la terza colonna
+     * Elabora i dati per costruire la quarta colonna
+     */
+    def paginaSintesi() {
+        String titolo = PATH + 'Statistiche'
+        String testo = ''
+        String summary = Preferenze.getStr(LibBio.SUMMARY)
+
+        testo += getTestoTop()
+        testo += getTestoBodySintesi()
+        testo += getTestoBottomSintesi()
+
+        if (titolo && testo && summary) {
+            new Edit(titolo, testo, summary)
+            registraPreferenze()
+        }// fine del blocco if
+    }// fine del metodo
+
+
+    def getTestoBodySintesi() {
+        def mappa = new HashMap()
+        def lista = new ArrayList()
+
+        lista.add(getRigaVoci())
+        lista.add(getRigaGiorni())
+        lista.add(getRigaAnni())
+        lista.add(getRigaAttivita())
+        lista.add(getRigaNazionalita())
+        lista.add(getRigaAttesa())
+
+        mappa.put('width', '50')
+        mappa.put('sortable', false)
+        mappa.put('titoli', getTitoliSintesi())
+        mappa.put('align', TipoAllineamento.right)
+        mappa.put('lista', lista)
+        return WikiLib.creaTabellaSortable(mappa)
+    } // fine della closure
+
+    /**
+     * Titoli della tabella di sintesi
+     */
+    private static getTitoliSintesi() {
+        def titoli
+        String statistiche = 'statistiche'
+        String vecchiaData = Preferenze.getStr(LibBio.ULTIMA_SINTESI)
+        String nuovaData = LibTime.getGioMeseAnnoLungo(new Date())
+        String differenze = 'diff.'
+
+        //valore per le preferenze
+        mappaSintesi.put(LibBio.ULTIMA_SINTESI, nuovaData)
+
+        nuovaData = LibWiki.setBold(nuovaData)
+        titoli = [statistiche, vecchiaData, nuovaData, differenze]
+
+        // valore di ritorno
+        return titoli
+    }// fine del metodo
+
+    /**
+     * Riga col numero di voci
+     */
+    private static getRigaVoci() {
+        ArrayList riga = new ArrayList()
+        String descrizione = ':Categoria:BioBot|Template bio'
+        def oldValue = Preferenze.getInt(LibBio.VOCI)
+        def newValue = BioGrails.count()
+        def differenze
+
+        //valore per le preferenze
+        mappaSintesi.put(LibBio.VOCI, newValue)
+
+        descrizione = LibWiki.setQuadre(descrizione)
+        descrizione = LibWiki.setBold(descrizione)
+        differenze = newValue - oldValue
+        oldValue = LibTesto.formatNum(oldValue)
+        newValue = LibTesto.formatNum(newValue)
+        newValue = LibWiki.setBold(newValue)
+        if (differenze != 0) {
+            differenze = LibTesto.formatNum(differenze)
+        } else {
+            differenze = ''
+        }// fine del blocco if-else
+        riga.add(descrizione)
+        riga.add(oldValue)
+        riga.add(newValue)
+        riga.add(differenze)
+
+        // valore di ritorno
+        return riga
+    }// fine del metodo
+
+    /**
+     * Riga col numero di giorni
+     */
+    private static getRigaGiorni() {
+        ArrayList riga = new ArrayList()
+        String descrizione = 'Giorni interessati'
+        def oldValue = Preferenze.getInt(LibBio.GIORNI)
+        def newValue = Giorno.count()
+        def differenze
+        String nota = 'Previsto il [[29 febbraio]] per gli [[Anno bisestile|anni bisestili]]'
+
+        //valore per le preferenze
+        mappaSintesi.put(LibBio.GIORNI, newValue)
+
+        descrizione = LibWiki.setBold(descrizione)
+        nota = LibWiki.setRef(nota)
+        descrizione += nota
+        differenze = newValue - oldValue
+        oldValue = LibTesto.formatNum(oldValue)
+        newValue = LibTesto.formatNum(newValue)
+        if (differenze != 0) {
+            differenze = LibTesto.formatNum(differenze)
+        } else {
+            differenze = ''
+        }// fine del blocco if-else
+
+        riga.add(descrizione)
+        riga.add(oldValue)
+        riga.add(newValue)
+        riga.add(differenze)
+
+        // valore di ritorno
+        return riga
+    }// fine del metodo
+
+    /**
+     * Riga col numero di anni
+     */
+    private static getRigaAnni() {
+        ArrayList riga = new ArrayList()
+        String descrizione = 'Anni interessati'
+        def oldValue = Preferenze.getInt(LibBio.ANNI)
+        def newValue = Anno.count()
+        def differenze
+        String nota = 'Potenzialmente dal [[1000 a.C.]] al [[{{CURRENTYEAR}}]]'
+
+        //valore per le preferenze
+        mappaSintesi.put(LibBio.ANNI, newValue)
+
+        descrizione = LibWiki.setBold(descrizione)
+        nota = LibWiki.setRef(nota)
+        descrizione += nota
+        differenze = newValue - oldValue
+        oldValue = LibTesto.formatNum(oldValue)
+        newValue = LibTesto.formatNum(newValue)
+        if (differenze != 0) {
+            differenze = LibTesto.formatNum(differenze)
+        } else {
+            differenze = ''
+        }// fine del blocco if-else
+
+        riga.add(descrizione)
+        riga.add(oldValue)
+        riga.add(newValue)
+        riga.add(differenze)
+
+        // valore di ritorno
+        return riga
+    }// fine del metodo
+
+    /**
+     * Riga col numero di attività
+     */
+    private static getRigaAttivita() {
+        ArrayList riga = new ArrayList()
+        String descrizione = PATH + 'Attività|Attività utilizzate'
+        def oldValue = Preferenze.getInt(LibBio.ATTIVITA)
+        def newValue = Attivita.executeQuery('select distinct plurale from Attivita').size()
+        def differenze
+
+        //valore per le preferenze
+        mappaSintesi.put(LibBio.ATTIVITA, newValue)
+
+        descrizione = LibWiki.setQuadre(descrizione)
+        descrizione = LibWiki.setBold(descrizione)
+        differenze = newValue - oldValue
+        oldValue = LibTesto.formatNum(oldValue)
+        newValue = LibTesto.formatNum(newValue)
+        newValue = LibWiki.setBold(newValue)
+        if (differenze != 0) {
+            differenze = LibTesto.formatNum(differenze)
+        } else {
+            differenze = ''
+        }// fine del blocco if-else
+
+        riga.add(descrizione)
+        riga.add(oldValue)
+        riga.add(newValue)
+        riga.add(differenze)
+
+        // valore di ritorno
+        return riga
+    }// fine del metodo
+
+    /**
+     * Riga col numero di nazionalità
+     */
+    private static getRigaNazionalita() {
+        ArrayList riga = new ArrayList()
+        String descrizione = PATH + 'Nazionalità|Nazionalità utilizzate'
+        def oldValue = Preferenze.getInt(LibBio.NAZIONALITA)
+        def newValue = Nazionalita.executeQuery('select distinct plurale from Nazionalita').size()
+        def differenze
+
+        //valore per le preferenze
+        mappaSintesi.put(LibBio.NAZIONALITA, newValue)
+
+        descrizione = LibWiki.setQuadre(descrizione)
+        descrizione = LibWiki.setBold(descrizione)
+        differenze = newValue - oldValue
+        oldValue = LibTesto.formatNum(oldValue)
+        newValue = LibTesto.formatNum(newValue)
+        newValue = LibWiki.setBold(newValue)
+        if (differenze != 0) {
+            differenze = LibTesto.formatNum(differenze)
+        } else {
+            differenze = ''
+        }// fine del blocco if-else
+
+        riga.add(descrizione)
+        riga.add(oldValue)
+        riga.add(newValue)
+        riga.add(differenze)
+
+        // valore di ritorno
+        return riga
+    }// fine del metodo
+
+    /**
+     * Riga coi giorni di attesa
+     */
+    private static getRigaAttesa() {
+        ArrayList riga = new ArrayList()
+        String descrizione = 'Giorni di attesa'
+        def oldValue = Preferenze.getInt(LibBio.ATTESA)
+        def newValue = 15
+        def differenze
+        String nota = 'Giorni di attesa indicativi prima che ogni singola voce venga ricontrollata per registrare eventuali modifiche intervenute nei parametri significativi.'
+
+        //valore per le preferenze
+        mappaSintesi.put(LibBio.ATTESA, newValue)
+
+        descrizione = LibWiki.setBold(descrizione)
+        nota = LibWiki.setRef(nota)
+        descrizione += nota
+        differenze = newValue - oldValue
+        oldValue = LibTesto.formatNum(oldValue)
+        newValue = LibTesto.formatNum(newValue)
+        if (differenze != 0) {
+            differenze = LibTesto.formatNum(differenze)
+        } else {
+            differenze = ''
+        }// fine del blocco if-else
+
+        riga.add(descrizione)
+        riga.add(oldValue)
+        riga.add(newValue)
+        riga.add(differenze)
+
+        // valore di ritorno
+        return riga
+    }// fine del metodo
+
+    /**
+     * Costruisce il testo finale della pagina
+     */
+    private static String getTestoBottomSintesi() {
+        String testo = ''
+
+        testo += A_CAPO
+        testo += '==Note=='
+        testo += A_CAPO
+        testo += '<references />'
+        testo += A_CAPO
+        testo += '<noinclude>'
+        testo += '[[Categoria:Progetto Biografie|{{PAGENAME}}]]'
+        testo += '</noinclude>'
+
+        // valore di ritorno
+        return testo
+    }// fine del metodo
+
+    /**
+     * Registra nelle preferenze i nuovi valori che diventeranno i vecchi per la prossima sintesi
+     */
+    private static registraPreferenze() {
+        Preferenze preferenza
+        String chiave
+        def valore
+
+        mappaSintesi?.each {
+            chiave = (String) it.getKey()
+            valore = it.getValue()
+            preferenza = Preferenze.findByCode(chiave)
+            if (preferenza) {
+                preferenza.value = valore
+                preferenza.save(flush: true)
+            }// fine del blocco if
+        } // fine del ciclo each
+        mappaSintesi.clear()
+    }// fine del metodo
+
 
 } // fine della service classe

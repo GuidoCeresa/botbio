@@ -31,7 +31,7 @@ class BioGrailsController {
     def eventoService
     def bioService
     def bioGrailsService
-    def listaService
+    def statisticheService
 
     def index() {
         redirect(action: 'list', params: params)
@@ -189,6 +189,7 @@ class BioGrailsController {
 
         if (continua) {
             bioGrailsService.uploadAll()
+            statisticheService.paginaSintesi()
         }// fine del blocco if
 
         redirect(action: 'list')
