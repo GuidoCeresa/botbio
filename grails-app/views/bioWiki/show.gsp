@@ -27,6 +27,9 @@
         <li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label" default="Home"/></a></li>
         <li><g:link class="list" action="list"><g:message code="bioWiki.list.label" args="[entityName]" default="Elenco"/></g:link></li>
         <li><g:link class="create" action="create"><g:message code="bioWiki.new.label" args="[entityName]" default="Nuovo"/></g:link></li>
+        <g:if test="${menuExtra}">
+            <algos:menuExtra menuExtra="${menuExtra}"> </algos:menuExtra>
+        </g:if>
     </ul>
 </div>
 <div id="show-bioWiki" class="content scaffold-show" role="main">

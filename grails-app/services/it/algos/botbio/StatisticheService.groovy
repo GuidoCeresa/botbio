@@ -29,7 +29,7 @@ class StatisticheService {
     public static String PATH = 'Progetto:Biografie/'
     private static String A_CAPO = '\n'
     private static HashMap mappaSintesi = new HashMap()
-
+    private static int NUOVA_ATTESA = 13
     /**
      * Aggiorna la pagina wiki di servizio delle attività
      */
@@ -593,7 +593,7 @@ class StatisticheService {
         ArrayList riga = new ArrayList()
         String descrizione = 'Giorni di attesa'
         def oldValue = Preferenze.getInt(LibBio.ATTESA)
-        def newValue = 15
+        def newValue = NUOVA_ATTESA
         def differenze
         String nota = 'Giorni di attesa indicativi prima che ogni singola voce venga ricontrollata per registrare eventuali modifiche intervenute nei parametri significativi.'
 

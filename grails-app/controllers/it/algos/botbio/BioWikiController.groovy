@@ -452,6 +452,7 @@ class BioWikiController {
 
     def show(Long id) {
         def bioWikiInstance = BioWiki.get(id)
+        ArrayList menuExtra
 
         if (!bioWikiInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'bioWiki.label', default: 'BioWiki'), id])
@@ -459,7 +460,23 @@ class BioWikiController {
             return
         }// fine del blocco if e fine anticipata del metodo
 
-        [bioWikiInstance: bioWikiInstance]
+        //--selezione dei menu extra
+        //--solo azione e di default controller=questo; classe e titolo vengono uguali
+        //--mappa con [cont:'controller', action:'metodo', icon:'iconaImmagine', title:'titoloVisibile']
+        String query = "select id from BioGrails where pageid=" + bioWikiInstance.pageid
+        ArrayList ref = BioGrails.executeQuery(query)
+        long idGrails = (long) ref.get(0)
+        menuExtra = [
+                [cont: 'bioGrails', action: "show/${idGrails}", icon: 'scambia', title: 'BioGrails']
+        ]
+        // fine della definizione
+
+        //--presentazione della view (show), secondo il modello
+        //--menuExtra può essere nullo o vuoto
+        render(view: 'show', model: [
+                bioWikiInstance: bioWikiInstance,
+                menuExtra: menuExtra],
+                params: params)
     } // fine del metodo
 
     def edit(Long id) {
