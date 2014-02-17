@@ -16,6 +16,7 @@ package it.algos.botbio
 import it.algos.algoslib.LibTesto
 import it.algos.algoslib.LibTime
 import it.algos.algoslib.LibWiki
+import it.algos.algospref.LibPref
 import it.algos.algospref.Preferenze
 import it.algos.algoswiki.Edit
 import it.algos.algoswiki.TipoAllineamento
@@ -29,7 +30,7 @@ class StatisticheService {
     public static String PATH = 'Progetto:Biografie/'
     private static String A_CAPO = '\n'
     private static HashMap mappaSintesi = new HashMap()
-    private static int NUOVA_ATTESA = 13
+    private static int NUOVA_ATTESA = 12
     /**
      * Aggiorna la pagina wiki di servizio delle attività
      */
@@ -363,7 +364,7 @@ class StatisticheService {
     def paginaSintesi() {
         String titolo = PATH + 'Statistiche'
         String testo = ''
-        String summary = Preferenze.getStr(LibBio.SUMMARY)
+        String summary = LibPref.getString(LibBio.SUMMARY)
 
         testo += getTestoTop()
         testo += getTestoBodySintesi()

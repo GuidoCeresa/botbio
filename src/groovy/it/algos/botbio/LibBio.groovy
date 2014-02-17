@@ -4,7 +4,7 @@ import groovy.util.logging.Log4j
 import it.algos.algoslib.Lib
 import it.algos.algoslib.LibTesto
 import it.algos.algoslib.LibTime
-import it.algos.algospref.Preferenze
+import it.algos.algospref.LibPref
 import it.algos.algoswiki.Pagina
 import it.algos.algoswiki.QueryInfoCat
 import it.algos.algoswiki.Risultato
@@ -51,6 +51,9 @@ class LibBio {
     public static final String NAZIONALITA = 'numeroNazionalitaGestite'
     public static final String ATTESA = 'giorniAttesa'
     public static final String ULTIMA_SINTESI = 'ultimaSintesi'
+    public static final String AGGIUNTI = 'recordsAggiunti'
+    public static final String MODIFICATI = 'recordsModificati'
+    public static final String CANCELLATI = 'recordsCancellati'
 
     private static String TAG_BIO = '\\{\\{ ?([Tt]emplate:)? ?[Bb]io[ \\|\n\r\t]'
 
@@ -394,8 +397,9 @@ class LibBio {
      *
      * @param debug log di controllo
      */
-    public static String gestVoci(def logService, boolean debug, long durata, int aggiunte, int modificate) {
-        return gestVoci(logService, debug, durata, aggiunte, modificate, BioWiki.count())
+    public static String gestVoci(
+            def logService, boolean debug, long durata, int aggiunte, int cancellate, int modificate) {
+        return gestVoci(logService, debug, durata, aggiunte, cancellate, modificate, BioWiki.count())
     }// fine del metodo
 
     /**
@@ -404,10 +408,11 @@ class LibBio {
      * @param debug log di controllo
      */
     public static String gestVoci(
-            def logService, boolean debug, long durata, int aggiunte, int modificate, int vociTotali) {
+            def logService, boolean debug, long durata, int aggiunte, int cancellate, int modificate, int vociTotali) {
         String avviso = ''
         int vociCat
         String aggiunteTxt
+        String cancellateTxt
         String modificateTxt
         String numVociTotaliTxt
         String percentuale
@@ -424,6 +429,7 @@ class LibBio {
         vociCat = query.getSize()
         percentuale = LibTesto.formatPercentuale(vociTotali, vociCat)
         aggiunteTxt = LibTesto.formatNum(aggiunte)
+        cancellateTxt = LibTesto.formatNum(cancellate)
         modificateTxt = LibTesto.formatNum(modificate)
         numVociTotaliTxt = LibTesto.formatNum(vociTotali)
         if (aggiunte > 0) {
@@ -441,8 +447,10 @@ class LibBio {
         durataMin = durataSec / 60
         durataSecondiTxt = LibTesto.formatNum(durataSec)
         durataMinutiTxt = LibTesto.formatNum(durataMin)
-        avviso += "Ciclo di ${durataMinutiTxt} min (${tempoTxt} sec/voce). "
-        avviso += "Aggiunte: ${aggiunteTxt}. Modificate: ${modificateTxt}. "
+        avviso += "Ciclo di ${durataMinutiTxt} min. "
+        avviso += "Aggiunte: ${aggiunteTxt}. "
+        avviso += "Cancellate: ${cancellateTxt}. "
+        avviso += "Modificate: ${modificateTxt}. "
         avviso += "[[Utente:Biobot|<span style=\"color:green\">'''Biobot'''</span>]]"
         avviso += " gestisce ${numVociTotaliTxt} voci pari al '''${percentuale}'''"
         avviso += " della categoria [[:Categoria:BioBot|'''BioBot''']]"
@@ -510,19 +518,7 @@ class LibBio {
      * Restituisce il summary dal parametro summary e dal parametro version
      */
     public static getSummary() {
-        // variabili e costanti locali di lavoro
-        String ritorno
-        String summary = '[[Utente:Biobot#9|Biobot '
-        String versioneCorrente = Preferenze.getStr('version')
-        String ultimaVersione = '9.3'
-
-        if (!versioneCorrente) {
-            versioneCorrente = ultimaVersione
-        }// fine del blocco if
-        ritorno = summary + versioneCorrente + ']]'
-
-        // valore di ritorno
-        return ritorno
+        return LibPref.getString(SUMMARY)
     }// fine della closure
 
     public static boolean contiene(ArrayList lista, def elemento) {

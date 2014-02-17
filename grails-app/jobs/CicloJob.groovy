@@ -39,6 +39,7 @@ class CicloJob {
 //    def group = "MyGroup"
 
     def execute() {
+        HashMap mappa
         ArrayList<Integer> listaNuoviRecordsAggiunti
         ArrayList<Integer> listaRecordsModificati
         long inizio = System.currentTimeMillis()
@@ -46,6 +47,7 @@ class CicloJob {
         long durata
         int aggiunti = 0
         int modificati = 0
+        int cancellati = 0
 
         //--flag di attivazione
         if (Preferenze.getBool(LibBio.USA_CRONO_DOWNLOAD)) {
@@ -61,10 +63,16 @@ class CicloJob {
 
             if (bioWikiService) {
                 //--aggiunge ed elabora quelli aggiunti
-                listaNuoviRecordsAggiunti = bioWikiService.aggiungeWiki()
+                mappa = bioWikiService.aggiungeWiki()
+                if (mappa && mappa.get(LibBio.AGGIUNTI)) {
+                    listaNuoviRecordsAggiunti = (ArrayList<Integer>) mappa.get(LibBio.AGGIUNTI)
+                }// fine del blocco if
                 if (listaNuoviRecordsAggiunti) {
                     bioService.elabora(listaNuoviRecordsAggiunti)
                     aggiunti = listaNuoviRecordsAggiunti.size()
+                }// fine del blocco if
+                if (mappa && mappa.get(LibBio.CANCELLATI)) {
+                    cancellati = mappa.get(LibBio.CANCELLATI).size()
                 }// fine del blocco if
 
                 //--modifica ed elabora quelli modificati
@@ -78,7 +86,7 @@ class CicloJob {
             if (logWikiService) {
                 fine = System.currentTimeMillis()
                 durata = fine - inizio
-                LibBio.gestVoci(logWikiService, false, durata, aggiunti, modificati)
+                LibBio.gestVoci(logWikiService, false, durata, aggiunti, cancellati, modificati)
             }// fine del blocco if
         }// fine del blocco if
     }// fine del metodo execute

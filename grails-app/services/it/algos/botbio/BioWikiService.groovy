@@ -77,12 +77,15 @@ class BioWikiService {
      *      modificando o meno la voce sul server wiki a seconda del flag modificaPagine
      * Cancella i records eccedenti
      *
-     * @return listaNuoviRecordsCreati: lista completa delle voci esistenti effettivamente create (pageid)
+     * @return mappa: con:
+     *              listaNuoviRecordsCreati: lista completa delle voci esistenti effettivamente create (pageid)
+     *              listaRecords cancellati: voci cancellate (pageid)
      */
-    public ArrayList<Integer> aggiungeWiki() {
+    public HashMap aggiungeWiki() {
         // variabili e costanti locali di lavoro
-        ArrayList<Integer> listaNuoviRecordsCreati = null
-        int vociCreate = 0
+        HashMap mappa = new HashMap()
+        ArrayList<Integer> listaNuoviRecordsCreati
+        int vociCreate
         int maxDownload
         ArrayList<Integer> listaVociServerWiki = null
         boolean continua = true
@@ -100,31 +103,7 @@ class BioWikiService {
 
         //--Recupera dal server la lista completa delle voci esistenti dalla categoria BioBot
         if (continua) {
-            if (debug) {
-//                listaVociServerWiki = new ArrayList<Integer>()
-//
-//                listaVociServerWiki.add(QueryVoce.leggePageid('Utente:Biobot/2'))
-//                listaVociServerWiki.add(QueryVoce.leggePageid('Utente:Biobot/3'))
-//                listaVociServerWiki.add(QueryVoce.leggePageid('Utente:Biobot/4'))
-//                listaVociServerWiki.add(QueryVoce.leggePageid('Utente:Biobot/5'))
-//                listaVociServerWiki.add(QueryVoce.leggePageid('Utente:Biobot/6'))
-//                listaVociServerWiki.add(QueryVoce.leggePageid('Utente:Biobot/7'))
-//                listaVociServerWiki.add(QueryVoce.leggePageid('Artesa'))
-//                listaVociServerWiki.add(QueryVoce.leggePageid('Coripe'))
-//
-//                listaVociServerWiki.add(QueryVoce.leggePageid('Acrotato (figlio di Cleomene II)'))
-//                listaVociServerWiki.add(QueryVoce.leggePageid('Luigi Belli'))
-//                listaVociServerWiki.add(QueryVoce.leggePageid('Hassan Rouhani'))
-//                listaVociServerWiki.add(QueryVoce.leggePageid('Gregorius Bar-Hebraeus'))
-//                listaVociServerWiki.add(QueryVoce.leggePageid('Ibn al-Awwam'))
-//                listaVociServerWiki.add(QueryVoce.leggePageid('Manaf Abushgeer'))
-//                listaVociServerWiki.add(QueryVoce.leggePageid('Alon Abutbul'))
-//                listaVociServerWiki.add(QueryVoce.leggePageid('Sayf al-Dawla'))
-//                listaVociServerWiki.add(QueryVoce.leggePageid('Falco Accame'))
-                listaVociServerWiki = this.getListaVociServerWiki()
-            } else {
-                listaVociServerWiki = this.getListaVociServerWiki()
-            }// fine del blocco if-else
+            listaVociServerWiki = this.getListaVociServerWiki()
             continua = (listaVociServerWiki && listaVociServerWiki.size() > 0)
             tempo()
         }// fine del blocco if
@@ -164,6 +143,7 @@ class BioWikiService {
             if (!listaNuoviRecordsCreati) {
                 listaNuoviRecordsCreati = listaNuoviRecordsDaCreare
             }// fine del blocco if
+            mappa.put(LibBio.AGGIUNTI, listaNuoviRecordsCreati)
             tempo()
         }// fine del blocco if-else
 
@@ -186,6 +166,7 @@ class BioWikiService {
         //--Cancella i records che non hanno più una voce sul server wiki (sicuramente da cancellare)
         if (continua) {
             this.cancellazioneEffettivaRecords(listaRecordsDaCancellare)
+            mappa.put(LibBio.CANCELLATI, listaRecordsDaCancellare)
             tempo()
         }// fine del blocco if-else
 
@@ -202,7 +183,7 @@ class BioWikiService {
         }// fine del blocco if-else
 
         // valore di ritorno
-        return listaNuoviRecordsCreati
+        return mappa
     } // fine del metodo
 
     /**

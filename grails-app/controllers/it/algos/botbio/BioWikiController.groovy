@@ -210,8 +210,10 @@ class BioWikiController {
     //--aggiorna i records BioWiki esistenti
     //--elabora i records BioWiki modificati, modificando i records BioGrails
     def cicloWikiDopoConferma() {
-        int aggiunte
-        int modificate
+        HashMap mappa
+        int aggiunti = 0
+        int cancellati = 0
+        int modificati
         long inizio = System.currentTimeMillis()
         long fine
         long durata
@@ -220,11 +222,17 @@ class BioWikiController {
             attivitaService.download()
             nazionalitaService.download()
             professioneService.download()
-            aggiunte = esegueAggiungeWiki()
-            modificate = esegueAggiornaWiki()
+            mappa = esegueAggiungeWiki()
+            if (mappa && mappa.get(LibBio.AGGIUNTI)) {
+                aggiunti = mappa.get(LibBio.AGGIUNTI).size()
+            }// fine del blocco if
+            if (mappa && mappa.get(LibBio.CANCELLATI)) {
+                cancellati = mappa.get(LibBio.CANCELLATI).size()
+            }// fine del blocco if
+            modificati = esegueAggiornaWiki()
             fine = System.currentTimeMillis()
             durata = fine - inizio
-            LibBio.gestVoci(logWikiService, false, durata, aggiunte, modificate)
+            LibBio.gestVoci(logWikiService, false, durata, aggiunti, cancellati, modificati)
         }// fine del blocco if
 
         redirect(action: 'list')
@@ -263,13 +271,18 @@ class BioWikiController {
     //--carica i parametri del template Bio, leggendoli dalle voci della categoria
     //--aggiunge nuovi records BioWiki
     //--elabora i records BioWiki aggiunti, creando nuovi records BioGrails
-    private int esegueAggiungeWiki() {
-        ArrayList<Integer> listaNuoviRecordsAggiunti
+    private HashMap esegueAggiungeWiki() {
         int aggiunti = 0
+        HashMap mappa
+        ArrayList<Integer> listaNuoviRecordsAggiunti
         String numVociTxt = ''
         flash.message = 'Operazione annullata. Il ciclo non è partito.'
 
-        listaNuoviRecordsAggiunti = bioWikiService.aggiungeWiki()
+        mappa = bioWikiService.aggiungeWiki()
+        if (mappa && mappa.get(LibBio.AGGIUNTI)) {
+            listaNuoviRecordsAggiunti = (ArrayList<Integer>) mappa.get(LibBio.AGGIUNTI)
+        }// fine del blocco if
+
         if (listaNuoviRecordsAggiunti) {
             bioService.elabora(listaNuoviRecordsAggiunti)
             aggiunti = listaNuoviRecordsAggiunti.size()
@@ -281,7 +294,7 @@ class BioWikiController {
             flash.message = "Sono state aggiunti ed elaborati ${numVociTxt} nuovi records BioWiki e BioGrails"
         }// fine del blocco if-else
 
-        return aggiunti
+        return mappa
     } // fine del metodo
 
     //--ciclo di aggiornamento ed elaborazione
