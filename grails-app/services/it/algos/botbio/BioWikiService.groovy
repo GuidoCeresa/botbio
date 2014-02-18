@@ -189,6 +189,20 @@ class BioWikiService {
     /**
      * Aggiorna il database biografia
      *
+     * listaRecordsDatabase:
+     *      Recupera la lista dei records esistenti nel database
+     *      Ordinata secondo il timestamp più vecchio
+     *
+     * listaRecordsDaControllare:
+     *      Limita eventualmente la lista secondo i parametri usaLimiteDownload e maxDownload
+     *
+     * listaRecordsModificatiWiki:
+     *      Spazzola la lista a blocchi stabiliti
+     *      Crea la lista delle voci effettivamente modificate sul server wikipedia dall'ultimo controllo
+     *
+     * listaRecordsModificatiBio:
+     *      Crea la lista delle voci che hanno modificato specificatamente il template bio (e non il resto della voce)
+     *
      * Crea la lista delle voci mantenute, potenzialmente uguali o modificate
      * Legge il parametro revid, lo confronta con il revid del database
      * Crea la lista delle voci modificate, che potenzialmente hanno modificato il template:Bio (da controllare)
@@ -200,11 +214,12 @@ class BioWikiService {
      */
     public ArrayList<Integer> aggiornaWiki() {
         // variabili e costanti locali di lavoro
-        ArrayList<Integer> listaRecordsModificati
+        ArrayList<Integer> listaRecordsModificatiBio
+        ArrayList<Integer> listaRecordsModificatiWiki
         int maxDownload
         boolean debug = Preferenze.getBool((String) grailsApplication.config.debug)
         ArrayList<Integer> listaRecordsDatabase
-        ArrayList<Integer> listaRecordsForseModificati
+        ArrayList<Integer> listaRecordsDaControllare
         int vociControllate = 0
         int vociAggiornate = 0
         String vociControllateTxt = ''
@@ -223,26 +238,31 @@ class BioWikiService {
         // messaggio di log
         log.info 'Metodo di controllo voci ed aggiornamento records esistenti'
 
-        // Recupera la lista completa dei records presenti nel database
+        //--Recupera la lista completa dei records presenti nel database
         listaRecordsDatabase = getListaRecordsDatabase()
 
-        //--Limitazione del numero di records da considerare
+        //--Limita eventualmente la lista secondo i parametri usaLimiteDownload e maxDownload
         if (LibPref.getBool('usaLimiteDownload')) {
             maxDownload = LibPref.getInt('maxDownload')
-            listaRecordsForseModificati = LibArray.estraArray(listaRecordsDatabase, maxDownload)
+            listaRecordsDaControllare = LibArray.estraArray(listaRecordsDatabase, maxDownload)
         } else {
-            listaRecordsForseModificati = listaRecordsDatabase
+            listaRecordsDaControllare = listaRecordsDatabase
         }// fine del blocco if-else
-        vociControllate = listaRecordsForseModificati.size()
+        vociControllate = listaRecordsDaControllare.size()
 
-        // regolo le voci modificate
-        listaRecordsModificati = this.getListaModificate(listaRecordsForseModificati)
-        this.regolaVociNuoveModificate(listaRecordsModificati)
-        aggiornaUltimaLettura(listaRecordsForseModificati)
+        //--Crea la lista delle voci effettivamente modificate sul server wikipedia dall'ultimo controllo
+        listaRecordsModificatiWiki = this.getListaModificateWiki(listaRecordsDaControllare)
+
+        //--Crea la lista delle voci che hanno modificato specificatamente il template bio (e non il resto della voce)
+//        listaRecordsModificatiBio = getListaModificateBio(listaRecordsModificatiWiki)
+        listaRecordsModificatiBio = listaRecordsModificatiWiki
+
+        //--Crea o modifica i records corrispondenti alle voci nuove ed a quelle che hanno modificato il template bio
+        this.regolaVociNuoveModificate(listaRecordsModificatiBio)
+        aggiornaUltimaLettura(listaRecordsDaControllare)
         tempo()
-
-        if (listaRecordsModificati) {
-            vociAggiornate = listaRecordsModificati.size()
+        if (listaRecordsModificatiBio) {
+            vociAggiornate = listaRecordsModificatiBio.size()
         }// fine del blocco if
 
         // valore di ritorno
@@ -256,7 +276,7 @@ class BioWikiService {
         oldDataTxt = LibBio.voceAggiornataVecchia()
         log.info "${oldDataTxt}"
 
-        return listaRecordsModificati
+        return listaRecordsModificatiWiki
     } // fine del metodo
 
     /**
@@ -524,7 +544,7 @@ class BioWikiService {
     } // fine del metodo
 
     /**
-     * Crea la lista delle voci sicuramente modificate
+     * Crea la lista delle voci sicuramente modificate sul server
      *
      * Riceve la lista dal database
      * Spazzola la lista a blocchi stabiliti
@@ -533,44 +553,31 @@ class BioWikiService {
      * Confronta il lastrevid con quello esistente nel record già presente
      * Crea la lista sicuramente modificate
      *
-     * @param listaForseModificate lista di pageids
+     * @param listaRecordsDaControllare lista di pageids
+     * @return listaRecordsModificatiWiki lista di pageids
      */
-    private getListaModificate(ArrayList listaForseModificate) {
+    private ArrayList<Integer> getListaModificateWiki(ArrayList listaRecordsDaControllare) {
         // variabili e costanti locali di lavoro
-        ArrayList listaModificate = null
+        ArrayList<Integer> listaRecordsModificatiWiki = null
         boolean continua = false
         ArrayList lista = null
         ArrayList listaWrap = null
         ArrayList listaErroriWrap = null
-        ArrayList listaMappeTmp = null
         ArrayList listaModificateTmp = null
         int dimBlocco = 100
         ArrayList listaPageids = null
         int blocchi
         int k = 0
-        def tot
         def mod = 0
-        int fix = 10000
-        int delta
-        def corr
-        String totTxt
         QueryTimestamp query
 
-        //test di velocità
-        // primi diecimila
-        // blocco da  50: minuti 4,52
-        // blocco da 100: minuti 5,23
-        // primi ventimila
-        // blocco da 100: minuti 8,38
-        // blocco da 200: minuti 11.38
-
         // controllo di congruità
-        if (listaForseModificate) {
+        if (listaRecordsDaControllare) {
             continua = true
         }// fine del blocco if
 
         if (continua) {
-            listaPageids = Lib.Array.splitArray(listaForseModificate, dimBlocco)
+            listaPageids = Lib.Array.splitArray(listaRecordsDaControllare, dimBlocco)
 
             if (listaPageids) {
                 continua = true
@@ -580,12 +587,8 @@ class BioWikiService {
         }// fine del blocco if
 
         if (continua) {
-//            log.info "Controllo quali sono le voci modificate (60 minuti circa)"
-            listaModificate = new ArrayList()
-
+            listaRecordsModificatiWiki = new ArrayList()
             blocchi = listaPageids.size()
-            tot = blocchi * dimBlocco
-            delta = fix / dimBlocco
             listaPageids.each {
                 k++
                 if (it instanceof ArrayList) {
@@ -611,27 +614,51 @@ class BioWikiService {
                 try { // prova ad eseguire il codice
 
                     listaModificateTmp.each {
-                        listaModificate.add(it)
+                        listaRecordsModificatiWiki.add((Integer) it)
                     } // fine del ciclo each
 
-                    mod = listaModificate.size()
+                    mod = listaRecordsModificatiWiki.size()
                 } catch (Exception unErrore) { // intercetta l'errore
-                    log.error 'getListaModificate' + " al blocco ${k}/$blocchi"
+                    log.error 'getListaModificate' + " al blocco ${k}/$blocchi + " + unErrore.toString()
                 }// fine del blocco try-catch
-
-//                if (isStep(k, delta)) {
-//                    totTxt = it.algos.algoswiki.WikiLib.formatNumero(tot)
-//                    corr = it.algos.algoswiki.WikiLib.formatNumero(k * dimBlocco)
-//                    mod = it.algos.algoswiki.WikiLib.formatNumero(mod)
-//                    log.info "Ho controllato (blocchi da $dimBlocco) la pagina ${corr}/${totTxt} e ci sono $mod voci modificate"
-//                    tempo()
-//                }// fine del blocco if
             }// fine del ciclo each
         }// fine del blocco if
 
         // valore di ritorno
-        return listaModificate
-    } // fine della closure
+        return listaRecordsModificatiWiki
+    } // fine del metodo
+
+    /**
+     * Crea la lista delle voci che hanno modificato specificatamente il template bio
+     * (e non il resto della voce)
+     *
+     * @param listaRecordsModificatiWiki lista di pageids
+     * @return listaRecordsModificatiBio lista di pageids
+     */
+    private ArrayList<Integer> getListaModificateBio(ArrayList listaRecordsModificatiWiki) {
+        ArrayList<Integer> listaRecordsModificatiBio = null
+        boolean usaPagineSingole = LibPref.getBool(LibBio.USA_PAGINE_SINGOLE)
+        int dimBlocco = 100
+        ArrayList<Integer> listaPageids
+
+        if (listaRecordsModificatiWiki) {
+            if (usaPagineSingole) {
+                log.info "Controlla la modifica del template bio a singole voci per volta"
+                listaRecordsModificatiWiki.each {
+                    this.download((int) it, true)
+                }// fine del ciclo each
+            } else {
+                listaPageids = Lib.Array.splitArray(listaRecordsModificatiWiki, dimBlocco)
+                if (listaPageids) {
+                    listaPageids.each {
+                        this.regolaBloccoNuovoModificato((ArrayList) it)
+                    }// fine del ciclo each
+                }// fine del blocco if
+            }// fine del blocco if-else
+        }// fine del blocco if
+
+        return listaRecordsModificatiBio
+    } // fine del metodo
 
     /**
      * Creo le voci nuove che non hanno ancora records oppure modificate
@@ -661,7 +688,7 @@ class BioWikiService {
         int cont = 0
         def dimVoci
         int totBlocchi
-        int numRec
+        int numRec = 0
         String numero
         long inizio
         long fine
@@ -678,8 +705,6 @@ class BioWikiService {
                 dimVoci = listaVoci.size()
                 dimVoci = Lib.Text.formatNum(dimVoci)
 
-//                log.info "Su wiki ci sono $dimVoci voci che sono state modificate"
-//                log.info "Regola le voci modificate a blocchi di ${dimBlocco} voci per volta"
                 listaPageids = Lib.Array.splitArray(listaVoci, dimBlocco)
                 if (listaPageids) {
                     totBlocchi = listaVoci.size() / dimBlocco
@@ -702,7 +727,7 @@ class BioWikiService {
                 }// fine del blocco if
             }// fine del blocco if-else
         }// fine del blocco if
-    } // fine della closure
+    } // fine del metodo
 
     /**
      * Spazzola la lista a blocchi stabiliti
@@ -719,7 +744,7 @@ class BioWikiService {
         WrapBio wrapBio
         String title
         int pageid
-        boolean registrata
+        boolean registrata = false
         HashMap mappa
         StatoBio statoBio
 
@@ -993,8 +1018,8 @@ class BioWikiService {
         WrapTime wrap
         BioWiki bio
         int pageid
-        Timestamp valoreWiki
-        Timestamp valoreDatabase
+        Timestamp valoreWiki = null
+        Timestamp valoreDatabase = null
         int lastrevid
 
         if (listaWrapTime) {

@@ -6,6 +6,8 @@ import it.algos.algoswiki.*
 import org.junit.Before
 import org.junit.Test
 
+import java.sql.Timestamp
+
 /**
  * Created with IntelliJ IDEA.
  * User: Gac
@@ -632,7 +634,7 @@ class WrapBioTest extends GrailsUnitTestCase {
         wrap = new WrapBio(pageid)
         assert wrap != null
         assert wrap.isValida()
-        assert wrap.getTitoloVoce() == 'Jean-Mohammed Abd-el-Jalil'
+        assert wrap.getTitoloVoce() == 'Jean Mohamed Ben Abdejlil'
 
         titolo = 'Peter Beardsley'
         wrap = new WrapBio(titolo)
@@ -698,5 +700,55 @@ class WrapBioTest extends GrailsUnitTestCase {
         assert wrap.isValida()
         assert wrap.getTitoloVoce() == titolo
     } // fine del test
+
+    void testCreaMappa() {
+        long inizio = System.currentTimeMillis()
+        long fine = System.currentTimeMillis()
+        long durata
+        int max = 10000
+        ArrayList singolo
+        ArrayList listaWrap = new ArrayList()
+        ArrayList listaArray = new ArrayList()
+        ArrayList listaMappa = new ArrayList()
+        HashMap mappa
+        WrapTime wrapTime
+        int pageid = 27
+        Timestamp timestamp = new Date().toTimestamp()
+
+        inizio = System.currentTimeMillis()
+        for (int k = 0; k < max; k++) {
+            mappa = new HashMap()
+            mappa.put('pageid',pageid)
+            mappa.put('timestamp',timestamp)
+            listaMappa.add(mappa)
+        } // fine del ciclo for
+        fine = System.currentTimeMillis()
+        durata = fine - inizio
+        println('Mappa - tempo per un ciclo di ' + listaMappa.size() + ' volte: ' + durata + ' millisecondi')
+
+
+        inizio = System.currentTimeMillis()
+        for (int k = 0; k < max; k++) {
+            singolo = new ArrayList()
+            singolo.add(pageid)
+            singolo.add(timestamp)
+            listaArray.add(singolo)
+        } // fine del ciclo for
+        fine = System.currentTimeMillis()
+        durata = fine - inizio
+        println('Array - tempo per un ciclo di ' + listaArray.size() + ' volte: ' + durata + ' millisecondi')
+
+        inizio = System.currentTimeMillis()
+        for (int k = 0; k < max; k++) {
+            wrapTime = new WrapTime(pageid, timestamp)
+            listaWrap.add(wrapTime)
+        } // fine del ciclo for
+        fine = System.currentTimeMillis()
+        durata = fine - inizio
+        println('WrapTime - tempo per un ciclo di ' + listaWrap.size() + ' volte: ' + durata + ' millisecondi')
+
+        def stop
+    } // fine del test
+
 
 } // fine della classe di test

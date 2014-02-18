@@ -12,35 +12,20 @@ class ElaboraJob {
     // utilizzo di un service con la businessLogic per l'elaborazione dei dati
     // il service viene iniettato automaticamente
     def bioService
-//    def logWikiService
 
     //--codifica dell'orario di attivazione
-//    private static String cronExpressionElabora = "0 0 2 * * ?"   //tutti i giorni alle due di notte
-    private static String cronExpressionElabora = "0 0 5-23 * * ?"   //tutti i giorni dalle 5 alle 11 di sera
+    private static String cronExpressionElabora = "0 0 10-23 ? * SUN-FRI"   //tutti i giorni dalle 10 alle 11 di sera, sabato escluso
 
     static triggers = {
         cron name: 'upload', cronExpression: cronExpressionElabora
     }// fine del metodo statico
 
     def execute() {
-        ArrayList<Integer> listaNuoviRecordsCreati
-        ArrayList<Integer> listaRecordsModificati
-        long inizio = System.currentTimeMillis()
-        long fine
-        long durata
-        int aggiunte = 0
-        int modificate = 0
-
         //--flag di attivazione
         if (Preferenze.getBool(LibBio.USA_CRONO_ELABORA)) {
             if (bioService) {
                 bioService.elabora()
             }// fine del blocco if
-//            if (logWikiService) {
-//                fine = System.currentTimeMillis()
-//                durata = fine - inizio
-//                LibBio.gestVoci(logWikiService, false, durata, aggiunte, modificate)
-//            }// fine del blocco if
         }// fine del blocco if
     }// fine del metodo execute
 
