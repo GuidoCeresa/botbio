@@ -251,7 +251,7 @@ class BioWikiService {
         vociControllate = listaRecordsDaControllare.size()
 
         //--Crea la lista delle voci effettivamente modificate sul server wikipedia dall'ultimo controllo
-        listaRecordsModificatiWiki = this.getListaModificateWiki(listaRecordsDaControllare)
+        listaRecordsModificatiWiki = getListaModificateWiki(listaRecordsDaControllare)
 
         //--Crea la lista delle voci che hanno modificato specificatamente il template bio (e non il resto della voce)
 //        listaRecordsModificatiBio = getListaModificateBio(listaRecordsModificatiWiki)
@@ -556,7 +556,7 @@ class BioWikiService {
      * @param listaRecordsDaControllare lista di pageids
      * @return listaRecordsModificatiWiki lista di pageids
      */
-    private ArrayList<Integer> getListaModificateWiki(ArrayList listaRecordsDaControllare) {
+    private static ArrayList<Integer> getListaModificateWiki(ArrayList listaRecordsDaControllare) {
         // variabili e costanti locali di lavoro
         ArrayList<Integer> listaRecordsModificatiWiki = null
         boolean continua = false
@@ -564,7 +564,7 @@ class BioWikiService {
         ArrayList listaWrap = null
         ArrayList listaErroriWrap = null
         ArrayList listaModificateTmp = null
-        int dimBlocco = 100
+        int dimBlocco = 500
         ArrayList listaPageids = null
         int blocchi
         int k = 0
@@ -612,7 +612,6 @@ class BioWikiService {
                 }// fine del blocco if
 
                 try { // prova ad eseguire il codice
-
                     listaModificateTmp.each {
                         listaRecordsModificatiWiki.add((Integer) it)
                     } // fine del ciclo each
@@ -685,14 +684,6 @@ class BioWikiService {
         boolean usaPagineSingole = Preferenze.getBool((String) grailsApplication.config.usaPagineSingole)
         int dimBlocco = 100
         ArrayList<Integer> listaPageids
-        int cont = 0
-        def dimVoci
-        int totBlocchi
-        int numRec = 0
-        String numero
-        long inizio
-        long fine
-        long durata
 
         if (listaVoci) {
             if (usaPagineSingole) {
@@ -702,27 +693,10 @@ class BioWikiService {
                     tempo()
                 }// fine del ciclo each
             } else {
-                dimVoci = listaVoci.size()
-                dimVoci = Lib.Text.formatNum(dimVoci)
-
                 listaPageids = Lib.Array.splitArray(listaVoci, dimBlocco)
                 if (listaPageids) {
-                    totBlocchi = listaVoci.size() / dimBlocco
                     listaPageids.each {
-                        inizio = System.currentTimeMillis()
                         this.regolaBloccoNuovoModificato((ArrayList) it)
-                        cont++
-                        try { // prova ad eseguire il codice
-                            numRec = BioWiki.count()
-                        } catch (Exception unErrore) { // intercetta l'errore
-                            log.error unErrore
-                        }// fine del blocco try-catch
-                        numero = Lib.Txt.formatNum(numRec)
-                        fine = System.currentTimeMillis()
-                        durata = fine - inizio
-                        durata = durata / 1000
-//                        log.info "Caricato il blocco $cont/$totBlocchi (" + durata + " sec.) Nel database dopo il flushing ci sono ${numero} records"
-                        tempo()
                     }// fine del ciclo each
                 }// fine del blocco if
             }// fine del blocco if-else
@@ -753,7 +727,7 @@ class BioWikiService {
                 query = new QueryMultiBio(listaPageids)
                 listaMappe = query.getListaMappe()
             } catch (Exception unErrore) { // intercetta l'errore
-                log.error 'Non sono riuscito ad eseguire la query'
+                log.error 'Non sono riuscito ad eseguire la query ' + unErrore.toString()
             }// fine del blocco try-catch
 
             if (listaMappe && listaMappe.size() > 0) {
@@ -1012,7 +986,7 @@ class BioWikiService {
      * @param listaForseModificate lista parziale (a blocchi) di mappe con pageids=lastrevids
      * @return lista di pageid
      */
-    private ArrayList chekTimeLista(ArrayList listaWrapTime) {
+    private static ArrayList chekTimeLista(ArrayList listaWrapTime) {
         // variabili e costanti locali di lavoro
         ArrayList listaPageid = null
         WrapTime wrap
