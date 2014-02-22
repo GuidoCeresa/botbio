@@ -188,7 +188,7 @@ class BioGrailsController {
         }// fine del blocco if
 
         if (continua) {
-            bioGrailsService.uploadAll()
+//            bioGrailsService.uploadAll()
             statisticheService.paginaSintesi()
         }// fine del blocco if
 
