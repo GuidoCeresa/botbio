@@ -114,7 +114,7 @@ class BioWikiService {
 
         //--Recupera la lista dei records esistenti nel database
         if (continua) {
-            listaRecordsDatabase = getListaRecordsDatabase()
+            listaRecordsDatabase = creaListaRecordsDatabase()
             tempo()
         }// fine del blocco if
 
@@ -218,8 +218,8 @@ class BioWikiService {
         ArrayList<Integer> listaRecordsModificatiWiki
         int maxDownload
         boolean debug = Preferenze.getBool((String) grailsApplication.config.debug)
-        ArrayList<Integer> listaRecordsDatabase
-        ArrayList<Integer> listaRecordsDaControllare
+        ArrayList listaRecordsDatabaseTime
+        ArrayList listaRecordsDaControllareTime
         int vociControllate = 0
         int vociAggiornate = 0
         String vociControllateTxt = ''
@@ -239,19 +239,19 @@ class BioWikiService {
         log.info 'Metodo di controllo voci ed aggiornamento records esistenti'
 
         //--Recupera la lista completa dei records presenti nel database
-        listaRecordsDatabase = getListaRecordsDatabase()
+        listaRecordsDatabaseTime = creaListaRecordsDatabaseTime()
 
         //--Limita eventualmente la lista secondo i parametri usaLimiteDownload e maxDownload
         if (LibPref.getBool('usaLimiteDownload')) {
             maxDownload = LibPref.getInt('maxDownload')
-            listaRecordsDaControllare = LibArray.estraArray(listaRecordsDatabase, maxDownload)
+            listaRecordsDaControllareTime = LibArray.estraArray(listaRecordsDatabaseTime, maxDownload)
         } else {
-            listaRecordsDaControllare = listaRecordsDatabase
+            listaRecordsDaControllareTime = listaRecordsDatabaseTime
         }// fine del blocco if-else
-        vociControllate = listaRecordsDaControllare.size()
+        vociControllate = listaRecordsDaControllareTime.size()
 
         //--Crea la lista delle voci effettivamente modificate sul server wikipedia dall'ultimo controllo
-        listaRecordsModificatiWiki = getListaModificateWiki(listaRecordsDaControllare)
+        listaRecordsModificatiWiki = getListaModificateWiki(listaRecordsDaControllareTime)
 
         //--Crea la lista delle voci che hanno modificato specificatamente il template bio (e non il resto della voce)
 //        listaRecordsModificatiBio = getListaModificateBio(listaRecordsModificatiWiki)
@@ -259,8 +259,8 @@ class BioWikiService {
 
         //--Crea o modifica i records corrispondenti alle voci nuove ed a quelle che hanno modificato il template bio
         this.regolaVociNuoveModificate(listaRecordsModificatiBio)
-        aggiornaUltimaLettura(listaRecordsDaControllare)
-        tempo()
+        aggiornaUltimaLettura(listaRecordsDaControllareTime)
+
         if (listaRecordsModificatiBio) {
             vociAggiornate = listaRecordsModificatiBio.size()
         }// fine del blocco if
@@ -270,6 +270,7 @@ class BioWikiService {
         vociAggiornateTxt = LibTesto.formatNum(vociAggiornate)
         fine = System.currentTimeMillis()
         durata = fine - inizio
+        println('Controllo spot: ' + durata)
         durata = durata / 1000
         durata = durata / 60
         log.info "BioWiki. Sono state controllate ${vociControllateTxt} voci e aggiornati ${vociAggiornateTxt} records. Tempo ${durata} min "
@@ -392,22 +393,39 @@ class BioWikiService {
      * Recupera la lista dei records esistenti nel database
      * Ordinata secondo il timestamp più vecchio; serve per le voci ''modificate''
      * Mentre per l'aggiunta di voci ''nuove'' è indifferente
-     * La lista e composta dal solo campo pageid (int)
+     * La lista e composta dai campi:
+     *      pageid (int)
      */
-    private static ArrayList<Integer> getListaRecordsDatabase() {
+    private static ArrayList creaListaRecordsDatabase() {
         // variabili e costanti locali di lavoro
-        ArrayList<Integer> lista
-        def num = 0
+        ArrayList lista
 
-//        log.info 'Recupera dal database tutti i records di BioWiki'
-        lista = (ArrayList<Integer>) BioWiki.executeQuery("select pageid from BioWiki order by ultimaLettura asc")
+        lista = BioWiki.executeQuery("select pageid from BioWiki order by ultimaLettura asc")
 
-        if (lista) {
-            num = lista.size()
-            num = Lib.Text.formatNum(num)
-//            log.info "Creata una lista di soli pageids con ${num} records"
-        } else {
+        if (!lista) {
             log.warn "La lista di pageids e vuota"
+        }// fine del blocco if-else
+
+        // valore di ritorno
+        return lista
+    } // fine del metodo
+
+    /**
+     * Recupera la lista dei records esistenti nel database
+     * Ordinata secondo il timestamp più vecchio; serve per le voci ''modificate''
+     * Mentre per l'aggiunta di voci ''nuove'' è indifferente
+     * La lista e composta dai campi:
+     *      pageid (int)
+     *      ultimaLettura (Timestamp)
+     */
+    private static ArrayList creaListaRecordsDatabaseTime() {
+        // variabili e costanti locali di lavoro
+        ArrayList lista
+
+        lista = BioWiki.executeQuery("select pageid,ultimaLettura from BioWiki order by ultimaLettura asc")
+
+        if (!lista) {
+            log.warn "La lista di pageids/ultimaLettura e vuota"
         }// fine del blocco if-else
 
         // valore di ritorno
@@ -570,6 +588,8 @@ class BioWikiService {
         int k = 0
         def mod = 0
         QueryTimestamp query
+        HashMap mappa
+        String elencoPageids
 
         // controllo di congruità
         if (listaRecordsDaControllare) {
@@ -596,11 +616,14 @@ class BioWikiService {
                 }// fine del blocco if
 
                 if (lista) {
-                    query = new QueryTimestamp((ArrayList) it)
+                    mappa = creaMappa((ArrayList) it)
+                    elencoPageids = creaStringaChiavi(mappa)
+
+                    query = new QueryTimestamp(elencoPageids)
                     if (query) {
                         listaWrap = query.getListaWrapTime()
                         if (listaWrap) {
-                            listaModificateTmp = chekTimeLista(listaWrap)
+                            listaModificateTmp = chekTimeLista(mappa, listaWrap)
                         }// fine del blocco if
                         listaErroriWrap = query.getListaErrori()
                         if (listaErroriWrap) {
@@ -792,33 +815,42 @@ class BioWikiService {
     } // fine della closure
 
     // voci esaminate
-    void aggiornaUltimaLettura(ArrayList<Integer> listaRecordsModificati) {
+    void aggiornaUltimaLettura(ArrayList listaRecordsEsaminati) {
+        String tagIni = '('
+        String tagEnd = ')'
+        String tagSep = ','
         String query
-        String range
+        String range = ''
         Timestamp ultimaLettura = new Timestamp(System.currentTimeMillis())
-        def letturaWiki = ultimaLettura.clearTime()
+        def letturaWiki = (new Timestamp(System.currentTimeMillis())).clearTime()
 
-        if (listaRecordsModificati) {
-            range = LibBio.getListaRec(listaRecordsModificati)
+        range += tagIni
+        listaRecordsEsaminati?.each {
+            range += it[0]
+            range += tagSep
+        } // fine del ciclo each
+        range = LibTesto.levaCoda(range, tagSep)
+        range += tagEnd
+
+        if (range) {
             query = "update BioWiki set ultimaLettura='${ultimaLettura}' where pageid in ${range}"
             BioWiki.executeUpdate(query)
             query = "update BioWiki set letturaWiki='${letturaWiki}' where pageid in ${range}"
             BioWiki.executeUpdate(query)
         }// fine del blocco if
-
     } // fine del metodo
 
-    /**
-     * Regola i collegamenti (link) alle tavole:
-     * Giorno
-     * Anno
-     * Attivita
-     * Nazionalita
-     * @todo obsoleto va in libreria
-     * @deprecated
-     * @param istanza di biografia originale wiki
-     * @param istanza di biografia corretta
-     */
+/**
+ * Regola i collegamenti (link) alle tavole:
+ * Giorno
+ * Anno
+ * Attivita
+ * Nazionalita
+ * @todo obsoleto va in libreria
+ * @deprecated
+ * @param istanza di biografia originale wiki
+ * @param istanza di biografia corretta
+ */
     def regolaLink = { biografiaWiki ->
         // variabili e costanti locali di lavoro
         def biografiaTmp
@@ -878,19 +910,19 @@ class BioWikiService {
         }// fine del blocco if
     } // fine della closure
 
-    /**
-     * Scarica da wikipedia una voce e crea/aggiorna un record sul database
-     *
-     * carica i parametri del template Bio, leggendolo dalla voce di wikipedia
-     * la query legge la pagina col pageid
-     * non sono ancora sicuro che la voce corrispondente al pageid sia una biografia
-     * In alcuni casi corregge direttamente la pagina e riporta nel log //todo da sviluppare
-     * controlla l'integrità dei dati dopo aver registrato
-     *
-     * @param pageid codice id del server wiki (# dal grailsId)
-     * @param esegueUpload - per evitare il loop
-     * @return record di biografia
-     */
+/**
+ * Scarica da wikipedia una voce e crea/aggiorna un record sul database
+ *
+ * carica i parametri del template Bio, leggendolo dalla voce di wikipedia
+ * la query legge la pagina col pageid
+ * non sono ancora sicuro che la voce corrispondente al pageid sia una biografia
+ * In alcuni casi corregge direttamente la pagina e riporta nel log //todo da sviluppare
+ * controlla l'integrità dei dati dopo aver registrato
+ *
+ * @param pageid codice id del server wiki (# dal grailsId)
+ * @param esegueUpload - per evitare il loop
+ * @return record di biografia
+ */
     public download(int pageid, boolean esegueUpload) {
         BioWiki biografia = null
         boolean continua = false
@@ -929,25 +961,25 @@ class BioWikiService {
         return biografia
     } // fine della closure
 
-    /**
-     * Scarica da wikipedia una voce e crea/aggiorna un record sul database
-     *
-     * carica i parametri del template Bio, leggendolo dalla voce di wikipedia
-     * la query legge la pagina col pageid
-     * non sono ancora sicuro che la voce corrispondente al pageid sia una biografia
-     * In alcuni casi corregge direttamente la pagina e riporta nel log //todo da sviluppare
-     * controlla l'integrità dei dati dopo aver registrato
-     *
-     * @param pageid codice id del server wiki (# dal grailsId)
-     * @return record di biografia
-     */
+/**
+ * Scarica da wikipedia una voce e crea/aggiorna un record sul database
+ *
+ * carica i parametri del template Bio, leggendolo dalla voce di wikipedia
+ * la query legge la pagina col pageid
+ * non sono ancora sicuro che la voce corrispondente al pageid sia una biografia
+ * In alcuni casi corregge direttamente la pagina e riporta nel log //todo da sviluppare
+ * controlla l'integrità dei dati dopo aver registrato
+ *
+ * @param pageid codice id del server wiki (# dal grailsId)
+ * @return record di biografia
+ */
     public download(int pageid) {
         return this.download(pageid, false) //@todo provvisorio deve diventare true
     } // fine della closure
 
-    /**
-     * Differenza tra due liste
-     */
+/**
+ * Differenza tra due liste
+ */
     private static ArrayList<Integer> deltaListe(ArrayList<Integer> primaLista, ArrayList<Integer> secondaLista) {
         // variabili e costanti locali di lavoro
         ArrayList<Integer> listaDiff = null
@@ -977,16 +1009,16 @@ class BioWikiService {
         return listaDiff
     } // fine della closure
 
-    /**
-     * Controlla se le voci (su wiki) sono state modificate rispetto alla versione esistente (sul database)
-     *
-     * Confronta il lastrevid con quello esistente nella voce
-     * Crea la lista sicuramente modificate
-     *
-     * @param listaForseModificate lista parziale (a blocchi) di mappe con pageids=lastrevids
-     * @return lista di pageid
-     */
-    private static ArrayList chekTimeLista(ArrayList listaWrapTime) {
+/**
+ * Controlla se le voci (su wiki) sono state modificate rispetto alla versione esistente (sul database)
+ *
+ * Confronta il lastrevid con quello esistente nella voce
+ * Crea la lista sicuramente modificate
+ *
+ * @param listaForseModificate lista parziale (a blocchi) di mappe con pageids=lastrevids
+ * @return lista di pageid
+ */
+    private static ArrayList chekTimeListaOld(ArrayList listaWrapTime) {
         // variabili e costanti locali di lavoro
         ArrayList listaPageid = null
         WrapTime wrap
@@ -1030,10 +1062,61 @@ class BioWikiService {
         return listaPageid
     } // fine della closure
 
-    /**
-     * Restituisce il valore booleano di un parametro Setting
-     * @deprecated
-     */
+/**
+ * Controlla se le voci (su wiki) sono state modificate rispetto alla versione esistente (sul database)
+ *
+ * Confronta il lastrevid con quello esistente nella voce
+ * Crea la lista sicuramente modificate
+ *
+ * @param mappa
+ * @param listaWrapTime
+ * @return lista di pageid
+ */
+    private static ArrayList chekTimeLista(HashMap mappa, ArrayList listaWrapTime) {
+        // variabili e costanti locali di lavoro
+        ArrayList listaPageid = null
+        WrapTime wrap
+        int pageid
+        Timestamp valoreWiki = null
+        Timestamp valoreDatabase = null
+        int lastrevid
+
+        if (mappa && listaWrapTime) {
+            listaPageid = new ArrayList()
+
+            listaWrapTime.each {
+                wrap = null
+                pageid = 0
+                if (it instanceof WrapTime) {
+                    wrap = (WrapTime) it
+                }// fine del blocco if
+
+                if (wrap) {
+                    pageid = wrap.getPageid()
+                    valoreWiki = wrap.getTimestamp()
+                }// fine del blocco if
+
+                if (pageid) {
+                    if (mappa.get(pageid)) {
+                        valoreDatabase = (Timestamp) mappa.get(pageid)
+                    }// fine del blocco if
+
+                    if (valoreWiki > valoreDatabase) {
+                        listaPageid.add(pageid)
+                    }// fine del blocco if
+                }// fine del blocco if
+
+            }// fine del ciclo each
+        }// fine del blocco if
+
+        // valore di ritorno
+        return listaPageid
+    } // fine della closure
+
+/**
+ * Restituisce il valore booleano di un parametro Setting
+ * @deprecated
+ */
     public static boolSetting = { code ->
         // variabili e costanti locali di lavoro
         boolean ritorno = false
@@ -1051,10 +1134,10 @@ class BioWikiService {
         return ritorno
     }// fine della closure
 
-    /**
-     * Restituisce il contrario del valore booleano di un parametro Setting
-     * @deprecated
-     */
+/**
+ * Restituisce il contrario del valore booleano di un parametro Setting
+ * @deprecated
+ */
     public static notBoolSetting = { code ->
         // variabili e costanti locali di lavoro
         boolean ritorno = false
@@ -1073,11 +1156,11 @@ class BioWikiService {
         return ritorno
     }// fine della closure
 
-    /**
-     * Controlla se il numero passato è un multiplo esatto
-     * @todo obsoleto va in libreria
-     * @deprecated
-     */
+/**
+ * Controlla se il numero passato è un multiplo esatto
+ * @todo obsoleto va in libreria
+ * @deprecated
+ */
     public isStep = { int numero, int intervallo ->
         // variabili e costanti locali di lavoro
         boolean step = false
@@ -1106,6 +1189,34 @@ class BioWikiService {
 
     private static tempoSec() {
 //        log.info LibBio.deltaSec(inizio) + ' secondi dal via'
+    }// fine del metodo
+
+
+    private static HashMap creaMappa(ArrayList listaPageidsTime) {
+        HashMap mappa = new HashMap()
+
+        listaPageidsTime?.each {
+            mappa.put(it[0], it[1])
+        } // fine del ciclo each
+
+        return mappa
+    }// fine del metodo
+
+    private static String creaStringaChiavi(HashMap mappa) {
+        String elencoPageids = ''
+        def key
+        String sep = '|'
+        if (mappa) {
+            key = mappa.keySet()
+            elencoPageids = ''
+            key?.each {
+                elencoPageids += it
+                elencoPageids += sep
+            } // fine del ciclo each
+            elencoPageids = LibTesto.levaCoda(elencoPageids, sep)
+        }// fine del blocco if
+
+        return elencoPageids
     }// fine del metodo
 
 } // fine della service classe
