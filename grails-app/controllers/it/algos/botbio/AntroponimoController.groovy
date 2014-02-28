@@ -76,14 +76,15 @@ class AntroponimoController {
         ArrayList<String> listaNomiParziale
         ArrayList<String> listaNomiUniciDiversiPerAccento
         String query = "select nome from BioGrails where nome <>'' order by nome asc"
-        int delta = 10000
+        int delta = 100
         int totaleVoci = BioGrails.count()
         log.info 'Inizio costruzione antroponimi'
 
-        query = "select nome from BioGrails where nome <>'' order by nome asc"
-        def listaA=  BioGrails.executeQuery(query)
-        query = "select distint nome from BioGrails where nome <>'' order by nome asc"
-        def listaB=  BioGrails.executeQuery(query)
+        long inizio
+        long fine
+        long durata
+
+        query = "select distinct nome from BioGrails where nome <>'' order by nome asc"
 
         antroponimoService.cancellaTutto()
 
@@ -91,7 +92,13 @@ class AntroponimoController {
         for (int k = 0; k < totaleVoci; k += delta) {
             listaNomiParziale = (ArrayList<String>) BioGrails.executeQuery(query, [max: delta, offset: k])
             listaNomiUniciDiversiPerAccento = antroponimoService.elaboraNomiUnici(listaNomiParziale)
+
+            inizio = System.currentTimeMillis()
             antroponimoService.spazzolaPacchetto(listaNomiUniciDiversiPerAccento)
+            fine = System.currentTimeMillis()
+            durata = fine - inizio
+            println('Antroponimi 100: ' + durata)
+
             log.info 'Elaborate ' + LibTesto.formatNum(k + delta) + ' voci'
         } // fine del ciclo for
 

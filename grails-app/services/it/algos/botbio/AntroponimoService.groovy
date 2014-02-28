@@ -157,23 +157,15 @@ class AntroponimoService {
 
     //--ricostruisce i records di antroponimi
     public static void spazzolaPacchetto(ArrayList<String> listaNomiUniciDiversiPerAccento) {
-        String nome
-        int totaleNomi
-        int k = 0
-
-        if (listaNomiUniciDiversiPerAccento && listaNomiUniciDiversiPerAccento.size() > 0) {
-            totaleNomi = listaNomiUniciDiversiPerAccento.size()
-            listaNomiUniciDiversiPerAccento?.each {
-                nome = it
-                spazzolaNome(nome, ++k, totaleNomi)
-            }// fine del ciclo each
-        }// fine del blocco if
+        listaNomiUniciDiversiPerAccento?.each {
+            spazzolaNome(it)
+        }// fine del ciclo each
     }// fine del metodo
 
-    private static void spazzolaNome(String nome, int pos, int totaleNomi) {
+    private static void spazzolaNome(String nome) {
         int lunghezza
         int numVoci
-        Antroponimo nuovoAntroponimo
+        Antroponimo nuovoAntroponimo = null
 
         if (nome) {
             numVoci = numeroVociCheUsanoNome(nome)
@@ -182,10 +174,10 @@ class AntroponimoService {
                 nuovoAntroponimo = Antroponimo.findByNome(nome)
                 if (!nuovoAntroponimo) {
                     nuovoAntroponimo = new Antroponimo(nome: nome)
+                    nuovoAntroponimo.voci = numVoci
+                    nuovoAntroponimo.lunghezza = lunghezza
+                    nuovoAntroponimo.save()
                 }// fine del blocco if
-                nuovoAntroponimo.voci = numVoci
-                nuovoAntroponimo.lunghezza = lunghezza
-                nuovoAntroponimo.save()
 //                nuovoAntroponimo = new Antroponimo(nome: nome, voci: numVoci, lunghezza: lunghezza).save(flush: true)
             } else {
                 def stop // c'è qualcosa che non va
@@ -350,7 +342,7 @@ class AntroponimoService {
     public void elaboraSingoloNome(String nome) {
         String titolo
         String testo = ''
-        String summary = 'BioBot'
+        String summary = LibBio.getSummary()
         ArrayList<BioGrails> listaBiografie
 
         titolo = tagTitolo + nome

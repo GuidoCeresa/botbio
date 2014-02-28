@@ -18,6 +18,7 @@ class UploadJob {
     // utilizzo di un service con la businessLogic per l'elaborazione dei dati
     // il service viene iniettato automaticamente
     def bioGrailsService
+    def statisticheService
 
     //--codifica dell'orario di attivazione
     private static String cronExpressionUpload = "0 0 8 ? * SUN-FRI"   //tutti i giorni alle 8, sabato escluso
@@ -31,6 +32,9 @@ class UploadJob {
         if (Preferenze.getBool(LibBio.USA_CRONO_DOWNLOAD)) {
             if (bioGrailsService) {
                 bioGrailsService.uploadAll()
+            }// fine del blocco if
+            if (statisticheService) {
+                statisticheService.paginaSintesi()
             }// fine del blocco if
         }// fine del blocco if
     }// fine del metodo execute
