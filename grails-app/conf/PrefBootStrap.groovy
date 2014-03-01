@@ -42,6 +42,10 @@ class PrefBootStrap {
         grailsApplication.config.numeroNazionalitaGestite = LibBio.NAZIONALITA
         grailsApplication.config.giorniAttesa = LibBio.ATTESA
         grailsApplication.config.ultimaSintesi = LibBio.ULTIMA_SINTESI
+        grailsApplication.config.usaCronoAntroponimi = LibBio.USA_CRONO_ANTROPONIMI
+        grailsApplication.config.usaCronoAttivita = LibBio.USA_CRONO_ATTIVITA
+        grailsApplication.config.usaCronoNazionalita = LibBio.USA_CRONO_NAZIONALITA
+        grailsApplication.config.usaCronoUpload = LibBio.USA_CRONO_UPLOAD
 
         //--alcune preferenze sempre presenti
         Preferenze.findOrCreateByCodeAndTypeAndValue((String) grailsApplication.config.debug, Preferenze.TYPE_BOOL, 'false').save(flush: true)
@@ -71,6 +75,10 @@ class PrefBootStrap {
         Preferenze.findOrCreateByCodeAndTypeAndValue((String) grailsApplication.config.numeroNazionalitaGestite, Preferenze.TYPE_INT, '250').save(flush: true)
         Preferenze.findOrCreateByCodeAndTypeAndValue((String) grailsApplication.config.giorniAttesa, Preferenze.TYPE_INT, '15').save(flush: true)
         Preferenze.findOrCreateByCodeAndTypeAndValue((String) grailsApplication.config.ultimaSintesi, Preferenze.TYPE_STR, '13 feb 2014').save(flush: true)
+        Preferenze.findOrCreateByCodeAndTypeAndValue((String) grailsApplication.config.usaCronoAntroponimi, Preferenze.TYPE_BOOL, 'false').save(flush: true)
+        Preferenze.findOrCreateByCodeAndTypeAndValue((String) grailsApplication.config.usaCronoAttivita, Preferenze.TYPE_BOOL, 'false').save(flush: true)
+        Preferenze.findOrCreateByCodeAndTypeAndValue((String) grailsApplication.config.usaCronoNazionalita, Preferenze.TYPE_BOOL, 'false').save(flush: true)
+        Preferenze.findOrCreateByCodeAndTypeAndValue((String) grailsApplication.config.usaCronoUpload, Preferenze.TYPE_BOOL, 'false').save(flush: true)
     }// fine della closure
 
     //--metodo invocato direttamente da Grails

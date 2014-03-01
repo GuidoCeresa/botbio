@@ -1,40 +1,34 @@
-/**
- * Created with IntelliJ IDEA.
- * User: Gac
- * Date: 16-11-13
- * Time: 17:43
- */
 import it.algos.algospref.Preferenze
 import it.algos.botbio.LibBio
 
 /**
  * Created with IntelliJ IDEA.
  * User: Gac
- * Date: 25-9-13
- * Time: 14:38
+ * Date: 31-1-14
+ * Time: 20:45
  */
-class UploadJob {
+class AttivitaJob {
 
     // utilizzo di un service con la businessLogic per l'elaborazione dei dati
     // il service viene iniettato automaticamente
-    def bioGrailsService
+    def listaService
     def statisticheService
 
     //--codifica dell'orario di attivazione
-    private static String cronExpressionUpload = "0 0 8 ? * SUN-FRI"   //tutti i giorni alle 8, sabato escluso
+    private static String cronExpressionAttivita = "0 0 0 ? * 7#2"   //a mezzanotte, il secondo sabato del mese
 
     static triggers = {
-        cron name: 'upload', cronExpression: cronExpressionUpload
+        cron name: 'attivita', cronExpression: cronExpressionAttivita
     }// fine del metodo statico
 
     def execute() {
         //--flag di attivazione
-        if (Preferenze.getBool(LibBio.USA_CRONO_UPLOAD)) {
-            if (bioGrailsService) {
-                bioGrailsService.uploadAll()
+        if (Preferenze.getBool(LibBio.USA_CRONO_ATTIVITA)) {
+            if (listaService) {
+                listaService.uploadAttivita()
             }// fine del blocco if
             if (statisticheService) {
-                statisticheService.paginaSintesi()
+                statisticheService.attivitaUsate()
             }// fine del blocco if
         }// fine del blocco if
     }// fine del metodo execute

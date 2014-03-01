@@ -129,13 +129,11 @@ class BioLista {
     public registra() {
         String titolo = this.titoloPagina
         String testo = this.getContenuto()
-        String summary = BioService.summarySetting()
+        String summary = LibBio.getSummary()
 
         // registra la pagina solo se ci sono differente significative
         // al di la della prima riga con il richiamo al template e che contiene la data
         if (titolo && testo && this.listaWrapper && this.listaWrapper.size() > 0) {
-//            LibBio.caricaPaginaDiversa(titolo, testo, summary, false)
-
             Edit edit = new EditBio(titolo, testo, summary)
         }// fine del blocco if
     }// fine del metodo

@@ -73,13 +73,13 @@ class ListaService {
         ArrayList<String> listaNazionalitaPlurali
         BioNazionalita wrapNazionalita
 
-        // Recupera tutte le attività esistenti (circa 250)
+        // Recupera tutte le nazionalità esistenti (circa 275)
         listaNazionalitaPlurali = NazionalitaService.getListaPlurali()
 
-        // Ciclo per ognuna delle attività esistenti (circa 1.000)
+        // Ciclo per ognuna delle nazionalità esistenti (circa 275)
         listaNazionalitaPlurali.each {
             wrapNazionalita = new BioNazionalita(it)
-            wrapNazionalita.registraPagina()
+//            wrapNazionalita.registraPagina()
         }// fine di each
     } // fine del metodo
 
