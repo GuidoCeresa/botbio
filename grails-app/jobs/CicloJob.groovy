@@ -26,17 +26,21 @@ class CicloJob {
     // execute job once in 60 minutes
     public static int FREQUENZA = 1000 * 60 * 60
 
+    //--numero di cicli
+    private static int CICLI = 4
+
     //--codifica dell'orario di attivazione
-    private static String cronExpressionCicloUno = "0 0 0 ? * SUN-FRI"   //tutti i giorni a mezzanotte, sabato escluso
-    private static String cronExpressionCicloDue = "0 0 4 ? * SUN-FRI"   //tutti i giorni alle quattro, sabato escluso
+    private static String cronExpressionCiclo = "0 0 0 ? * SUN-FRI"
+    //tutti i giorni a mezzanotte, sabato escluso, ciclo multiplo
+//    private static String cronExpressionCicloUno = "0 0 0 ? * SUN-FRI"   //tutti i giorni a mezzanotte, sabato escluso
+//    private static String cronExpressionCicloDue = "0 0 4 ? * SUN-FRI"   //tutti i giorni alle quattro, sabato escluso
 //    private static String cronExpressionCiclo = "0 0 * * * ?"   //tutti i giorni a tutte le ore
 //    private static String cronExpressionCiclo = "0 0 2-23 * * ?"   //tutti i giorni a tutte le ore meno mezzanotte e l'una
 //        private static String cronExpressionCiclo = "0 0 0,2,4,6,8,10,12,14,16,18,20,22 * * ?"   //tutti i giorni ogni quattro ore
 
     static triggers = {
 //        simple startDelay: DELAY, repeatInterval: FREQUENZA
-        cron name: 'ciclouno', cronExpression: cronExpressionCicloUno
-        cron name: 'ciclodue', cronExpression: cronExpressionCicloDue
+        cron name: 'ciclouno', cronExpression: cronExpressionCiclo
     }// fine del metodo statico
 
     def execute() {
@@ -77,11 +81,14 @@ class CicloJob {
                 }// fine del blocco if
 
                 //--modifica ed elabora quelli modificati
-                listaRecordsModificati = bioWikiService.aggiornaWiki()
-                if (listaRecordsModificati) {
-                    bioService.elabora(listaRecordsModificati)
-                    modificati = listaRecordsModificati.size()
-                }// fine del blocco if
+                for (int k = 0; k < CICLI; k++) {
+                    listaRecordsModificati = bioWikiService.aggiornaWiki()
+                    if (listaRecordsModificati) {
+                        bioService.elabora(listaRecordsModificati)
+                        modificati = listaRecordsModificati.size()
+                    }// fine del blocco if
+                } // fine del ciclo for
+
             }// fine del blocco if
 
             if (logWikiService) {
