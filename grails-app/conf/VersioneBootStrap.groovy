@@ -1,5 +1,5 @@
 import groovy.sql.Sql
-import it.algos.botbio.BioGrails
+import it.algos.algospref.Preferenze
 
 import javax.sql.DataSource
 
@@ -95,6 +95,23 @@ class VersioneBootStrap {
         if (versioneService && versioneService.installaVersione(16)) {
             versioneService.newVersione('Preferenze', 'Aggiunti valori per i crono jobs')
         }// fine del blocco if
+
+        //--completa il nuovo campo ordine delle preferenze
+        if (versioneService && versioneService.installaVersione(17)) {
+            //@todo occorre creare manualmente il campo con "alter table preferenze add ordine integer not null"
+            def preferenze = Preferenze.list()
+            Preferenze preferenza
+
+            preferenze?.each {
+                preferenza = it
+                preferenza.ordine = preferenza.id
+                preferenza.save(flush: true)
+            } // fine del ciclo each
+
+            versioneService.newVersione('Preferenze', 'Aggiunti i campi ordine e descrizione')
+        }// fine del blocco if
+
+
     }// fine della closure
 
     def allungaCampo(Sql sql, String nomeCampo) {
