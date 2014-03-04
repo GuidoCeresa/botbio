@@ -14,8 +14,8 @@ class ElaboraJob {
     def bioService
 
     //--codifica dell'orario di attivazione
-    //tutti i giorni dalle 10 alle 11 di sera, sabato escluso
-    private static String cronExpressionElabora = "0 0 8-23 ? * SUN-FRI"
+    //tutti i giorni dalle 9 alle 11 di sera, sabato escluso
+    private static String cronExpressionElabora = "0 0 9-23 ? * SUN-FRI"
 
     static triggers = {
         cron name: 'elabora', cronExpression: cronExpressionElabora

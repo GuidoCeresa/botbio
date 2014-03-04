@@ -30,7 +30,7 @@ class StatisticheService {
     public static String PATH = 'Progetto:Biografie/'
     private static String A_CAPO = '\n'
     private static HashMap mappaSintesi = new HashMap()
-    private static int NUOVA_ATTESA = 7
+    private static int NUOVA_ATTESA = 6
     /**
      * Aggiorna la pagina wiki di servizio delle attività
      */

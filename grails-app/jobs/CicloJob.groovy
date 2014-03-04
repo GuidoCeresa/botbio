@@ -22,7 +22,7 @@ class CicloJob {
     private static int CICLI = 4
 
     //--codifica dell'orario di attivazione
-    //a mezzanotte, tutti i giorni sabato escluso
+    //--a mezzanotte, tutti i giorni sabato escluso
     private static String cronExpressionCiclo = "0 0 0 ? * SUN-FRI"
 
     static triggers = {
