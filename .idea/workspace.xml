@@ -2,11 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="68254703-7597-4adf-9a44-9a0e7a7facfd" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/jobs/CicloJob.groovy" afterPath="$PROJECT_DIR$/grails-app/jobs/CicloJob.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/jobs/ElaboraJob.groovy" afterPath="$PROJECT_DIR$/grails-app/jobs/ElaboraJob.groovy" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/services/it/algos/botbio/StatisticheService.groovy" afterPath="$PROJECT_DIR$/grails-app/services/it/algos/botbio/StatisticheService.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/jobs/UploadJob.groovy" afterPath="$PROJECT_DIR$/grails-app/jobs/UploadJob.groovy" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application.properties" afterPath="$PROJECT_DIR$/application.properties" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/botbio-grailsPlugins.iml" afterPath="$PROJECT_DIR$/botbio-grailsPlugins.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/botbio.iml" afterPath="$PROJECT_DIR$/botbio.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="botbio.iws" />
@@ -192,9 +191,7 @@
         <entry file="file://$PROJECT_DIR$/grails-app/conf/VersioneBootStrap.groovy">
           <provider selected="true" editor-type-id="text-editor">
             <state line="100" column="61" selection-start="4476" selection-end="4526" vertical-scroll-proportion="0.0" vertical-offset="1275" max-vertical-offset="1980">
-              <folding>
-                <element signature="e#0#21#0" expanded="true" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -202,7 +199,7 @@
       <file leaf-file-name="CicloJob.groovy" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/grails-app/jobs/CicloJob.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="24" column="51" selection-start="554" selection-end="597" vertical-scroll-proportion="0.0" vertical-offset="90" max-vertical-offset="1380">
+            <state line="24" column="51" selection-start="554" selection-end="597" vertical-scroll-proportion="0.0" vertical-offset="360" max-vertical-offset="1395">
               <folding />
             </state>
           </provider>
@@ -211,7 +208,7 @@
       <file leaf-file-name="AntroponimoJob.groovy" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/grails-app/jobs/AntroponimoJob.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="16" column="117" selection-start="454" selection-end="492" vertical-scroll-proportion="0.0" vertical-offset="58" max-vertical-offset="615">
+            <state line="16" column="117" selection-start="454" selection-end="492" vertical-scroll-proportion="0.0" vertical-offset="240" max-vertical-offset="630">
               <folding />
             </state>
           </provider>
@@ -220,7 +217,7 @@
       <file leaf-file-name="ElaboraJob.groovy" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/grails-app/jobs/ElaboraJob.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="16" column="28" selection-start="394" selection-end="394" vertical-scroll-proportion="0.0" vertical-offset="88" max-vertical-offset="570">
+            <state line="16" column="28" selection-start="394" selection-end="394" vertical-scroll-proportion="0.0" vertical-offset="240" max-vertical-offset="585">
               <folding />
             </state>
           </provider>
@@ -229,7 +226,7 @@
       <file leaf-file-name="UploadJob.groovy" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/grails-app/jobs/UploadJob.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="23" column="94" selection-start="576" selection-end="576" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="630">
+            <state line="23" column="94" selection-start="576" selection-end="576" vertical-scroll-proportion="0.0" vertical-offset="345" max-vertical-offset="720">
               <folding />
             </state>
           </provider>
@@ -238,7 +235,7 @@
       <file leaf-file-name="StatisticheService.groovy" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/grails-app/services/it/algos/botbio/StatisticheService.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="32" column="75" selection-start="1266" selection-end="1266" vertical-scroll-proportion="0.0" vertical-offset="555" max-vertical-offset="9960">
+            <state line="26" column="42" selection-start="1048" selection-end="1048" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="9960">
               <folding />
             </state>
           </provider>
@@ -247,7 +244,7 @@
       <file leaf-file-name="application.properties" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/application.properties">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="6" column="10" selection-start="136" selection-end="136" vertical-scroll-proportion="0.186722" vertical-offset="0" max-vertical-offset="482">
+            <state line="6" column="10" selection-start="136" selection-end="136" vertical-scroll-proportion="0.1319648" vertical-offset="0" max-vertical-offset="682">
               <folding />
             </state>
           </provider>
@@ -256,7 +253,25 @@
       <file leaf-file-name="BuildConfig.groovy" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/grails-app/conf/BuildConfig.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="74" column="43" selection-start="2982" selection-end="2982" vertical-scroll-proportion="0.0" vertical-offset="1071" max-vertical-offset="1500">
+            <state line="67" column="67" selection-start="2770" selection-end="2770" vertical-scroll-proportion="0.0" vertical-offset="831" max-vertical-offset="1500">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AttivitaService.groovy" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/grails-app/services/it/algos/botbio/AttivitaService.groovy">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="19" column="6" selection-start="829" selection-end="829" vertical-scroll-proportion="0.0" vertical-offset="27" max-vertical-offset="4650">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AttivitaJob.groovy" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/grails-app/jobs/AttivitaJob.groovy">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="17" column="111" selection-start="466" selection-end="506" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="615">
               <folding />
             </state>
           </provider>
@@ -322,14 +337,14 @@
         <option value="$PROJECT_DIR$/grails-app/jobs/NazionalitaJob.groovy" />
         <option value="$PROJECT_DIR$/grails-app/services/it/algos/botbio/ListaService.groovy" />
         <option value="$PROJECT_DIR$/src/groovy/it/algos/botbio/BioLista.groovy" />
-        <option value="$PROJECT_DIR$/grails-app/conf/BuildConfig.groovy" />
         <option value="$PROJECT_DIR$/grails-app/conf/PrefBootStrap.groovy" />
         <option value="$PROJECT_DIR$/grails-app/conf/BootStrap.groovy" />
         <option value="$PROJECT_DIR$/grails-app/conf/VersioneBootStrap.groovy" />
         <option value="$PROJECT_DIR$/grails-app/jobs/CicloJob.groovy" />
         <option value="$PROJECT_DIR$/grails-app/jobs/UploadJob.groovy" />
-        <option value="$PROJECT_DIR$/grails-app/services/it/algos/botbio/StatisticheService.groovy" />
         <option value="$PROJECT_DIR$/grails-app/jobs/ElaboraJob.groovy" />
+        <option value="$PROJECT_DIR$/grails-app/services/it/algos/botbio/StatisticheService.groovy" />
+        <option value="$PROJECT_DIR$/grails-app/conf/BuildConfig.groovy" />
         <option value="$PROJECT_DIR$/application.properties" />
       </list>
     </option>
@@ -456,10 +471,20 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="botbio" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="botbio-grailsPlugins" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
       <pane id="PackagesPane" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -1009,7 +1034,9 @@
       <workItem from="1393650606478" duration="6294000" />
       <workItem from="1393826815909" duration="1996000" />
       <workItem from="1393859534738" duration="2626000" />
-      <workItem from="1393869465129" duration="747000" />
+      <workItem from="1393869465129" duration="1129000" />
+      <workItem from="1393955820615" duration="16000" />
+      <workItem from="1394086239755" duration="677000" />
     </task>
     <task id="LOCAL-00001" summary="working">
       <created>1379825094196</created>
@@ -1331,11 +1358,15 @@
       <created>1393869510260</created>
       <updated>1393869510260</updated>
     </task>
-    <option name="localTasksCounter" value="81" />
+    <task id="LOCAL-00081" summary="1.49&#10;">
+      <created>1393933585754</created>
+      <updated>1393933585754</updated>
+    </task>
+    <option name="localTasksCounter" value="82" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="250578000" />
+    <option name="totallyTimeSpent" value="251653000" />
   </component>
   <component name="TodoView" selected-index="0">
     <todo-panel id="selected-file">
@@ -1369,7 +1400,7 @@
       <window_info id="Java Enterprise" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Spring" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.38653" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.28129396" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.28129396" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32819074" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32770744" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32796487" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -1382,7 +1413,6 @@
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.48101267" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2562929" sideWeight="0.46266472" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Grails View" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32951945" sideWeight="0.56661785" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.46272856" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24942966" sideWeight="0.62608695" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -1393,6 +1423,7 @@
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32208157" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.46272856" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32952926" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
@@ -1445,7 +1476,6 @@
     <option name="myTodoPanelSettings">
       <TodoPanelSettings />
     </option>
-    <MESSAGE value="0.23 flag falso a giorni ed anni&#10;" />
     <MESSAGE value="0.24 titolo delle voci nella pagina di servizio&#10;" />
     <MESSAGE value="ciclo elabora" />
     <MESSAGE value="fix ciclo elabora" />
@@ -1470,7 +1500,8 @@
     <MESSAGE value="1.46&#10;" />
     <MESSAGE value="1.47 cron jobs&#10;" />
     <MESSAGE value="1.47 ordine+descrizione&#10;" />
-    <option name="LAST_COMMIT_MESSAGE" value="1.47 ordine+descrizione&#10;" />
+    <MESSAGE value="1.49&#10;" />
+    <option name="LAST_COMMIT_MESSAGE" value="1.49&#10;" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -1480,11 +1511,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/grails-app/views/bioWiki/show.gsp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="32" column="0" selection-start="908" selection-end="1033" vertical-scroll-proportion="0.7090909" vertical-offset="285" max-vertical-offset="9915" />
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/.grails/2.2.3/projects/botbio/plugins/algoswiki-0.82/src/groovy/it/algos/algoswiki/WrapTime.groovy">
       <provider selected="true" editor-type-id="text-editor">
         <state line="16" column="0" selection-start="221" selection-end="221" vertical-scroll-proportion="0.0" vertical-offset="99" max-vertical-offset="675" />
@@ -1597,11 +1623,6 @@
         <state line="9" column="6" selection-start="185" selection-end="185" vertical-scroll-proportion="0.0" vertical-offset="195" max-vertical-offset="1095" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/grails-app/jobs/AttivitaJob.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="26" column="92" selection-start="779" selection-end="779" vertical-scroll-proportion="0.5718475" vertical-offset="0" max-vertical-offset="682" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/grails-app/controllers/it/algos/botbio/AttivitaController.groovy">
       <provider selected="true" editor-type-id="text-editor">
         <state line="77" column="0" selection-start="3069" selection-end="3158" vertical-scroll-proportion="-14.347826" vertical-offset="765" max-vertical-offset="4020" />
@@ -1688,63 +1709,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/grails-app/conf/WikiBootStrap.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="27" column="88" selection-start="871" selection-end="871" vertical-scroll-proportion="0.5938417" vertical-offset="0" max-vertical-offset="682">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/.grails/2.2.3/projects/botbio/plugins/algospref-0.47/grails-app/domain/it/algos/algospref/Preferenze.groovy">
-      <provider editor-type-id="org.jetbrains.plugins.grails.perspectives.DomainClassesRelationsEditorProvider">
-        <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="6" selection-start="129" selection-end="129" vertical-scroll-proportion="-1.0411392" vertical-offset="718" max-vertical-offset="3855">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/grails-app/conf/PrefBootStrap.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="0" selection-start="105" selection-end="105" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="255">
-          <folding />
-        </state>
+        <state line="27" column="88" selection-start="871" selection-end="871" vertical-scroll-proportion="0.5938417" vertical-offset="0" max-vertical-offset="682" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/grails-app/conf/BootStrap.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="28" column="0" selection-start="1311" selection-end="1311" vertical-scroll-proportion="0.4852941" vertical-offset="255" max-vertical-offset="630">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/.grails/2.2.3/projects/botbio/plugins/algos-0.82/grails-app/conf/LogoBootStrap.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="420" />
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/.grails/2.2.3/projects/botbio/plugins/algos-0.82/grails-app/conf/PrefBootStrap.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="340" />
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/.grails/2.2.3/projects/botbio/plugins/algos-0.82/grails-app/conf/ExportBootStrap.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="340" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/grails-app/conf/BuildConfig.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="74" column="43" selection-start="2982" selection-end="2982" vertical-scroll-proportion="0.0" vertical-offset="831" max-vertical-offset="1500">
-          <folding />
-        </state>
+        <state line="28" column="0" selection-start="1311" selection-end="1311" vertical-scroll-proportion="0.4852941" vertical-offset="255" max-vertical-offset="630" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/grails-app/conf/VersioneBootStrap.groovy">
       <provider selected="true" editor-type-id="text-editor">
         <state line="100" column="61" selection-start="4476" selection-end="4526" vertical-scroll-proportion="0.0" vertical-offset="1275" max-vertical-offset="1980">
-          <folding>
-            <element signature="e#0#21#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1762,20 +1738,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/grails-app/jobs/UploadJob.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="23" column="94" selection-start="576" selection-end="576" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="630">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/grails-app/services/it/algos/botbio/StatisticheService.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="32" column="75" selection-start="1266" selection-end="1266" vertical-scroll-proportion="0.0" vertical-offset="555" max-vertical-offset="9960">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/grails-app/jobs/ElaboraJob.groovy">
       <provider selected="true" editor-type-id="text-editor">
         <state line="16" column="28" selection-start="394" selection-end="394" vertical-scroll-proportion="0.0" vertical-offset="88" max-vertical-offset="570">
@@ -1783,9 +1745,44 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/grails-app/jobs/UploadJob.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="23" column="94" selection-start="576" selection-end="576" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="630">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/grails-app/services/it/algos/botbio/AttivitaService.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="19" column="6" selection-start="829" selection-end="829" vertical-scroll-proportion="0.0" vertical-offset="27" max-vertical-offset="4650">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/grails-app/jobs/AttivitaJob.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="17" column="111" selection-start="466" selection-end="506" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="615">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/grails-app/services/it/algos/botbio/StatisticheService.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="26" column="42" selection-start="1048" selection-end="1048" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="9960">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/grails-app/conf/BuildConfig.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="67" column="67" selection-start="2770" selection-end="2770" vertical-scroll-proportion="0.0" vertical-offset="831" max-vertical-offset="1500">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/application.properties">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="10" selection-start="136" selection-end="136" vertical-scroll-proportion="0.186722" vertical-offset="0" max-vertical-offset="482">
+        <state line="6" column="10" selection-start="136" selection-end="136" vertical-scroll-proportion="0.1319648" vertical-offset="0" max-vertical-offset="682">
           <folding />
         </state>
       </provider>
