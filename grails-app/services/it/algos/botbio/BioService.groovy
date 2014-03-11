@@ -130,7 +130,6 @@ class BioService {
         long durata
         long tempo
         String tempoTxt
-        String oldDataTxt
         int numVoci = 0
         BioWiki bioWiki
         BioGrails bioGrails = null
@@ -152,6 +151,7 @@ class BioService {
                 }// fine del blocco try-catch
                 if (bioGrails) {
                     bioGrails = elaboraLink(bioWiki, bioGrails)
+                    bioGrails = ricalcolaDopoLink(bioGrails)
                     bioGrails = elaboraDidascalie(bioWiki, bioGrails)
                 }// fine del blocco if
 
@@ -167,52 +167,6 @@ class BioService {
                 }// fine del blocco
             }// fine del blocco if
         }// fine di each
-
-//        if (listaRecordsDaElaborare) {
-//            numVoci = listaRecordsDaElaborare.size()
-//            numVociTxt = LibTesto.formatNum(numVoci)
-//        } else {
-//            return new ArrayList<Integer>()
-//        }// fine del blocco if-else
-
-//        inizio = System.currentTimeMillis()
-//        elaboraGrails(listaRecordsDaElaborare)
-//        fine = System.currentTimeMillis()
-//        durata = fine - inizio
-//        tempo = durata / numVoci
-//        tempoTxt = LibTesto.formatNum(tempo)
-////        log.info "Eseguito il metodo elaboraGrails su ${numVociTxt} records in ${tempoTxt} millisecondi/ciascuno"
-//
-//        inizio = System.currentTimeMillis()
-//        elaboraLink(listaRecordsDaElaborare)
-//        fine = System.currentTimeMillis()
-//        durata = fine - inizio
-//        tempo = durata / numVoci
-//        tempoTxt = LibTesto.formatNum(tempo)
-////        log.info "Eseguito il metodo elaboraLink su ${numVociTxt} records in ${tempoTxt} millisecondi/ciascuno"
-//
-//        inizio = System.currentTimeMillis()
-//        elaboraDidascalie(listaRecordsDaElaborare)
-//        fine = System.currentTimeMillis()
-//        durata = fine - inizio
-//        tempo = durata / numVoci
-//        tempoTxt = LibTesto.formatNum(tempo)
-////        log.info "Eseguito il metodo elaboraDidascalie su ${numVociTxt} records in ${tempoTxt} millisecondi/ciascuno"
-
-//        // valore di ritorno
-//        numVociTxt = LibTesto.formatNum(numVoci)
-//        fine = System.currentTimeMillis()
-//        durata = fine - inizioInizio
-//        tempo = durata / numVoci
-//        durata = durata / 1000
-//        durata = durata / 60
-//        if (debug) {
-//            log.info 'Fine del metodo di elaborazione dei records'
-//        } else {
-//            log.info "BioGrails. Sono state elaborate ${numVociTxt} voci in ${tempo} millisecondi/ciascuna. Tempo ${durata} min"
-//            oldDataTxt = LibBio.voceElaborataVecchia()
-//            log.info "${oldDataTxt}"
-//        }// fine del blocco if-else
 
         fine = System.currentTimeMillis()
         durata = fine - inizio
@@ -325,6 +279,32 @@ class BioService {
             bioGrails.attivita3Link = AttivitaService.getAttivita(bioGrails.attivita3)
             bioGrails.nazionalitaLink = NazionalitaService.getNazionalita(bioGrails.nazionalita)
 //            bioGrails.save(flush: false)
+        }// fine del blocco if
+
+        return bioGrails
+    } // fine del metodo
+
+    //--Ricalcola i campi ridondanti dopo aver regolato i link
+    public BioGrails ricalcolaDopoLink(BioGrails bioGrails) {
+
+        //--azzera tutto
+        bioGrails.attivita = ''
+        bioGrails.attivita2 = ''
+        bioGrails.attivita3 = ''
+        bioGrails.nazionalita = ''
+
+        //--ricalcola
+        if (bioGrails.attivitaLink) {
+            bioGrails.attivita = bioGrails.attivitaLink.singolare
+        }// fine del blocco if
+        if (bioGrails.attivita2Link) {
+            bioGrails.attivita2 = bioGrails.attivita2Link.singolare
+        }// fine del blocco if
+        if (bioGrails.attivita3Link) {
+            bioGrails.attivita3 = bioGrails.attivita3Link.singolare
+        }// fine del blocco if
+        if (bioGrails.nazionalitaLink) {
+            bioGrails.nazionalita = bioGrails.nazionalitaLink.singolare
         }// fine del blocco if
 
         return bioGrails
@@ -2224,18 +2204,37 @@ class BioService {
      * @param pageid codice id del server wiki (# dal grailsId)
      * @return vero/falso
      */
-    public upload = { int pageid ->
+    public upload(int pageid) {
         boolean registrata = false
-        BioWiki biografia
         WrapBio wrapBio
 
         //controllo di congruita
         if (pageid) {
-            biografia = Bio.findByPageid(pageid)
-            if (biografia) {
-                wrapBio = new WrapBio(biografia)
-                registrata = wrapBio.registraPaginaWiki()
-            }// fine del blocco if
+            wrapBio = new WrapBio(pageid)
+            registrata = wrapBio.registraPaginaWiki()
+        }// fine del blocco if
+
+        // valore di ritorno
+        return registrata
+    } // fine della closure
+
+    /**
+     * Carica su wikipedia una voce dopo averla controllata/modificata al volo
+     *
+     * @param pageid codice id del server wiki (# dal grailsId)
+     * @return vero/falso
+     */
+    public uploadWiki(int pageid) {
+        boolean registrata = false
+        WrapBio wrapBio
+        String testoTemplateWiki = bioWikiService.creaTestoTemplateBioWiki(pageid)
+
+        //controllo di congruita
+        if (pageid && testoTemplateWiki) {
+            wrapBio = new WrapBio(pageid)
+            wrapBio.setTestoTemplateFinale(testoTemplateWiki)
+            wrapBio.creaTestoVoceFinale()
+            registrata = wrapBio.registraPaginaWiki()
         }// fine del blocco if
 
         // valore di ritorno
@@ -2264,7 +2263,7 @@ class BioService {
         String testoNew
         String wikiTmplBio = ''
         String grailsTmplBio = ''
-        String summary = BioService.summarySetting()
+        String summary = getSummary()
         int oldLen
         int newLen
         int maxDelta = 100

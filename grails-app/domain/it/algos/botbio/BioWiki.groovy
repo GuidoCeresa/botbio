@@ -205,11 +205,11 @@ class BioWiki  {
         ultimaScrittura(nullable: true)
 
         extra()
-        extraLista()
+        extraLista(nullable: true, blank: true)
         graffe()
         note()
         nascosto()
-        errori()
+        errori(nullable: true, blank: true)
         sizeBio()
         modificaWiki(nullable: true)
         letturaWiki(nullable: true)

@@ -2,6 +2,7 @@ package it.algos.botbio
 
 import groovy.util.logging.Log4j
 import it.algos.algoslib.Lib
+import it.algos.algoslib.LibTesto
 import it.algos.algoslib.LibTime
 import it.algos.algoslib.LibWiki
 import it.algos.algoswiki.*
@@ -56,7 +57,7 @@ public class WrapBio {
     public static String tagAvviso = ' <!--Parametro bio inesistente-->'
 
     private HashMap mappaPar
-    private String testoVoce
+    private String testoVoceOriginale
     private String testoTemplateOriginale  // testo del template originale presente sul server
     private int pageid
     private String titoloVoce
@@ -285,7 +286,7 @@ public class WrapBio {
             this.creaTestoFinaleTemplate()
 
             // Crea il testo definitivo della voce
-//            this.creaTestoVoceFinale()
+            this.creaTestoVoceFinale()
         }// fine del blocco if
     }// fine del metodo
 
@@ -323,7 +324,7 @@ public class WrapBio {
                 continua = false
             }// fine del blocco if
 
-//            testoCompletoVoce = this.getTestoVoce()
+//            testoCompletoVoce = this.getTestoVoceOriginale()
 //            if (!testoCompletoVoce) {
 //                this.setStatoBio(StatoBio.vuota)
 //                continua = false
@@ -415,9 +416,9 @@ public class WrapBio {
                 testo = (String) mappaPar[Const.TAG_TESTO]
             }// fine del blocco if
             if (testo) {
-                this.setTestoVoce(testo)
+                this.setTestoVoceOriginale(testo)
             } else {
-                this.setTestoVoce('')
+                this.setTestoVoceOriginale('')
                 trovati = false
                 log.error 'estraeTestoTitolo - La pagina dal titolo ' + mappaPar.title + ' non ha testo'
             }// fine del blocco if-else
@@ -735,9 +736,9 @@ public class WrapBio {
                     chiaveSiAccento = ParBio.getStaticTag(chiaveNoAccento)
                     try { // prova ad eseguire il codice
                         valore = mappaBio."${chiaveSiAccento}"
-                        if (valore) {
-                            bioWiki."${chiaveNoAccento}" = valore
-                        }// fine del blocco if
+//                        if (valore) {
+                        bioWiki."${chiaveNoAccento}" = valore
+//                        }// fine del blocco if
                     } catch (Exception unErrore) { // intercetta l'errore
                     }// fine del blocco try-catch
                 }// fine del blocco if
@@ -749,9 +750,7 @@ public class WrapBio {
             if (mappaPar.pageid) {
                 bioWiki.pageid = mappaPar.pageid
             }// fine del blocco if
-            if (mappaPar.ns) {
-                bioWiki.ns = mappaPar.ns
-            }// fine del blocco if
+            bioWiki.ns = mappaPar.ns
             if (mappaPar.title) {
                 bioWiki.title = mappaPar.title
             }// fine del blocco if
@@ -771,9 +770,7 @@ public class WrapBio {
                 def a = mappaPar.timestamp
                 bioWiki.timestamp = mappaPar.timestamp
             }// fine del blocco if
-            if (mappaPar.comment) {
-                bioWiki.comment = mappaPar.comment
-            }// fine del blocco if
+            bioWiki.comment = mappaPar.comment
             if (mappaPar.logNote) {
                 bioWiki.logNote = mappaPar.logNote
             }// fine del blocco if
@@ -1289,18 +1286,18 @@ public class WrapBio {
     /**
      * Crea il testo definitivo della voce
      */
-    public creaTestoVoceFinale = {
+    public creaTestoVoceFinale() {
         String testoNew = ''
         boolean continua
-        String testoOld = this.getTestoVoce()
-        String oldTemplate = wikiService.recuperaTemplate(testoOld, '[Bb]io')
+        String testoOld = this.getTestoVoceOriginale()
+        String oldTemplate = this.getTestoTemplateOriginale()
         String newTemplate = this.getTestoTemplateFinale()
 
         //controllo di congruita
         continua = (testoOld && oldTemplate && newTemplate)
 
         if (continua) {
-            testoNew = LibBio.sostituisce(testoOld, oldTemplate, 5, newTemplate)
+            testoNew = LibTesto.sostituisce(testoOld, oldTemplate,  newTemplate)
             continua == (testoNew)
         }// fine del blocco if
 
@@ -1326,7 +1323,6 @@ public class WrapBio {
                 bioRegistrata = bioOriginale.save(flush: true)
             } catch (Exception unErrore) { // intercetta l'errore
                 try { // prova ad eseguire il codice
-                    def a = unErrore
                     log.error(avviso)
                     logWikiService.warn(avviso)
                 } catch (Exception unErrore2) { // intercetta l'errore
@@ -1423,12 +1419,12 @@ public class WrapBio {
         Risultato risultato
         String titolo = this.getTitoloVoce()
         String testoVoceFinale = this.getTestoVoceFinale()
-        String summary = BioService.summarySetting() + ' - fix templ'
+        String summary = LibBio.getSummary() + ' - fix temp'
 
         //controllo di congruita
         if (titolo && testoVoceFinale) {
-            risultato = LibBio.caricaPagina(titolo, testoVoceFinale, summary, true)
-            registrata = (risultato == Risultato.registrata)
+            new Edit(titolo, testoVoceFinale, summary)
+//            registrata = (risultato == Risultato.registrata)
         }// fine del blocco if
 
         // valore di ritorno
@@ -1436,13 +1432,13 @@ public class WrapBio {
     } // fine della closure
 
 
-    private void setTestoVoce(String testoVoce) {
-        this.testoVoce = testoVoce
+    private void setTestoVoceOriginale(String testoVoceOriginale) {
+        this.testoVoceOriginale = testoVoceOriginale
     }
 
 
-    public String getTestoVoce() {
-        return testoVoce
+    public String getTestoVoceOriginale() {
+        return testoVoceOriginale
     }
 
 
@@ -1616,7 +1612,7 @@ public class WrapBio {
     }
 
 
-    private void setTestoTemplateFinale(String testoTemplateFinale) {
+    public void setTestoTemplateFinale(String testoTemplateFinale) {
         this.testoTemplateFinale = testoTemplateFinale
     }
 

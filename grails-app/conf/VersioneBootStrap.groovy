@@ -111,6 +111,12 @@ class VersioneBootStrap {
             versioneService.newVersione('Preferenze', 'Aggiunti i campi ordine e descrizione')
         }// fine del blocco if
 
+        //--modificate le constraints di BioWiki
+        if (versioneService && versioneService.installaVersione(18)) {
+            //@todo occorre modificare manualmente il db con "alter table bio_wiki modify column extra_lista longtext set utf8 collate utf8 default null"
+            versioneService.newVersione('Database', 'Modificati con default null i campi: BioWiki.extraLista, BioWiki.errori')
+        }// fine del blocco if
+
 
     }// fine della closure
 

@@ -27,13 +27,14 @@
 
 <div class="nav" role="navigation">
     <ul>
-        <li><a class="home" href="${createLink(uri: '/home')}"><g:message code="default.home.label" default="Home"/></a></li>
+        <li><a class="home" href="${createLink(uri: '/home')}"><g:message code="default.home.label"
+                                                                           default="Home"/></a></li>
         <g:if test="${!noMenuCreate}">
             <li><g:link class="create" action="create"><g:message code="bioWiki.new.label"
                                                                   args="[entityName]" default="Nuovo"/></g:link></li>
         </g:if>
         <g:if test="${menuExtra}">
-            <algos:menuExtra menuExtra="${menuExtra}"> </algos:menuExtra>
+            <algos:menuExtra menuExtra="${menuExtra}"></algos:menuExtra>
         </g:if>
     </ul>
 </div>
@@ -139,6 +140,7 @@
         </g:else>
         </tbody>
     </table>
+
     <div class="pagination">
         <g:paginate total="${bioWikiInstanceTotal}"/>
     </div>

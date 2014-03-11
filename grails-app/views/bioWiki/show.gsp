@@ -26,17 +26,34 @@
     <ul>
         <li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label" default="Home"/></a></li>
         <li><g:link class="list" action="list"><g:message code="bioWiki.list.label" args="[entityName]" default="Elenco"/></g:link></li>
-        <li><g:link class="create" action="create"><g:message code="bioWiki.new.label" args="[entityName]" default="Nuovo"/></g:link></li>
+        <g:if test="${!noMenuCreate}">
+            <li><g:link class="create" action="create"><g:message code="bioWiki.new.label" args="[entityName]" default="Nuovo"/></g:link></li>
+        </g:if>
         <g:if test="${menuExtra}">
-            <algos:menuExtra menuExtra="${menuExtra}"> </algos:menuExtra>
+            <algos:menuExtra menuExtra="${menuExtra}"></algos:menuExtra>
         </g:if>
     </ul>
 </div>
 <div id="show-bioWiki" class="content scaffold-show" role="main">
     <h1><g:message code="bioWiki.show.label" args="[entityName]" default="Mostra"/></h1>
+
     <g:if test="${flash.message}">
         <div class="message" role="status">${flash.message}</div>
     </g:if>
+    <g:if test="${flash.error}">
+        <div class="errors" role="status">${flash.error}</div>
+    </g:if>
+    <g:if test="${flash.messages}">
+        <g:each in="${flash.messages}" status="i" var="singoloMessaggio">
+            <div class="message" role="status">${singoloMessaggio}</div>
+        </g:each>
+    </g:if>
+    <g:if test="${flash.errors}">
+        <g:each in="${flash.errors}" status="i" var="singoloErrore">
+            <div class="errors" role="status">${singoloErrore}</div>
+        </g:each>
+    </g:if>
+
     <ol class="property-list bioWiki">
         
         <g:if test="${bioWikiInstance?.wikiUrl}">

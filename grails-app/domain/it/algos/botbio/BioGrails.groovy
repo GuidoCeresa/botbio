@@ -29,10 +29,11 @@ class BioGrails {
     String localitaNato //luogoNascita oppure luogoNascitaLink se esiste in BioWiki
     String localitaMorto //luogoMorte oppure luogoMorteLink se esiste in BioWiki
 
-    String attivita = ''
-    String attivita2 = ''
-    String attivita3 = ''
-    String nazionalita = ''
+
+    String attivita = ''    //--ridondante - serve per ricerche, filtri e ordinamenti
+    String attivita2 = ''   //--ridondante - serve per ricerche, filtri e ordinamenti
+    String attivita3 = ''   //--ridondante - serve per ricerche, filtri e ordinamenti
+    String nazionalita = '' //--ridondante - serve per ricerche, filtri e ordinamenti
 
     String didascaliaBase
     String didascaliaGiornoNato

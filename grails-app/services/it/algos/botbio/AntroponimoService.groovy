@@ -232,7 +232,7 @@ class AntroponimoService {
         int soglia = Preferenze.getInt(LibBio.SOGLIA_ANTROPONIMI)
         String testo = ''
         String titolo = progetto + 'Liste'
-        String summary = BioService.summarySetting()
+        String summary = LibBio.getSummary()
         int k = 0
         def listaNomi
         Antroponimo antro

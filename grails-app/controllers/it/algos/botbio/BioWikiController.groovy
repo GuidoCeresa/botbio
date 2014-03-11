@@ -306,14 +306,13 @@ class BioWikiController {
         int modificati = 0
         String numVociTxt = ''
         String oldDataTxt
-        flash.message = ''
+        flash.messages = []
 
         listaRecordsModificati = bioWikiService.aggiornaWiki()
         if (listaRecordsModificati) {
             bioService.elabora(listaRecordsModificati)
             modificati = listaRecordsModificati.size()
         }// fine del blocco if
-        flash.messages = []
         if (modificati == 0) {
             flash.messages.add('Le voci presenti nel database erano già aggiornate. Non è stato modificato nulla')
         } else {
@@ -463,9 +462,167 @@ class BioWikiController {
         redirect(action: 'show', id: bioWikiInstance.id)
     } // fine del metodo
 
+    def download() {
+        int pageid = 0
+        def bioWikiInstance = null
+        flash.messages = []
+
+        if (params.id) {
+            pageid = Integer.decode(params.id)
+        }// fine del blocco if
+
+        if (pageid) {
+            bioWikiInstance = BioWiki.findByPageid(pageid)
+        }// fine del blocco if
+
+        if (pageid && bioWikiService) {
+            bioWikiService.download(pageid)
+        }// fine del blocco if
+
+        if (bioWikiInstance) {
+            flash.messages.add("Il record del database su ${bioWikiInstance.title} è stato aggiornato scaricando la voce del server wiki")
+            redirect(action: 'show', id: bioWikiInstance.id)
+        } else {
+            flash.error = 'Non sono riuscito a scaricare la pagina dal server wiki'
+            redirect(action: 'list')
+        }// fine del blocco if-else
+    } // fine del metodo
+
+    def elaboraSingola() {
+        int pageid = 0
+        def bioWikiInstance = null
+        flash.messages = []
+
+        if (params.id) {
+            pageid = Integer.decode(params.id)
+        }// fine del blocco if
+
+        if (pageid) {
+            bioWikiInstance = BioWiki.findByPageid(pageid)
+        }// fine del blocco if
+
+        if (pageid && bioService) {
+            bioService.elabora(pageid)
+        }// fine del blocco if
+
+        if (bioWikiInstance) {
+            flash.messages.add("Il record di ${bioWikiInstance.title} è stato elaborato ed è aggiornato su BioGrails")
+            redirect(action: 'show', id: bioWikiInstance.id)
+        } else {
+            flash.error = 'Non sono riuscito ad elaborare il record'
+            redirect(action: 'list')
+        }// fine del blocco if-else
+    } // fine del metodo
+
+    def fix() {
+        int pageid = 0
+        def bioWikiInstance = null
+        flash.messages = []
+
+        if (params.id) {
+            pageid = Integer.decode(params.id)
+        }// fine del blocco if
+
+        if (pageid) {
+            bioWikiInstance = BioWiki.findByPageid(pageid)
+        }// fine del blocco if
+
+        if (pageid && bioWikiService && bioWikiService) {
+            bioWikiService.download(pageid)
+            bioService.elabora(pageid)
+        }// fine del blocco if
+
+        if (bioWikiInstance) {
+            flash.messages.add("Il record del database su ${bioWikiInstance.title} è stato aggiornato scaricando la voce del server wiki")
+            flash.messages.add("Il record di ${bioWikiInstance.title} è stato elaborato ed è aggiornato su BioGrails")
+            redirect(action: 'show', id: bioWikiInstance.id)
+        } else {
+            redirect(action: 'list')
+        }// fine del blocco if-else
+    } // fine del metodo
+
+    def upload() {
+        if (grailsApplication && grailsApplication.config.login) {
+            esegueUpload()
+        } else {
+            flash.error = 'Devi essere loggato per poter eseguire un upload'
+            redirect(action: 'list')
+        }// fine del blocco if-else
+    } // fine del metodo
+
+    def esegueUpload() {
+        int pageid = 0
+        def bioWikiInstance = null
+        flash.messages = []
+
+        if (params.id) {
+            pageid = Integer.decode(params.id)
+        }// fine del blocco if
+
+        if (pageid) {
+            bioWikiInstance = BioWiki.findByPageid(pageid)
+        }// fine del blocco if
+
+        if (pageid && bioService) {
+            bioService.uploadWiki(pageid)
+            bioWikiService.download(pageid)
+            bioService.elabora(pageid)
+        }// fine del blocco if
+
+        if (bioWikiInstance) {
+            flash.messages.add("Il record di ${bioWikiInstance.title} è stato caricato sul server wiki aggiornando la voce")
+            flash.messages.add("Il record del database su ${bioWikiInstance.title} è stato aggiornato scaricando la voce del server wiki")
+            flash.messages.add("Il record di ${bioWikiInstance.title} è stato elaborato ed è aggiornato su BioGrails")
+            redirect(action: 'show', id: bioWikiInstance.id)
+        } else {
+            redirect(action: 'list')
+        }// fine del blocco if-else
+    } // fine del metodo
+
+    def ciclo() {
+        if (grailsApplication && grailsApplication.config.login) {
+            esegueCiclo()
+        } else {
+            flash.error = 'Devi essere loggato per poter eseguire un ciclo completo'
+            redirect(action: 'list')
+        }// fine del blocco if-else
+    } // fine del metodo
+
+    def esegueCiclo() {
+        int pageid = 0
+        def bioWikiInstance = null
+        flash.messages = []
+
+        if (params.id) {
+            pageid = Integer.decode(params.id)
+        }// fine del blocco if
+
+        if (pageid) {
+            bioWikiInstance = BioWiki.findByPageid(pageid)
+        }// fine del blocco if
+
+        if (pageid && bioService) {
+            bioWikiService.download(pageid)
+            bioService.uploadWiki(pageid)
+            bioWikiService.download(pageid)
+            bioService.elabora(pageid)
+        }// fine del blocco if
+
+        if (bioWikiInstance) {
+            flash.messages.add("Il record del database su ${bioWikiInstance.title} è stato aggiornato scaricando la voce del server wiki")
+            flash.messages.add("Il record di ${bioWikiInstance.title} è stato caricato sul server wiki aggiornando la voce")
+            flash.messages.add("Il record del database su ${bioWikiInstance.title} è stato aggiornato scaricando la voce del server wiki")
+            flash.messages.add("Il record di ${bioWikiInstance.title} è stato elaborato ed è aggiornato su BioGrails")
+            redirect(action: 'show', id: bioWikiInstance.id)
+        } else {
+            redirect(action: 'list')
+        }// fine del blocco if-else
+    } // fine del metodo
+
     def show(Long id) {
         def bioWikiInstance = BioWiki.get(id)
         ArrayList menuExtra
+        def noMenuCreate = true
 
         if (!bioWikiInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'bioWiki.label', default: 'BioWiki'), id])
@@ -476,10 +633,16 @@ class BioWikiController {
         //--selezione dei menu extra
         //--solo azione e di default controller=questo; classe e titolo vengono uguali
         //--mappa con [cont:'controller', action:'metodo', icon:'iconaImmagine', title:'titoloVisibile']
-        String query = "select id from BioGrails where pageid=" + bioWikiInstance.pageid
+        int pageid = bioWikiInstance.pageid
+        String query = "select id from BioGrails where pageid=" + pageid
         ArrayList ref = BioGrails.executeQuery(query)
         long idGrails = (long) ref.get(0)
         menuExtra = [
+                [cont: 'bioWiki', action: "download/${pageid}", icon: 'frecciagiu', title: 'Download'],
+                [cont: 'bioWiki', action: "elaboraSingola/${pageid}", icon: 'database', title: 'Elabora'],
+                [cont: 'bioWiki', action: "fix/${pageid}", icon: 'frecciagiu', title: 'Fix (download + elabora)'],
+                [cont: 'bioWiki', action: "upload/${pageid}", icon: 'frecciasu', title: 'Upload'],
+                [cont: 'bioWiki', action: "ciclo/${pageid}", icon: 'frecciasu', title: 'Ciclo (download + elabora + upload)'],
                 [cont: 'bioGrails', action: "show/${idGrails}", icon: 'scambia', title: 'BioGrails']
         ]
         // fine della definizione
@@ -488,7 +651,8 @@ class BioWikiController {
         //--menuExtra può essere nullo o vuoto
         render(view: 'show', model: [
                 bioWikiInstance: bioWikiInstance,
-                menuExtra: menuExtra],
+                menuExtra: menuExtra,
+                noMenuCreate: noMenuCreate],
                 params: params)
     } // fine del metodo
 

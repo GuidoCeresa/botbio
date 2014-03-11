@@ -195,6 +195,7 @@ class BioGrailsController {
         redirect(action: 'list')
     } // fine del metodo
 
+
     def list(Integer max) {
         params.max = Math.min(max ?: 100, 100)
         ArrayList menuExtra
@@ -317,9 +318,36 @@ class BioGrailsController {
         redirect(action: 'show', id: bioGrailsInstance.id)
     } // fine del metodo
 
+    def elaboraSingola() {
+        int pageid = 0
+        def bioGrailsInstance = null
+
+        if (params.id) {
+            pageid = Integer.decode(params.id)
+        }// fine del blocco if
+
+        if (pageid) {
+            bioGrailsInstance = BioGrails.findByPageid(pageid)
+        }// fine del blocco if
+
+        if (pageid && bioService) {
+            bioService.elabora(pageid)
+        }// fine del blocco if
+
+        if (bioGrailsInstance) {
+            flash.message = "Il record di ${bioGrailsInstance.title} è stato elaborato ed è aggiornato"
+            redirect(action: 'show', id: bioGrailsInstance.id)
+        } else {
+            flash.error = 'Non sono riuscito ad elaborare il record'
+            redirect(action: 'list')
+        }// fine del blocco if-else
+    } // fine del metodo
+
+
     def show(Long id) {
         def bioGrailsInstance = BioGrails.get(id)
         ArrayList menuExtra
+        def noMenuCreate = true
 
         if (!bioGrailsInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'bioGrails.label', default: 'BioGrails'), id])
@@ -330,10 +358,12 @@ class BioGrailsController {
         //--selezione dei menu extra
         //--solo azione e di default controller=questo; classe e titolo vengono uguali
         //--mappa con [cont:'controller', action:'metodo', icon:'iconaImmagine', title:'titoloVisibile']
-        String query = "select id from BioWiki where pageid=" + bioGrailsInstance.pageid
+        int pageid = bioGrailsInstance.pageid
+        String query = "select id from BioWiki where pageid=" + pageid
         ArrayList ref = BioWiki.executeQuery(query)
         long idWiki = (long) ref.get(0)
         menuExtra = [
+                [cont: 'bioGrails', action: "elaboraSingola/${pageid}", icon: 'database', title: 'Elabora'],
                 [cont: 'bioWiki', action: "show/${idWiki}", icon: 'scambia', title: 'BioWiki']
         ]
         // fine della definizione
@@ -342,7 +372,8 @@ class BioGrailsController {
         //--menuExtra può essere nullo o vuoto
         render(view: 'show', model: [
                 bioGrailsInstance: bioGrailsInstance,
-                menuExtra: menuExtra],
+                menuExtra: menuExtra,
+                noMenuCreate: noMenuCreate],
                 params: params)
     } // fine del metodo
 

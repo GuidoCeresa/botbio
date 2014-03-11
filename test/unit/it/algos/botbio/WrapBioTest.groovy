@@ -180,7 +180,7 @@ class WrapBioTest extends GrailsUnitTestCase {
         voceBioRichiesta = StatoBio.vuota
         wrap = new WrapBio(titolo)
         assert wrap
-        testoVoce = wrap.getTestoVoce()
+        testoVoce = wrap.getTestoVoceOriginale()
         assert testoVoce == ''
         testoTemplate = wrap.getTestoTemplateOriginale()
         assert testoTemplate == ''
@@ -192,7 +192,7 @@ class WrapBioTest extends GrailsUnitTestCase {
         voceBioRichiesta = StatoBio.redirect
         wrap = new WrapBio(titolo)
         assert wrap
-        testoVoce = wrap.getTestoVoce()
+        testoVoce = wrap.getTestoVoceOriginale()
         assert testoVoce
         testoTemplate = wrap.getTestoTemplateOriginale()
         assert testoTemplate == ''
@@ -204,7 +204,7 @@ class WrapBioTest extends GrailsUnitTestCase {
         voceBioRichiesta = StatoBio.bioErrato
         wrap = new WrapBio(titolo)
         assert wrap
-        testoVoce = wrap.getTestoVoce()
+        testoVoce = wrap.getTestoVoceOriginale()
         assert testoVoce
         testoTemplate = wrap.getTestoTemplateOriginale()
         assert testoTemplate
@@ -216,7 +216,7 @@ class WrapBioTest extends GrailsUnitTestCase {
         voceBioRichiesta = StatoBio.bioIncompleto
         wrap = new WrapBio(titolo)
         assert wrap
-        testoVoce = wrap.getTestoVoce()
+        testoVoce = wrap.getTestoVoceOriginale()
         assert testoVoce
         testoTemplate = wrap.getTestoTemplateOriginale()
         assert testoTemplate
@@ -228,7 +228,7 @@ class WrapBioTest extends GrailsUnitTestCase {
         voceBioRichiesta = StatoBio.bioNormale
         wrap = new WrapBio(titolo)
         assert wrap
-        testoVoce = wrap.getTestoVoce()
+        testoVoce = wrap.getTestoVoceOriginale()
         assert testoVoce
         testoTemplate = wrap.getTestoTemplateOriginale()
         assert testoTemplate
@@ -240,7 +240,7 @@ class WrapBioTest extends GrailsUnitTestCase {
         voceBioRichiesta = StatoBio.bioNormale
         wrap = new WrapBio(titolo)
         assert wrap
-        testoVoce = wrap.getTestoVoce()
+        testoVoce = wrap.getTestoVoceOriginale()
         assert testoVoce
         testoTemplate = wrap.getTestoTemplateOriginale()
         assert testoTemplate
@@ -252,7 +252,7 @@ class WrapBioTest extends GrailsUnitTestCase {
         voceBioRichiesta = StatoBio.disambigua
         wrap = new WrapBio(titolo)
         assert wrap
-        testoVoce = wrap.getTestoVoce()
+        testoVoce = wrap.getTestoVoceOriginale()
         assert testoVoce
         testoTemplate = wrap.getTestoTemplateOriginale()
         assert testoTemplate == ''
@@ -264,7 +264,7 @@ class WrapBioTest extends GrailsUnitTestCase {
         voceBioRichiesta = StatoBio.senzaBio
         wrap = new WrapBio(titolo)
         assert wrap
-        testoVoce = wrap.getTestoVoce()
+        testoVoce = wrap.getTestoVoceOriginale()
         assert testoVoce
         testoTemplate = wrap.getTestoTemplateOriginale()
         assert testoTemplate == ''
@@ -582,7 +582,7 @@ class WrapBioTest extends GrailsUnitTestCase {
             assert pageid != null
             assert pageid instanceof Integer
 
-            testoVoce = wrap.getTestoVoce()
+            testoVoce = wrap.getTestoVoceOriginale()
             assert testoVoce != null
             assert testoVoce instanceof String
 

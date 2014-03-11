@@ -90,7 +90,7 @@ abstract class BioAttNaz {
         ArrayList<Long> listaVociId = this.getListaVociId()
         ArrayList listaDidascalie = new ArrayList()
         BioGrails bioGrails
-        boolean perAdessoFalso = false
+        boolean perAdessoFalso = true //cambiato in true il 8-3-14
 
         // controllo di congruità
         if (listaVociId) {

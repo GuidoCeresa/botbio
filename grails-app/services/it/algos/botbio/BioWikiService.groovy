@@ -945,7 +945,7 @@ class BioWikiService {
                 log.error "download - La voce ${title}, non è stata registrata"
             }// fine del blocco if-else
 
-//            testoOld = wrapBio.getTestoVoce().length()
+//            testoOld = wrapBio.getTestoVoceOriginale().length()
 //            testoNew = wrapBio.getTestoVoceFinale().length()
 //            if (testoOld != testoNew) {
 //                if (wrapBio.registraPaginaWiki()) {
@@ -1218,5 +1218,44 @@ class BioWikiService {
 
         return elencoPageids
     }// fine del metodo
+
+    /**
+     * Crea il testo definitivo del template con i dati modificati nel record di BioWiki
+     *
+     * I campi/parametri sono ordinati come l'enumeration
+     * Riporta sempore i campi/parametri (anche vuoti)
+     * Riporta gli altri campi/parametri solo se hanno un valore
+     */
+    public String creaTestoTemplateBioWiki(int pageid) {
+        String testoTemplate = ''
+        BioWiki bioWiki = BioWiki.findByPageid(pageid)
+        String tagIni = '{{Bio'
+        String aCapo = '\n'
+        String tagPipe = '|'
+        String tagSep = ' = '
+        String tagEnd = '}}'
+        def campo
+
+        //controllo di congruita
+        if (pageid && bioWiki) {
+            testoTemplate += tagIni
+            testoTemplate += aCapo
+            ParBio.each {
+                campo = it.toString()
+                if (it.semplice || bioWiki."${campo}") {
+                    testoTemplate += tagPipe
+                    testoTemplate += it.tag
+                    testoTemplate += tagSep
+                    if (bioWiki."${campo}") {
+                        testoTemplate += bioWiki."${campo}"
+                    }// fine del blocco if
+                    testoTemplate += aCapo
+                }// fine del blocco if
+            } // fine di each
+            testoTemplate += tagEnd
+        }// fine del blocco if
+
+        return testoTemplate
+    } // fine della closure
 
 } // fine della service classe
