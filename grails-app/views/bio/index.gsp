@@ -134,6 +134,7 @@
             <li class="controller"><g:link controller="bio" action="pargiorno">Controllo giorni errati</g:link></li>
             <li class="controller"><g:link controller="bio" action="parOrdinamentoVuoti">Controllo parametro forzaOrdinamento in BioGrails</g:link></li>
             <li class="controller"><g:link controller="bio" action="didascaliaListe">Controllo parametro didascaliaListe in BioGrails</g:link></li>
+            <li class="controller"><g:link controller="bio" action="seleziona">Selezione di una pagina dal title o dal pageId</g:link></li>
             <li class="controller"><g:link controller="bio" action="test">Test di prova</g:link></li>
         </ul>
     </div>

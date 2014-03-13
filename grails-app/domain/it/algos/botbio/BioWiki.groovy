@@ -20,7 +20,7 @@ import java.text.SimpleDateFormat
  * Classe con esattamente i dati esistenti sul server (nel momento in cui li legge)
  * Fotocopia esatta
  */
-class BioWiki  {
+class BioWiki {
 
     /** nomi interni dei campi (ordine non garantito) */
     //--parametri wiki
@@ -129,7 +129,7 @@ class BioWiki  {
     boolean controllato = false
 
     //serve per le voci che sono state elaborate e trasferite (creando od aggiornando il record) su BioGrails
-    boolean elaborata=false
+    boolean elaborata = false
 
     //serve per le voci a cui manca uno o più parametri fondamentali
     boolean incompleta = false
@@ -310,63 +310,72 @@ class BioWiki  {
      * afterUpdate - Executed after an object has been updated
      * afterDelete - Executed after an object has been deleted
      * onLoad - Executed when an object is loaded from the database
+     * devono essere metodi e non closure (le closure non funzionano dal 13-3-14)
      */
 
     /**
      * metodo chiamato automaticamente da Grails
      * prima di creare un nuovo record
+     * metodo e non closure (non funziona)
      */
-    def beforeInsert = {
-    } // end of def beforeInsert
+    def beforeInsert() {
+    } // end of metodo beforeInsert
 
     /**
      * metodo chiamato automaticamente da Grails
      * prima di registrare un record esistente
+     * metodo e non closure (non funziona)
      */
-    def beforeUpdate = {
-    } // end of def beforeUpdate
+    def beforeUpdate() {
+    } // end of metodo beforeUpdate
 
     /**
      * metodo chiamato automaticamente da Grails
      * prima di cancellare un record
+     * metodo e non closure (non funziona)
      */
-    def beforeDelete = {
-    } // end of def beforeDelete
+    def beforeDelete() {
+    } // end of metodo beforeDelete
 
     /**
      * metodo chiamato automaticamente da Grails
      * prima di convalidare un record
+     * metodo e non closure (non funziona)
      */
-    def beforeValidate = {
-    } // end of def beforeDelete
+    def beforeValidate() {
+    } // end of metodo beforeDelete
 
     /**
      * metodo chiamato automaticamente da Grails
      * dopo aver creato un nuovo record
+     * metodo e non closure (non funziona)
      */
-    def afterInsert = {
-    } // end of def beforeInsert
+    def afterInsert() {
+    } // end of metodo beforeInsert
 
     /**
      * metodo chiamato automaticamente da Grails
      * dopo aver registrato un record esistente
+     * metodo e non closure (non funziona)
      */
-    def afterUpdate = {
-    } // end of def beforeUpdate
+    def afterUpdate() {
+    } // end of metodo beforeUpdate
 
     /**
      * metodo chiamato automaticamente da Grails
      * dopo aver cancellato un record
+     * metodo e non closure (non funziona)
      */
-    def afterDelete = {
-    } // end of def beforeDelete
+    def afterDelete() {
+    } // end of metodo beforeDelete
 
     /**
      * metodo chiamato automaticamente da Grails
      * dopo che il record è stato letto dal database e
      * le proprietà dell'oggetto sono state aggiornate
+     * metodo e non closure (non funziona)
      */
-    def onLoad = {
-    } // end of def onLoad
+    def onLoad() {
+    } // end of metodo onLoad
 
 } // fine della domain classe

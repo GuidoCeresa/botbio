@@ -396,10 +396,18 @@ class BioWikiController {
         //--selezione dei records da mostrare
         //--per una lista filtrata (parziale), modificare i parametri
         //--oppure modificare il findAllByInteroGreaterThan()...
-        lista = BioWiki.findAll(params)
+        if (params.nome) {
+            lista = BioWiki.findAllByNome(params.nome, params)
+        } else {
+            if (params.cognome) {
+                lista = BioWiki.findAllByCognome(params.cognome, params)
+            } else {
+                lista = BioWiki.findAll(params)
+            }// fine del blocco if-else
+        }// fine del blocco if-else
 
         //--calcola il numero di record
-        recordsTotali = BioWiki.count()
+        recordsTotali = lista.size()
 
         //--titolo visibile sopra la table dei dati
         titoloLista = 'Elenco di ' + Lib.Txt.formatNum(recordsTotali) + ' biografie (fotocopia originali wiki)'

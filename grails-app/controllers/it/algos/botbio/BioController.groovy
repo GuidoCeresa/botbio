@@ -605,6 +605,69 @@ class BioController {
         redirect(action: 'parOrdinamentoVuoti')
     } // fine del metodo
 
+    //--mostra un dialogo di selezione per trovare un record
+    //--seleziona in base al title (titolo) della pagina
+    //--seleziona in base al pageId
+    def seleziona() {
+        params.tipo = TipoDialogo.inputTesto
+        params.titolo = 'Seleziona pagina'
+        params.avviso = []
+        params.avviso.add("Selezione di una voce (record)")
+        params.avviso.add("La voce (record) può essere selezionata in base al title (titolo) della pagina di wikipedia")
+        params.avviso.add("La voce (record) può essere selezionata in base al pageId della pagina di wikipedia")
+        params.avviso.add("Le voci (lista di record) possono essere selezionate in base al nome della persona")
+        params.avviso.add("Le voci (lista di record) possono essere selezionate in base al cognome della persona")
+        params.avviso.add("Scrivi il title esattamente come riportato sul server di wikipedia, oppure scrivi il pageId, oppure il nome, oppure il cognome")
+        params.returnController = 'bio'
+        params.returnAction = 'selezionaEffettivo'
+        redirect(controller: 'dialogo', action: 'box', params: params)
+    } // fine del metodo
+
+    //--estrae il valore della risposta dal dialogo
+    //--seleziona in base al title (titolo) della pagina
+    //--seleziona in base al pageId
+    //--prima prova come pageId, poi come title
+    //--se ne trova più di uno prova come nome e poi come cognome
+    def selezionaEffettivo() {
+        def valore
+        int pageId
+        def risultato
+        BioWiki bioWiki = null
+        Antroponimo antroponimo = null
+
+        if (params.valore) {
+            valore = params.valore
+        }// fine del blocco if
+
+        if (valore) {
+            try { // prova ad eseguire il codice
+                pageId = Integer.decode(valore)
+                bioWiki = BioWiki.findByPageid(pageId)
+            } catch (Exception unErrore) { // intercetta l'errore
+                def e = unErrore
+                valore = valore.trim()
+                risultato = BioWiki.findAllByTitle(valore)
+                if (risultato.size() == 1) {
+                    bioWiki = risultato.get(0)
+                } else {
+                    antroponimo = Antroponimo.findByNome(valore)
+                    if (antroponimo) {
+                        params.nome = valore
+                    } else {
+                        params.cognome = valore
+                    }// fine del blocco if-else
+                }// fine del blocco if-else
+            }// fine del blocco try-catch
+        }// fine del blocco if
+
+        if (bioWiki) {
+            params.id = bioWiki.id
+            redirect(controller: 'bioWiki', action: 'show', params: params)
+        } else {
+            redirect(controller: 'bioWiki', action: 'index', params: params)
+        }// fine del blocco if-else
+    } // fine del metodo
+
     //--parametro didascaliaListe
     def didascaliaListe() {
         params.max = 100
