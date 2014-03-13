@@ -728,7 +728,7 @@ class BioController {
         //--titolo visibile sopra la table dei dati
         titoloLista = 'Elenco di '
         titoloLista += Lib.Txt.formatNum(params.max) + '/' + Lib.Txt.formatNum(recordsTotaliVuoti)
-        titoloLista += ' records col parametro didascaliaListe vuoto'
+        titoloLista += ' records col parametro didascaliaListe vuoto/nullo'
         titoloLista += ' su un totale di ' + Lib.Txt.formatNum(vociBiograficheTotali) + ' voci biografiche'
 
         //--presentazione della view (list), secondo il modello

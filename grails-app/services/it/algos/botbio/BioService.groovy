@@ -84,18 +84,33 @@ class BioService {
     public ArrayList<Integer> elabora() {
         // variabili e costanti locali di lavoro
         ArrayList<Integer> listaRecordsElaborati = null
-        ArrayList<Integer> listaid
+        ArrayList<Integer> listaDidascalieNulle
+        ArrayList<Integer> listaNonElaborate
+        ArrayList<Integer> listaPageId = null
         int maxElabora
 
-        listaid = (ArrayList<Integer>) BioWiki.executeQuery('select pageid from BioWiki where elaborata=false order by letturaWiki asc')
+        listaDidascalieNulle = (ArrayList<Integer>) BioGrails.executeQuery('select pageid from BioGrails where didascaliaListe is null')
+        listaNonElaborate = (ArrayList<Integer>) BioWiki.executeQuery('select pageid from BioWiki where elaborata=false order by letturaWiki asc')
+
+        if (listaDidascalieNulle && listaNonElaborate) {
+            listaPageId = listaDidascalieNulle + listaNonElaborate
+            listaPageId = LibArray.valoriUnici(listaPageId)
+        } else {
+            if (listaDidascalieNulle) {
+                listaPageId = listaDidascalieNulle
+            }// fine del blocco if
+            if (listaNonElaborate) {
+                listaPageId = listaNonElaborate
+            }// fine del blocco if
+        }// fine del blocco if-else
 
         if (LibPref.getBool(LibBio.USA_LIMITE_ELABORA)) {
             maxElabora = LibPref.getInt(LibBio.MAX_ELABORA)
-            listaid = LibArray.estraArray(listaid, maxElabora)
+            listaPageId = LibArray.estraArray(listaPageId, maxElabora)
         }// fine del blocco if
 
-        if (listaid) {
-            listaRecordsElaborati = elabora(listaid)
+        if (listaPageId) {
+            listaRecordsElaborati = elabora(listaPageId)
         }// fine del blocco if
 
         return listaRecordsElaborati

@@ -16,6 +16,7 @@ package it.algos.botbio
 import it.algos.algos.DialogoController
 import it.algos.algos.TipoDialogo
 import it.algos.algoslib.Lib
+import it.algos.algospref.Preferenze
 import org.codehaus.groovy.grails.commons.DefaultGrailsDomainClass
 import org.springframework.dao.DataIntegrityViolationException
 
@@ -128,7 +129,11 @@ class BioGrailsController {
         }// fine del blocco if
 
         if (continua) {
-            bioService.elaboraAll()
+            if (Preferenze.getBool(LibBio.USA_LIMITE_ELABORA)) {
+                bioService.elabora()
+            } else {
+                bioService.elaboraAll()
+            }// fine del blocco if-else
         }// fine del blocco if
 
         redirect(action: 'list')
