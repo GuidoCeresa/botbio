@@ -157,36 +157,23 @@ class AntroponimoService {
 
     //--ricostruisce i records di antroponimi
     public static void spazzolaPacchetto(ArrayList<String> listaNomiUniciDiversiPerAccento) {
+        int soglia = Preferenze.getInt(LibBio.SOGLIA_ANTROPONIMI)
+
         listaNomiUniciDiversiPerAccento?.each {
-            spazzolaNome(it)
+            spazzolaNome(it, soglia)
         }// fine del ciclo each
     }// fine del metodo
 
-    private static void spazzolaNome(String nome) {
+    private static void spazzolaNome(String nome, int soglia) {
         int lunghezza
         int numVoci
-        Antroponimo nuovoAntroponimo = null
 
         if (nome) {
             numVoci = numeroVociCheUsanoNome(nome)
-            if (numVoci > 0) {
+            if (numVoci > soglia) {
                 lunghezza = nome.length()
-                nuovoAntroponimo = Antroponimo.findByNome(nome)
-                if (!nuovoAntroponimo) {
-                    nuovoAntroponimo = new Antroponimo(nome: nome)
-                    nuovoAntroponimo.voci = numVoci
-                    nuovoAntroponimo.lunghezza = lunghezza
-                    nuovoAntroponimo.save()
-                }// fine del blocco if
-//                nuovoAntroponimo = new Antroponimo(nome: nome, voci: numVoci, lunghezza: lunghezza).save(flush: true)
-            } else {
-                def stop // c'è qualcosa che non va
-            }// fine del blocco if-else
-//            if (nuovoAntroponimo) {
-//                println(pos + '/' + totaleNomi + ' - ' + nome)
-//            } else {
-//                println('Non sono riuscito a registrare il nome: ' + nome)
-//            }// fine del blocco if-else
+                new Antroponimo(nome: nome, voci: numVoci, lunghezza: lunghezza).save()
+            }// fine del blocco if
         }// fine del blocco if
     }// fine del metodo
 

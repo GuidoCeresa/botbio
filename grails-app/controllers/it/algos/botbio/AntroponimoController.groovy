@@ -79,7 +79,6 @@ class AntroponimoController {
         int delta = 100
         int totaleVoci = BioGrails.count()
         log.info 'Inizio costruzione antroponimi'
-
         long inizio
         long fine
         long durata
@@ -90,14 +89,18 @@ class AntroponimoController {
 
         //ciclo
         for (int k = 0; k < totaleVoci; k += delta) {
+            inizio = System.currentTimeMillis()
             listaNomiParziale = (ArrayList<String>) BioGrails.executeQuery(query, [max: delta, offset: k])
             listaNomiUniciDiversiPerAccento = antroponimoService.elaboraNomiUnici(listaNomiParziale)
+            fine = System.currentTimeMillis()
+            durata = fine - inizio
+            println('Antroponimi 100 elabora: ' + durata)
 
             inizio = System.currentTimeMillis()
             antroponimoService.spazzolaPacchetto(listaNomiUniciDiversiPerAccento)
             fine = System.currentTimeMillis()
             durata = fine - inizio
-            println('Antroponimi 100: ' + durata)
+            println('Antroponimi 100 spazzola: ' + durata)
 
             log.info 'Elaborate ' + LibTesto.formatNum(k + delta) + ' voci'
         } // fine del ciclo for

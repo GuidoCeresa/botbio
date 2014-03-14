@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="68254703-7597-4adf-9a44-9a0e7a7facfd" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/controllers/it/algos/botbio/BioController.groovy" afterPath="$PROJECT_DIR$/grails-app/controllers/it/algos/botbio/BioController.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/controllers/it/algos/botbio/BioGrailsController.groovy" afterPath="$PROJECT_DIR$/grails-app/controllers/it/algos/botbio/BioGrailsController.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/services/it/algos/botbio/BioService.groovy" afterPath="$PROJECT_DIR$/grails-app/services/it/algos/botbio/BioService.groovy" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/controllers/it/algos/botbio/AntroponimoController.groovy" afterPath="$PROJECT_DIR$/grails-app/controllers/it/algos/botbio/AntroponimoController.groovy" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/services/it/algos/botbio/AntroponimoService.groovy" afterPath="$PROJECT_DIR$/grails-app/services/it/algos/botbio/AntroponimoService.groovy" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application.properties" afterPath="$PROJECT_DIR$/application.properties" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
@@ -131,6 +130,21 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
+      <breakpoint url="file://$PROJECT_DIR$/grails-app/controllers/it/algos/botbio/AntroponimoController.groovy" line="107" class="it.algos.botbio.AntroponimoController" package="it.algos.botbio">
+        <option name="ENABLED" value="true" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="REMOVE_AFTER_HIT" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="SUSPEND" value="true" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="true" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
     </line_breakpoints>
     <breakpoint_any default_suspend_policy="SuspendAll" default_condition_enabled="true">
       <breakpoint>
@@ -177,33 +191,19 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="BioWikiController.groovy" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/grails-app/controllers/it/algos/botbio/BioWikiController.groovy">
+      <file leaf-file-name="AntroponimoService.groovy" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/grails-app/services/it/algos/botbio/AntroponimoService.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="312" column="28" selection-start="14169" selection-end="14169" vertical-scroll-proportion="-6.0434785" vertical-offset="4541" max-vertical-offset="11010">
-              <folding>
-                <element signature="e#703#742#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="BioController.groovy" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/grails-app/controllers/it/algos/botbio/BioController.groovy">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="721" column="82" selection-start="28692" selection-end="28820" vertical-scroll-proportion="-10.086957" vertical-offset="10508" max-vertical-offset="11970">
+            <state line="195" column="68" selection-start="7043" selection-end="7043" vertical-scroll-proportion="0.0" vertical-offset="2466" max-vertical-offset="15150">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="BioWiki.groovy" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/grails-app/domain/it/algos/botbio/BioWiki.groovy">
-          <provider editor-type-id="org.jetbrains.plugins.grails.perspectives.DomainClassesRelationsEditorProvider">
-            <state />
-          </provider>
+      <file leaf-file-name="AntroponimoController.groovy" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/grails-app/controllers/it/algos/botbio/AntroponimoController.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="131" column="18" selection-start="4667" selection-end="4667" vertical-scroll-proportion="-3.9" vertical-offset="1755" max-vertical-offset="5790">
+            <state line="99" column="42" selection-start="4189" selection-end="4189" vertical-scroll-proportion="-11.173913" vertical-offset="1153" max-vertical-offset="5055">
               <folding />
             </state>
           </provider>
@@ -212,39 +212,7 @@
       <file leaf-file-name="application.properties" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/application.properties">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="4" column="16" selection-start="110" selection-end="110" vertical-scroll-proportion="0.14888337" vertical-offset="0" max-vertical-offset="403">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="BioGrailsController.groovy" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/grails-app/controllers/it/algos/botbio/BioGrailsController.groovy">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="132" column="30" selection-start="5790" selection-end="5790" vertical-scroll-proportion="-11.826087" vertical-offset="1708" max-vertical-offset="6795">
-              <folding>
-                <element signature="e#717#756#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="BioGrails.groovy" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/grails-app/domain/it/algos/botbio/BioGrails.groovy">
-          <provider editor-type-id="org.jetbrains.plugins.grails.perspectives.DomainClassesRelationsEditorProvider">
-            <state />
-          </provider>
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="35" column="85" selection-start="1574" selection-end="1574" vertical-scroll-proportion="16.2" vertical-offset="1335" max-vertical-offset="3270">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="BioService.groovy" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/grails-app/services/it/algos/botbio/BioService.groovy">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="88" column="45" selection-start="3621" selection-end="3621" vertical-scroll-proportion="0.0" vertical-offset="1295" max-vertical-offset="62445">
+            <state line="6" column="46" selection-start="142" selection-end="142" vertical-scroll-proportion="0.12587413" vertical-offset="0" max-vertical-offset="715">
               <folding />
             </state>
           </provider>
@@ -289,7 +257,6 @@
         <option value="$PROJECT_DIR$/grails-app/views/bioGrails/show.gsp" />
         <option value="$USER_HOME$/.grails/2.2.3/projects/botbio/plugins/algoswiki-0.82/src/groovy/it/algos/algoswiki/WrapTime.groovy" />
         <option value="$PROJECT_DIR$/test/unit/it/algos/botbio/WrapBioTest.groovy" />
-        <option value="$PROJECT_DIR$/grails-app/controllers/it/algos/botbio/AntroponimoController.groovy" />
         <option value="$PROJECT_DIR$/grails-app/jobs/AttNazJob.groovy" />
         <option value="$PROJECT_DIR$/grails-app/jobs/AntroponimoJob.groovy" />
         <option value="$PROJECT_DIR$/src/groovy/it/algos/botbio/LibBio.groovy" />
@@ -309,7 +276,6 @@
         <option value="$PROJECT_DIR$/grails-app/conf/VersioneBootStrap.groovy" />
         <option value="$PROJECT_DIR$/grails-app/domain/it/algos/botbio/BioGrails.groovy" />
         <option value="$PROJECT_DIR$/src/templates/scaffolding/show.gsp" />
-        <option value="$PROJECT_DIR$/grails-app/services/it/algos/botbio/AntroponimoService.groovy" />
         <option value="$PROJECT_DIR$/src/groovy/it/algos/botbio/WrapBio.groovy" />
         <option value="$PROJECT_DIR$/grails-app/services/it/algos/botbio/BioWikiService.groovy" />
         <option value="$PROJECT_DIR$/grails-app/domain/it/algos/botbio/BioWiki.groovy" />
@@ -318,6 +284,8 @@
         <option value="$PROJECT_DIR$/grails-app/controllers/it/algos/botbio/BioController.groovy" />
         <option value="$PROJECT_DIR$/grails-app/controllers/it/algos/botbio/BioGrailsController.groovy" />
         <option value="$PROJECT_DIR$/grails-app/services/it/algos/botbio/BioService.groovy" />
+        <option value="$PROJECT_DIR$/grails-app/controllers/it/algos/botbio/AntroponimoController.groovy" />
+        <option value="$PROJECT_DIR$/grails-app/services/it/algos/botbio/AntroponimoService.groovy" />
         <option value="$PROJECT_DIR$/application.properties" />
       </list>
     </option>
@@ -383,60 +351,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="botbio" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="botbio" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="groovy" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="botbio" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="botbio" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="botbio" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="grails-app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="views" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="botbio" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="botbio" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
               <option name="myItemId" value="grails-app" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -455,25 +369,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="jobs" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="botbio" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="botbio" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="grails-app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="controllers" />
+              <option name="myItemId" value="services" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -1043,7 +939,7 @@
       <workItem from="1394350451233" duration="7223000" />
       <workItem from="1394514342101" duration="2745000" />
       <workItem from="1394566769676" duration="2305000" />
-      <workItem from="1394688561707" duration="10153000" />
+      <workItem from="1394688561707" duration="14394000" />
     </task>
     <task id="LOCAL-00001" summary="working">
       <created>1379825094196</created>
@@ -1381,11 +1277,15 @@
       <created>1394695297498</created>
       <updated>1394695297499</updated>
     </task>
-    <option name="localTasksCounter" value="85" />
+    <task id="LOCAL-00085" summary="1.53&#10;">
+      <created>1394717817621</created>
+      <updated>1394717817621</updated>
+    </task>
+    <option name="localTasksCounter" value="86" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="290054000" />
+    <option name="totallyTimeSpent" value="294295000" />
   </component>
   <component name="TodoView" selected-index="0">
     <todo-panel id="selected-file">
@@ -1429,7 +1329,7 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32911393" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Bean Validation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.41935483" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.41935483" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2562929" sideWeight="0.46266472" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Grails View" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32951945" sideWeight="0.56661785" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.46272856" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
@@ -1495,7 +1395,6 @@
     <option name="myTodoPanelSettings">
       <TodoPanelSettings />
     </option>
-    <MESSAGE value="1.27" />
     <MESSAGE value="1.28&#10;" />
     <MESSAGE value="1.29 fix null&#10;" />
     <MESSAGE value="1.30 pagina attività&#10;" />
@@ -1520,7 +1419,8 @@
     <MESSAGE value="1.50&#10;" />
     <MESSAGE value="1.51&#10;" />
     <MESSAGE value="1.52&#10;" />
-    <option name="LAST_COMMIT_MESSAGE" value="1.52&#10;" />
+    <MESSAGE value="1.53&#10;" />
+    <option name="LAST_COMMIT_MESSAGE" value="1.53&#10;" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -1530,13 +1430,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/grails-app/services/it/algos/botbio/StatisticheService.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="26" column="42" selection-start="1048" selection-end="1048" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="9960">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/grails-app/views/bio/show.gsp">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="9870">
@@ -1651,23 +1544,9 @@
         <state line="10" column="6" selection-start="188" selection-end="188" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="330" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/grails-app/services/it/algos/botbio/AntroponimoService.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="237" column="51" selection-start="8587" selection-end="8587" vertical-scroll-proportion="0.0" vertical-offset="3322" max-vertical-offset="15345">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/.grails/2.2.3/projects/botbio/plugins/algoswiki-0.82/src/groovy/it/algos/algoswiki/Edit.groovy">
       <provider selected="true" editor-type-id="text-editor">
         <state line="54" column="11" selection-start="1478" selection-end="1478" vertical-scroll-proportion="0.0" vertical-offset="912" max-vertical-offset="9555">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/groovy/it/algos/botbio/LibBio.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="43" column="55" selection-start="1762" selection-end="1762" vertical-scroll-proportion="0.0" vertical-offset="16564" max-vertical-offset="17235">
           <folding />
         </state>
       </provider>
@@ -1733,13 +1612,6 @@
     <entry file="file://$PROJECT_DIR$/src/templates/scaffolding/list.gsp">
       <provider selected="true" editor-type-id="text-editor">
         <state line="59" column="0" selection-start="2137" selection-end="2783" vertical-scroll-proportion="0.93273544" vertical-offset="469" max-vertical-offset="2130" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/grails-app/controllers/it/algos/botbio/AntroponimoController.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="143" column="73" selection-start="6265" selection-end="6265" vertical-scroll-proportion="-0.110456556" vertical-offset="2145" max-vertical-offset="5010">
-          <folding />
-        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/grails-app/conf/BuildConfig.groovy">
@@ -1808,7 +1680,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-0.18610422" vertical-offset="75" max-vertical-offset="540">
           <folding>
-            <element signature="e#0#25#0" expanded="true" />
+            <element signature="e#0#25#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1820,28 +1692,44 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/grails-app/domain/it/algos/botbio/BioWiki.groovy">
-      <provider editor-type-id="org.jetbrains.plugins.grails.perspectives.DomainClassesRelationsEditorProvider">
-        <state />
-      </provider>
+    <entry file="file://$PROJECT_DIR$/grails-app/services/it/algos/botbio/BioService.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="131" column="18" selection-start="4667" selection-end="4667" vertical-scroll-proportion="-3.9" vertical-offset="1755" max-vertical-offset="5790">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/grails-app/controllers/it/algos/botbio/BioController.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="721" column="82" selection-start="28692" selection-end="28820" vertical-scroll-proportion="-10.086957" vertical-offset="10508" max-vertical-offset="11970">
+        <state line="88" column="45" selection-start="3621" selection-end="3621" vertical-scroll-proportion="0.0" vertical-offset="1295" max-vertical-offset="62445">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/grails-app/controllers/it/algos/botbio/BioWikiController.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="312" column="28" selection-start="14169" selection-end="14169" vertical-scroll-proportion="-6.0434785" vertical-offset="4541" max-vertical-offset="11010">
+        <state line="322" column="0" selection-start="14726" selection-end="14726" vertical-scroll-proportion="0.179676" vertical-offset="4708" max-vertical-offset="11010">
           <folding>
             <element signature="e#703#742#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/grails-app/controllers/it/algos/botbio/BioController.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="721" column="82" selection-start="28692" selection-end="28820" vertical-scroll-proportion="0.34167895" vertical-offset="10508" max-vertical-offset="11970">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/grails-app/domain/it/algos/botbio/BioWiki.groovy">
+      <provider editor-type-id="org.jetbrains.plugins.grails.perspectives.DomainClassesRelationsEditorProvider">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="131" column="18" selection-start="4667" selection-end="4667" vertical-scroll-proportion="0.29907975" vertical-offset="1755" max-vertical-offset="5790">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/grails-app/controllers/it/algos/botbio/BioGrailsController.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="132" column="30" selection-start="5790" selection-end="5790" vertical-scroll-proportion="0.4005891" vertical-offset="1708" max-vertical-offset="6795">
+          <folding>
+            <element signature="e#717#756#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1851,30 +1739,42 @@
         <state />
       </provider>
       <provider selected="true" editor-type-id="text-editor">
-        <state line="35" column="85" selection-start="1574" selection-end="1574" vertical-scroll-proportion="16.2" vertical-offset="1335" max-vertical-offset="3270">
+        <state line="35" column="85" selection-start="1574" selection-end="1574" vertical-scroll-proportion="-1.2423313" vertical-offset="1335" max-vertical-offset="3270">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/grails-app/controllers/it/algos/botbio/BioGrailsController.groovy">
+    <entry file="file://$PROJECT_DIR$/grails-app/controllers/it/algos/botbio/AntroponimoController.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="132" column="30" selection-start="5790" selection-end="5790" vertical-scroll-proportion="-11.826087" vertical-offset="1708" max-vertical-offset="6795">
-          <folding>
-            <element signature="e#717#756#0" expanded="true" />
-          </folding>
+        <state line="99" column="42" selection-start="4189" selection-end="4189" vertical-scroll-proportion="-11.173913" vertical-offset="1153" max-vertical-offset="5055">
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/grails-app/services/it/algos/botbio/BioService.groovy">
+    <entry file="file://$PROJECT_DIR$/src/groovy/it/algos/botbio/LibBio.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="88" column="45" selection-start="3621" selection-end="3621" vertical-scroll-proportion="0.0" vertical-offset="1295" max-vertical-offset="62445">
+        <state line="46" column="31" selection-start="1987" selection-end="1987" vertical-scroll-proportion="0.0" vertical-offset="276" max-vertical-offset="17235">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/unit/it/algos/botbio/AntroponimoServiceTests.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="11" column="6" selection-start="215" selection-end="215" vertical-scroll-proportion="0.20979021" vertical-offset="0" max-vertical-offset="715">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/grails-app/services/it/algos/botbio/AntroponimoService.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="195" column="68" selection-start="7043" selection-end="7043" vertical-scroll-proportion="0.0" vertical-offset="2466" max-vertical-offset="15150">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/application.properties">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="16" selection-start="110" selection-end="110" vertical-scroll-proportion="0.14888337" vertical-offset="0" max-vertical-offset="403">
+        <state line="6" column="46" selection-start="142" selection-end="142" vertical-scroll-proportion="0.12587413" vertical-offset="0" max-vertical-offset="715">
           <folding />
         </state>
       </provider>
