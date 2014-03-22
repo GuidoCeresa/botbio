@@ -79,7 +79,7 @@ class ListaService {
         // Ciclo per ognuna delle nazionalità esistenti (circa 275)
         listaNazionalitaPlurali.each {
             wrapNazionalita = new BioNazionalita(it)
-//            wrapNazionalita.registraPagina()
+            wrapNazionalita.registraPagina()
         }// fine di each
     } // fine del metodo
 

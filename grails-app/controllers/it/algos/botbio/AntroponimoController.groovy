@@ -12,10 +12,8 @@
 /* flagOverwrite = true */
 
 package it.algos.botbio
-
 import it.algos.algos.DialogoController
 import it.algos.algos.TipoDialogo
-import it.algos.algoslib.LibTesto
 import it.algos.algospref.Preferenze
 import org.codehaus.groovy.grails.commons.DefaultGrailsDomainClass
 import org.springframework.dao.DataIntegrityViolationException
@@ -62,7 +60,9 @@ class AntroponimoController {
             if (params.valore instanceof String) {
                 valore = (String) params.valore
                 if (valore.equals(DialogoController.DIALOGO_CONFERMA)) {
-                    costruisce()
+                    if (antroponimoService) {
+                        antroponimoService.costruisce()
+                    }// fine del blocco if
                     flash.message = 'Operazione effettuata. Sono stati creati gli antroponimi'
                 }// fine del blocco if
             }// fine del blocco if
@@ -70,43 +70,6 @@ class AntroponimoController {
 
         redirect(action: 'list')
     } // fine del metodo
-
-    //--recupera una lista 'grezza' di tutti i nomi
-    private void costruisce() {
-        ArrayList<String> listaNomiParziale
-        ArrayList<String> listaNomiUniciDiversiPerAccento
-        String query = "select nome from BioGrails where nome <>'' order by nome asc"
-        int delta = 100
-        int totaleVoci = BioGrails.count()
-        log.info 'Inizio costruzione antroponimi'
-        long inizio
-        long fine
-        long durata
-
-        query = "select distinct nome from BioGrails where nome <>'' order by nome asc"
-
-        antroponimoService.cancellaTutto()
-
-        //ciclo
-        for (int k = 0; k < totaleVoci; k += delta) {
-            inizio = System.currentTimeMillis()
-            listaNomiParziale = (ArrayList<String>) BioGrails.executeQuery(query, [max: delta, offset: k])
-            listaNomiUniciDiversiPerAccento = antroponimoService.elaboraNomiUnici(listaNomiParziale)
-            fine = System.currentTimeMillis()
-            durata = fine - inizio
-            println('Antroponimi 100 elabora: ' + durata)
-
-            inizio = System.currentTimeMillis()
-            antroponimoService.spazzolaPacchetto(listaNomiUniciDiversiPerAccento)
-            fine = System.currentTimeMillis()
-            durata = fine - inizio
-            println('Antroponimi 100 spazzola: ' + durata)
-
-            log.info 'Elaborate ' + LibTesto.formatNum(k + delta) + ' voci'
-        } // fine del ciclo for
-
-        log.info 'Fine costruzione antroponimi'
-    }// fine del metodo
 
     //--mostra un dialogo di conferma per l'operazione da compiere
     //--passa al metodo effettivo

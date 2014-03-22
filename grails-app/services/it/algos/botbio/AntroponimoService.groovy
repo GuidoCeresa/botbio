@@ -30,7 +30,41 @@ class AntroponimoService {
     private String progetto = 'Progetto:Antroponimi/'
     private String templateIncipit = 'incipit lista nomi'
 
+    //--recupera una lista 'grezza' di tutti i nomi
     public void costruisce() {
+        ArrayList<String> listaNomiParziale
+        ArrayList<String> listaNomiUniciDiversiPerAccento
+        String query = "select nome from BioGrails where nome <>'' order by nome asc"
+        int delta = 1000
+        int totaleVoci = BioGrails.count()
+        log.info 'Inizio costruzione antroponimi'
+        long inizio
+        long fine
+        long durata
+        String mess
+        def numAntro
+
+        cancellaTutto()
+
+        //ciclo
+        for (int k = 0; k < totaleVoci; k += delta) {
+            inizio = System.currentTimeMillis()
+            listaNomiParziale = (ArrayList<String>) BioGrails.executeQuery(query, [max: delta, offset: k])
+            listaNomiUniciDiversiPerAccento = elaboraNomiUnici(listaNomiParziale)
+            spazzolaPacchetto(listaNomiUniciDiversiPerAccento)
+
+            fine = System.currentTimeMillis()
+            durata = fine - inizio
+            durata = durata / 1000
+            numAntro = Antroponimo.count()
+            mess = 'Elaborati ' + LibTesto.formatNum(delta) + ' antroponimi in ' + durata + ' sec. per un totale di ' + LibTesto.formatNum(k + delta) + ' antroponimi teorici e creati ' + LibTesto.formatNum(numAntro) + ' nuovi record in totale'
+            println(mess)
+        } // fine del ciclo for
+
+        log.info 'Fine costruzione antroponimi'
+    }// fine del metodo
+
+    public void costruisceOld() {
         ArrayList<String> listaNomiCompleta
         ArrayList<String> listaNomiUniciDiversiPerAccento
 

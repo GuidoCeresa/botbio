@@ -1,10 +1,7 @@
 package it.algos.botbio
-
 import it.algos.algoslib.LibTesto
 import it.algos.algoslib.LibTime
-import it.algos.algoswiki.Edit
 import org.apache.commons.logging.LogFactory
-
 /**
  * Created by IntelliJ IDEA.
  * User: Gac
@@ -134,7 +131,7 @@ class BioLista {
         // registra la pagina solo se ci sono differente significative
         // al di la della prima riga con il richiamo al template e che contiene la data
         if (titolo && testo && this.listaWrapper && this.listaWrapper.size() > 0) {
-            Edit edit = new EditBio(titolo, testo, summary)
+//            Edit edit = new EditBio(titolo, testo, summary)
         }// fine del blocco if
     }// fine del metodo
 
