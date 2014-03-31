@@ -28,6 +28,7 @@ class BotbioTagLib {
         String testoOut = ''
 
         //--controllers dei plugins
+        testoOut += tagController('Pref')
         testoOut += tagController('Preferenze')
         testoOut += tagController('Versione')
         testoOut += tagController('Evento')

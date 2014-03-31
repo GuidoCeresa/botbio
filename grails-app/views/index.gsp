@@ -122,7 +122,7 @@
         <h2>Moduli disponibili:</h2>
         <ul>
             <g:if test="${grailsApplication.config.mostraControllerSpecifici}">
-                <bio:listaControllers></bio:listaControllers>
+                <bio:listaControllers> </bio:listaControllers>
             </g:if>
             <g:else>
                 <g:each var="c"
