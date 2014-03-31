@@ -19,7 +19,7 @@ class CicloJob {
     def logWikiService
 
     //--numero di cicli
-    private static int CICLI = 4
+    private static int CICLI = 5
 
     //--codifica dell'orario di attivazione
     //--a mezzanotte, tutti i giorni sabato escluso
