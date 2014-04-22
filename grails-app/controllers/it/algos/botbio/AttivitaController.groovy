@@ -127,7 +127,7 @@ class AttivitaController {
         //--selezione dei records da mostrare
         //--per una lista filtrata (parziale), modificare i parametri
         //--oppure modificare il findAllByInteroGreaterThan()...
-        lista = Attivita.findAll(params)
+        lista = Attivita.list(params)
         recordsTotali = Attivita.count()
 
         //--calcola il numero di record

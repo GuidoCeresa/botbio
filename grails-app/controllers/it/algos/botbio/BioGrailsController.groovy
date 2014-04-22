@@ -258,7 +258,7 @@ class BioGrailsController {
         //--selezione dei records da mostrare
         //--per una lista filtrata (parziale), modificare i parametri
         //--oppure modificare il findAllByInteroGreaterThan()...
-        lista = BioGrails.findAll(params)
+        lista = BioGrails.list(params)
 
         //--calcola il numero di record
         recordsTotali = BioGrails.count()

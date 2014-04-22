@@ -26,34 +26,14 @@
     <ul>
         <li><a class="home" href="\${createLink(uri: '/')}"><g:message code="default.home.label" default="Home"/></a></li>
         <li><g:link class="list" action="list"><g:message code="${domainClass.propertyName}.list.label" args="[entityName]" default="Elenco"/></g:link></li>
-        <g:if test="\${!noMenuCreate}">
-            <li><g:link class="create" action="create"><g:message code="${domainClass.propertyName}.new.label" args="[entityName]" default="Nuovo"/></g:link></li>
-        </g:if>
-        <g:if test="\${menuExtra}">
-            <algos:menuExtra menuExtra="\${menuExtra}"></algos:menuExtra>
-        </g:if>
+        <li><g:link class="create" action="create"><g:message code="${domainClass.propertyName}.new.label" args="[entityName]" default="Nuovo"/></g:link></li>
     </ul>
 </div>
 <div id="show-${domainClass.propertyName}" class="content scaffold-show" role="main">
     <h1><g:message code="${domainClass.propertyName}.show.label" args="[entityName]" default="Mostra"/></h1>
-
     <g:if test="\${flash.message}">
         <div class="message" role="status">\${flash.message}</div>
     </g:if>
-    <g:if test="\${flash.error}">
-        <div class="errors" role="status">\${flash.error}</div>
-    </g:if>
-    <g:if test="\${flash.messages}">
-        <g:each in="\${flash.messages}" status="i" var="singoloMessaggio">
-            <div class="message" role="status">\${singoloMessaggio}</div>
-        </g:each>
-    </g:if>
-    <g:if test="\${flash.errors}">
-        <g:each in="\${flash.errors}" status="i" var="singoloErrore">
-            <div class="errors" role="status">\${singoloErrore}</div>
-        </g:each>
-    </g:if>
-
     <ol class="property-list ${domainClass.propertyName}">
         <%  excludedProps = Event.allEvents.toList() << 'id' << 'version'
         allowedNames = domainClass.persistentProperties*.name << 'dateCreated' << 'lastUpdated'
@@ -82,6 +62,17 @@
         </g:if>
         <%  } %>
     </ol>
+    <g:form>
+        <g:if test="\${usaSpostamento}">
+            <fieldset class="buttons">
+                <g:hiddenField name="id" value="\${${propertyName}?.id}"/>
+                <g:link class="create" action="moveFirst">Primo record</g:link>
+                <g:link class="edit" action="movePrec" id="\${${propertyName}?.id}">Precedente</g:link>
+                <g:link class="edit" action="moveSucc" id="\${${propertyName}?.id}">Successivo</g:link>
+                <g:link class="create" action="moveLast">Ultimo record</g:link>
+            </fieldset>
+        </g:if>
+    </g:form>
     <g:form>
         <fieldset class="buttons">
             <g:hiddenField name="id" value="\${${propertyName}?.id}" />

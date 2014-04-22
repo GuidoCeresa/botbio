@@ -402,7 +402,7 @@ class BioWikiController {
             if (params.cognome) {
                 lista = BioWiki.findAllByCognome(params.cognome, params)
             } else {
-                lista = BioWiki.findAll(params)
+                lista = BioWiki.list(params)
             }// fine del blocco if-else
         }// fine del blocco if-else
 

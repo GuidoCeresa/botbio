@@ -110,7 +110,7 @@ class ProfessioneController {
         //--selezione dei records da mostrare
         //--per una lista filtrata (parziale), modificare i parametri
         //--oppure modificare il findAllByInteroGreaterThan()...
-        lista = Professione.findAll(params)
+        lista = Professione.list(params)
 
         //--calcola il numero di record
         titoloLista = 'Elenco di ' + lista.size() + ' records di professioni'

@@ -24,10 +24,19 @@ CSS: utilizza il css dell'applicazione finale (esclusi dal JAR)
 Utilizza il plugin export:
     1) aggiunge una barra nel template list
     2) modifica il metodo list nel template controller
-    3) inietta la property exportService nel template controller
+    3) inietta la variabile exportService nel template controller
     4) aggiunge il plugin export:1.5 in BuildConfig
     5) aggiunge il file ExportBootStrap che viene ricopiato nell'applicazione
-    6) di default la property exportService è regolata a false
+     Mostra una barra di bottoni per esportare (in diversi formati) i dati visibili nella lista.
+     Di default il flag usaExport, è true
+     Può essere disabilitato in maniera dinamica, senza avviare/riavviare l'applicazione,
+     solo per uno specifico  controller, creando una preferenza specifica nelle Pref
+     Può essere disabilitato in maniera statica, avviando/riavviando l'applicazione,
+     solo per uno specifico controller, cancellando il corpo del metodo regolaExport()
+     e regolando la variabile statica della classe
+     Può essere disabilitato in maniera statica, avviando/riavviando l'applicazione,
+     per tutta l'applicazione, modificando il parametro servletContext.usaExport,
+     contenuto nella classe ExportBootStrap
 
 Utilizza il plugin quartz
     1) crea una directory Jobs
@@ -35,8 +44,25 @@ Utilizza il plugin quartz
     3) cancella il file RefreshJob (nel plugin) per evitare duplicazioni
     4) si possono aggiungere altri files xxxJob nella directory
 
+Utilizza il plugin filterpane
+     Mostra (bottom) una finestra/dialogo di ricerca/selezione/filtro dei record.
+     Di default il flag usaFilter, è true
+     Può essere disabilitato in maniera dinamica, senza avviare/riavviare l'applicazione,
+     solo per uno specifico  controller, creando una preferenza specifica nelle Pref
+     Può essere disabilitato in maniera statica, avviando/riavviando l'applicazione,
+     solo per uno specifico controller, cancellando il corpo del metodo regolaFiltro()
+     e regolando la variabile statica della classe
+     Può essere disabilitato in maniera statica, avviando/riavviando l'applicazione,
+     per tutta l'applicazione, modificando il parametro servletContext.usaFilter,
+     contenuto nella classe FilterBootStrap
+
 Utilizza il plugin mail
     1) regolare: host, port, username, password e props in Config
+
+Problemi comuni:
+1) refresh-dependencies
+2) clean
+3) rebuild
 
 
 @TODO da aggiungere l'utilizzo del plugin mail

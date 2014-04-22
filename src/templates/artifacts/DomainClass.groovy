@@ -26,7 +26,7 @@
     } // end of static constraints
 
     /**
-     * Grails support two tipe of Inheritance:
+     * Grails support two type of Inheritance:
      * 1) table-per-hierarchy mapping (default)
      * 2) table-per-subclasses
      * By default GORM classes use table-per-hierarchy inheritance mapping.

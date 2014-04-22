@@ -234,7 +234,7 @@ class GiornoController {
         //--selezione dei records da mostrare
         //--per una lista filtrata (parziale), modificare i parametri
         //--oppure modificare il findAllByInteroGreaterThan()...
-        lista = Giorno.findAll(params)
+        lista = Giorno.list(params)
         recordsTotali = Giorno.count()
 
         //--calcola il numero di record

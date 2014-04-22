@@ -234,7 +234,7 @@ class AnnoController {
         //--selezione dei records da mostrare
         //--per una lista filtrata (parziale), modificare i parametri
         //--oppure modificare il findAllByInteroGreaterThan()...
-        lista = Anno.findAll(params)
+        lista = Anno.list(params)
         recordsTotali = Anno.count()
 
         //--calcola il numero di record

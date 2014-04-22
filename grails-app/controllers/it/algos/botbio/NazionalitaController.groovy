@@ -128,7 +128,7 @@ class NazionalitaController {
         //--selezione dei records da mostrare
         //--per una lista filtrata (parziale), modificare i parametri
         //--oppure modificare il findAllByInteroGreaterThan()...
-        lista = Nazionalita.findAll(params)
+        lista = Nazionalita.list(params)
         recordsTotali = Nazionalita.count()
 
         //--calcola il numero di record
