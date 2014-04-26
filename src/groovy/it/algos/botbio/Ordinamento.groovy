@@ -15,6 +15,7 @@ public enum Ordinamento {
     attivitaAlfabetico,
     alfabeticoAlfabetico,
     alfabeticoCronologico,
-    carattere
+    carattere,
+    prestabilitoInMappa
 
 }

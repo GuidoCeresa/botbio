@@ -1,5 +1,7 @@
 package it.algos.botbio
 
+import it.algos.algoslib.LibTesto
+import it.algos.algoslib.LibWiki
 import org.apache.commons.logging.LogFactory
 
 /**
@@ -28,14 +30,14 @@ class BioAttivita extends BioAttNaz {
         super.inizializza(plurale)
 
         // Crea paragrafo/pagina con le didascalie
-        this.bioLista = new BioListaAtt(getPlurale(), getListaDidascalie())
+        this.bioLista = new BioListaAtt(getPlurale(), getListaMappaGrails(), Ordinamento.prestabilitoInMappa)
     } // fine del metodo
 
     /**
-     * Crea una lista di records di attività utilizzati
+     * Crea una lista di id di attività utilizzate
      * Per ogni plurale, ci possono essere diversi 'singolari' richiamati dalle voci di BioGrails
      */
-    protected creaListaSingolariId() {
+    protected creaListaAttivitaId() {
         String attivitaPlurale = this.getPlurale()
         ArrayList<Long> listaSingolariID
         String query
@@ -45,35 +47,34 @@ class BioAttivita extends BioAttNaz {
             if (!attivitaPlurale.contains(tag)) {
                 query = "select id from Attivita where plurale='$attivitaPlurale'"
                 listaSingolariID = (ArrayList<Long>) Attivita.executeQuery(query)
-                this.setListaSingolariID(listaSingolariID)
+                this.setListaAttivitaID(listaSingolariID)
             }// fine del blocco if
         }// fine del blocco if
     } // fine del metodo
 
-
     /**
-     * Crea una lista di voci biografiche per un singolo record di attività attività
+     * Crea una lista di id (del DB Grails) per un singolo record di attività attività
      *
      * @param attivitaId (grails id)
      * @return listaVociId (grails id)
      */
-    protected  ArrayList<Long> creaListaVociIdSingolare(long attivitaId) {
+    protected ArrayList<Long> creaListaVociIdSingolare(long attivitaId) {
         ArrayList<Long> listaVociId = null
         String query
 
         // controllo di congruità
         if (attivitaId && attivitaId > 0) {
             try { // prova ad eseguire il codice
-                query = getQueryParziale(1) + "${attivitaId}"
+                query = getQueryParzialeId(1) + "${attivitaId}"
                 listaVociId = (ArrayList<Long>) BioGrails.executeQuery(query)
 
                 if (USA_ANCHE_ATTIVITA_DUE) {
-                    query = getQueryParziale(2) + "${attivitaId}"
+                    query = getQueryParzialeId(2) + "${attivitaId}"
                     listaVociId += (ArrayList<Long>) BioGrails.executeQuery(query)
                 }// fine del blocco if
 
                 if (USA_ANCHE_ATTIVITA_TRE) {
-                    query = getQueryParziale(3) + "${attivitaId}"
+                    query = getQueryParzialeId(3) + "${attivitaId}"
                     listaVociId += (ArrayList<Long>) BioGrails.executeQuery(query)
                 }// fine del blocco if
             } catch (Exception unErrore) { // intercetta l'errore
@@ -86,12 +87,223 @@ class BioAttivita extends BioAttNaz {
     } // fine del metodo
 
     /**
+     * Crea una lista di mappe che utilizzano questa attività
+     * Ricerca tutte le nazionalita
+     * Per ognuna esegue una query
+     */
+    protected creaListaMappe() {
+        ArrayList<Map> listaMappaGrails = new ArrayList()
+        Map mappa
+        String attivita = this.getPlurale()
+        String nazionalita
+        String titoloParagrafo
+        String sottoTitolo
+        ArrayList listaGrails = new ArrayList()
+        ArrayList<Long> listaSingolariID
+        ArrayList<String> listaNazionalitaSingolari
+        ArrayList<String> listaNazionalitaPlurali
+        String pathTitolo = BioListaAttNaz.PATH + 'Nazionalità/'
+        String pathSottoTitolo = BioListaAttNaz.PATH + 'Attività/'
+        ArrayList<Map> listaDidascalie
+
+        // recupera la lista delle attivita singolari
+        listaSingolariID = this.getListaAttivitaID()
+
+        // recupera la lista delle nazionalita singolari
+        listaNazionalitaSingolari = creaNazionalitaSingolari(listaSingolariID)
+
+        // recupera la lista delle nazionalita plurali
+        listaNazionalitaPlurali = creaNazionalitaPlurali(listaSingolariID, listaNazionalitaSingolari)
+
+        // ciclo
+        if (listaSingolariID) {
+            listaNazionalitaPlurali?.each {
+                mappa = new HashMap()
+                nazionalita = it
+                if (nazionalita) {
+                    nazionalita = LibTesto.primaMaiuscola(it)
+                    titoloParagrafo = pathTitolo + nazionalita + '|' + nazionalita
+                    titoloParagrafo = LibWiki.setQuadre(titoloParagrafo)
+                    attivita = LibTesto.primaMaiuscola(attivita)
+                    sottoTitolo = pathSottoTitolo + attivita + '/' + nazionalita
+                } else {
+                    titoloParagrafo = '...'
+                }// fine del blocco if-else
+                listaDidascalie = creaListaDidascalie(listaSingolariID, it)
+                mappa.put(LibBio.MAPPA_TITOLO_PARAGRAFO, titoloParagrafo)
+                mappa.put(LibBio.MAPPA_SOTTO_TITOLO, sottoTitolo)
+                mappa.put(LibBio.MAPPA_LISTA, listaDidascalie)
+                mappa.put(LibBio.MAPPA_NUMERO, listaDidascalie.size())
+                mappa.put(LibBio.MAPPA_ORDINE, Ordinamento.prestabilitoInMappa.toString())
+                mappa.put(LibBio.MAPPA_SOTTOPAGINA, listaDidascalie.size() > NUM_RIGHE_PER_SOTTOPAGINA)
+                mappa.put(LibBio.MAPPA_ATTIVITA, attivita)
+                mappa.put(LibBio.MAPPA_NAZIONALITA, nazionalita)
+                mappa.put(LibBio.MAPPA_LIVELLO, 1)
+                listaMappaGrails.add(mappa)
+            }// fine di each
+
+            this.setListaMappaGrails(listaMappaGrails)
+        }// fine del blocco if
+    } // fine del metodo
+
+    private static ArrayList<String> creaNazionalitaSingolari(ArrayList<Long> listaSingolariID) {
+        ArrayList<String> listaNazionalitaSingolari
+        String query
+
+        query = "select distinct nazionalita from BioGrails where "
+        query += queryWhereAtt(listaSingolariID)
+
+        listaNazionalitaSingolari = (ArrayList<String>) BioGrails.executeQuery(query)
+
+        return listaNazionalitaSingolari
+    } // fine del metodo
+
+    private
+    static ArrayList<String> creaNazionalitaPlurali(ArrayList<Long> listaSingolariID, ArrayList<String> listaNazionalitaSingolari) {
+        ArrayList<String> listaNazionalitaPlurali = new ArrayList()
+        Nazionalita nazionalita
+        String nazionalitaPlurale
+
+        listaNazionalitaSingolari?.each {
+            if (it) {
+                nazionalita = Nazionalita.findBySingolare((String) it)
+                if (nazionalita) {
+                    nazionalitaPlurale = nazionalita.plurale
+                }// fine del blocco if
+            } else {
+                nazionalitaPlurale = ''
+            }// fine del blocco if-else
+            if (!listaNazionalitaPlurali.contains(nazionalitaPlurale)) {
+                listaNazionalitaPlurali.add(nazionalitaPlurale)
+            }// fine del blocco if
+        } // fine del ciclo each
+        listaNazionalitaPlurali?.sort()
+
+        return listaNazionalitaPlurali
+    } // fine del metodo
+
+    // controlla che non ci siano didascalie mancanti
+    // nel caso le crea al volo
+    private static ArrayList<Map> creaListaDidascalie(ArrayList<Long> listaSingolariID, String nazionalitaPlurale) {
+        ArrayList<Map> listaMappe = new ArrayList<Map>()
+        Map mappa
+        ArrayList lista
+        ArrayList<Long> listaNazId = nazionalitaId(nazionalitaPlurale)
+        String query
+        long idGrails
+        BioGrails bio = null
+        String didascalia
+        String cognome
+        String nome
+        String primaLettera
+
+        query = "select id,didascaliaListe,cognome,nome from BioGrails where "
+        query += queryWhereAtt(listaSingolariID)
+        query += ' and '
+        query += queryWhereNaz(listaNazId)
+        query += ' order by cognome,title'
+
+        lista = (ArrayList<String>) BioGrails.executeQuery(query)
+
+        lista?.each {
+            if (it[1]) {
+                didascalia = (String) it[1]
+                if (it[2]) {
+                    cognome = (String) it[2]
+                    primaLettera = cognome.substring(0, 1)
+                } else {
+                    if (it[3]) {
+                        nome = (String) it[3]
+                        primaLettera = nome.substring(0, 1)
+                    } else {
+                        primaLettera = '.'
+                    }// fine del blocco if-else
+                }// fine del blocco if-else
+            } else {
+                idGrails = (Long) it[0]
+                bio = BioGrails.findById(idGrails)
+                cognome = bio.cognome
+                nome = bio.nome
+                if (cognome) {
+                    primaLettera = cognome.substring(0, 1)
+                } else {
+                    if (nome) {
+                        primaLettera = nome.substring(0, 1)
+                    } else {
+                        primaLettera = '.'
+                    }// fine del blocco if-else
+                }// fine del blocco if-else
+                didascalia = creaTestoDidascaliaAlVolo(bio)
+            }// fine del blocco if-else
+            mappa = new HashMap()
+            primaLettera = primaLettera.toUpperCase()
+            mappa.put(LibBio.MAPPA_PRIMA_LETTERA, primaLettera)
+            mappa.put(LibBio.MAPPA_DIDASCALIA, didascalia)
+            listaMappe.add(mappa)
+        } // fine del ciclo each
+
+        return listaMappe
+    } // fine del metodo
+
+    private static ArrayList<Long> nazionalitaId(String nazionalitaPlurale) {
+        ArrayList<Long> listaNazId = null
+        def risultato
+        String query = "select id from Nazionalita where plurale='${nazionalitaPlurale}'"
+        risultato = Nazionalita.executeQuery(query)
+
+        if (risultato instanceof ArrayList<Long>) {
+            if (risultato.size() > 0) {
+                listaNazId = risultato
+            } else {
+                listaNazId = new ArrayList<Long>()
+                listaNazId.add(0)
+            }// fine del blocco if-else
+        } else {
+            if (risultato instanceof Long) {
+                listaNazId = new ArrayList<Long>()
+                listaNazId.add(risultato)
+            }// fine del blocco if
+        }// fine del blocco if-else
+
+        return listaNazId
+    } // fine del metodo
+
+
+    private static String queryWhereAtt(ArrayList<Long> idAttivita) {
+        String query = "("
+        String longId
+
+        idAttivita?.each {
+            longId = it
+            query += "attivita_link_id=${longId} or attivita2link_id=${longId} or attivita3link_id=${longId} or "
+        } // fine del ciclo each
+
+        return LibTesto.levaCoda(query.trim(), 'or').trim() + ')'
+    } // fine del metodo
+
+    private static String queryWhereNaz(ArrayList<Long> listaNazId) {
+        String query = "("
+        String naz
+
+        if (listaNazId && listaNazId.size() == 1 && listaNazId[0] == 0) {
+            query += "nazionalita_link_id is null"
+        } else {
+            listaNazId?.each {
+                naz = it
+                query += "nazionalita_link_id=${naz} or "
+            } // fine del ciclo each
+        }// fine del blocco if-else
+
+        return LibTesto.levaCoda(query.trim(), 'or').trim() + ')'
+    } // fine del metodo
+
+    /**
      * Crea una query (parziale) col nome del campo
      *
      * @param num di attività (principale, secondaria o terziaria)
      * @return query
      */
-    private static String getQueryParziale(int num) {
+    private static String getQueryParzialeId(int num) {
         // variabili e costanti locali di lavoro
         String query = ''
         String tag = "select id from BioGrails where "
@@ -119,6 +331,5 @@ class BioAttivita extends BioAttNaz {
         // valore di ritorno
         return query
     } // fine del metodo
-
 
 } // fine della classe

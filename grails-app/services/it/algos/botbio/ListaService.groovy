@@ -13,6 +13,8 @@
 
 package it.algos.botbio
 
+import it.algos.algoslib.LibTesto
+
 class ListaService {
 
     /**
@@ -53,13 +55,17 @@ class ListaService {
         listaAttivitaPlurali = AttivitaService.getListaPlurali()
 
         // Ciclo per ognuna delle attività esistenti (circa 500)
-        listaAttivitaPlurali.each {
+        listaAttivitaPlurali?.each {
             wrapAttivita = new BioAttivita(it)
             wrapAttivita.registraPagina()
+            def stopProvvisorio
         }// fine di each
     } // fine del metodo
 
-    /**
+    public pippo() {
+    } // fine del metodo
+
+        /**
      * Costruisce tutte le liste delle nazionalità
      *
      * Recupera la lista delle singole nazionalità

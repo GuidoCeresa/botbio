@@ -8,11 +8,15 @@ package it.algos.botbio
  */
 abstract class BioAttNaz {
 
+    protected static int NUM_RIGHE_PER_SOTTOPAGINA = 50
+    protected static int NUM_RIGHE_PER_CARATTERE_SOTTOPAGINA = 50
+
     private String plurale
-    private ArrayList<Long> listaSingolariID
+    private ArrayList<Long> listaAttivitaID
     private ArrayList<Long> listaVociId
     private ArrayList listaDidascalie
     private BioLista bioLista
+    private ArrayList listaMappaGrails
 
     public BioAttNaz(String plurale) {
         super()
@@ -29,34 +33,37 @@ abstract class BioAttNaz {
         this.setPlurale(plurale)
 
         // Crea una lista di records di attività utilizzati da BioGrails
-        this.creaListaSingolariId()
+        this.creaListaAttivitaId()
 
-        // Crea una lista di voci biografiche che utilizzano questa attività
+        // Crea una lista di id delle voci biografiche che utilizzano questa attività
         this.creaListaVociId()
+
+        // Crea una lista di mappe che utilizzano questa attività
+        this.creaListaMappe()
 
         // Crea una lista di didascalie
         this.creaListaDidascalie()
 
-        // Crea paragrafo/pagina con le didascalie
-        this.bioLista = new BioListaAtt(getPlurale(), getListaDidascalie())
+//        Crea paragrafo/pagina con le didascalie
+//        this.bioLista = new BioListaAtt(getPlurale(), getListaDidascalie())
     } // fine del metodo
 
     /**
-     * Crea una lista di records di attività utilizzati
+     * Crea una lista di id di attività utilizzate
      * Per ogni plurale, ci possono essere diversi 'singolari' richiamati dalle voci di BioGrails
      */
-    protected creaListaSingolariId() {
+    protected creaListaAttivitaId() {
     } // fine del metodo
 
     /**
-     * Crea una lista di voci biografiche che utilizzano questa attività
+     * Crea una lista di id di voci biografiche che utilizzano questa attività
      */
     private creaListaVociId() {
-        ArrayList<Long> listaSingolariID
         ArrayList<Long> listaVociId = new ArrayList<Long>()
+        ArrayList<Long> listaSingolariID
 
         // recupera la lista dei singolari
-        listaSingolariID = this.getListaSingolariID()
+        listaSingolariID = this.getListaAttivitaID()
 
         // controllo di congruità
         if (listaSingolariID) {
@@ -71,8 +78,15 @@ abstract class BioAttNaz {
         }// fine del blocco if
     } // fine del metodo
 
+
     /**
-     * Crea una lista di voci biografiche per un singolo record di attività attività
+     * Crea una lista di mappe che utilizzano questa attività
+     */
+    protected creaListaMappe() {
+    } // fine del metodo
+
+    /**
+     * Crea una lista di id (del DB Grails) per un singolo record di attività
      *
      * @param attivitaId (grails id)
      * @return listaVociId (grails id)
@@ -161,12 +175,12 @@ abstract class BioAttNaz {
         this.plurale = plurale
     }
 
-    ArrayList<Long> getListaSingolariID() {
-        return listaSingolariID
+    ArrayList<Long> getListaAttivitaID() {
+        return listaAttivitaID
     }
 
-    void setListaSingolariID(ArrayList<Long> listaSingolariID) {
-        this.listaSingolariID = listaSingolariID
+    void setListaAttivitaID(ArrayList<Long> listaAttivitaID) {
+        this.listaAttivitaID = listaAttivitaID
     }
 
     ArrayList<Long> getListaVociId() {
@@ -191,5 +205,13 @@ abstract class BioAttNaz {
 
     void setBioLista(BioLista bioLista) {
         this.bioLista = bioLista
+    }
+
+    ArrayList getListaMappaGrails() {
+        return listaMappaGrails
+    }
+
+    void setListaMappaGrails(ArrayList listaMappaGrails) {
+        this.listaMappaGrails = listaMappaGrails
     }
 } // fine della classe

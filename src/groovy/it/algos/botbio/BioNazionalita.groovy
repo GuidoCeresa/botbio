@@ -47,7 +47,7 @@ class BioNazionalita extends BioAttNaz {
     } // fine del metodo
 
     /**
-     * Crea una lista di voci biografiche per un singolo record di nazionalità
+     * Crea una lista di id (del DB Grails) per un singolo record di attività attività
      *
      * @param attivitaId (grails id)
      * @return listaVociId (grails id)

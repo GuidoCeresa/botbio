@@ -59,6 +59,21 @@ class LibBio {
     public static final String MODIFICATI = 'recordsModificati'
     public static final String CANCELLATI = 'recordsCancellati'
 
+    // campi di una mappa
+    public static final String MAPPA_TITOLO_PARAGRAFO = 'titoloParagrafo'
+    public static final String MAPPA_SOTTO_TITOLO = 'sottoTitolo'
+    public static final String MAPPA_LISTA = 'listaDidascalie'
+    public static final String MAPPA_NUMERO = 'numeroRighe'
+    public static final String MAPPA_ORDINE = 'ordinamento'
+    public static final String MAPPA_SOTTOPAGINA = 'sottopagina'
+    public static final String MAPPA_LIVELLO = 'livello'
+    public static final String MAPPA_ATTIVITA = 'attivita'
+    public static final String MAPPA_NAZIONALITA = 'nazionalita'
+
+    // campi di una mappa
+    public static final String MAPPA_PRIMA_LETTERA = 'primaLettera'
+    public static final String MAPPA_DIDASCALIA = 'didascalia'
+
     private static String TAG_BIO = '\\{\\{ ?([Tt]emplate:)? ?[Bb]io[ \\|\n\r\t]'
 
     /**

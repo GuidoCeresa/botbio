@@ -23,7 +23,7 @@ dataSource {
     //dialect = "org.hibernate.dialect.MySQLMyISAMDialect"
     dialect = "org.hibernate.dialect.MySQL5InnoDBDialect"
     username = "root"
-    password = "cervino63"
+    password = ""
 } // end of dataSource
 
 hibernate {

@@ -16,6 +16,7 @@ package it.algos.botbio
 import it.algos.algos.DialogoController
 import it.algos.algos.TipoDialogo
 import it.algos.algoslib.Lib
+import it.algos.algoslib.LibTesto
 import org.codehaus.groovy.grails.commons.DefaultGrailsDomainClass
 import org.springframework.dao.DataIntegrityViolationException
 
@@ -72,6 +73,7 @@ class AttivitaController {
     //--elabora e crea tutti le pagine di attività
     //--passa al metodo effettivo senza nessun dialogo di conferma
     def uploadAttivita() {
+        listaService.uploadAttivita()//todo da levare
         if (grailsApplication && grailsApplication.config.login) {
             listaService.uploadAttivita()
             statisticheService.attivitaUsate()
@@ -137,11 +139,11 @@ class AttivitaController {
         //--menuExtra e campiLista possono essere nulli o vuoti
         //--se campiLista è vuoto, mostra tutti i campi (primi 8)
         render(view: 'list', model: [
-                attivitaInstanceList: lista,
+                attivitaInstanceList : lista,
                 attivitaInstanceTotal: recordsTotali,
-                menuExtra: menuExtra,
-                titoloLista: titoloLista,
-                campiLista: campiLista],
+                menuExtra            : menuExtra,
+                titoloLista          : titoloLista,
+                campiLista           : campiLista],
                 params: params)
     } // fine del metodo
 

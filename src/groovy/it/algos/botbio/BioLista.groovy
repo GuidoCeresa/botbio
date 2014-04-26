@@ -1,7 +1,10 @@
 package it.algos.botbio
+
 import it.algos.algoslib.LibTesto
 import it.algos.algoslib.LibTime
+import it.algos.algoswiki.Edit
 import org.apache.commons.logging.LogFactory
+
 /**
  * Created by IntelliJ IDEA.
  * User: Gac
@@ -23,8 +26,8 @@ class BioLista {
     protected static String A_CAPO = '\n'
 
     private ArrayList listaWrapper
-    protected String plurale
-    protected String categoria
+    private String plurale
+    private String categoria
     protected String titoloPagina
     protected String titoloParagrafo
     protected String campoParagrafo
@@ -54,9 +57,9 @@ class BioLista {
         super()
 
         // regola le variabili di istanza coi parametri
-        this.plurale = plurale
-        this.categoria = plurale
-        this.listaWrapper = listaWrapper
+        this.setPlurale(plurale)
+        this.setCategoria(plurale)
+        this.setListaWrapper(listaWrapper)
         this.bioLista = bioLista
         this.ordinamento = ordinamento
 
@@ -124,14 +127,14 @@ class BioLista {
      */
 
     public registra() {
-        String titolo = this.titoloPagina
+        String titolo = this.getTitoloPagina()
         String testo = this.getContenuto()
         String summary = LibBio.getSummary()
 
         // registra la pagina solo se ci sono differente significative
         // al di la della prima riga con il richiamo al template e che contiene la data
         if (titolo && testo && this.listaWrapper && this.listaWrapper.size() > 0) {
-//            Edit edit = new EditBio(titolo, testo, summary)
+            Edit edit = new EditBio(titolo, testo, summary)
         }// fine del blocco if
     }// fine del metodo
 
@@ -164,8 +167,8 @@ class BioLista {
         // variabili e costanti locali di lavoro
         String testo = ''
         String aCapo = '\n'
-        String categoria = this.categoria
-        String plurale = this.plurale
+        String categoria = this.getCategoria()
+        String plurale = this.getPlurale()
         String attNazMaiuscola
         String attNazMinuscola
 
@@ -174,6 +177,7 @@ class BioLista {
         attNazMaiuscola = LibTesto.primaMaiuscola(attNaz)
         attNazMinuscola = LibTesto.primaMinuscola(attNaz)
 
+        testo += aCapo
         testo += '==Voci correlate=='
         testo += aCapo
         if (categoria) {
@@ -193,7 +197,7 @@ class BioLista {
         }// fine del blocco if-else
 
         // valore di ritorno
-        return testo.trim()
+        return testo
     }// fine del metodo
 
     protected int dimWrapper() {
@@ -251,4 +255,29 @@ class BioLista {
     void setTesto(String testo) {
         this.testo = testo
     }
+
+    String getTitoloPagina() {
+        return titoloPagina
+    }
+
+    void setTitoloPagina(String titoloPagina) {
+        this.titoloPagina = titoloPagina
+    }
+
+    String getCategoria() {
+        return categoria
+    }
+
+    void setCategoria(String categoria) {
+        this.categoria = categoria
+    }
+
+    String getPlurale() {
+        return plurale
+    }
+
+    void setPlurale(String plurale) {
+        this.plurale = plurale
+    }
+
 }// fine della classe
