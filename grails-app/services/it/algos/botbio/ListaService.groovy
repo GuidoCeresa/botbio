@@ -50,22 +50,38 @@ class ListaService {
         // variabili e costanti locali di lavoro
         ArrayList<String> listaAttivitaPlurali
         BioAttivita wrapAttivita
+        long inizio = System.currentTimeMillis()
+        long parziale
+        long durataParziale = 0
+        long durataProgressiva = 0
+        long durataProgressivaOld = 0
+        int num
+        int k = 0
+        String attivita
 
         // Recupera tutte le attività esistenti (circa 500)
         listaAttivitaPlurali = AttivitaService.getListaPlurali()
+        num = listaAttivitaPlurali.size()
 
         // Ciclo per ognuna delle attività esistenti (circa 500)
         listaAttivitaPlurali?.each {
+            attivita = LibTesto.primaMaiuscola(it)
             wrapAttivita = new BioAttivita(it)
             wrapAttivita.registraPagina()
-            def stopProvvisorio
+            parziale = System.currentTimeMillis()
+            durataProgressiva = parziale - inizio
+            durataProgressiva = durataProgressiva / 1000
+            durataParziale = durataProgressiva - durataProgressivaOld
+            durataProgressivaOld=durataProgressiva
+            k++
+            println(k + '/' + num + " - ${attivita}" + ' in ' + durataParziale + ' sec. - totale ' + durataProgressiva + ' sec.')
         }// fine di each
     } // fine del metodo
 
     public pippo() {
     } // fine del metodo
 
-        /**
+    /**
      * Costruisce tutte le liste delle nazionalità
      *
      * Recupera la lista delle singole nazionalità
