@@ -38,6 +38,7 @@ class LibBio {
     public static final String USA_CRONO_ATTIVITA = 'usaCronoAttivita'
     public static final String USA_CRONO_NAZIONALITA = 'usaCronoNazionalita'
     public static final String USA_CASSETTO = 'usaCassetto'
+    public static final String USA_TAVOLA_CONTENUTI = 'usaTavolaContenuti'
     public static final String MAX_RIGHE_CASSETTO = 'maxRigheCassetto'
     public static final String USA_COLONNE = 'usaColonne'
     public static final String MAX_RIGHE_COLONNE = 'maxRigheColonne'

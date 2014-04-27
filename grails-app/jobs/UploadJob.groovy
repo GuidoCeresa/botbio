@@ -21,7 +21,7 @@ class UploadJob {
     def statisticheService
 
     //--codifica dell'orario di attivazione
-    private static String cronExpressionUpload = "0 0 7 ? * SUN-FRI"   //tutti i giorni alle 7, sabato escluso
+    private static String cronExpressionUpload = "0 0 7 ? * MON-FRI"   //tutti i giorni alle 7, sabato e domenica esclusi
 
     static triggers = {
         cron name: 'upload', cronExpression: cronExpressionUpload

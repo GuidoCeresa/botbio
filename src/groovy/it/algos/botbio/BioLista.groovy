@@ -2,6 +2,7 @@ package it.algos.botbio
 
 import it.algos.algoslib.LibTesto
 import it.algos.algoslib.LibTime
+import it.algos.algospref.Pref
 import it.algos.algoswiki.Edit
 import org.apache.commons.logging.LogFactory
 
@@ -131,7 +132,7 @@ class BioLista {
         String testo = this.getContenuto()
         String summary = LibBio.getSummary()
 
-        // registra la pagina solo se ci sono differente significative
+        // registra la pagina solo se ci sono differenze significative
         // al di la della prima riga con il richiamo al template e che contiene la data
         if (titolo && testo && this.listaWrapper && this.listaWrapper.size() > 0) {
             Edit edit = new EditBio(titolo, testo, summary)
@@ -142,13 +143,20 @@ class BioLista {
     protected static String getTestoIni(int numRec) {
         // variabili e costanti locali di lavoro
         String testo = ''
+        boolean usaTavolaContenuti = Pref.getBool(LibBio.USA_TAVOLA_CONTENUTI)
         String dataCorrente = LibTime.getGioMeseAnnoLungo(new Date())
         String numero = LibTesto.formatNum(numRec)
-        String tag = '__NOTOC__'
+        String tagIndice = '__FORCETOC__'
+        String tagNoIndice = '__NOTOC__'
         String aCapo = '\n'
 
-        testo += tag
+        if (usaTavolaContenuti) {
+            testo += tagIndice
+        } else {
+            testo += tagNoIndice
+        }// fine del blocco if-else
         testo += aCapo
+
         testo += "<noinclude>"
         testo += "{{StatBio"
         testo += "|bio="

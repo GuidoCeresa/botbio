@@ -30,14 +30,14 @@ class BioAttivita extends BioAttNaz {
         super.inizializza(plurale)
 
         // Crea paragrafo/pagina con le didascalie
-        this.bioLista = new BioListaAtt(getPlurale(), getListaMappaGrails(), Ordinamento.prestabilitoInMappa)
+        this.bioLista = new BioListaAtt(getPlurale(), getNumPersoneUnivoche(),getListaMappaGrails(), Ordinamento.prestabilitoInMappa)
     } // fine del metodo
 
     /**
      * Crea una lista di id di attività utilizzate
      * Per ogni plurale, ci possono essere diversi 'singolari' richiamati dalle voci di BioGrails
      */
-    protected creaListaAttivitaId() {
+    protected creaListaId() {
         String attivitaPlurale = this.getPlurale()
         ArrayList<Long> listaSingolariID
         String query
@@ -47,7 +47,7 @@ class BioAttivita extends BioAttNaz {
             if (!attivitaPlurale.contains(tag)) {
                 query = "select id from Attivita where plurale='$attivitaPlurale'"
                 listaSingolariID = (ArrayList<Long>) Attivita.executeQuery(query)
-                this.setListaAttivitaID(listaSingolariID)
+                this.setListaID(listaSingolariID)
             }// fine del blocco if
         }// fine del blocco if
     } // fine del metodo
@@ -98,7 +98,6 @@ class BioAttivita extends BioAttNaz {
         String nazionalita
         String titoloParagrafo
         String sottoTitolo
-        ArrayList listaGrails = new ArrayList()
         ArrayList<Long> listaSingolariID
         ArrayList<String> listaNazionalitaSingolari
         ArrayList<String> listaNazionalitaPlurali
@@ -107,13 +106,13 @@ class BioAttivita extends BioAttNaz {
         ArrayList<Map> listaDidascalie
 
         // recupera la lista delle attivita singolari
-        listaSingolariID = this.getListaAttivitaID()
+        listaSingolariID = this.getListaID()
 
         // recupera la lista delle nazionalita singolari
         listaNazionalitaSingolari = creaNazionalitaSingolari(listaSingolariID)
 
         // recupera la lista delle nazionalita plurali
-        listaNazionalitaPlurali = creaNazionalitaPlurali(listaSingolariID, listaNazionalitaSingolari)
+        listaNazionalitaPlurali = creaNazionalitaPlurali(listaNazionalitaSingolari)
 
         // ciclo
         if (listaSingolariID) {
@@ -146,20 +145,19 @@ class BioAttivita extends BioAttNaz {
         }// fine del blocco if
     } // fine del metodo
 
-    private static ArrayList<String> creaNazionalitaSingolari(ArrayList<Long> listaSingolariID) {
+    private ArrayList<String> creaNazionalitaSingolari(ArrayList<Long> listaSingolariID) {
         ArrayList<String> listaNazionalitaSingolari
         String query
 
         query = "select distinct nazionalita from BioGrails where "
-        query += queryWhereAtt(listaSingolariID)
+        query += queryWhereUno(listaSingolariID)
 
         listaNazionalitaSingolari = (ArrayList<String>) BioGrails.executeQuery(query)
 
         return listaNazionalitaSingolari
     } // fine del metodo
 
-    private
-    static ArrayList<String> creaNazionalitaPlurali(ArrayList<Long> listaSingolariID, ArrayList<String> listaNazionalitaSingolari) {
+    private static ArrayList<String> creaNazionalitaPlurali(ArrayList<String> listaNazionalitaSingolari) {
         ArrayList<String> listaNazionalitaPlurali = new ArrayList()
         Nazionalita nazionalita
         String nazionalitaPlurale
@@ -182,70 +180,8 @@ class BioAttivita extends BioAttNaz {
         return listaNazionalitaPlurali
     } // fine del metodo
 
-    // controlla che non ci siano didascalie mancanti
-    // nel caso le crea al volo
-    private static ArrayList<Map> creaListaDidascalie(ArrayList<Long> listaSingolariID, String nazionalitaPlurale) {
-        ArrayList<Map> listaMappe = new ArrayList<Map>()
-        Map mappa
-        ArrayList lista
-        ArrayList<Long> listaNazId = nazionalitaId(nazionalitaPlurale)
-        String query
-        long idGrails
-        BioGrails bio = null
-        String didascalia
-        String cognome
-        String nome
-        String primaLettera
 
-        query = "select id,didascaliaListe,cognome,nome from BioGrails where "
-        query += queryWhereAtt(listaSingolariID)
-        query += ' and '
-        query += queryWhereNaz(listaNazId)
-        query += ' order by cognome,title'
-
-        lista = (ArrayList<String>) BioGrails.executeQuery(query)
-
-        lista?.each {
-            if (it[1]) {
-                didascalia = (String) it[1]
-                if (it[2]) {
-                    cognome = (String) it[2]
-                    primaLettera = cognome.substring(0, 1)
-                } else {
-                    if (it[3]) {
-                        nome = (String) it[3]
-                        primaLettera = nome.substring(0, 1)
-                    } else {
-                        primaLettera = '.'
-                    }// fine del blocco if-else
-                }// fine del blocco if-else
-            } else {
-                idGrails = (Long) it[0]
-                bio = BioGrails.findById(idGrails)
-                cognome = bio.cognome
-                nome = bio.nome
-                if (cognome) {
-                    primaLettera = cognome.substring(0, 1)
-                } else {
-                    if (nome) {
-                        primaLettera = nome.substring(0, 1)
-                    } else {
-                        primaLettera = '.'
-                    }// fine del blocco if-else
-                }// fine del blocco if-else
-                didascalia = creaTestoDidascaliaAlVolo(bio)
-            }// fine del blocco if-else
-            mappa = new HashMap()
-            primaLettera = primaLettera.toUpperCase()
-            mappa.put(LibBio.MAPPA_PRIMA_LETTERA, primaLettera)
-            mappa.put(LibBio.MAPPA_DIDASCALIA, didascalia)
-            listaMappe.add(mappa)
-        } // fine del ciclo each
-
-        return listaMappe
-    } // fine del metodo
-
-    private static ArrayList<Long> nazionalitaId(String nazionalitaPlurale) {
+    protected ArrayList<Long> attNazId(String nazionalitaPlurale) {
         ArrayList<Long> listaNazId = null
         def risultato
         String query = "select id from Nazionalita where plurale='${nazionalitaPlurale}'"
@@ -269,7 +205,7 @@ class BioAttivita extends BioAttNaz {
     } // fine del metodo
 
 
-    private static String queryWhereAtt(ArrayList<Long> idAttivita) {
+    protected String queryWhereUno(ArrayList<Long> idAttivita) {
         String query = "("
         String longId
 
@@ -281,7 +217,7 @@ class BioAttivita extends BioAttNaz {
         return LibTesto.levaCoda(query.trim(), 'or').trim() + ')'
     } // fine del metodo
 
-    private static String queryWhereNaz(ArrayList<Long> listaNazId) {
+    protected String queryWhereDue(ArrayList<Long> listaNazId) {
         String query = "("
         String naz
 

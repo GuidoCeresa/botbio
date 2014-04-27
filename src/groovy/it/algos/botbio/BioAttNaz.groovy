@@ -1,5 +1,7 @@
 package it.algos.botbio
 
+import it.algos.algoslib.LibTesto
+
 /**
  * Created with IntelliJ IDEA.
  * User: Gac
@@ -12,11 +14,12 @@ abstract class BioAttNaz {
     protected static int NUM_RIGHE_PER_CARATTERE_SOTTOPAGINA = 50
 
     private String plurale
-    private ArrayList<Long> listaAttivitaID
+    private ArrayList<Long> listaID
     private ArrayList<Long> listaVociId
     private ArrayList listaDidascalie
     private BioLista bioLista
     private ArrayList listaMappaGrails
+    private int numPersoneUnivoche
 
     public BioAttNaz(String plurale) {
         super()
@@ -32,8 +35,8 @@ abstract class BioAttNaz {
         // regola le variabili di istanza coi parametri
         this.setPlurale(plurale)
 
-        // Crea una lista di records di attività utilizzati da BioGrails
-        this.creaListaAttivitaId()
+        // Crea una lista di id di attività o nazionalità utilizzate
+        this.creaListaId()
 
         // Crea una lista di id delle voci biografiche che utilizzano questa attività
         this.creaListaVociId()
@@ -43,16 +46,13 @@ abstract class BioAttNaz {
 
         // Crea una lista di didascalie
         this.creaListaDidascalie()
-
-//        Crea paragrafo/pagina con le didascalie
-//        this.bioLista = new BioListaAtt(getPlurale(), getListaDidascalie())
     } // fine del metodo
 
     /**
-     * Crea una lista di id di attività utilizzate
+     * Crea una lista di id di attività o nazionalità utilizzate
      * Per ogni plurale, ci possono essere diversi 'singolari' richiamati dalle voci di BioGrails
      */
-    protected creaListaAttivitaId() {
+    protected creaListaId() {
     } // fine del metodo
 
     /**
@@ -63,7 +63,7 @@ abstract class BioAttNaz {
         ArrayList<Long> listaSingolariID
 
         // recupera la lista dei singolari
-        listaSingolariID = this.getListaAttivitaID()
+        listaSingolariID = this.getListaID()
 
         // controllo di congruità
         if (listaSingolariID) {
@@ -77,7 +77,6 @@ abstract class BioAttNaz {
             this.setListaVociId(listaVociId)
         }// fine del blocco if
     } // fine del metodo
-
 
     /**
      * Crea una lista di mappe che utilizzano questa attività
@@ -157,6 +156,104 @@ abstract class BioAttNaz {
         return didascalia
     }// fine del metodo
 
+    // controlla che non ci siano didascalie mancanti
+    // nel caso le crea al volo
+    protected ArrayList<Map> creaListaDidascalie(ArrayList<Long> listaSingolariID, String nazionalitaPlurale) {
+        ArrayList<Map> listaMappe = new ArrayList<Map>()
+        Map mappa
+        ArrayList lista
+        ArrayList<Long> listaNazId = attNazId(nazionalitaPlurale)
+        String query
+        long idGrails
+        BioGrails bio = null
+        String didascalia
+        String cognome
+        String nome
+        String primaLettera
+
+        query = "select id,didascaliaListe,cognome,nome from BioGrails where "
+        query += queryWhereUno(listaSingolariID)
+        query += ' and '
+        query += queryWhereDue(listaNazId)
+        query += ' order by cognome,title'
+
+        lista = (ArrayList<String>) BioGrails.executeQuery(query)
+
+        lista?.each {
+            if (it[1]) {
+                didascalia = (String) it[1]
+                if (it[2]) {
+                    cognome = (String) it[2]
+                    primaLettera = cognome.substring(0, 1)
+                } else {
+                    if (it[3]) {
+                        nome = (String) it[3]
+                        primaLettera = nome.substring(0, 1)
+                    } else {
+                        primaLettera = '.'
+                    }// fine del blocco if-else
+                }// fine del blocco if-else
+            } else {
+                idGrails = (Long) it[0]
+                bio = BioGrails.findById(idGrails)
+                cognome = bio.cognome
+                nome = bio.nome
+                if (cognome) {
+                    primaLettera = cognome.substring(0, 1)
+                } else {
+                    if (nome) {
+                        primaLettera = nome.substring(0, 1)
+                    } else {
+                        primaLettera = '.'
+                    }// fine del blocco if-else
+                }// fine del blocco if-else
+                didascalia = creaTestoDidascaliaAlVolo(bio)
+            }// fine del blocco if-else
+            mappa = new HashMap()
+            primaLettera = primaLettera.toUpperCase()
+            mappa.put(LibBio.MAPPA_PRIMA_LETTERA, primaLettera)
+            mappa.put(LibBio.MAPPA_DIDASCALIA, didascalia)
+            listaMappe.add(mappa)
+        } // fine del ciclo each
+
+        return listaMappe
+    } // fine del metodo
+
+    protected int calcolaNumeroPersoneUnivoche(ArrayList<Long> listaSingolariID, ArrayList<String> nazionalitaPlurale) {
+        int personeUnivoche = 0
+        ArrayList<Long> listaNazId = new ArrayList<Long>()
+        String query
+        def risultato
+
+        nazionalitaPlurale?.each {
+            listaNazId += attNazId(it)
+        } // fine del ciclo each
+
+        query = "select distinct id from BioGrails where "
+        query += queryWhereUno(listaSingolariID)
+        query += ' and '
+        query += queryWhereDue(listaNazId)
+
+        risultato = BioGrails.executeQuery(query)
+        if (risultato) {
+            personeUnivoche = risultato.size()
+        }// fine del blocco if
+
+        return personeUnivoche
+    } // fine del metodo
+
+    protected ArrayList<Long> attNazId(String nazionalitaPlurale) {
+        return null
+    } // fine del metodo
+
+    protected String queryWhereUno(ArrayList<Long> id) {
+        return null
+    } // fine del metodo
+
+    protected String queryWhereDue(ArrayList<Long> listaId) {
+        return null
+    } // fine del metodo
+
     /**
      * Registra il paragrafo/pagina
      */
@@ -175,12 +272,12 @@ abstract class BioAttNaz {
         this.plurale = plurale
     }
 
-    ArrayList<Long> getListaAttivitaID() {
-        return listaAttivitaID
+    ArrayList<Long> getListaID() {
+        return listaID
     }
 
-    void setListaAttivitaID(ArrayList<Long> listaAttivitaID) {
-        this.listaAttivitaID = listaAttivitaID
+    void setListaID(ArrayList<Long> listaID) {
+        this.listaID = listaID
     }
 
     ArrayList<Long> getListaVociId() {
@@ -213,5 +310,13 @@ abstract class BioAttNaz {
 
     void setListaMappaGrails(ArrayList listaMappaGrails) {
         this.listaMappaGrails = listaMappaGrails
+    }
+
+    int getNumPersoneUnivoche() {
+        return numPersoneUnivoche
+    }
+
+    void setNumPersoneUnivoche(int numPersoneUnivoche) {
+        this.numPersoneUnivoche = numPersoneUnivoche
     }
 } // fine della classe

@@ -17,6 +17,7 @@ import it.algos.algos.DialogoController
 import it.algos.algos.TipoDialogo
 import it.algos.algoslib.Lib
 import it.algos.algoslib.LibTesto
+import it.algos.algoswiki.Login
 import org.codehaus.groovy.grails.commons.DefaultGrailsDomainClass
 import org.springframework.dao.DataIntegrityViolationException
 
@@ -73,7 +74,6 @@ class AttivitaController {
     //--elabora e crea tutti le pagine di attività
     //--passa al metodo effettivo senza nessun dialogo di conferma
     def uploadAttivita() {
-        listaService.uploadAttivita()//todo da levare
         if (grailsApplication && grailsApplication.config.login) {
             listaService.uploadAttivita()
             statisticheService.attivitaUsate()

@@ -94,14 +94,31 @@ class ListaService {
         // variabili e costanti locali di lavoro
         ArrayList<String> listaNazionalitaPlurali
         BioNazionalita wrapNazionalita
+        long inizio = System.currentTimeMillis()
+        long parziale
+        long durataParziale = 0
+        long durataProgressiva = 0
+        long durataProgressivaOld = 0
+        int num
+        int k = 0
+        String nazionalita
 
         // Recupera tutte le nazionalità esistenti (circa 275)
         listaNazionalitaPlurali = NazionalitaService.getListaPlurali()
+        num = listaNazionalitaPlurali.size()
 
         // Ciclo per ognuna delle nazionalità esistenti (circa 275)
         listaNazionalitaPlurali.each {
+            nazionalita = LibTesto.primaMaiuscola(it)
             wrapNazionalita = new BioNazionalita(it)
             wrapNazionalita.registraPagina()
+            parziale = System.currentTimeMillis()
+            durataProgressiva = parziale - inizio
+            durataProgressiva = durataProgressiva / 1000
+            durataParziale = durataProgressiva - durataProgressivaOld
+            durataProgressivaOld=durataProgressiva
+            k++
+            println(k + '/' + num + " - ${nazionalita}" + ' in ' + durataParziale + ' sec. - totale ' + durataProgressiva + ' sec.')
         }// fine di each
     } // fine del metodo
 

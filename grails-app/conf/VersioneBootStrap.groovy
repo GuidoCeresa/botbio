@@ -1,5 +1,7 @@
 import groovy.sql.Sql
+import it.algos.algospref.Pref
 import it.algos.algospref.Preferenze
+import it.algos.botbio.LibBio
 
 import javax.sql.DataSource
 
@@ -117,6 +119,17 @@ class VersioneBootStrap {
             versioneService.newVersione('Database', 'Modificati con default null i campi: BioWiki.extraLista, BioWiki.errori')
         }// fine del blocco if
 
+        //--creata una nuova preferenza
+        if (versioneService && versioneService.installaVersione(19)) {
+            Pref pref = new Pref()
+            pref.ordine = 3
+            pref.code = LibBio.USA_TAVOLA_CONTENUTI
+            pref.descrizione = 'Mostra il sommario in testa alle pagine'
+            pref.type = Pref.Type.booleano
+            pref.bool = true
+            pref.save(flush: true)
+            versioneService.newVersione('Preferenze', 'USA_TAVOLA_CONTENUTI di default true')
+        }// fine del blocco if
 
     }// fine della closure
 
