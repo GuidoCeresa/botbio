@@ -221,20 +221,29 @@ abstract class BioAttNaz {
 
     protected int calcolaNumeroPersoneUnivoche(ArrayList<Long> listaSingolariID, ArrayList<String> nazionalitaPlurale) {
         int personeUnivoche = 0
-        ArrayList<Long> listaNazId = new ArrayList<Long>()
+        ArrayList<Long> listaNazId
         String query
         def risultato
 
-        nazionalitaPlurale?.each {
-            listaNazId += attNazId(it)
-        } // fine del ciclo each
+        if (nazionalitaPlurale && nazionalitaPlurale.size() > 0) {
+            listaNazId = new ArrayList<Long>()
+            nazionalitaPlurale?.each {
+                listaNazId += attNazId(it)
+            } // fine del ciclo each
+        }// fine del blocco if
 
         query = "select distinct id from BioGrails where "
         query += queryWhereUno(listaSingolariID)
-        query += ' and '
-        query += queryWhereDue(listaNazId)
+        if (listaNazId) {
+            query += ' and '
+            query += queryWhereDue(listaNazId)
+        }// fine del blocco if
 
-        risultato = BioGrails.executeQuery(query)
+        try { // prova ad eseguire il codice
+            risultato = BioGrails.executeQuery(query)
+        } catch (Exception unErrore) { // intercetta l'errore
+            def errore = unErrore
+        }// fine del blocco try-catch
         if (risultato) {
             personeUnivoche = risultato.size()
         }// fine del blocco if
