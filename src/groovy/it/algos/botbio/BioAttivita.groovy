@@ -104,6 +104,7 @@ class BioAttivita extends BioAttNaz {
         String pathTitolo = BioListaAttNaz.PATH + 'Nazionalità/'
         String pathSottoTitolo = BioListaAttNaz.PATH + 'Attività/'
         ArrayList<Map> listaDidascalie
+        int personeUnivoche
 
         // recupera la lista delle attivita singolari
         listaSingolariID = this.getListaID()
@@ -140,6 +141,9 @@ class BioAttivita extends BioAttNaz {
                 mappa.put(LibBio.MAPPA_LIVELLO, 1)
                 listaMappaGrails.add(mappa)
             }// fine di each
+
+            personeUnivoche = calcolaNumeroPersoneUnivoche(listaSingolariID, listaNazionalitaPlurali)
+            this.setNumPersoneUnivoche(personeUnivoche)
 
             this.setListaMappaGrails(listaMappaGrails)
         }// fine del blocco if

@@ -16,6 +16,7 @@ package it.algos.botbio
 import it.algos.algoslib.LibTesto
 import it.algos.algoslib.LibTime
 import it.algos.algospref.LibPref
+import it.algos.algospref.Pref
 import it.algos.algospref.Preferenze
 import it.algos.algoswiki.Edit
 import it.algos.algoswiki.TipoAllineamento
@@ -231,7 +232,7 @@ class AntroponimoService {
         //esegue la query
         listaNomi = getListaNomi()
 
-        //crea le pagine dei singoli nomi
+        //crea le pagine dei singoli nomi (circa 600)
         listaNomi?.each {
             elaboraSingoloNome((String) it)
         }// fine del ciclo each
@@ -457,16 +458,22 @@ class AntroponimoService {
         String testo = ''
         String dataCorrente = LibTime.getGioMeseAnnoLungo(new Date())
         String numero = ''
-        boolean eliminaIndice = false
+        boolean usaTavolaContenuti = Pref.getBool(LibBio.USA_TAVOLA_CONTENUTI)
         String template = templateIncipit
+        String tagIndice = '__FORCETOC__'
+        String tagNoIndice = '__NOTOC__'
 
         if (num) {
             numero = LibTesto.formatNum(num)
         }// fine del blocco if
 
-        if (eliminaIndice) {
-            testo += '__NOTOC__'
-        }// fine del blocco if
+        if (usaTavolaContenuti) {
+            testo += tagIndice
+        } else {
+            testo += tagNoIndice
+        }// fine del blocco if-else
+        testo += aCapo
+
         testo += '<noinclude>'
         testo += aCapo
         testo += "{{StatBio"
