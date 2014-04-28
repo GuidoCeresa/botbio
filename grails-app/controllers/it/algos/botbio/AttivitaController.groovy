@@ -74,6 +74,8 @@ class AttivitaController {
     //--elabora e crea tutti le pagine di attività
     //--passa al metodo effettivo senza nessun dialogo di conferma
     def uploadAttivita() {
+        listaService.uploadAttivita()
+
         if (grailsApplication && grailsApplication.config.login) {
             listaService.uploadAttivita()
             statisticheService.attivitaUsate()

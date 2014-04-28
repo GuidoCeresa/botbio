@@ -30,7 +30,7 @@ class BioAttivita extends BioAttNaz {
         super.inizializza(plurale)
 
         // Crea paragrafo/pagina con le didascalie
-        this.bioLista = new BioListaAtt(getPlurale(), getNumPersoneUnivoche(),getListaMappaGrails(), Ordinamento.prestabilitoInMappa)
+        this.bioLista = new BioListaAtt(getPlurale(), getNumPersoneUnivoche(), getListaMappaGrails(), Ordinamento.prestabilitoInMappa)
     } // fine del metodo
 
     /**
@@ -150,13 +150,17 @@ class BioAttivita extends BioAttNaz {
     } // fine del metodo
 
     private ArrayList<String> creaNazionalitaSingolari(ArrayList<Long> listaSingolariID) {
-        ArrayList<String> listaNazionalitaSingolari
+        ArrayList<String> listaNazionalitaSingolari = null
         String query
 
         query = "select distinct nazionalita from BioGrails where "
         query += queryWhereUno(listaSingolariID)
 
-        listaNazionalitaSingolari = (ArrayList<String>) BioGrails.executeQuery(query)
+        try { // prova ad eseguire il codice
+            listaNazionalitaSingolari = (ArrayList<String>) BioGrails.executeQuery(query)
+        } catch (Exception unErrore) { // intercetta l'errore
+            log.error unErrore
+        }// fine del blocco try-catch
 
         return listaNazionalitaSingolari
     } // fine del metodo

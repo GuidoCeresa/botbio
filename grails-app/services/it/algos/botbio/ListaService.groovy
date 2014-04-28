@@ -65,14 +65,15 @@ class ListaService {
 
         // Ciclo per ognuna delle attività esistenti (circa 500)
         listaAttivitaPlurali?.each {
-            attivita = LibTesto.primaMaiuscola(it)
-            wrapAttivita = new BioAttivita(it)
+            attivita = it
+            attivita = LibTesto.primaMaiuscola(attivita)
+            wrapAttivita = new BioAttivita(attivita)
             wrapAttivita.registraPagina()
             parziale = System.currentTimeMillis()
             durataProgressiva = parziale - inizio
             durataProgressiva = durataProgressiva / 1000
             durataParziale = durataProgressiva - durataProgressivaOld
-            durataProgressivaOld=durataProgressiva
+            durataProgressivaOld = durataProgressiva
             k++
             println(k + '/' + num + " - ${attivita}" + ' in ' + durataParziale + ' sec. - totale ' + durataProgressiva + ' sec.')
         }// fine di each
@@ -109,14 +110,15 @@ class ListaService {
 
         // Ciclo per ognuna delle nazionalità esistenti (circa 275)
         listaNazionalitaPlurali.each {
-            nazionalita = LibTesto.primaMaiuscola(it)
-            wrapNazionalita = new BioNazionalita(it)
+            nazionalita = it
+            nazionalita = LibTesto.primaMaiuscola(nazionalita)
+            wrapNazionalita = new BioNazionalita(nazionalita)
             wrapNazionalita.registraPagina()
             parziale = System.currentTimeMillis()
             durataProgressiva = parziale - inizio
             durataProgressiva = durataProgressiva / 1000
             durataParziale = durataProgressiva - durataProgressivaOld
-            durataProgressivaOld=durataProgressiva
+            durataProgressivaOld = durataProgressiva
             k++
             println(k + '/' + num + " - ${nazionalita}" + ' in ' + durataParziale + ' sec. - totale ' + durataProgressiva + ' sec.')
         }// fine di each
