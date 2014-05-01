@@ -1,5 +1,6 @@
 package it.algos.botbio
 
+import grails.plugin.mail.MailService
 import it.algos.algoslib.LibTesto
 import it.algos.algoslib.LibWiki
 import org.apache.commons.logging.LogFactory

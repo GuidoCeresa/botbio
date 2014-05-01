@@ -33,6 +33,7 @@ class AttivitaController {
     def attivitaService
     def listaService
     def statisticheService
+    def mailService
 
     def index() {
         redirect(action: 'list', params: params)
@@ -71,11 +72,39 @@ class AttivitaController {
     } // fine del metodo
 
     //--creazione delle liste partendo da BioGrails
+    //--elabora e crea le pagine della prima meta delle attività
+    //--il taglio è la preferenza META_ATTIVITA
+    //--passa al metodo effettivo senza nessun dialogo di conferma
+    def uploadAttivitaPrimaMeta() {
+        if (grailsApplication && grailsApplication.config.login) {
+            statisticheService.attivitaUsate()
+        } else {
+            flash.error = 'Devi essere loggato per effettuare un upload di pagine sul server wiki'
+        }// fine del blocco if-else
+        redirect(action: 'list')
+    } // fine del metodo
+
+    //--creazione delle liste partendo da BioGrails
+    //--elabora e crea le pagine della seconda meta delle attività
+    //--il taglio è la preferenza META_ATTIVITA
+    //--passa al metodo effettivo senza nessun dialogo di conferma
+    def uploadAttivitaSecondaMeta() {
+        if (grailsApplication && grailsApplication.config.login) {
+            listaService.uploadAttivitaSecondaMeta()
+            statisticheService.attivitaUsate()
+        } else {
+            flash.error = 'Devi essere loggato per effettuare un upload di pagine sul server wiki'
+        }// fine del blocco if-else
+        redirect(action: 'list')
+    } // fine del metodo
+
+    //--creazione delle liste partendo da BioGrails
     //--elabora e crea tutti le pagine di attività
     //--passa al metodo effettivo senza nessun dialogo di conferma
     def uploadAttivita() {
         if (grailsApplication && grailsApplication.config.login) {
-            listaService.uploadAttivita()
+            listaService.uploadAttivitaPrimaMeta()
+            listaService.uploadAttivitaSecondaMeta()
             statisticheService.attivitaUsate()
         } else {
             flash.error = 'Devi essere loggato per effettuare un upload di pagine sul server wiki'
@@ -96,7 +125,9 @@ class AttivitaController {
         //--solo azione e di default controller=questo; classe e titolo vengono uguali
         //--mappa con [cont:'controller', action:'metodo', icon:'iconaImmagine', title:'titoloVisibile']
         menuExtra = [
-                [cont: 'attivita', action: 'uploadAttivita', icon: 'frecciasu', title: 'Upload pagine'],
+                [cont: 'attivita', action: 'uploadAttivitaPrimaMeta', icon: 'frecciasu', title: 'Upload prime attività'],
+                [cont: 'attivita', action: 'uploadAttivitaSecondaMeta', icon: 'frecciasu', title: 'Upload seconde attività'],
+                [cont: 'attivita', action: 'uploadAttivita', icon: 'frecciasu', title: 'Upload all'],
         ]
         // fine della definizione
 

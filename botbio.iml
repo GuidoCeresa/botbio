@@ -50,9 +50,7 @@
     <orderEntry type="module-library" exported="">
       <library name="Grails User Library (botbio)">
         <CLASSES>
-          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.springframework/spring-test/jars/spring-test-3.1.0.RELEASE.jar!/" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/javax.activation/activation/jars/activation-1.1.jar!/" />
-          <root url="jar://$USER_HOME$/.grails/ivy-cache/javax.mail/mail/jars/mail-1.4.3.jar!/" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/c3p0/c3p0/jars/c3p0-0.9.1.1.jar!/" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/org.quartz-scheduler/quartz/jars/quartz-2.2.1.jar!/" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/nekohtml/nekohtml/jars/nekohtml-1.9.6.2.jar!/" />
@@ -100,6 +98,9 @@
           <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.tomcat/tomcat-catalina-ant/jars/tomcat-catalina-ant-7.0.52.jar!/" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.tomcat.embed/tomcat-embed-core/jars/tomcat-embed-core-7.0.52.jar!/" />
           <root url="file://$MODULE_DIR$/lib" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/com.sun.mail/javax.mail/jars/javax.mail-1.5.1.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.springframework/spring-test/jars/spring-test-3.1.4.RELEASE.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/javax.mail/javax.mail-api/jars/javax.mail-api-1.5.1.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

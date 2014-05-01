@@ -45,7 +45,7 @@ abstract class BioAttNaz {
         this.creaListaMappe()
 
         // Crea una lista di didascalie
-        this.creaListaDidascalie()
+//        this.creaListaDidascalie()
     } // fine del metodo
 
     /**

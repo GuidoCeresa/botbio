@@ -72,7 +72,7 @@ grails.project.dependency.resolution = {
 
         // opzionali
         compile ":quartz:1.0.1"
-        compile ":mail:1.0.1"
+        compile ":mail:1.0.4"
         compile ":export:1.5"
         runtime ":filterpane:2.3.3"
 

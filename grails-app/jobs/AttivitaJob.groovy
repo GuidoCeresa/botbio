@@ -1,3 +1,4 @@
+import it.algos.algospref.Pref
 import it.algos.algospref.Preferenze
 import it.algos.botbio.LibBio
 

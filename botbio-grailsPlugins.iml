@@ -6,16 +6,16 @@
         <webroots>
           <root url="file://$USER_HOME$/.grails/2.3.7/projects/botbio/plugins/filterpane-2.3.3/web-app" relative="/" />
           <root url="file://$USER_HOME$/.grails/2.3.7/projects/botbio/plugins/filterpane-2.3.3/grails-app/views" relative="/" />
-          <root url="file://$USER_HOME$/.grails/2.3.7/projects/botbio/plugins/mail-1.0.1/grails-app/views" relative="/" />
           <root url="file://$USER_HOME$/.grails/2.3.7/projects/botbio/plugins/export-1.5/web-app" relative="/" />
           <root url="file://$USER_HOME$/.grails/2.3.7/projects/botbio/plugins/algoswiki-0.83/web-app" relative="/" />
           <root url="file://$USER_HOME$/.grails/2.3.7/projects/botbio/plugins/algoswiki-0.83/grails-app/views" relative="/" />
           <root url="file://$USER_HOME$/.grails/2.3.7/projects/botbio/plugins/resources-1.2.7/web-app" relative="/" />
           <root url="file://$USER_HOME$/.grails/2.3.7/projects/botbio/plugins/joda-time-1.4/grails-app/views" relative="/" />
-          <root url="file://$USER_HOME$/.grails/2.3.7/projects/botbio/plugins/algospref-0.57/grails-app/views" relative="/" />
-          <root url="file://$USER_HOME$/.grails/2.3.7/projects/botbio/plugins/algoslogo-0.26/grails-app/views" relative="/" />
+          <root url="file://$USER_HOME$/.grails/2.3.7/projects/botbio/plugins/mail-1.0.4/grails-app/views" relative="/" />
+          <root url="file://$USER_HOME$/.grails/2.3.7/projects/botbio/plugins/algospref-0.59/grails-app/views" relative="/" />
           <root url="file://$USER_HOME$/.grails/2.3.7/projects/botbio/plugins/algos-1.27/web-app" relative="/" />
           <root url="file://$USER_HOME$/.grails/2.3.7/projects/botbio/plugins/algos-1.27/grails-app/views" relative="/" />
+          <root url="file://$USER_HOME$/.grails/2.3.7/projects/botbio/plugins/algoslogo-0.26/grails-app/views" relative="/" />
           <root url="file://$USER_HOME$/.grails/2.3.7/projects/botbio/plugins/algosvers-0.30/grails-app/views" relative="/" />
         </webroots>
         <sourceRoots />
@@ -118,11 +118,11 @@
       <sourceFolder url="file://$USER_HOME$/.grails/2.3.7/projects/botbio/plugins/algoslogo-0.26/grails-app/domain" isTestSource="false" />
       <sourceFolder url="file://$USER_HOME$/.grails/2.3.7/projects/botbio/plugins/algoslogo-0.26/grails-app/services" isTestSource="false" />
     </content>
-    <content url="file://$USER_HOME$/.grails/2.3.7/projects/botbio/plugins/algospref-0.57">
-      <sourceFolder url="file://$USER_HOME$/.grails/2.3.7/projects/botbio/plugins/algospref-0.57/src/groovy" isTestSource="false" />
-      <sourceFolder url="file://$USER_HOME$/.grails/2.3.7/projects/botbio/plugins/algospref-0.57/grails-app/i18n" isTestSource="false" />
-      <sourceFolder url="file://$USER_HOME$/.grails/2.3.7/projects/botbio/plugins/algospref-0.57/grails-app/controllers" isTestSource="false" />
-      <sourceFolder url="file://$USER_HOME$/.grails/2.3.7/projects/botbio/plugins/algospref-0.57/grails-app/domain" isTestSource="false" />
+    <content url="file://$USER_HOME$/.grails/2.3.7/projects/botbio/plugins/algospref-0.59">
+      <sourceFolder url="file://$USER_HOME$/.grails/2.3.7/projects/botbio/plugins/algospref-0.59/src/groovy" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.3.7/projects/botbio/plugins/algospref-0.59/grails-app/i18n" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.3.7/projects/botbio/plugins/algospref-0.59/grails-app/controllers" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.3.7/projects/botbio/plugins/algospref-0.59/grails-app/domain" isTestSource="false" />
     </content>
     <content url="file://$USER_HOME$/.grails/2.3.7/projects/botbio/plugins/algosvers-0.30">
       <sourceFolder url="file://$USER_HOME$/.grails/2.3.7/projects/botbio/plugins/algosvers-0.30/grails-app/i18n" isTestSource="false" />
@@ -161,11 +161,11 @@
       <sourceFolder url="file://$USER_HOME$/.grails/2.3.7/projects/botbio/plugins/joda-time-1.4/src/groovy" isTestSource="false" />
       <sourceFolder url="file://$USER_HOME$/.grails/2.3.7/projects/botbio/plugins/joda-time-1.4/grails-app/taglib" isTestSource="false" />
     </content>
-    <content url="file://$USER_HOME$/.grails/2.3.7/projects/botbio/plugins/mail-1.0.1">
-      <sourceFolder url="file://$USER_HOME$/.grails/2.3.7/projects/botbio/plugins/mail-1.0.1/src/groovy" isTestSource="false" />
-      <sourceFolder url="file://$USER_HOME$/.grails/2.3.7/projects/botbio/plugins/mail-1.0.1/grails-app/i18n" isTestSource="false" />
-      <sourceFolder url="file://$USER_HOME$/.grails/2.3.7/projects/botbio/plugins/mail-1.0.1/grails-app/services" isTestSource="false" />
-      <sourceFolder url="file://$USER_HOME$/.grails/2.3.7/projects/botbio/plugins/mail-1.0.1/grails-app/taglib" isTestSource="false" />
+    <content url="file://$USER_HOME$/.grails/2.3.7/projects/botbio/plugins/mail-1.0.4">
+      <sourceFolder url="file://$USER_HOME$/.grails/2.3.7/projects/botbio/plugins/mail-1.0.4/src/groovy" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.3.7/projects/botbio/plugins/mail-1.0.4/grails-app/i18n" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.3.7/projects/botbio/plugins/mail-1.0.4/grails-app/services" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.3.7/projects/botbio/plugins/mail-1.0.4/grails-app/taglib" isTestSource="false" />
     </content>
     <content url="file://$USER_HOME$/.grails/2.3.7/projects/botbio/plugins/quartz-1.0.1">
       <sourceFolder url="file://$USER_HOME$/.grails/2.3.7/projects/botbio/plugins/quartz-1.0.1/src/java" isTestSource="false" />
@@ -204,9 +204,7 @@
         <CLASSES>
           <root url="file://$USER_HOME$/.grails/2.3.7/projects/botbio/plugins/export-1.5/lib" />
           <root url="file://$USER_HOME$/.grails/2.3.7/projects/botbio/plugins/joda-time-1.4/lib" />
-          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.springframework/spring-test/jars/spring-test-3.1.0.RELEASE.jar!/" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/javax.activation/activation/jars/activation-1.1.jar!/" />
-          <root url="jar://$USER_HOME$/.grails/ivy-cache/javax.mail/mail/jars/mail-1.4.3.jar!/" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/c3p0/c3p0/jars/c3p0-0.9.1.1.jar!/" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/org.quartz-scheduler/quartz/jars/quartz-2.2.1.jar!/" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/nekohtml/nekohtml/jars/nekohtml-1.9.6.2.jar!/" />
@@ -253,6 +251,9 @@
           <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.tomcat.embed/tomcat-embed-jasper/jars/tomcat-embed-jasper-7.0.52.jar!/" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.tomcat/tomcat-catalina-ant/jars/tomcat-catalina-ant-7.0.52.jar!/" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.tomcat.embed/tomcat-embed-core/jars/tomcat-embed-core-7.0.52.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/com.sun.mail/javax.mail/jars/javax.mail-1.5.1.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.springframework/spring-test/jars/spring-test-3.1.4.RELEASE.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/javax.mail/javax.mail-api/jars/javax.mail-api-1.5.1.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

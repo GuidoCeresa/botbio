@@ -120,6 +120,15 @@ class AttivitaService {
     } // fine del metodo
 
     /**
+     * Ritorna il numero di tutte le attività plurali distinte
+     *
+     * @return numero totale di tutti i plurali distinti delle attività
+     */
+    public static int getNumPlurali() {
+        return getListaPlurali()?.size()
+    } // fine del metodo
+
+    /**
      * Ritorna una lista di una mappa per ogni attività distinta
      *
      * La mappa contiene:

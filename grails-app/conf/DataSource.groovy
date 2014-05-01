@@ -23,11 +23,11 @@ dataSource {
     //dialect = "org.hibernate.dialect.MySQLMyISAMDialect"
     dialect = "org.hibernate.dialect.MySQL5InnoDBDialect"
     username = "root"
-    password = ""
+    password = "cervino63"
 } // end of dataSource
 
 hibernate {
-    cache.use_second_level_cache = false
+    cache.use_second_level_caccervino63he = false
     cache.use_query_cache = false
     cache.provider_class = 'net.sf.ehcache.hibernate.EhCacheProvider'
 } // end of hibernate

@@ -14,11 +14,14 @@
 package it.algos.botbio
 
 import it.algos.algoslib.LibTesto
+import it.algos.algospref.Pref
 
 class ListaService {
 
+    def attivitaService
+
     /**
-     * Costruisce tutte le liste delle attività e delle naziuonalità
+     * Costruisce tutte le liste delle attività e delle nazionalità
      *
      * Recupera la lista delle singole attività
      * Per ogni attività recupera una lista di records di attività utilizzati
@@ -47,16 +50,64 @@ class ListaService {
      * Crea la pagina e la registra su wiki
      */
     public uploadAttivita() {
+        this.uploadAttivitaPrimaMeta()
+        this.uploadAttivitaSecondaMeta()
+    } // fine del metodo
+
+    /**
+     * Costruisce le pagine della prima meta delle attività
+     * Il taglio è la preferenza META_ATTIVITA
+     *
+     * Recupera la lista delle singole attività
+     * Per ogni attività recupera una lista di records di attività utilizzati
+     * Per ogni attività crea una lista di tutte le biografie che utilizzano quei records di attività
+     * Crea una lista di didascalie
+     * Crea la pagina e la registra su wiki
+     */
+    public uploadAttivitaPrimaMeta() {
+        int posInizio = 0
+        int posFine = Pref.getInt(LibBio.META_ATTIVITA, 250)
+        this.uploadAttivita(posInizio, posFine)
+    } // fine del metodo
+
+    /**
+     * Costruisce le pagine della seconda meta delle attività
+     * Il taglio è la preferenza META_ATTIVITA
+     *
+     * Recupera la lista delle singole attività
+     * Per ogni attività recupera una lista di records di attività utilizzati
+     * Per ogni attività crea una lista di tutte le biografie che utilizzano quei records di attività
+     * Crea una lista di didascalie
+     * Crea la pagina e la registra su wiki
+     */
+    public uploadAttivitaSecondaMeta() {
+        int posInizio = Pref.getInt(LibBio.META_ATTIVITA, 250)
+        int posFine = attivitaService.getNumPlurali()
+        this.uploadAttivita(posInizio, posFine)
+    } // fine del metodo
+
+    /**
+     * Costruisce tutte le liste delle attività
+     *
+     * Recupera la lista delle singole attività
+     * Per ogni attività recupera una lista di records di attività utilizzati
+     * Per ogni attività crea una lista di tutte le biografie che utilizzano quei records di attività
+     * Crea una lista di didascalie
+     * Crea la pagina e la registra su wiki
+     *
+     * @param posInizio : posizione della prima attività da elaborare
+     * @param posInizio : posizione dell'ultima attività da elaborare
+     */
+    public uploadAttivita(int posInizio, int posFine) {
         // variabili e costanti locali di lavoro
         ArrayList<String> listaAttivitaPlurali
         BioAttivita wrapAttivita
         long inizio = System.currentTimeMillis()
         long parziale
-        long durataParziale = 0
-        long durataProgressiva = 0
+        long durataParziale
+        long durataProgressiva
         long durataProgressivaOld = 0
         int num
-        int k = 0
         String attivita
 
         // Recupera tutte le attività esistenti (circa 500)
@@ -64,21 +115,19 @@ class ListaService {
         num = listaAttivitaPlurali.size()
 
         // Ciclo per ognuna delle attività esistenti (circa 500)
-        listaAttivitaPlurali?.each {
-            wrapAttivita = new BioAttivita(it)
+        for (int k = posInizio; k < posFine; k++) {
+            attivita = listaAttivitaPlurali.get(k)
+            wrapAttivita = new BioAttivita(attivita)
             wrapAttivita.registraPagina()
-            attivita = LibTesto.primaMaiuscola(it)
+            attivita = LibTesto.primaMaiuscola(attivita)
             parziale = System.currentTimeMillis()
             durataProgressiva = parziale - inizio
             durataProgressiva = durataProgressiva / 1000
             durataParziale = durataProgressiva - durataProgressivaOld
             durataProgressivaOld = durataProgressiva
-            k++
             println(k + '/' + num + " - ${attivita}" + ' in ' + durataParziale + ' sec. - totale ' + durataProgressiva + ' sec.')
-        }// fine di each
-    } // fine del metodo
-
-    public pippo() {
+            def stop
+        } // fine del ciclo for
     } // fine del metodo
 
     /**

@@ -135,7 +135,11 @@ class BioLista {
         // registra la pagina solo se ci sono differenze significative
         // al di la della prima riga con il richiamo al template e che contiene la data
         if (titolo && testo && this.listaWrapper && this.listaWrapper.size() > 0) {
-            Edit edit = new EditBio(titolo, testo, summary)
+            try { // prova ad eseguire il codice
+                Edit edit = new EditBio(titolo, testo, summary)
+            } catch (Exception unErrore) { // intercetta l'errore
+                log.error titolo + ' - ' + unErrore
+            }// fine del blocco try-catch
         }// fine del blocco if
     }// fine del metodo
 
